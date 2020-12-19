@@ -1,0 +1,6 @@
+##This contains a list of the self-replicating groups on the rooted regular-2 tree on level 1 ##
+
+[gens, 
+#"description", 
+#emptyset,
+#sr_2_2];
