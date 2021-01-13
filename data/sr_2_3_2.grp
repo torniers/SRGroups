@@ -1,8 +1,0 @@
-##This contains a self-replicating group on the rooted regular-2 tree on level 3 ##
-
-[
-	[ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4) ], 
-	#sr_2_3_2, 
-	#sr_2_2_2, 
-	[2, 4, #sr_2_3 that this group projects to]
-]
