@@ -4,104 +4,104 @@
 	[ (5,6)(7,8), (1,7,4,6,2,8,3,5), (1,4,2,3)(5,7,6,8), (1,2)(3,4)(5,6)(7,8) ],
 	#sr_2_3_1,
 	#sr_2_2_1,
-	[#the places this goes down to]
+	[#the classes it extends to]
 ]
 
 [
 	[ (1,5,3,8,2,6,4,7), (1,3,2,4)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ], 
 	#sr_2_3_2, 
 	#sr_2_2_1,
-	[#the places this goes down to]
+	[#the classes it extends to]
 ]
 
 [
 	[ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(5,7)(6,8), (5,6)(7,8), (1,2)(3,4)(5,6)(7,8) ],
 	#sr_2_3_3,
 	#sr_2_2_2,
-	[#the places this goes down to]
+	[#the classes it extends to]
 ]
 
 [
 	[ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ],
 	#sr_2_3_4,
 	#sr_2_2_2,
-	[#the places this goes down to]
+	[#the classes it extends to]
 ]
 
 [
 	[ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ],
 	#sr_2_3_5,
 	#sr_2_2_2,
-	[#the places this goes down to]
+	[#the classes it extends to]
 ]
 
 [
 	[ (1,3)(2,4)(5,8)(6,7), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ],
 	#sr_2_3_6,
 	#sr_2_2_2,
-	[#the places this goes down to]
+	[#the classes it extends to]
 ]
 
 [
 	[ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4), (1,3)(2,4)(5,7)(6,8), (1,2)(5,6), (5,6)(7,8), (1,2)(3,4)(5,6)(7,8) ],
 	#sr_2_3_7,
 	#sr_2_2_3,
-	[#the places this goes down to]
+	[#the classes it extends to]
 ]
 
 [
 	[ (1,5)(2,6)(3,7)(4,8), (1,3,2,4), (1,3)(2,4)(5,7)(6,8), (1,2)(5,6), (5,6)(7,8), (1,2)(3,4)(5,6)(7,8) ],
 	#sr_2_3_8,
 	#sr_2_2_3,
-	[#the places this goes down to]
+	[#the classes it extends to]
 ]
 
 [
 	[ (1,5,2,6)(3,7)(4,8), (1,3)(2,4), (1,3)(2,4)(5,7)(6,8), (1,2)(5,6),(5,6)(7,8), (1,2)(3,4)(5,6)(7,8) ],
 	#sr_2_3_9,
 	#sr_2_2_1,
-	[#the places this goes down to]
+	[#the classes it extends to]
 ]
 
 [
 	[ (1,5,2,6)(3,7)(4,8), (1,3,2,4), (1,3)(2,4)(5,7)(6,8), (1,2)(5,6), (5,6)(7,8), (1,2)(3,4)(5,6)(7,8) ],
 	#sr_2_3_10,
 	#sr_2_2_3,
-	[#the places this goes down to]
+	[#the classes it extends to]
 ]
 
 [
 	[ (3,4)(5,7,6,8), (1,5)(2,6)(3,7)(4,8), (5,6)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ],
 	#sr_2_3_11,
 	#sr_2_2_3,
-	[#the places this goes down to]
+	[#the classes it extends to]
 ]
 
 [
 	[ (3,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (5,6)(7,8), (1,4,2,3)(5,7,6,8), (1,2)(3,4)(5,6)(7,8) ],
 	#sr_2_3_12,
 	#sr_2_2_3,
-	[#the places this goes down to]
+	[#the classes it extends to]
 ]
 
 [
 	[ (1,5)(2,6)(3,7)(4,8), (3,4)(5,7)(6,8), (1,4,2,3)(5,7,6,8), (1,2)(3,4)(5,6)(7,8) ],
 	#sr_2_3_13,
 	#sr_2_2_3,
-	[#the places this goes down to]
+	[#the classes it extends to]
 ]
 
 [
 	[ (1,5,2,6)(3,7,4,8), (3,4)(5,7)(6,8), (1,4,2,3)(5,7,6,8), (1,2)(3,4)(5,6)(7,8) ], 
 	#sr_2_3_14, 
 	#sr_2_2_3, 
-	[#the places this goes down to]  
+	[#the classes it extends to]  
 ]
 
 [
 	[ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ],
 	#sr_2_3_15, 
 	#sr_2_2_3, 
-	[#the places this goes down to]
+	[#the classes it extends to]
 ]
 
