@@ -1,7 +1,8 @@
 ##This contains a list of the self-replicating groups on the rooted regular-2 tree on level 1 ##
 
-[(1,2), 
-#sr_2_1_1, 
-#emptyset,
-[#sr_2_2_1, sr_2_2_2, sr_2_2_3]
+[
+	[ (1,2) ], 
+	#sr_2_1_1, 
+	#emptyset,
+	[#sr_2_2_1, sr_2_2_2, sr_2_2_3]
 ];
