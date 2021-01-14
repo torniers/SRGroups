@@ -3,5 +3,4 @@
 #
 # Reading the declaration part of the package.
 #
-
 ReadPackage( "SRGroups", "gap/SRGroups.gd");

@@ -1,0 +1,9 @@
+#
+# SRGroups: Self-replicating groups of regular rooted trees.
+#
+# Routines
+#
+
+dir:= DirectoriesPackageLibrary( "SRGroups", "data" );
+fnam:=Filename( dir, Concatenation("sr_",String(srdeg),"_",String(srlev),".grp"));
+Read(fnam);
