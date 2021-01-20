@@ -4,11 +4,14 @@
 # Routines
 #
 srdeg:=2;
-srlev:=1;
 dir:= DirectoriesPackageLibrary( "SRGroups", "data" );
 
-while IsExistingFile(Filename( dir[1], Concatenation("sr_",String(srdeg),"_",String(srlev),".grp"))) do
-	fnam:=Filename( dir, Concatenation("sr_",String(srdeg),"_",String(srlev),".grp"));
-	Read(fnam);
-	srlev:=srlev+1;
+while IsExistingFile(Filename( dir[1], Concatenation("sr_",String(srdeg),"_1.grp"))) do
+	srlev:=1;
+	while IsExistingFile(Filename( dir[1], Concatenation("sr_",String(srdeg),"_",String(srlev),".grp"))) do
+			fnam:=Filename( dir, Concatenation("sr_",String(srdeg),"_",String(srlev),".grp"));
+			Read(fnam);
+			srlev:=srlev+1;
+	od;
+	srdeg:=srdeg+1;
 od;

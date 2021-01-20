@@ -3,5 +3,5 @@
 #
 # Reading the implementation part of the package.
 #
-ReadPackage( "SRGroups", "gap/SRGroups.grp");
-ReadPackage( "SRGroups", "gap/SRGroups.gi");
+ReadPackage( "SRGroups", "lib/SRGroups.grp");
+ReadPackage( "SRGroups", "lib/SRGroups.gi");

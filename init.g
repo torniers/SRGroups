@@ -3,4 +3,4 @@
 #
 # Reading the declaration part of the package.
 #
-ReadPackage( "SRGroups", "gap/SRGroups.gd");
+ReadPackage( "SRGroups", "lib/SRGroups.gd");
