@@ -1,4 +1,5 @@
 ##This contains a list of the self-replicating groups on the rooted regular-2 tree on level 1 ##
+
 sr_2_1_1:=
 [
 	[ (1,2) ],
