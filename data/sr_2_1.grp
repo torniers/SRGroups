@@ -3,7 +3,7 @@
 sr_2_1_1:=
 [
 	[ (1,2) ],
-	"sr_2_1_1",
+	"SymmetricGroup(2)",
 	"emptyset",
 	["sr_2_2_1",
 	"sr_2_2_2",
