@@ -15,3 +15,7 @@ while IsExistingFile(Filename( dir[1], Concatenation("sr_",String(srdeg),"_1.grp
 	od;
 	srdeg:=srdeg+1;
 od;
+
+InstallGlobalFunction(SelectSRGroups,function(k,n)
+Print("Hi");
+end);

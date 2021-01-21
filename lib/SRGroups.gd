@@ -16,4 +16,13 @@
 
 #! @Description
 #!   Insert documentation for your function here
-DeclareGlobalFunction( "SRGroups_Example" );
+DeclareGlobalFunction( "SelectSRGroups" );
+
+DeclareGlobalFunction( "AutT" );
+DeclareGlobalFunction( "IsSelfReplicating" );
+DeclareGlobalFunction( "BelowAction" );
+DeclareGlobalFunction( "MaximalExtension" );
+DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
+DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection" );
+DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroups" );
+DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection" );
