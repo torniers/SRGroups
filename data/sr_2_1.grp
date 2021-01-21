@@ -1,11 +1,13 @@
 ##This contains a list of the self-replicating groups on the rooted regular-2 tree on level 1 ##
 
-sr_2_1_1:=
+sr_2_1:=
 [
-	[ (1,2) ],
-	"SymmetricGroup(2)",
-	"emptyset",
-	["sr_2_2_1",
-	"sr_2_2_2",
-	"sr_2_2_3"]
+	[
+		[ (1,2) ],
+		"SymmetricGroup(2)",
+		"emptyset",
+		["SRGroup(2,2,1)",
+		"SRGroup(2,2,2)",
+		"SRGroup(2,2,3)"]
+	]
 ];

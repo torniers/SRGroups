@@ -3,19 +3,14 @@
 #
 # Routines
 #
-srdeg:=2;
+
+InstallGlobalFunction(SRGroup,function(deg,lev,num)
+local dir, fnam, G;
 dir:= DirectoriesPackageLibrary( "SRGroups", "data" );
-
-while IsExistingFile(Filename( dir[1], Concatenation("sr_",String(srdeg),"_1.grp"))) do
-	srlev:=1;
-	while IsExistingFile(Filename( dir[1], Concatenation("sr_",String(srdeg),"_",String(srlev),".grp"))) do
-			fnam:=Filename( dir, Concatenation("sr_",String(srdeg),"_",String(srlev),".grp"));
-			Read(fnam);
-			srlev:=srlev+1;
-	od;
-	srdeg:=srdeg+1;
-od;
-
-InstallGlobalFunction(SelectSRGroups,function(k,n)
-Print("Hi");
+if IsExistingFile(Filename( dir[1], Concatenation("sr_",String(deg),"_",String(lev),".grp"))) then
+	fnam:=Filename( dir, Concatenation("sr_",String(deg),"_",String(lev),".grp"));
+	Read(fnam);
+fi;
+G:=EvalString(Concatenation("sr_",String(deg),"_",String(lev),"[",String(num),"]"));
+return G;
 end);

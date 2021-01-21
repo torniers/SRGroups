@@ -1,31 +1,32 @@
 ##This contains a list of the self-replicating groups on the rooted regular-3 tree on level 2 ##
 
-sr_3_1_1:=
+sr_3_1:=
 [
-	[ (), (1,2,3), (1,3,2) ],
-	"AlternatingGroup(3)",
-	"emptyset",
-	["sr_3_2_1",
-	"sr_3_2_2",
-	"sr_3_2_3",
-	"sr_3_2_4",
-	"sr_3_2_5"]
-];
+	[
+		[ (), (1,2,3), (1,3,2) ],
+		"AlternatingGroup(3)",
+		"emptyset",
+		["SRGroup(3,2,1)",
+		"SRGroup(3,2,2)",
+		"SRGroup(3,2,3)",
+		"SRGroup(3,2,4)",
+		"SRGroup(3,2,5)"]
+	],
 
-sr_3_1_2:=
-[
-	[ (), (2,3), (1,2), (1,2,3), (1,3,2), (1,3) ],
-	"SymmetricGroup(3)",
-	"emptyset",
-	["sr_3_2_6",
-	"sr_3_2_7",
-	"sr_3_2_8",
-	"sr_3_2_9",
-	"sr_3_2_10",
-	"sr_3_2_11",
-	"sr_3_2_12",
-	"sr_3_2_13",
-	"sr_3_2_14",
-	"sr_3_2_15",
-	"sr_3_2_16"]
+	[
+		[ (), (2,3), (1,2), (1,2,3), (1,3,2), (1,3) ],
+		"SymmetricGroup(3)",
+		"emptyset",
+		["SRGroup(3,2,6)",
+		"SRGroup(3,2,7)",
+		"SRGroup(3,2,8)",
+		"SRGroup(3,2,9)",
+		"SRGroup(3,2,10)",
+		"SRGroup(3,2,11)",
+		"SRGroup(3,2,12)",
+		"SRGroup(3,2,13)",
+		"SRGroup(3,2,14)",
+		"SRGroup(3,2,15)",
+		"SRGroup(3,2,16)"]
+	]
 ];

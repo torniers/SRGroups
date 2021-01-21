@@ -16,7 +16,7 @@
 
 #! @Description
 #!   Insert documentation for your function here
-DeclareGlobalFunction( "SelectSRGroups" );
+DeclareGlobalFunction( "SRGroup" );
 
 DeclareGlobalFunction( "AutT" );
 DeclareGlobalFunction( "IsSelfReplicating" );
