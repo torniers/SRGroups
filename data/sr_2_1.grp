@@ -1,6 +1,6 @@
 ##This contains a list of the self-replicating groups on the rooted regular-2 tree on level 1 ##
 
-sr_2_1:=
+BindGlobal("sr_2_1",
 [
 	[
 		[ (1,2) ],
@@ -10,4 +10,4 @@ sr_2_1:=
 		"SRGroup(2,2,2)",
 		"SRGroup(2,2,3)"]
 	]
-];
+]);
