@@ -4,13 +4,24 @@
 # Routines
 #
 
-InstallGlobalFunction(SRGroup,function(deg,lev,num)
+# arg[1]:=degree
+# arg[2]:=level
+# arg[3]:=number
+InstallGlobalFunction(SRGroup,function(arg)
 local dir, fnam, G;
+
 dir:= DirectoriesPackageLibrary( "SRGroups", "data" );
-if IsExistingFile(Filename( dir[1], Concatenation("sr_",String(deg),"_",String(lev),".grp"))) then
-	fnam:=Filename( dir, Concatenation("sr_",String(deg),"_",String(lev),".grp"));
+if IsExistingFile(Filename( dir[1], Concatenation("sr_",String(arg[1]),"_",String(arg[2]),".grp"))) then
+	fnam:=Filename( dir, Concatenation("sr_",String(arg[1]),"_",String(arg[2]),".grp"));
 	Read(fnam);
 fi;
-G:=EvalString(Concatenation("sr_",String(deg),"_",String(lev),"[",String(num),"]"));
+
+if Length(arg)=3 then
+	G:=EvalString(Concatenation("sr_",String(arg[1]),"_",String(arg[2]),"[",String(arg[3]),"]"));
+else
+	G:=EvalString(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
+fi;
+MakeReadWriteGlobal(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
+UnbindGlobal(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
 return G;
 end);
