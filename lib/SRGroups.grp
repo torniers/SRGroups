@@ -8,7 +8,7 @@
 # arg[2]:=level
 # arg[3]:=number
 InstallGlobalFunction(SRGroup,function(arg)
-local dir, fnam, G;
+local dir, fnam, G, list, i, Gpos;
 
 dir:= DirectoriesPackageLibrary( "SRGroups", "data" );
 if IsExistingFile(Filename( dir[1], Concatenation("sr_",String(arg[1]),"_",String(arg[2]),".grp"))) then
@@ -16,10 +16,23 @@ if IsExistingFile(Filename( dir[1], Concatenation("sr_",String(arg[1]),"_",Strin
 	Read(fnam);
 fi;
 
-if Length(arg)=3 then
+if (Length(arg)=3) and not (arg[3]=0) then
 	G:=EvalString(Concatenation("sr_",String(arg[1]),"_",String(arg[2]),"[",String(arg[3]),"]"));
-else
+elif (Length(arg)=2) or (Length(arg)=3 and arg[3]=0) then
 	G:=EvalString(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
+elif (Length(arg)=4) and (arg[3]=0) then
+	list:=EvalString(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
+	Gpos:=1;
+	G:=[];
+	for i in [1..Length(list)] do
+		if EndsWith(list[i][3],Concatenation(",",String(arg[4]),")")) then
+			G[Gpos]:=list[i];
+			Gpos:=Gpos+1;
+		fi;
+	od;	
+else
+	Print("No method exists!");
+	return;
 fi;
 MakeReadWriteGlobal(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
 UnbindGlobal(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
