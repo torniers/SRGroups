@@ -2021,5 +2021,5 @@ BindGlobal("sr_3_3",
 		"SRGroup(3,3,188)",
 		"SRGroup(3,2,16)",
 		["the classes it extends to"]
-	],
+	]
 ]);
