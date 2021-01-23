@@ -10,7 +10,7 @@
 # arg[4]:=groups with same projection (arg[3]=0 is required)
 # arg[5]:=position
 InstallGlobalFunction(SRGroup,function(arg)
-local dir, fnam, G, list, i, Gpos;
+local dir, fnam, G, list, i, Gpos, temp;
 
 dir:= DirectoriesPackageLibrary( "SRGroups", "data" );
 if IsExistingFile(Filename( dir[1], Concatenation("sr_",String(arg[1]),"_",String(arg[2]),".grp"))) then
@@ -35,6 +35,15 @@ elif (Length(arg)=4) and (arg[3]=0) then
 			Gpos:=Gpos+1;
 		fi;
 	od;	
+elif (Length(arg)=5) and ((arg[4]=0) and (arg[3]=0)) then
+	list:=EvalString(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
+		Gpos:=1;
+		G:=[];
+		for i in [1..Length(list)] do
+			temp:=arg[5];
+			G[Gpos]:=list[i][temp];
+			Gpos:=Gpos+1;
+		od;
 else
 	Print("No method exists!");
 	return;
