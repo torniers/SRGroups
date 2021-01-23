@@ -7,6 +7,8 @@
 # arg[1]:=degree
 # arg[2]:=level
 # arg[3]:=number
+# arg[4]:=groups with same projection (arg[3]=0 is required)
+# arg[5]:=position
 InstallGlobalFunction(SRGroup,function(arg)
 local dir, fnam, G, list, i, Gpos;
 
@@ -14,6 +16,9 @@ dir:= DirectoriesPackageLibrary( "SRGroups", "data" );
 if IsExistingFile(Filename( dir[1], Concatenation("sr_",String(arg[1]),"_",String(arg[2]),".grp"))) then
 	fnam:=Filename( dir, Concatenation("sr_",String(arg[1]),"_",String(arg[2]),".grp"));
 	Read(fnam);
+else
+	Print("These groups are not available (yet)!");
+	return;
 fi;
 
 if (Length(arg)=3) and not (arg[3]=0) then
