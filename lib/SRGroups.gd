@@ -17,6 +17,7 @@
 #! @Description
 #!   Insert documentation for your function here
 DeclareGlobalFunction( "SRGroup" );
+DeclareGlobalFunction( "CheckSRProjections" );
 
 DeclareGlobalFunction( "AutT" );
 DeclareGlobalFunction( "IsSelfReplicating" );

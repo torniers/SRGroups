@@ -39,8 +39,8 @@ elif (Length(arg)=5) and ((arg[4]=0) and (arg[3]=0)) then
 	list:=EvalString(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
 		Gpos:=1;
 		G:=[];
+		temp:=arg[5];
 		for i in [1..Length(list)] do
-			temp:=arg[5];
 			G[Gpos]:=list[i][temp];
 			Gpos:=Gpos+1;
 		od;
@@ -48,7 +48,33 @@ else
 	Print("No method exists!");
 	return;
 fi;
+
 MakeReadWriteGlobal(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
 UnbindGlobal(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
 return G;
+end);
+
+InstallGlobalFunction(CheckSRProjections,function(arg)
+local dir, fnam, list1, list2, pr, i, G1, G2, check;
+
+check:=0;
+list1:=SRGroup(arg[1],arg[2],0,0,1);
+list2:=SRGroup(arg[1],arg[2],0,0,3);
+pr:=Projection(AutT(arg[1],arg[2]));
+for i in [1..Length(list1)] do
+	G1:=Image(pr,Group(list1[i]));
+	G2:=Group(EvalString(list2[i])[1]);
+	if not G1=G2 then
+		Print("SRGroup(",String(arg[1]),",",String(arg[2]),")[",String(i),"]");
+		check:=check+1;
+	fi;
+od;
+
+if check=0 then
+	Print("All groups project correctly.");
+else
+	Print(check,"groups did not project corrrectly.");
+fi;
+
+return;
 end);
