@@ -78,3 +78,46 @@ fi;
 
 return;
 end);
+
+InstallGlobalFunction(SRGroupFile, function(arg)
+local fName, dir, k, i, j, list1, list2, list3, deg, lev, SRG, cmnt;
+	dir:=DirectoriesPackageLibrary("SRGroups", "data");
+	if arg[1]=0 then
+		list1:=DirectoryContents("/proc/cygdrive/C/gap-4.11.0/pkg/SRGroups/data");
+		k:=list1[Length(DirectoryContents("/proc/cygdrive/C/gap-4.11.0/pkg/SRGroups/data"))];
+		i:=SplitString(k, ".", "_");
+		deg:=EvalString(list1[2])+1;
+		fName:=Filename(dir[1], Concatenation(list1[1], "_", String(deg), "_", String(1), ".grp"));
+		# Need to work out how to add all the self-replicating groups on level 1 =: A
+		#AppendTo(fName, SRG);
+	else 
+		deg:=arg[1];
+		list1:=DirectoryContents("/proc/cygdrive/C/gap-4.11.0/pkg/SRGroups/data");
+		#if an element of list begins with "sr_arg[1]_" then we are going to store it as our value of k. Each time we find another value in list that begins with the same string we will overwrite k as our list will be stored in an increasing sequence so naturally it will store the greatest value of k last. 
+		i:=1;
+		while i < Length(DirectoryContents("/proc/cygdrive/C/gap-4.11.0/pkg/SRGroups/data"))+1 do
+			if StartsWith(list1[i], Concatenation("sr_", String(deg))) then
+				k:=list1[i];
+			fi;
+			i:=i+1;
+		od;
+		i:=SplitString(k, ".", "_");
+		lev:=EvalString(i[3])+1;
+		fName:=Filename(dir[1], Concatenation(i[1], "_", String(deg), "_", String(lev), ".grp"));
+		list2:=[];
+		for j in [1..Length(SRGroup(deg,lev-1))] do
+			list2[j]:=ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection(deg, lev, Group(SRGroup(deg, lev-1, j)[1]));
+		od;
+		list3:=[];
+		for j in [1..Length(list2)] do
+			list3[j]:=GeneratorsOfGroup(list2[j]);
+		od;
+		AppendTo(fName, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##"));
+		SRG:=[];
+		for j in [1..Length(list3)] do
+			SRG[j]:= [list3[j]];
+		od;
+		AppendTo(fName, SRG);
+	fi;
+return;
+end);
