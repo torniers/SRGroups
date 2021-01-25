@@ -8,7 +8,7 @@
 # arg[2]:=level
 # arg[3]:=number
 # arg[4]:=groups with same projection (arg[3]=0 is required)
-# arg[5]:=position
+# arg[5]:=position (arg[3]=0 and arg[4]=0 is required)
 InstallGlobalFunction(SRGroup,function(arg)
 local dir, fnam, G, list, i, Gpos, temp;
 
@@ -65,7 +65,7 @@ for i in [1..Length(list1)] do
 	G1:=Image(pr,Group(list1[i]));
 	G2:=Group(EvalString(list2[i])[1]);
 	if not G1=G2 then
-		Print("SRGroup(",String(arg[1]),",",String(arg[2]),")[",String(i),"]");
+		Print("SRGroup(",String(arg[1]),",",String(arg[2]),")[",String(i),"]\n");
 		check:=check+1;
 	fi;
 od;
