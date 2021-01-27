@@ -19,6 +19,7 @@
 DeclareGlobalFunction( "SRGroup" );
 DeclareGlobalFunction( "CheckSRProjections" );
 DeclareGlobalFunction( "SRGroupFile" );
+DeclareGlobalFunction( "EnString" );
 
 DeclareGlobalFunction( "AutT" );
 DeclareGlobalFunction( "IsSelfReplicating" );
