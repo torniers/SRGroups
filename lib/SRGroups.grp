@@ -144,13 +144,11 @@ fNameTemp6, reEntry, initialo, initialj;
 				od;
 			od;
 		fi;
-		fNameTemp2:=Filename(dir[1],Concatenation("temp_,",String(deg),"_",String(lev),"_above_indiv.grp"));
-		fNameTemp3:=Filename(dir[1],Concatenation("temp_,",String(deg),"_",String(lev),"_indiv.grp"));
-		fNameTemp4:=Filename(dir[1],Concatenation("temp_,",String(deg),"_",String(lev),"_full.grp"));
-		fNameTemp5:=Filename(dir[1],Concatenation("temp_,",String(deg),"_",String(lev),"_var.grp"));
-		fNameTemp6:=Filename(dir[1],Concatenation("temp_,",String(deg),"_",String(lev),"_above.grp"));
-		AppendTo(fNameTemp4, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
-		AppendTo(fNameTemp6, "BindGlobal(\"sr_",String(deg),"_",String(lev-1),"\",\n[");
+		fNameTemp2:=Filename(dir[1],Concatenation("temp_",String(deg),"_",String(lev),"_above_indiv.grp"));
+		fNameTemp3:=Filename(dir[1],Concatenation("temp_",String(deg),"_",String(lev),"_indiv.grp"));
+		fNameTemp4:=Filename(dir[1],Concatenation("temp_",String(deg),"_",String(lev),"_full.grp"));
+		fNameTemp5:=Filename(dir[1],Concatenation("temp_",String(deg),"_",String(lev),"_var.grp"));
+		fNameTemp6:=Filename(dir[1],Concatenation("temp_",String(deg),"_",String(lev),"_above.grp"));
 		GroupList2:=[];
 		if lev=1 then
 			GroupList2:=GroupList;
@@ -164,6 +162,22 @@ fNameTemp6, reEntry, initialo, initialj;
 			if IsExistingFile(fNameTemp4) and IsExistingFile(fNameTemp5) then
 				reEntry:=true;
 				Read(fNameTemp5);
+				initialj:=EvalString("initialj");
+				initialo:=EvalString("initialo");
+				newgrouplist:=[];
+				sortedlist:=EvalString("sortedlist");
+				total:=EvalString("total");
+				unsortedlist1:=EvalString("unsortedlist1");
+				unsortedlist2:=EvalString("unsortedlist2");
+				n:=EvalString("n");
+				p:=EvalString("p");
+				I:=EvalString("I");
+				M:=EvalString("M");
+				N:=EvalString("N");
+				Identicals:=EvalString("Identicals");
+				PrevGroupList:=SRGroup(deg,lev-1);
+				PrevPosList:=EvalString("PrevPosList");
+				Vertices:=EvalString("Vertices");
 			else
 				reEntry:=false;
 				unsortedlist1:=[];
@@ -185,11 +199,11 @@ fNameTemp6, reEntry, initialo, initialj;
 				initialo:=1;
 			fi;
 			for j in [initialj..numberoflists] do
+				newgrouplist[j]:=[];
 				if not reEntry then
 					unsortedlist2[j]:=[];
 					sortedlist[j]:=[];
 					PrevPosList[j]:=[];
-					newgrouplist[j]:=[];
 					if j>1 then
 						total:=total+Length(SRGroup(deg,lev-1,0,j-1));
 					fi;
@@ -222,7 +236,14 @@ fNameTemp6, reEntry, initialo, initialj;
 							fi;
 							AppendTo(fNameTemp3,",\n\t\t",GroupList2[M][2]);
 							AppendTo(fNameTemp3,",\n\t\t",GroupList2[M][3]);
-							AppendTo(fNameTemp3,",\n\t\t",GroupList2[M][4],"\n\t],");
+							if not M=Sum(unsortedlist1) then
+								AppendTo(fNameTemp3,",\n\t\t",GroupList2[M][4],"\n\t],");
+							else
+								AppendTo(fNameTemp3,",\n\t\t",GroupList2[M][4],"\n\t]");
+							fi;
+							if not IsExistingFile(fNameTemp4) then
+								AppendTo(fNameTemp4, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
+							fi;
 							AppendTo(fNameTemp4,StringFile(fNameTemp3));
 							PrintTo(fNameTemp5,EnString(j, o, sortedlist, total, unsortedlist1, unsortedlist2, n, p, I, M, N, Identicals, PrevPosList, Vertices));
 							if reEntry then
@@ -233,7 +254,9 @@ fNameTemp6, reEntry, initialo, initialj;
 							M:=M+1;
 						od;
 						if not I=M then
-							newgrouplist[j][n]:=PrevGroupList[total+PrevPosList[j][n]];
+							if not reEntry then
+								newgrouplist[j][n]:=PrevGroupList[total+PrevPosList[j][n]];
+							fi;
 							newgrouplist[j][n][2]:=String(Concatenation("\"SRGroup(", String(deg), ",", String(lev-1), ",", String(total+n), ")\""));
 							PrintTo(fNameTemp2, "\n\t", "[");
 							AppendTo(fNameTemp2, "\n\t\t", newgrouplist[j][n][1], ",");
@@ -255,6 +278,9 @@ fNameTemp6, reEntry, initialo, initialj;
 							MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(total+PrevPosList[j][n]),"_proj"));
 							UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(total+PrevPosList[j][n]),"_proj"));
 							Vertices:=Vertices-1;
+							if not IsExistingFile(fNameTemp6) then
+								AppendTo(fNameTemp6, "BindGlobal(\"sr_",String(deg),"_",String(lev-1),"\",\n[");
+							fi;
 							if Vertices = 0 then
 								AppendTo(fNameTemp6,StringFile(fNameTemp2),"\n]);");
 							else
@@ -265,6 +291,10 @@ fNameTemp6, reEntry, initialo, initialj;
 								reEntry:=false;
 								initialo:=1;
 							fi;
+						fi;
+						if reEntry then
+							reEntry:=false;
+							initialo:=1;
 						fi;
 						n:=n+1;
 					od;
