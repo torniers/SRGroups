@@ -80,11 +80,11 @@ return;
 end);
 
 InstallGlobalFunction(SRGroupFile, function(arg)
-local fName, dir, k, i, j, list1, list2, list3, deg, lev, SRG, cmnt, n, fNameTemp, GroupList, initial, previous, temp, tempFile;
+local fName, dir, k, i, j, list1, list2, list3, deg, lev, SRG, cmnt, n, fNameTemp, GroupList, initial, previous, temp, tempFile, GroupList2, numberoflists, unsortedlist1, unsortedlist2, sortedlist, PrevPosList, N, M, Identicals, o , p, sortingtemp, total, Vertices, I, J, fNameTemp2, PrevGroupList, newgrouplist, Prev, Post, m;
 	dir:=DirectoriesPackageLibrary("SRGroups", "data");
+	list1:=DirectoryContents(dir[1]);
 	if arg[1]=0 or arg[1]=1 then
-		list1:=DirectoryContents("/proc/cygdrive/C/gap-4.11.0/pkg/SRGroups/data");
-		k:=list1[Length(DirectoryContents("/proc/cygdrive/C/gap-4.11.0/pkg/SRGroups/data"))];
+		k:=list1[Length(list1)];
 		i:=SplitString(k, ".", "_");
 		deg:=EvalString(list1[2])+1;
 		fName:=Filename(dir[1], Concatenation(list1[1], "_", String(deg), "_", String(1), ".grp"));
@@ -92,10 +92,9 @@ local fName, dir, k, i, j, list1, list2, list3, deg, lev, SRG, cmnt, n, fNameTem
 		#AppendTo(fName, SRG);
 	else 
 		deg:=arg[1];
-		list1:=DirectoryContents("/proc/cygdrive/C/gap-4.11.0/pkg/SRGroups/data");
 		#if an element of list begins with "sr_arg[1]_" then we are going to store it as our value of k. Each time we find another value in list that begins with the same string we will overwrite k as our list will be stored in an increasing sequence so naturally it will store the greatest value of k last. 
 		i:=1;
-		while i < Length(DirectoryContents("/proc/cygdrive/C/gap-4.11.0/pkg/SRGroups/data"))+1 do
+		while i < Length(list1)+1 do
 			if StartsWith(list1[i], Concatenation("sr_", String(deg))) then
 				k:=list1[i];
 			fi;
@@ -103,9 +102,9 @@ local fName, dir, k, i, j, list1, list2, list3, deg, lev, SRG, cmnt, n, fNameTem
 		od;
 		i:=SplitString(k, ".", "_");
 		lev:=EvalString(i[3])+1;
-		fName:=Filename(dir, Concatenation(i[1], "_", String(deg), "_", String(lev), ".grp"));
+		fName:=Filename(dir[1], Concatenation(i[1], "_", String(deg), "_", String(lev), ".grp"));
 		list2:=[];
-		fNameTemp:=Filename(dir, Concatenation("temp", "_", String(deg), "_", String(lev), ".grp"));
+		fNameTemp:=Filename(dir[1], Concatenation("temp", "_", String(deg), "_", String(lev), ".grp"));
 		initial:=1;
 		if IsExistingFile(fNameTemp) then
 			Read(fNameTemp);
@@ -113,35 +112,182 @@ local fName, dir, k, i, j, list1, list2, list3, deg, lev, SRG, cmnt, n, fNameTem
 			previous:=0;
 			while previous=initial-1 do
 				previous:=initial;
-				PrintTo(tempFile,Concatenation("initial1:=",String(initial),";\n\nif IsList(temp_",String(deg),"_",String(lev-1),"_",String(initial),"_proj) then\n\tinitial1:=initial1+1;\nfi;"));
+				PrintTo(tempFile,Concatenation("initial1:=",String(initial),";\n\nif IsBound(temp_",String(deg),"_",String(lev-1),"_",String(initial),"_proj) then\n\tinitial1:=initial1+1;\nfi;"));
 				Read(tempFile);
 				initial:=EvalString("initial1");
+				if previous=initial-1 then
+					MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(previous),"_proj"));
+					UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(previous),"_proj"));
+				fi;
+				UnbindGlobal("initial1");
 			od;
 		fi;
 		if initial<Length(SRGroup(deg,lev-1)) then
 			for j in [initial..Length(SRGroup(deg,lev-1))] do
 				GroupList:=ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection(deg, lev, Group(SRGroup(deg, lev-1, j)[1]));
 				if j=1 then
-					AppendTo(fNameTemp,Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(j),"_proj:=\n["));
+					AppendTo(fNameTemp,Concatenation("BindGlobal(\"temp_",String(deg),"_",String(lev-1),"_",String(j),"_proj\",\n["));
 				else
-					AppendTo(fNameTemp,Concatenation("\n\ntemp_",String(deg),"_",String(lev-1),"_",String(j),"_proj:=\n["));
+					AppendTo(fNameTemp,Concatenation("\n\nBindGlobal(\"temp_",String(deg),"_",String(lev-1),"_",String(j),"_proj\",\n["));
 				fi;
 				for n in [1..Length(GroupList)] do
 					list2[n]:=GeneratorsOfGroup(GroupList[n]);
 					if n=Length(GroupList) then
-						AppendTo(fNameTemp,Concatenation("\n\t",String(list2[n]),"\n];"));
+						AppendTo(fNameTemp,Concatenation("\n\t",String(list2[n]),"\n]);"));
 					else
 						AppendTo(fNameTemp,Concatenation("\n\t",String(list2[n]),","));
 					fi;
 				od;
 			od;
 		fi;
-		# AppendTo(fName, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##"));
-		# SRG:=[];
-		# for j in [1..Length(list3)] do
-			# SRG[j]:= [list3[j]];
-		# od;
-		# AppendTo(fName, SRG);
+		fNameTemp2:=Filename(dir[1],"temp2.grp");
+		AppendTo(fName, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
+		AppendTo(fNameTemp2, "[");
+		GroupList2:=[];
+		if lev=1 then
+			GroupList2:=GroupList;
+		elif lev=2 then
+			numberoflists:=1;
+		else 
+			numberoflists:=Length(SRGroup(deg,lev-2));
+		fi;
+		if lev>1 then
+			Read(fNameTemp);
+			unsortedlist1:=[];
+			for j in [1..Length(SRGroup(deg,lev-1))] do
+				unsortedlist1[j]:=Length(EvalString(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(j),"_proj")));
+			od;
+			unsortedlist2:=[];
+			sortedlist:=[];
+			PrevPosList:=[];
+			PrevGroupList:=SRGroup(deg,lev-1);
+			newgrouplist:=[];
+			Vertices:=Length(PrevGroupList);
+			total:=0;
+			N:=1;
+			M:=1;
+			I:=1;
+			J:=1;
+			for j in [1..numberoflists] do
+				unsortedlist2[j]:=[];
+				sortedlist[j]:=[];
+				PrevPosList[j]:=[];
+				newgrouplist[j]:=[];
+				if j>1 then
+					total:=total+Length(SRGroup(deg,lev-1,0,j-1));
+				fi;
+				for n in [1..Length(SRGroup(deg,lev-1,0,j))] do
+					unsortedlist2[j][n]:=unsortedlist1[N];
+					N:=N+1;
+				od;
+				n:=1;
+				sortedlist[j]:=SortedList(unsortedlist2[j]);
+				while n<=Length(SRGroup(deg,lev-1,0,j)) do
+					Identicals:=Positions(unsortedlist2[j],sortedlist[j][n]);
+					if Length(Identicals)=1 then
+						PrevPosList[j][n]:=Identicals[1];
+						for p in [1..sortedlist[j][n]] do
+							GroupList2[M]:=[];
+							GroupList2[M][1]:=EvalString(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(total+PrevPosList[j][n]),"_proj"))[p];
+							GroupList2[M][2]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(M),")\"");
+							GroupList2[M][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(total+n),")\"");
+							GroupList2[M][4]:="[\"the classes it extends to\"]";
+							if not M=1 then
+								AppendTo(fName,Concatenation("\n\n\t[\n\t\t",String(GroupList2[M][1])));
+							else
+								AppendTo(fName,Concatenation("\n\t[\n\t\t",String(GroupList2[M][1])));
+							fi;
+							AppendTo(fName,",\n\t\t",GroupList2[M][2]);
+							AppendTo(fName,",\n\t\t",GroupList2[M][3]);
+							AppendTo(fName,",\n\t\t",GroupList2[M][4],"\n\t],");
+							M:=M+1;
+						od;
+						Prev:=PrevPosList[j];
+						Post:=sortedlist[j];
+						newgrouplist[j][n]:=PrevGroupList[total+Prev[n]];
+						newgrouplist[j][n][2]:=String(Concatenation("\"SRGroup(", String(deg), ",", String(lev-1), ",", String(total+n), ")\""));
+						AppendTo(fNameTemp2, "\n\t", "[");
+						AppendTo(fNameTemp2, "\n\t\t", newgrouplist[j][n][1], ",");
+						AppendTo(fNameTemp2, "\n\t\t", "", newgrouplist[j][n][2], ",");
+						AppendTo(fNameTemp2, "\n\t\t", "\"", newgrouplist[j][n][3], "\",");
+						for m in [1..sortedlist[j][n]] do
+							newgrouplist[j][n][4]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(I),")\"");
+							if sortedlist[j][n]=1 then
+								AppendTo(fNameTemp2,"\n\t\t", "[", newgrouplist[j][n][4], "]");
+							elif m=1 then
+								AppendTo(fNameTemp2, "\n\t\t", "[", newgrouplist[j][n][4], ",");
+							elif m=sortedlist[j][n] then
+								AppendTo(fNameTemp2, "\n\t\t", newgrouplist[j][n][4], "]");
+							else 
+								AppendTo(fNameTemp2, "\n\t\t", newgrouplist[j][n][4], ",");
+							fi;
+							I:=I+1;
+						od;
+						Vertices:=Vertices-1;
+						if Vertices = 0 then
+							AppendTo(fNameTemp2, "\n\t]\n]);");
+						else
+							AppendTo(fNameTemp2, "\n\t],\n");
+						fi;
+						n:=n+1;
+					else
+						for o in [1..Length(Identicals)] do
+							PrevPosList[j][n]:=Identicals[o];
+							for p in [1..sortedlist[j][n]] do
+								GroupList2[M]:=[];
+								GroupList2[M][1]:=EvalString(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(total+PrevPosList[j][n]),"_proj"))[p];
+								GroupList2[M][2]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(M),")\"");
+								GroupList2[M][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(total+n),")\"");
+								GroupList2[M][4]:="[\"the classes it extends to\"]";
+								if not M=1 then
+									AppendTo(fName,Concatenation("\n\n\t[\n\t\t",String(GroupList2[M][1])));
+								else
+									AppendTo(fName,Concatenation("\n\t[\n\t\t",String(GroupList2[M][1])));
+								fi;
+								AppendTo(fName,",\n\t\t",GroupList2[M][2]);
+								AppendTo(fName,",\n\t\t",GroupList2[M][3]);
+								AppendTo(fName,",\n\t\t",GroupList2[M][4],"\n\t],");
+								M:=M+1;
+							od;
+							Prev:=PrevPosList[j];
+							Post:=sortedlist[j];
+							newgrouplist[j][n]:=PrevGroupList[total+Prev[n]];
+							newgrouplist[j][n][2]:=String(Concatenation("\"SRGroup(", String(deg), ",", String(lev-1), ",", String(total+n), ")\""));
+							AppendTo(fNameTemp2, "\n\t", "[");
+							AppendTo(fNameTemp2, "\n\t\t", newgrouplist[j][n][1], ",");
+							AppendTo(fNameTemp2, "\n\t\t", "", newgrouplist[j][n][2], ",");
+							AppendTo(fNameTemp2, "\n\t\t", "\"", newgrouplist[j][n][3], "\",");
+							for m in [1..sortedlist[j][n]] do
+								newgrouplist[j][n][4]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(I),")\"");
+								if sortedlist[j][n]=1 then
+									AppendTo(fNameTemp2,"\n\t\t", "[", newgrouplist[j][n][4], "]");
+								elif m=1 then
+									AppendTo(fNameTemp2, "\n\t\t", "[", newgrouplist[j][n][4], ",");
+								elif m=sortedlist[j][n] then
+									AppendTo(fNameTemp2, "\n\t\t", newgrouplist[j][n][4], "]");
+								else 
+									AppendTo(fNameTemp2, "\n\t\t", newgrouplist[j][n][4], ",");
+								fi;
+								I:=I+1;
+							od;
+							AppendTo(fNameTemp2, "\n\t", "],");
+							Vertices:=Vertices-1;
+							if Vertices = 0 then
+								AppendTo(fNameTemp2, "\n]);");
+							else
+								AppendTo(fNameTemp2, "\n");
+							fi;
+							MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(total+PrevPosList[j][n]),"_proj"));
+							UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(total+PrevPosList[j][n]),"_proj"));
+							n:=n+1;
+						od;
+					fi;
+				od;
+			od;
+		fi;
+		AppendTo(fName,"\n]);");
+		#RemoveFile(fNameTemp);
+		#RemoveFile(tempFile);
 	fi;
 return;
 end);
