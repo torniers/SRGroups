@@ -1,5 +1,0 @@
-initial1:=7;
-
-if IsBound(temp_2_3_7_proj) then
-	initial1:=initial1+1;
-fi;
