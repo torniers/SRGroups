@@ -1,5 +1,5 @@
-initial1:=7;
+initial1:=16;
 
-if IsBound(temp_2_3_7_proj) then
+if IsBound(temp_2_3_16_proj) then
 	initial1:=initial1+1;
 fi;
