@@ -102,32 +102,17 @@ fNameTemp6, reEntry, initialo, initialj, totaltemp, kk, totalsrs, reEntrychecker
 		fNameTemp4:=Filename(dir[1],Concatenation("temp_",String(deg),"_1_full.grp"));
 		fNameTemp5:=Filename(dir[1],Concatenation("temp_",String(deg),"_1_var.grp"));
 		GroupList:=[];
+		initialj:=1;
 		if IsExistingFile(fNameTemp4) and IsExistingFile(fNameTemp5) then
 				reEntry:=true;
 				reEntrychecker:=true;
 				Read(fNameTemp5);
-				initialj:=EvalString("initialj");
-				initialo:=EvalString("initialo");
-				newgrouplist:=[];
-				sortedlist:=EvalString("sortedlist");
-				total:=EvalString("total");
-				unsortedlist1:=EvalString("unsortedlist1");
-				unsortedlist2:=EvalString("unsortedlist2");
-				n:=EvalString("n");
-				p:=EvalString("p");
-				I:=EvalString("I");
-				M:=EvalString("M");
-				N:=EvalString("N");
-				Identicals:=EvalString("Identicals");
-				PrevGroupList:=SRGroup(deg,lev-1);
-				PrevPosList:=EvalString("PrevPosList");
-				Vertices:=EvalString("Vertices");
-				totaltemp:=0;
+				initialj:=EvalString("varArg1");
 		else
 			reEntry:=false;
 			reEntrychecker:=false;
 		fi;
-		for j in [1..NrTransitiveGroups(deg)] do
+		for j in [initialj..NrTransitiveGroups(deg)] do
 			GroupList[j]:=[];
 			GroupList[j][1]:=TRANSGrp(deg,j);
 			Remove(GroupList[j][1],Length(GroupList[j][1]));
@@ -150,12 +135,10 @@ fNameTemp6, reEntry, initialo, initialj, totaltemp, kk, totalsrs, reEntrychecker
 				PrintTo(fNameTemp4, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level 1 ##\n\nBindGlobal(\"sr_",String(deg),"_1\",\n["));
 			fi;
 			AppendTo(fNameTemp4,StringFile(fNameTemp3));
-			PrintTo(fNameTemp5,EnString2());
+			PrintTo(fNameTemp5,EnString(j));
 		od;
-		# Need to work out how to add all the self-replicating groups on level 1 =: A
 		AppendTo(fNameTemp4,"\n]);");
 		PrintTo(fName, StringFile(fNameTemp4));
-		
 	else 
 		deg:=arg[1];
 		#if an element of list begins with "sr_arg[1]_" then we are going to store it as our value of k. Each time we find another value in list that begins with the same string we will overwrite k as our list will be stored in an increasing sequence so naturally it will store the greatest value of k last. 
@@ -174,7 +157,7 @@ fNameTemp6, reEntry, initialo, initialj, totaltemp, kk, totalsrs, reEntrychecker
 		initial:=1;
 		if IsExistingFile(fNameTemp) then
 			Read(fNameTemp);
-			tempFile:=Filename(dir,Concatenation("temp_",String(deg),"_",String(lev),"_check.grp"));
+			tempFile:=Filename(dir[1],Concatenation("temp_",String(deg),"_",String(lev),"_check.grp"));
 			previous:=0;
 			while previous=initial-1 do
 				previous:=initial;
@@ -398,15 +381,13 @@ end);
 InstallGlobalFunction(EnString, function(arg)
 local Superstring, i;
 
-Superstring:=Concatenation("varArg1:=",String(arg[1]));
-for i in [2..(Length(arg)-1)] do
+for i in [1..Length(arg)] do
 	if i=1 then
-		Superstring:=Concatenation("varArg",String(i),":=",String(arg[i]));
+		Superstring:=Concatenation("varArg",String(i),":=",String(arg[i]),";");
 	else
-		Superstring:=Concatenation(Superstring,";\nvarArg",String(i),":=",String(arg[i]));
+		Superstring:=Concatenation(Superstring,"\nvarArg",String(i),":=",String(arg[i]),";");
 	fi;
 od;
-Superstring:=Concatenation(Superstring,";\nvarArg",String(Length(arg)),":=",String(arg[Length(arg)]),";");
 
 return Superstring;
 end);

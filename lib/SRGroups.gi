@@ -65,7 +65,7 @@ InstallGlobalFunction(MaximalExtension,function(k,n,G)
 		for b in pre_a do
 			extn:=true;
 			for i in [1..k] do
-				if not BelowAction(k,n+1,b,i) in G then extn:=false; break; fi;
+				if not BelowAction(k,n+1,b,i) in G then extn:=false; break; fi; # potential issue
 			od;
 			if extn then Add(gensMG,b); break; fi;
 		od;
@@ -113,7 +113,7 @@ InstallGlobalFunction(ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjectio
 	F:=AutT(k,n);
 	pr:=Projection(F);
 	list:=[];
-	for class in ConjugacyClassesMaximalSubgroups(MaximalExtension(k,n-1,G)) do
+	for class in ConjugacyClassesMaximalSubgroups(MaximalExtension(k,n-1,G)) do # potential issue
 		for H in class do
 			if not Image(pr,H)=G then continue; fi;
 			if IsSelfReplicating(k,n,H) then
@@ -169,7 +169,7 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,f
 
 	F:=AutT(k,n);
 	pr:=Projection(F);
-	list:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection(k,n,G));
+	list:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection(k,n,G)); # potential issue
 	listtemp:=ShallowCopy(list);
 	while not IsEmpty(listtemp) do
 		for H in listtemp do
