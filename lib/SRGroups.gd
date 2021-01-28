@@ -20,6 +20,7 @@ DeclareGlobalFunction( "SRGroup" );
 DeclareGlobalFunction( "CheckSRProjections" );
 DeclareGlobalFunction( "SRGroupFile" );
 DeclareGlobalFunction( "EnString" );
+DeclareGlobalFunction( "Unleash" );
 
 DeclareGlobalFunction( "AutT" );
 DeclareGlobalFunction( "IsSelfReplicating" );
