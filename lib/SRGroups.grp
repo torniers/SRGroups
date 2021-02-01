@@ -83,7 +83,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 local fName, dir, k, i, j, list1, list2, list3, deg, lev, SRG, cmnt, n, fNameTemp, GroupList, initial, previous, temp,
 tempFile, GroupList2, numberoflists, unsortedlist1, unsortedlist2, sortedlist, PrevPosList, N, M, Identicals, o , p,
 sortingtemp, total, Vertices, I, J, fNameTemp2, PrevGroupList, newgrouplist, Prev, Post, m, fNameTemp3, fNameTemp4, fNameTemp5,
-fNameTemp6, reEntry, initialo, initialj, totaltemp, kk, totalsrs, reEntrychecker, jj;
+fNameTemp6, reEntry, initialo, initialj, totaltemp, kk, totalsrs, reEntrychecker, jj, listOfGroups, x, y, z, levelOneLists, prePosList, sortedList1, unsortedList1, unsortedList2, repeats;
 
 	dir:=DirectoriesPackageLibrary("SRGroups", "data");
 	list1:=DirectoryContents(dir[1]);
@@ -198,11 +198,43 @@ fNameTemp6, reEntry, initialo, initialj, totaltemp, kk, totalsrs, reEntrychecker
 		if lev=1 then
 			GroupList2:=GroupList;
 		elif lev=2 then
-			numberoflists:=1;
+			Read(fNameTemp);
+			unsortedList1:=[];
+			unsortedList2:=[];
+			sortedList1:=[];
+			prePosList:=[];
+			levelOneLists:=Length(SRGroup(deg, lev-1));	
+			for x in [1..levelOneLists] do
+				unsortedList1[x]:=[];
+				sortedList1[x]:=[];
+				prePosList[x]:=[];
+				for y in [1..Length(SRGroup(deg,lev,0,x))] do
+					unsortedList1[x][y]:=Length(SRGroup(deg,lev,0,x)[y][4]);
+				od;
+				unsortedList2[x]:=Length(unsortedList1[x]);
+				sortedList1[x]:=Length(unsortedList1[x]);
+			od;
+			StableSort(sortedList1);
+			y:=1;
+			while y<=Length(unsortedList2) do
+				repeats:=Positions(unsortedList2, sortedList1[y]);
+				for z in [1..Length(repeats)] do
+					prePosList[y]:=repeats[z];
+					y:=y+1;
+				od;
+			od;
+			listOfGroups:=[];
+			for x in [1..levelOneLists] do
+				listOfGroups[x]:=[];
+				listOfGroups[x][1]:= EvalString(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(x),"_proj"));
+				listOfGroups[x][2]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(x),")\"");
+				listOfGroups[x][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(x+lev-1),")\"");
+				listOfGroups[x][4]:="[\"the classes it extends to\"]";
+			od;
 		else 
 			numberoflists:=Length(SRGroup(deg,lev-2));
 		fi;
-		if lev>1 then
+		if lev>2 then
 			Read(fNameTemp);
 			if IsExistingFile(fNameTemp4) and IsExistingFile(fNameTemp5) then
 				reEntry:=true;
