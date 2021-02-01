@@ -43,10 +43,10 @@ InstallGlobalFunction(BelowAction,function(k,n,aut,i)
 	local aut_i, j;
 	
 	# restricting to subtree below the level 1 vertex i by taking remainder mod k^(n-1)
-	aut_i:=[];	
+	aut_i:=[];
 	for j in [1..k^(n-1)] do aut_i[j]:=((i-1)*k^(n-1)+j)^aut mod k^(n-1); od;
 	# replace 0 with k^(n-1)
-	aut_i[Position(aut_i,0)]:=k^(n-1);	
+	aut_i[Position(aut_i,0)]:=k^(n-1);
 	return PermList(aut_i);
 end);
 
