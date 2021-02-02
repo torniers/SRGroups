@@ -85,24 +85,85 @@ tempFile, GroupList2, numberoflists, unsortedlist1, unsortedlist2, sortedlist, P
 sortingtemp, total, Vertices, I, J, fNameTemp2, PrevGroupList, newgrouplist, Prev, Post, m, fNameTemp3, fNameTemp4, fNameTemp5,
 fNameTemp6, reEntry, initialo, initialj, totaltemp, kk, totalsrs, reEntrychecker, jj, listOfGroups, x, y, z, levelOneGroups, prePosList, sortedList1, unsortedList1, unsortedList2, repeats, initialz;
 
-	dir:=DirectoriesPackageLibrary("SRGroups", "data");
-	list1:=DirectoryContents(dir[1]);
-	if arg[1]=0 or arg[1]=1 then
-		totalsrs:=0;
-		for k in [1..Length(list1)] do
-			if StartsWith(list1[k],"sr_") then
-				totalsrs:=totalsrs+1;
-			fi;
-		od;
-		k:=list1[totalsrs];
-		i:=SplitString(k, ".", "_");
-		deg:=EvalString(i[2])+1;
-		fName:=Filename(dir[1], Concatenation(i[1], "_", String(deg), "_1.grp"));
-		fNameTemp3:=Filename(dir[1],Concatenation("temp_",String(deg),"_1_indiv.grp"));
-		fNameTemp4:=Filename(dir[1],Concatenation("temp_",String(deg),"_1_full.grp"));
-		fNameTemp5:=Filename(dir[1],Concatenation("temp_",String(deg),"_1_var.grp"));
-		GroupList:=[];
+dir:=DirectoriesPackageLibrary("SRGroups", "data");
+list1:=DirectoryContents(dir[1]);
+if arg[1]=0 or arg[1]=1 then
+	totalsrs:=0;
+	for k in [1..Length(list1)] do
+		if StartsWith(list1[k],"sr_") then
+			totalsrs:=totalsrs+1;
+		fi;
+	od;
+	k:=list1[totalsrs];
+	i:=SplitString(k, ".", "_");
+	deg:=EvalString(i[2])+1;
+	fName:=Filename(dir[1], Concatenation(i[1], "_", String(deg), "_1.grp"));
+	fNameTemp3:=Filename(dir[1],Concatenation("temp_",String(deg),"_1_indiv.grp"));
+	fNameTemp4:=Filename(dir[1],Concatenation("temp_",String(deg),"_1_full.grp"));
+	fNameTemp5:=Filename(dir[1],Concatenation("temp_",String(deg),"_1_var.grp"));
+	GroupList:=[];
+	if IsExistingFile(fNameTemp4) and IsExistingFile(fNameTemp5) then
+			reEntry:=true;
+			reEntrychecker:=true;
+			Read(fNameTemp5);
+			initialj:=EvalString("varArg1");
+	else
+		reEntry:=false;
+		reEntrychecker:=false;
 		initialj:=1;
+	fi;
+	for j in [initialj..NrTransitiveGroups(deg)] do
+		GroupList[j]:=[];
+		GroupList[j][1]:=TRANSGrp(deg,j);
+		Remove(GroupList[j][1],Length(GroupList[j][1]));
+		GroupList[j][2]:=Concatenation("\"SRGroup(",String(deg),",1,",String(j),")\"");
+		GroupList[j][3]:="\"emptyset\"";
+		GroupList[j][4]:="[\"the classes it extends to\"]";
+		if not j=1 then
+			PrintTo(fNameTemp3,Concatenation("\n\n\t[\n\t\t",String(GroupList[j][1])));
+		else
+			PrintTo(fNameTemp3,Concatenation("\n\t[\n\t\t",String(GroupList[j][1])));
+		fi;
+		AppendTo(fNameTemp3,",\n\t\t",GroupList[j][2]);
+		AppendTo(fNameTemp3,",\n\t\t",GroupList[j][3]);
+		if not j=NrTransitiveGroups(deg) then
+			AppendTo(fNameTemp3,",\n\t\t",GroupList[j][4],"\n\t],");
+		else
+			AppendTo(fNameTemp3,",\n\t\t",GroupList[j][4],"\n\t]");
+		fi;
+		if not IsExistingFile(fNameTemp4) then
+			PrintTo(fNameTemp4, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level 1 ##\n\nBindGlobal(\"sr_",String(deg),"_1\",\n["));
+		fi;
+		AppendTo(fNameTemp4,StringFile(fNameTemp3));
+		PrintTo(fNameTemp5,EnString(j));
+	od;
+	AppendTo(fNameTemp4,"\n]);");
+	PrintTo(fName, StringFile(fNameTemp4));
+else 
+	deg:=arg[1];
+	#if an element of list begins with "sr_arg[1]_" then we are going to store it as our value of k. Each time we find another value in list that begins with the same string we will overwrite k as our list will be stored in an increasing sequence so naturally it will store the greatest value of k last. 
+	i:=1;
+	k:=0;
+	while i < Length(list1)+1 do
+		if StartsWith(list1[i], Concatenation("sr_", String(deg))) then
+			k:=list1[i];
+		fi;
+		i:=i+1;
+	od;
+	if k=0 then 
+		lev:=1;
+	else
+		i:=SplitString(k, ".", "_");
+		lev:=EvalString(i[3])+1;
+	fi;
+	fName:=Filename(dir[1], Concatenation("sr_", String(deg), "_", String(lev), ".grp"));
+	list2:=[];
+	fNameTemp:=Filename(dir[1], Concatenation("temp", "_", String(deg), "_", String(lev), ".grp"));
+	fNameTemp3:=Filename(dir[1],Concatenation("temp_",String(deg),"_",String(lev),"_indiv.grp"));
+	fNameTemp4:=Filename(dir[1],Concatenation("temp_",String(deg),"_",String(lev),"_full.grp"));
+	fNameTemp5:=Filename(dir[1],Concatenation("temp_",String(deg),"_",String(lev),"_var.grp"));
+	if lev=1 then
+		GroupList:=[];
 		if IsExistingFile(fNameTemp4) and IsExistingFile(fNameTemp5) then
 				reEntry:=true;
 				reEntrychecker:=true;
@@ -111,6 +172,7 @@ fNameTemp6, reEntry, initialo, initialj, totaltemp, kk, totalsrs, reEntrychecker
 		else
 			reEntry:=false;
 			reEntrychecker:=false;
+			initialj:=1;
 		fi;
 		for j in [initialj..NrTransitiveGroups(deg)] do
 			GroupList[j]:=[];
@@ -137,28 +199,7 @@ fNameTemp6, reEntry, initialo, initialj, totaltemp, kk, totalsrs, reEntrychecker
 			AppendTo(fNameTemp4,StringFile(fNameTemp3));
 			PrintTo(fNameTemp5,EnString(j));
 		od;
-		AppendTo(fNameTemp4,"\n]);");
-		PrintTo(fName, StringFile(fNameTemp4));
-	else 
-		deg:=arg[1];
-		#if an element of list begins with "sr_arg[1]_" then we are going to store it as our value of k. Each time we find another value in list that begins with the same string we will overwrite k as our list will be stored in an increasing sequence so naturally it will store the greatest value of k last. 
-		i:=1;
-		k:=0;
-		while i < Length(list1)+1 do
-			if StartsWith(list1[i], Concatenation("sr_", String(deg))) then
-				k:=list1[i];
-			fi;
-			i:=i+1;
-		od;
-		if k=0 then 
-			lev:=1;
-		else
-			i:=SplitString(k, ".", "_");
-			lev:=EvalString(i[3])+1;
-		fi;
-		fName:=Filename(dir[1], Concatenation("sr_", "_", String(deg), "_", String(lev), ".grp"));
-		list2:=[];
-		fNameTemp:=Filename(dir[1], Concatenation("temp", "_", String(deg), "_", String(lev), ".grp"));
+	else
 		initial:=1;
 		if IsExistingFile(fNameTemp) then
 			Read(fNameTemp);
@@ -195,14 +236,9 @@ fNameTemp6, reEntry, initialo, initialj, totaltemp, kk, totalsrs, reEntrychecker
 			od;
 		fi;
 		fNameTemp2:=Filename(dir[1],Concatenation("temp_",String(deg),"_",String(lev),"_above_indiv.grp"));
-		fNameTemp3:=Filename(dir[1],Concatenation("temp_",String(deg),"_",String(lev),"_indiv.grp"));
-		fNameTemp4:=Filename(dir[1],Concatenation("temp_",String(deg),"_",String(lev),"_full.grp"));
-		fNameTemp5:=Filename(dir[1],Concatenation("temp_",String(deg),"_",String(lev),"_var.grp"));
 		fNameTemp6:=Filename(dir[1],Concatenation("temp_",String(deg),"_",String(lev),"_above.grp"));
 		GroupList2:=[];
-		if lev=1 then
-			GroupList2:=GroupList;
-		elif lev=2 then
+		if lev=2 then
 			Read(fNameTemp);
 			if IsExistingFile(fNameTemp4) and IsExistingFile(fNameTemp5) then
 				reEntry:=true;
@@ -493,16 +529,17 @@ fNameTemp6, reEntry, initialo, initialj, totaltemp, kk, totalsrs, reEntrychecker
 				od;
 			od;
 		fi;
-		if reEntrychecker and lev>2 then
-			Unleash("varArg1", "varArg2", "varArg3", "varArg4", "varArg5", "varArg6", "varArg7", "varArg8", "varArg9", "varArg10", "varArg11", "varArg12", "varArg13", "varArg14");
-		elif reEntrychecker and lev=2 then
-			Unleash("varArg1", "varArg2", "varArg3", "varArg4", "varArg5", "varArg6", "varArg7", "varArg8", "varArg9", "varArg10");
-		fi;
-		AppendTo(fNameTemp4,"\n]);");
-		AppendTo(fName,StringFile(fNameTemp4));
-		#RemoveFile(fNameTemp);
-		#RemoveFile(tempFile);
 	fi;
+	if reEntrychecker and lev>2 then
+		Unleash("varArg1", "varArg2", "varArg3", "varArg4", "varArg5", "varArg6", "varArg7", "varArg8", "varArg9", "varArg10", "varArg11", "varArg12", "varArg13", "varArg14");
+	elif reEntrychecker and lev=2 then
+		Unleash("varArg1", "varArg2", "varArg3", "varArg4", "varArg5", "varArg6", "varArg7", "varArg8", "varArg9", "varArg10");
+	fi;
+	AppendTo(fNameTemp4,"\n]);");
+	AppendTo(fName,StringFile(fNameTemp4));
+	#RemoveFile(fNameTemp);
+	#RemoveFile(tempFile);
+fi;
 return;
 end);
 
