@@ -351,7 +351,7 @@ else
 						UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(PrevPosList[y]),"_proj"));
 						Vertices:=Vertices-1;
 						if not IsExistingFile(fNameTemp6) then
-							PrintTo(fNameTemp6, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev-1),"\",\n["));
+							PrintTo(fNameTemp6, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev-1), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev-1),"\",\n["));
 						fi;
 						if Vertices = 0 then
 							AppendTo(fNameTemp6,StringFile(fNameTemp2),"\n]);");
@@ -513,7 +513,7 @@ else
 							UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(total+PrevPosList[j][n]),"_proj"));
 							Vertices:=Vertices-1;
 							if not IsExistingFile(fNameTemp6) then
-								PrintTo(fNameTemp6, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev-1),"\",\n["));
+								PrintTo(fNameTemp6, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev-1), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev-1),"\",\n["));
 							fi;
 							if Vertices = 0 then
 								AppendTo(fNameTemp6,StringFile(fNameTemp2),"\n]);");
