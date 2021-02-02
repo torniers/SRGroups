@@ -1,4 +1,4 @@
-##This contains a list of the self-replicating groups on the rooted regular-2 tree on level 1 ##
+##This contains a list of the self-replicating groups on the rooted regular-2 tree on level 2##
 
 BindGlobal("sr_2_1",
 [
