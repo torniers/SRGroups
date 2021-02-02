@@ -26,6 +26,8 @@ DeclareGlobalFunction( "AutT" );
 DeclareGlobalFunction( "IsSelfReplicating" );
 DeclareGlobalFunction( "BelowAction" );
 DeclareGlobalFunction( "MaximalExtension" );
+DeclareGlobalFunction( "HasSufficientRigidAutomorphisms" );
+DeclareGlobalFunction( "RepresentativeWithSufficientRigidAutomorphisms" );
 DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
 DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroups" );
