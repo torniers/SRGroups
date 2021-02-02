@@ -1,0 +1,10 @@
+varArg1:=1;
+varArg2:=[ 2 ];
+varArg3:=[ 5, 11 ];
+varArg4:=[ 5, 11 ];
+varArg5:=4;
+varArg6:=6;
+varArg7:=9;
+varArg8:=2;
+varArg9:=[ 1, 2 ];
+varArg10:=1;
