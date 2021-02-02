@@ -1,0 +1,5 @@
+initial1:=3;
+
+if IsBound(temp_3_1_3_proj) then
+	initial1:=initial1+1;
+fi;
