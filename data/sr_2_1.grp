@@ -1,10 +1,10 @@
-##This contains a list of the self-replicating groups on the rooted regular-2 tree on level 1 ##
+##This contains a list of the self-replicating groups on the rooted regular-2 tree on level 2##
 
 BindGlobal("sr_2_1",
 [
 	[
 		[ (1,2) ],
-		"SymmetricGroup(2)",
+		"SRGroup(2,1,1)",
 		"emptyset",
 		["SRGroup(2,2,1)",
 		"SRGroup(2,2,2)",
