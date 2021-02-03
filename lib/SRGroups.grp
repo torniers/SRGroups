@@ -164,9 +164,10 @@ if arg[1]=0 or arg[1]=1 then
 	
 # 2. Case where the input argument is in [2,32].
 else 
-	deg:=arg[1]; # Set the degree to be the input argument.
+	# 2.1. Set the degree to be the input argument.
+	deg:=arg[1];
 	
-	# 2.1. Finding the level to begin. If an element of list begins with "sr_arg[1]_", then store it as our value of k. Each time we find another value in list that begins with the same string, overwrite k as the list is sorted in an increasing sequence so naturally it will store the greatest value of k last.
+	# 2.2. Finding the level to begin. If an element of list begins with "sr_arg[1]_", then store it as our value of k. Each time we find another value in list that begins with the same string, overwrite k as the list is sorted in an increasing sequence so naturally it will store the greatest value of k last.
 	i:=1;
 	k:=0;
 	while i < Length(list1)+1 do
@@ -182,7 +183,7 @@ else
 		lev:=EvalString(i[3])+1;
 	fi;
 	
-	# 2.2. Create required filenames.
+	# 2.3. Create required filenames.
 	fName:=Filename(dir[1], Concatenation("sr_", String(deg), "_", String(lev), ".grp"));
 	fName2:=Filename(dir[1],Concatenation("sr_", String(deg), "_", String(lev-1), ".grp"));
 	fNameTemp:=Filename(dir2[1], Concatenation("temp_", String(deg), "_", String(lev), ".grp"));
@@ -191,10 +192,9 @@ else
 	fNameTemp5:=Filename(dir2[1],Concatenation("temp_",String(deg),"_",String(lev),"_var.grp"));
 	tempfileexist:=false;
 	
-	# 2.3. Level 1 case.
+	# 2.4. Level 1 case.
 	if lev=1 then
-		
-		# 2.3.1. Check if the group files have already been partially created (re-entry condition). If so, read these files to continue from the previous save point.
+		# 2.4.1. Check if the group files have already been partially created (re-entry condition). If so, read these files to continue from the previous save point.
 		if IsExistingFile(fNameTemp4) and IsExistingFile(fNameTemp5) then
 			reEntry:=true;
 			reEntrychecker:=true;
@@ -206,18 +206,18 @@ else
 			initialj:=1;
 		fi;
 		
-		# 2.3.2. Evaluate all transitive groups of the degree=deg and store their information.
+		# 2.4.2. Evaluate all transitive groups of the degree=deg and store their information.
 		# Formatting of the group information is also completed here. For degree>1, this is done separately. See any "sr_deg_lev.grp" file for how this formatting is done.
 		GroupList:=[];
 		for j in [initialj..NrTransitiveGroups(deg)] do
-			# 2.3.2.1. Create entries containing individual group information.
+			# 2.4.2.1. Create entries containing individual group information.
 			GroupList[j]:=[];
 			GroupList[j][1]:=ShallowCopy(TRANSGrp(deg,j));
 			Remove(GroupList[j][1],Length(GroupList[j][1]));
 			GroupList[j][2]:=Concatenation("\"SRGroup(",String(deg),",1,",String(j),")\"");
 			GroupList[j][3]:="\"emptyset\"";
 			GroupList[j][4]:="[\"the classes it extends to\"]";
-			# 2.3.2.2. Print all individual group information (in correct format) to "temp_deg_1_indiv.grp".
+			# 2.4.2.2. Print all individual group information (in correct format) to "temp_deg_1_indiv.grp".
 			if not j=1 then
 				PrintTo(fNameTemp3,Concatenation("\n\n\t[\n\t\t",String(GroupList[j][1])));
 			else
@@ -233,37 +233,39 @@ else
 			if not IsExistingFile(fNameTemp4) then
 				PrintTo(fNameTemp4, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level 1 ##\n\nBindGlobal(\"sr_",String(deg),"_1\",\n["));
 			fi;
-			# 2.3.2.3. Print formatted individual group information to "temp_deg_1_full.grp" and save this point.
+			# 2.4.2.3. Print formatted individual group information to "temp_deg_1_full.grp" and save this point.
 			AppendTo(fNameTemp4,StringFile(fNameTemp3));
 			PrintTo(fNameTemp5,EnString(j)); # Save-point
 		od;
 		
-	# 2.4. Level>1 case.
+	# 2.5. Level>1 case.
 	else
-		# 2.4.1. Check whether some (or all) groups have already been extended (stored in "temp_deg_lev.grp") and continue from this point.
+		# 2.5.1. Check whether some (or all) groups have already been extended (stored in "temp_deg_lev.grp") and continue from this point.
 		initial:=1;
 		if IsExistingFile(fNameTemp) then
-			
+			# 2.5.1.1. To count the number of stored variables containing the conjugacy class representatives, create a file "temp_deg_lev_check.grp".
 			Read(fNameTemp);
 			tempFile:=Filename(dir2[1],Concatenation("temp_",String(deg),"_",String(lev),"_check.grp"));
 			tempfileexist:=true;
-			# 
 			previous:=0;
 			while previous=initial-1 do
 				previous:=initial;
+				# 2.5.1.2. Print a statement to this file which declares a new variable called initial1, that increments if the variable temp_deg_lev-1_initial_proj exists.
 				PrintTo(tempFile,Concatenation("initial1:=",String(initial),";\n\nif IsBound(temp_",String(deg),"_",String(lev-1),"_",String(initial),"_proj) then\n\tinitial1:=initial1+1;\nfi;"));
 				Read(tempFile);
+				# 2.5.1.3. The variable initial is then incremented by setting its new value to initial1, and loops only if this value increases.
 				initial:=EvalString("initial1");
 				if previous=initial-1 then
 					MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(previous),"_proj"));
 					UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(previous),"_proj"));
 				fi;
-				# Unbind residual variable initial1
+				# 2.5.1.4. Unbind residual variable initial1.
 				UnbindGlobal("initial1");
+				# 2.5.1.5. The loop won't repeat once it finds an unbound temp_deg_lev-1_initial_proj variable.
 			od;
 		fi;
 		
-		
+		# 2.5.2. Extend each group on level lev-1 to all conjugacy class representatives and store their generators.
 		list2:=[];
 		if initial<=Length(SRGroup(deg,lev-1)) then
 			for j in [initial..Length(SRGroup(deg,lev-1))] do
@@ -283,6 +285,8 @@ else
 				od;
 			od;
 		fi;
+		
+		# 
 		fNameTemp2:=Filename(dir2[1],Concatenation("temp_",String(deg),"_",String(lev),"_above_indiv.grp"));
 		fNameTemp6:=Filename(dir2[1],Concatenation("temp_",String(deg),"_",String(lev),"_above.grp"));
 		GroupList2:=[];
