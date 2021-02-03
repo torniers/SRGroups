@@ -6,8 +6,6 @@
 
 # Input::	k: integer at least 2, n: integer at least 1
 # Output::	the automorphism group of the k-regular rooted tree of depth n
-# Input::	k: integer at least 2, n: integer at least 1
-# Output::	the automorphism group of the k-regular rooted tree of depth n
 InstallGlobalFunction(AutT,function(k,n)
 	local G, i;
 	
