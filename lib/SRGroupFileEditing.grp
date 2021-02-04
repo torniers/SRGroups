@@ -1,7 +1,7 @@
 # Input:: Any integer in the range [0,31], which denotes the degree of the regular rooted tree being assessed. If the input is 0 or 1, the degree is chosen to be the lowest degree not stored.
 # Output:: The file containing all self-replicating groups of the rooted k-tree at the lowest level not stored.
 InstallGlobalFunction(SRGroupFile, function(arg)
-local fNew, dirData, k, i, x, dataContents, list2, deg, lev, y, fExtensions, GroupList, entryPoint, breakPoint, fBreakPointCheck, GroupList2, unsortedList1, unsortedList2, sortedlist, PrevPosList, N, M, Identicals, z , w, total, Vertices, I, fLevelAboveSingle, PrevGroupList, newgrouplist, m, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, totaltemp, kk, totalsrs, reEntrychecker, M, y, z, sortedList1, unsortedList1, repeats, dirTempFiles, fNewAbove, breakPointCheckExist;
+local fNew, dirData, k, i, x, dataContents, list2, deg, lev, y, fExtensions, GroupList, entryPoint, breakPoint, fBreakPointCheck, GroupList2, unsortedList1, unsortedList2, sortedlist, PrevPosList, N, M, Identicals, z , w, total, vertices, I, fLevelAboveSingle, PrevGroupList, newgrouplist, m, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, totaltemp, kk, totalsrs, reEntrychecker, M, y, z, sortedList1, unsortedList1, repeats, dirTempFiles, fNewAbove, breakPointCheckExist;
 
 # 0. Create directories to be used (dirData: storage of final group files, dirTempFiles: storage of temporary files).
 dirData:=DirectoriesPackageLibrary("SRGroups", "data");
@@ -210,6 +210,7 @@ else
 		fLevelAboveSingle:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_above_indiv.grp"));
 		fLevelAboveCumulative:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_above.grp"));
 		GroupList2:=[];
+		newgrouplist:=[];
 		if lev=2 then
 			Read(fExtensions);
 			if IsExistingFile(fCumulative) and IsExistingFile(fVariables) then
@@ -217,7 +218,6 @@ else
 				reEntrychecker:=true;
 				Read(fVariables);
 				initialz:=EvalString("varArg1");
-				newgrouplist:=[];
 				repeats:=EvalString("varArg2");
 				sortedList1:=EvalString("varArg3");
 				unsortedList1:=EvalString("varArg4");
@@ -227,7 +227,7 @@ else
 				y:=EvalString("varArg8");
 				PrevGroupList:=SRGroup(deg,lev-1);
 				PrevPosList:=EvalString("varArg9");
-				Vertices:=EvalString("varArg10");
+				vertices:=EvalString("varArg10");
 				totaltemp:=0;
 				if y>1 then
 					for k in [1..y-1] do
@@ -242,7 +242,6 @@ else
 				sortedList1:=[];
 				PrevPosList:=[];
 				PrevGroupList:=SRGroup(deg,lev-1);
-				newgrouplist:=[];
 				for x in [1..Length(SRGroup(deg, lev-1))] do
 					unsortedList1[x]:=Length(EvalString(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(x),"_proj")));
 				od;
@@ -251,7 +250,7 @@ else
 				M:=1;
 				I:=1;
 				initialz:=1;
-				Vertices:=Length(PrevGroupList);
+				vertices:=Length(PrevGroupList);
 			fi;
 			while y<=Length(SRGroup(deg, lev-1))do
 				repeats:=Positions(unsortedList1, sortedList1[y]);
@@ -282,7 +281,7 @@ else
 							PrintTo(fCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
 						fi;
 						AppendTo(fCumulative,StringFile(fSingleGroup));
-						PrintTo(fVariables,EnString(z, repeats, sortedList1, unsortedList1, w, I, M, y, PrevPosList, Vertices));
+						PrintTo(fVariables,EnString(z, repeats, sortedList1, unsortedList1, w, I, M, y, PrevPosList, vertices));
 						if reEntry then
 							reEntry:=false;
 							initialz:=1;
@@ -312,16 +311,16 @@ else
 						od;
 						MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(PrevPosList[y]),"_proj"));
 						UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(PrevPosList[y]),"_proj"));
-						Vertices:=Vertices-1;
+						vertices:=vertices-1;
 						if not IsExistingFile(fLevelAboveCumulative) then
 							PrintTo(fLevelAboveCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev-1), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev-1),"\",\n["));
 						fi;
-						if Vertices = 0 then
+						if vertices = 0 then
 							AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),"\n]);");
 						else
 							AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),",\n");
 						fi;
-						PrintTo(fVariables,EnString(z, repeats, sortedList1, unsortedList1, w, I, M, y, PrevPosList, Vertices));
+						PrintTo(fVariables,EnString(z, repeats, sortedList1, unsortedList1, w, I, M, y, PrevPosList, vertices));
 						if reEntry then
 							reEntry:=false;
 							initialz:=1;
@@ -336,13 +335,13 @@ else
 			od;
 		else 
 			Read(fExtensions);
+			
 			if IsExistingFile(fCumulative) and IsExistingFile(fVariables) then
 				reEntry:=true;
 				reEntrychecker:=true;
 				Read(fVariables);
 				initialx:=EvalString("varArg1");
 				initialz:=EvalString("varArg2");
-				newgrouplist:=[];
 				sortedlist:=EvalString("varArg3");
 				total:=EvalString("varArg4");
 				unsortedList1:=EvalString("varArg5");
@@ -355,7 +354,7 @@ else
 				Identicals:=EvalString("varArg12");
 				PrevGroupList:=SRGroup(deg,lev-1);
 				PrevPosList:=EvalString("varArg13");
-				Vertices:=EvalString("varArg14");
+				vertices:=EvalString("varArg14");
 				totaltemp:=0;
 				for x in [1..initialx] do
 					if x=initialx then
@@ -386,13 +385,11 @@ else
 				sortedlist:=[];
 				PrevPosList:=[];
 				PrevGroupList:=SRGroup(deg,lev-1);
-				newgrouplist:=[];
-				Vertices:=Length(PrevGroupList);
+				vertices:=Length(PrevGroupList);
 				total:=0;
 				N:=1;
 				M:=1;
 				I:=1;
-				J:=1;
 				initialx:=1;
 				initialz:=1;
 			fi;
@@ -443,7 +440,7 @@ else
 								PrintTo(fCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
 							fi;
 							AppendTo(fCumulative,StringFile(fSingleGroup));
-							PrintTo(fVariables,EnString(x, z, sortedlist, total, unsortedList1, unsortedList2, y, w, I, M, N, Identicals, PrevPosList, Vertices));
+							PrintTo(fVariables,EnString(x, z, sortedlist, total, unsortedList1, unsortedList2, y, w, I, M, N, Identicals, PrevPosList, vertices));
 							if reEntry then
 								reEntry:=false;
 								initialz:=1;
@@ -473,16 +470,16 @@ else
 							od;
 							MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(total+PrevPosList[x][y]),"_proj"));
 							UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(total+PrevPosList[x][y]),"_proj"));
-							Vertices:=Vertices-1;
+							vertices:=vertices-1;
 							if not IsExistingFile(fLevelAboveCumulative) then
 								PrintTo(fLevelAboveCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev-1), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev-1),"\",\n["));
 							fi;
-							if Vertices = 0 then
+							if vertices = 0 then
 								AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),"\n]);");
 							else
 								AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),",\n");
 							fi;
-							PrintTo(fVariables,EnString(x, z, sortedlist, total, unsortedList1, unsortedList2, y, w, I, M, N, Identicals, PrevPosList, Vertices));
+							PrintTo(fVariables,EnString(x, z, sortedlist, total, unsortedList1, unsortedList2, y, w, I, M, N, Identicals, PrevPosList, vertices));
 							if reEntry then
 								reEntry:=false;
 								initialz:=1;
