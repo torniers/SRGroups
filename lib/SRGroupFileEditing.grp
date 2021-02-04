@@ -1,7 +1,7 @@
 # Input:: Any integer in the range [0,31], which denotes the degree of the regular rooted tree being assessed. If the input is 0 or 1, the degree is chosen to be the lowest degree not stored.
 # Output:: The file containing all self-replicating groups of the rooted k-tree at the lowest level not stored.
 InstallGlobalFunction(SRGroupFile, function(arg)
-local fName, dirData, k, i, x, dataContents, list2, deg, lev, y, fNameTemp, GroupList, entryPoint, breakPoint, tempFile, GroupList2, unsortedList1, unsortedList2, sortedlist, PrevPosList, N, M, Identicals, z , w, total, Vertices, I, fNameTemp2, PrevGroupList, newgrouplist, m, fNameTemp3, fNameTemp4, fVariables, fNameTemp6, reEntry, initialz, initialx, totaltemp, kk, totalsrs, reEntrychecker, M, y, z, sortedList1, unsortedList1, repeats, dirTempFiles, fName2, tempFileExist;
+local fNew, dirData, k, i, x, dataContents, list2, deg, lev, y, fExtensions, GroupList, entryPoint, breakPoint, fBreakPointCheck, GroupList2, unsortedList1, unsortedList2, sortedlist, PrevPosList, N, M, Identicals, z , w, total, Vertices, I, fLevelAboveSingle, PrevGroupList, newgrouplist, m, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, totaltemp, kk, totalsrs, reEntrychecker, M, y, z, sortedList1, unsortedList1, repeats, dirTempFiles, fNewAbove, breakPointCheckExist;
 
 # 0. Create directories to be used (dirData: storage of final group files, dirTempFiles: storage of temporary files).
 dirData:=DirectoriesPackageLibrary("SRGroups", "data");
@@ -24,12 +24,12 @@ if arg[1]=0 or arg[1]=1 then
 	deg:=EvalString(i[2])+1;
 	
 	# 1.2. Create required filenames.
-	fName:=Filename(dirData[1], Concatenation(i[1], "_", String(deg), "_1.grp"));
-	fNameTemp3:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_1_indiv.grp"));
-	fNameTemp4:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_1_full.grp"));
+	fNew:=Filename(dirData[1], Concatenation(i[1], "_", String(deg), "_1.grp"));
+	fSingleGroup:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_1_indiv.grp"));
+	fCumulative:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_1_full.grp"));
 	fVariables:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_1_var.grp"));
 	# 1.2.1. Check if the group files have already been partially created (re-entry condition). If so, read these files to continue from the previous save-point.
-	if IsExistingFile(fNameTemp4) and IsExistingFile(fVariables) then
+	if IsExistingFile(fCumulative) and IsExistingFile(fVariables) then
 			reEntry:=true;
 			reEntrychecker:=true;
 			Read(fVariables);
@@ -53,30 +53,30 @@ if arg[1]=0 or arg[1]=1 then
 		GroupList[x][4]:="[\"the classes it extends to\"]";
 		# 1.3.2. Print all individual group information (in correct format) to "temp_deg_1_indiv.grp".
 		if not x=1 then
-			PrintTo(fNameTemp3,Concatenation("\n\n\t[\n\t\t",String(GroupList[x][1])));
+			PrintTo(fSingleGroup,Concatenation("\n\n\t[\n\t\t",String(GroupList[x][1])));
 		else
-			PrintTo(fNameTemp3,Concatenation("\n\t[\n\t\t",String(GroupList[x][1])));
+			PrintTo(fSingleGroup,Concatenation("\n\t[\n\t\t",String(GroupList[x][1])));
 		fi;
-		AppendTo(fNameTemp3,",\n\t\t",GroupList[x][2]);
-		AppendTo(fNameTemp3,",\n\t\t",GroupList[x][3]);
+		AppendTo(fSingleGroup,",\n\t\t",GroupList[x][2]);
+		AppendTo(fSingleGroup,",\n\t\t",GroupList[x][3]);
 		if not x=NrTransitiveGroups(deg) then
-			AppendTo(fNameTemp3,",\n\t\t",GroupList[x][4],"\n\t],");
+			AppendTo(fSingleGroup,",\n\t\t",GroupList[x][4],"\n\t],");
 		else
-			AppendTo(fNameTemp3,",\n\t\t",GroupList[x][4],"\n\t]");
+			AppendTo(fSingleGroup,",\n\t\t",GroupList[x][4],"\n\t]");
 		fi;
-		if not IsExistingFile(fNameTemp4) then
-			PrintTo(fNameTemp4, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level 1 ##\n\nBindGlobal(\"sr_",String(deg),"_1\",\n[")); #################### Fix #####################
+		if not IsExistingFile(fCumulative) then
+			PrintTo(fCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level 1 ##\n\nBindGlobal(\"sr_",String(deg),"_1\",\n[")); #################### Fix #####################
 		fi;
 		# 1.3.3. Print formatted individual group information to "temp_deg_1_full.grp" and save this point.
-		AppendTo(fNameTemp4,StringFile(fNameTemp3));
+		AppendTo(fCumulative,StringFile(fSingleGroup));
 		PrintTo(fVariables,EnString(x)); # Save-point
 	od;
-	AppendTo(fNameTemp4,"\n]);");
+	AppendTo(fCumulative,"\n]);");
 	
 	# 1.4. Print all group information to final "sr_deg_1.grp" file, remove all associated temporary files, and unbind all residual variables.
-	PrintTo(fName, StringFile(fNameTemp4));
-	RemoveFile(fNameTemp3);
-	RemoveFile(fNameTemp4);
+	PrintTo(fNew, StringFile(fCumulative));
+	RemoveFile(fSingleGroup);
+	RemoveFile(fCumulative);
 	RemoveFile(fVariables);
 	if reEntrychecker then
 		Unleash("varArg1");
@@ -104,18 +104,18 @@ else
 	fi;
 	
 	# 2.3. Create required filenames.
-	fName:=Filename(dirData[1], Concatenation("sr_", String(deg), "_", String(lev), ".grp"));
-	fName2:=Filename(dirData[1],Concatenation("sr_", String(deg), "_", String(lev-1), ".grp"));
-	fNameTemp:=Filename(dirTempFiles[1], Concatenation("temp_", String(deg), "_", String(lev), ".grp"));
-	fNameTemp3:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_indiv.grp"));
-	fNameTemp4:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_full.grp"));
+	fNew:=Filename(dirData[1], Concatenation("sr_", String(deg), "_", String(lev), ".grp"));
+	fNewAbove:=Filename(dirData[1],Concatenation("sr_", String(deg), "_", String(lev-1), ".grp"));
+	fExtensions:=Filename(dirTempFiles[1], Concatenation("temp_", String(deg), "_", String(lev), ".grp"));
+	fSingleGroup:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_indiv.grp"));
+	fCumulative:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_full.grp"));
 	fVariables:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_var.grp"));
-	tempFileExist:=false;
+	breakPointCheckExist:=false;
 	
 	# 2.4. Level 1 case.
 	if lev=1 then
 		# 2.4.1. Check if the group files have already been partially created (re-entry condition). If so, read these files to continue from the previous save point.
-		if IsExistingFile(fNameTemp4) and IsExistingFile(fVariables) then
+		if IsExistingFile(fCumulative) and IsExistingFile(fVariables) then
 			reEntry:=true;
 			reEntrychecker:=true;
 			Read(fVariables);
@@ -139,22 +139,22 @@ else
 			GroupList[x][4]:="[\"the classes it extends to\"]";
 			# 2.4.2.2. Print all individual group information (in correct format) to "temp_deg_1_indiv.grp".
 			if not x=1 then
-				PrintTo(fNameTemp3,Concatenation("\n\n\t[\n\t\t",String(GroupList[x][1])));
+				PrintTo(fSingleGroup,Concatenation("\n\n\t[\n\t\t",String(GroupList[x][1])));
 			else
-				PrintTo(fNameTemp3,Concatenation("\n\t[\n\t\t",String(GroupList[x][1])));
+				PrintTo(fSingleGroup,Concatenation("\n\t[\n\t\t",String(GroupList[x][1])));
 			fi;
-			AppendTo(fNameTemp3,",\n\t\t",GroupList[x][2]);
-			AppendTo(fNameTemp3,",\n\t\t",GroupList[x][3]);
+			AppendTo(fSingleGroup,",\n\t\t",GroupList[x][2]);
+			AppendTo(fSingleGroup,",\n\t\t",GroupList[x][3]);
 			if not x=NrTransitiveGroups(deg) then
-				AppendTo(fNameTemp3,",\n\t\t",GroupList[x][4],"\n\t],");
+				AppendTo(fSingleGroup,",\n\t\t",GroupList[x][4],"\n\t],");
 			else
-				AppendTo(fNameTemp3,",\n\t\t",GroupList[x][4],"\n\t]");
+				AppendTo(fSingleGroup,",\n\t\t",GroupList[x][4],"\n\t]");
 			fi;
-			if not IsExistingFile(fNameTemp4) then
-				PrintTo(fNameTemp4, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level 1 ##\n\nBindGlobal(\"sr_",String(deg),"_1\",\n["));
+			if not IsExistingFile(fCumulative) then
+				PrintTo(fCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level 1 ##\n\nBindGlobal(\"sr_",String(deg),"_1\",\n["));
 			fi;
 			# 2.4.2.3. Print formatted individual group information to "temp_deg_1_full.grp" and save this point.
-			AppendTo(fNameTemp4,StringFile(fNameTemp3));
+			AppendTo(fCumulative,StringFile(fSingleGroup));
 			PrintTo(fVariables,EnString(x)); # Save-point
 		od;
 		
@@ -162,17 +162,17 @@ else
 	else
 		# 2.5.1. Check whether some (or all) groups have already been extended (stored in "temp_deg_lev.grp") and continue from this point.
 		entryPoint:=1;
-		if IsExistingFile(fNameTemp) then
+		if IsExistingFile(fExtensions) then
 			# 2.5.1.1. To count the number of stored variables containing the conjugacy class representatives, create a file "temp_deg_lev_check.grp".
-			Read(fNameTemp);
-			tempFile:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_check.grp"));
-			tempFileExist:=true;
+			Read(fExtensions);
+			fBreakPointCheck:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_check.grp"));
+			breakPointCheckExist:=true;
 			breakPoint:=0;
 			while breakPoint=entryPoint-1 do
 				breakPoint:=entryPoint;
 				# 2.5.1.2. Print a statement to this file which declares a new variable called newEntryPoint, that increments if the variable temp_deg_lev-1_initial_proj exists.
-				PrintTo(tempFile,Concatenation("newEntryPoint:=",String(entryPoint),";\n\nif IsBound(temp_",String(deg),"_",String(lev-1),"_",String(entryPoint),"_proj) then\n\tinitial1:=newEntryPoint+1;\nfi;"));
-				Read(tempFile);
+				PrintTo(fBreakPointCheck,Concatenation("newEntryPoint:=",String(entryPoint),";\n\nif IsBound(temp_",String(deg),"_",String(lev-1),"_",String(entryPoint),"_proj) then\n\tinitial1:=newEntryPoint+1;\nfi;"));
+				Read(fBreakPointCheck);
 				# 2.5.1.3. The variable entryPoint is then incremented by setting its new value to newEntryPoint, and loops only if this value increases.
 				entryPoint:=EvalString("newEntryPoint");
 				if breakPoint=entryPoint-1 then
@@ -191,28 +191,28 @@ else
 			for x in [entryPoint..Length(SRGroup(deg,lev-1))] do
 				GroupList:=ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection(deg, lev, Group(SRGroup(deg, lev-1, x)[1]));
 				if x=1 then
-					AppendTo(fNameTemp,Concatenation("BindGlobal(\"temp_",String(deg),"_",String(lev-1),"_",String(x),"_proj\",\n["));
+					AppendTo(fExtensions,Concatenation("BindGlobal(\"temp_",String(deg),"_",String(lev-1),"_",String(x),"_proj\",\n["));
 				else
-					AppendTo(fNameTemp,Concatenation("\n\nBindGlobal(\"temp_",String(deg),"_",String(lev-1),"_",String(x),"_proj\",\n["));
+					AppendTo(fExtensions,Concatenation("\n\nBindGlobal(\"temp_",String(deg),"_",String(lev-1),"_",String(x),"_proj\",\n["));
 				fi;
 				for y in [1..Length(GroupList)] do
 					list2[y]:=GeneratorsOfGroup(GroupList[y]);
 					if y=Length(GroupList) then
-						AppendTo(fNameTemp,Concatenation("\n\t",String(list2[y]),"\n]);"));
+						AppendTo(fExtensions,Concatenation("\n\t",String(list2[y]),"\n]);"));
 					else
-						AppendTo(fNameTemp,Concatenation("\n\t",String(list2[y]),","));
+						AppendTo(fExtensions,Concatenation("\n\t",String(list2[y]),","));
 					fi;
 				od;
 			od;
 		fi;
 		
 		# 
-		fNameTemp2:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_above_indiv.grp"));
-		fNameTemp6:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_above.grp"));
+		fLevelAboveSingle:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_above_indiv.grp"));
+		fLevelAboveCumulative:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_above.grp"));
 		GroupList2:=[];
 		if lev=2 then
-			Read(fNameTemp);
-			if IsExistingFile(fNameTemp4) and IsExistingFile(fVariables) then
+			Read(fExtensions);
+			if IsExistingFile(fCumulative) and IsExistingFile(fVariables) then
 				reEntry:=true;
 				reEntrychecker:=true;
 				Read(fVariables);
@@ -267,21 +267,21 @@ else
 						GroupList2[M][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(y),")\"");
 						GroupList2[M][4]:="[\"the classes it extends to\"]";
 						if not M=1 then
-							PrintTo(fNameTemp3,Concatenation("\n\n\t[\n\t\t",String(GroupList2[M][1])));
+							PrintTo(fSingleGroup,Concatenation("\n\n\t[\n\t\t",String(GroupList2[M][1])));
 						else
-							PrintTo(fNameTemp3,Concatenation("\n\t[\n\t\t",String(GroupList2[M][1])));
+							PrintTo(fSingleGroup,Concatenation("\n\t[\n\t\t",String(GroupList2[M][1])));
 						fi;
-						AppendTo(fNameTemp3,",\n\t\t",GroupList2[M][2]);
-						AppendTo(fNameTemp3,",\n\t\t",GroupList2[M][3]);
+						AppendTo(fSingleGroup,",\n\t\t",GroupList2[M][2]);
+						AppendTo(fSingleGroup,",\n\t\t",GroupList2[M][3]);
 						if not M=Sum(unsortedList1) then
-							AppendTo(fNameTemp3,",\n\t\t",GroupList2[M][4],"\n\t],");
+							AppendTo(fSingleGroup,",\n\t\t",GroupList2[M][4],"\n\t],");
 						else
-							AppendTo(fNameTemp3,",\n\t\t",GroupList2[M][4],"\n\t]");
+							AppendTo(fSingleGroup,",\n\t\t",GroupList2[M][4],"\n\t]");
 						fi;
-						if not IsExistingFile(fNameTemp4) then
-							PrintTo(fNameTemp4, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
+						if not IsExistingFile(fCumulative) then
+							PrintTo(fCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
 						fi;
-						AppendTo(fNameTemp4,StringFile(fNameTemp3));
+						AppendTo(fCumulative,StringFile(fSingleGroup));
 						PrintTo(fVariables,EnString(z, repeats, sortedList1, unsortedList1, w, I, M, y, PrevPosList, Vertices));
 						if reEntry then
 							reEntry:=false;
@@ -293,33 +293,33 @@ else
 					if not I=M then
 						newgrouplist[y]:=PrevGroupList[PrevPosList[y]];
 						newgrouplist[y][2]:=String(Concatenation("\"SRGroup(", String(deg), ",", String(lev-1), ",", String(y), ")\""));
-						PrintTo(fNameTemp2, "\n\t", "[");
-						AppendTo(fNameTemp2, "\n\t\t", newgrouplist[y][1], ",");
-						AppendTo(fNameTemp2, "\n\t\t", "", newgrouplist[y][2], ",");
-						AppendTo(fNameTemp2, "\n\t\t", "\"", newgrouplist[y][3], "\",");
+						PrintTo(fLevelAboveSingle, "\n\t", "[");
+						AppendTo(fLevelAboveSingle, "\n\t\t", newgrouplist[y][1], ",");
+						AppendTo(fLevelAboveSingle, "\n\t\t", "", newgrouplist[y][2], ",");
+						AppendTo(fLevelAboveSingle, "\n\t\t", "\"", newgrouplist[y][3], "\",");
 						for m in [1..sortedList1[y]] do
 							newgrouplist[y][4]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(I),")\"");
 							if sortedList1[y]=1 then
-								AppendTo(fNameTemp2,"\n\t\t", "[", newgrouplist[y][4], "]\n\t]");
+								AppendTo(fLevelAboveSingle,"\n\t\t", "[", newgrouplist[y][4], "]\n\t]");
 							elif m=1 then
-								AppendTo(fNameTemp2, "\n\t\t", "[", newgrouplist[y][4], ",");
+								AppendTo(fLevelAboveSingle, "\n\t\t", "[", newgrouplist[y][4], ",");
 							elif m=sortedList1[y] then
-								AppendTo(fNameTemp2, "\n\t\t", newgrouplist[y][4], "]\n\t]");
+								AppendTo(fLevelAboveSingle, "\n\t\t", newgrouplist[y][4], "]\n\t]");
 							else 
-								AppendTo(fNameTemp2, "\n\t\t", newgrouplist[y][4], ",");
+								AppendTo(fLevelAboveSingle, "\n\t\t", newgrouplist[y][4], ",");
 							fi;
 							I:=I+1;
 						od;
 						MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(PrevPosList[y]),"_proj"));
 						UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(PrevPosList[y]),"_proj"));
 						Vertices:=Vertices-1;
-						if not IsExistingFile(fNameTemp6) then
-							PrintTo(fNameTemp6, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev-1), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev-1),"\",\n["));
+						if not IsExistingFile(fLevelAboveCumulative) then
+							PrintTo(fLevelAboveCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev-1), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev-1),"\",\n["));
 						fi;
 						if Vertices = 0 then
-							AppendTo(fNameTemp6,StringFile(fNameTemp2),"\n]);");
+							AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),"\n]);");
 						else
-							AppendTo(fNameTemp6,StringFile(fNameTemp2),",\n");
+							AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),",\n");
 						fi;
 						PrintTo(fVariables,EnString(z, repeats, sortedList1, unsortedList1, w, I, M, y, PrevPosList, Vertices));
 						if reEntry then
@@ -335,8 +335,8 @@ else
 				od;
 			od;
 		else 
-			Read(fNameTemp);
-			if IsExistingFile(fNameTemp4) and IsExistingFile(fVariables) then
+			Read(fExtensions);
+			if IsExistingFile(fCumulative) and IsExistingFile(fVariables) then
 				reEntry:=true;
 				reEntrychecker:=true;
 				Read(fVariables);
@@ -428,21 +428,21 @@ else
 							GroupList2[M][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(total+y),")\"");
 							GroupList2[M][4]:="[\"the classes it extends to\"]";
 							if not M=1 then
-								PrintTo(fNameTemp3,Concatenation("\n\n\t[\n\t\t",String(GroupList2[M][1])));
+								PrintTo(fSingleGroup,Concatenation("\n\n\t[\n\t\t",String(GroupList2[M][1])));
 							else
-								PrintTo(fNameTemp3,Concatenation("\n\t[\n\t\t",String(GroupList2[M][1])));
+								PrintTo(fSingleGroup,Concatenation("\n\t[\n\t\t",String(GroupList2[M][1])));
 							fi;
-							AppendTo(fNameTemp3,",\n\t\t",GroupList2[M][2]);
-							AppendTo(fNameTemp3,",\n\t\t",GroupList2[M][3]);
+							AppendTo(fSingleGroup,",\n\t\t",GroupList2[M][2]);
+							AppendTo(fSingleGroup,",\n\t\t",GroupList2[M][3]);
 							if not M=Sum(unsortedList1) then
-								AppendTo(fNameTemp3,",\n\t\t",GroupList2[M][4],"\n\t],");
+								AppendTo(fSingleGroup,",\n\t\t",GroupList2[M][4],"\n\t],");
 							else
-								AppendTo(fNameTemp3,",\n\t\t",GroupList2[M][4],"\n\t]");
+								AppendTo(fSingleGroup,",\n\t\t",GroupList2[M][4],"\n\t]");
 							fi;
-							if not IsExistingFile(fNameTemp4) then
-								PrintTo(fNameTemp4, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
+							if not IsExistingFile(fCumulative) then
+								PrintTo(fCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
 							fi;
-							AppendTo(fNameTemp4,StringFile(fNameTemp3));
+							AppendTo(fCumulative,StringFile(fSingleGroup));
 							PrintTo(fVariables,EnString(x, z, sortedlist, total, unsortedList1, unsortedList2, y, w, I, M, N, Identicals, PrevPosList, Vertices));
 							if reEntry then
 								reEntry:=false;
@@ -454,33 +454,33 @@ else
 						if not I=M then
 							newgrouplist[x][y]:=PrevGroupList[total+PrevPosList[x][y]];
 							newgrouplist[x][y][2]:=String(Concatenation("\"SRGroup(", String(deg), ",", String(lev-1), ",", String(total+y), ")\""));
-							PrintTo(fNameTemp2, "\n\t", "[");
-							AppendTo(fNameTemp2, "\n\t\t", newgrouplist[x][y][1], ",");
-							AppendTo(fNameTemp2, "\n\t\t", "", newgrouplist[x][y][2], ",");
-							AppendTo(fNameTemp2, "\n\t\t", "\"", newgrouplist[x][y][3], "\",");
+							PrintTo(fLevelAboveSingle, "\n\t", "[");
+							AppendTo(fLevelAboveSingle, "\n\t\t", newgrouplist[x][y][1], ",");
+							AppendTo(fLevelAboveSingle, "\n\t\t", "", newgrouplist[x][y][2], ",");
+							AppendTo(fLevelAboveSingle, "\n\t\t", "\"", newgrouplist[x][y][3], "\",");
 							for m in [1..sortedlist[x][y]] do
 								newgrouplist[x][y][4]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(I),")\"");
 								if sortedlist[x][y]=1 then
-									AppendTo(fNameTemp2,"\n\t\t", "[", newgrouplist[x][y][4], "]\n\t]");
+									AppendTo(fLevelAboveSingle,"\n\t\t", "[", newgrouplist[x][y][4], "]\n\t]");
 								elif m=1 then
-									AppendTo(fNameTemp2, "\n\t\t", "[", newgrouplist[x][y][4], ",");
+									AppendTo(fLevelAboveSingle, "\n\t\t", "[", newgrouplist[x][y][4], ",");
 								elif m=sortedlist[x][y] then
-									AppendTo(fNameTemp2, "\n\t\t", newgrouplist[x][y][4], "]\n\t]");
+									AppendTo(fLevelAboveSingle, "\n\t\t", newgrouplist[x][y][4], "]\n\t]");
 								else 
-									AppendTo(fNameTemp2, "\n\t\t", newgrouplist[x][y][4], ",");
+									AppendTo(fLevelAboveSingle, "\n\t\t", newgrouplist[x][y][4], ",");
 								fi;
 								I:=I+1;
 							od;
 							MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(total+PrevPosList[x][y]),"_proj"));
 							UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(total+PrevPosList[x][y]),"_proj"));
 							Vertices:=Vertices-1;
-							if not IsExistingFile(fNameTemp6) then
-								PrintTo(fNameTemp6, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev-1), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev-1),"\",\n["));
+							if not IsExistingFile(fLevelAboveCumulative) then
+								PrintTo(fLevelAboveCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev-1), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev-1),"\",\n["));
 							fi;
 							if Vertices = 0 then
-								AppendTo(fNameTemp6,StringFile(fNameTemp2),"\n]);");
+								AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),"\n]);");
 							else
-								AppendTo(fNameTemp6,StringFile(fNameTemp2),",\n");
+								AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),",\n");
 							fi;
 							PrintTo(fVariables,EnString(x, z, sortedlist, total, unsortedList1, unsortedList2, y, w, I, M, N, Identicals, PrevPosList, Vertices));
 							if reEntry then
@@ -498,13 +498,13 @@ else
 			od;
 		fi;
 	fi;
-	AppendTo(fNameTemp4,"\n]);");
+	AppendTo(fCumulative,"\n]);");
 	
 	# _._. Print all group information to final sr_deg_lev.grp file, remove all associated temporary files, and unbind all residual variables.
-	PrintTo(fName,StringFile(fNameTemp4));
-	RemoveFile(fNameTemp);
-	RemoveFile(fNameTemp3);
-	RemoveFile(fNameTemp4);
+	PrintTo(fNew,StringFile(fCumulative));
+	RemoveFile(fExtensions);
+	RemoveFile(fSingleGroup);
+	RemoveFile(fCumulative);
 	RemoveFile(fVariables);
 	if reEntrychecker and lev>2 then
 		Unleash("varArg1", "varArg2", "varArg3", "varArg4", "varArg5", "varArg6", "varArg7", "varArg8", "varArg9", "varArg10", "varArg11", "varArg12", "varArg13", "varArg14");
@@ -514,12 +514,12 @@ else
 		Unleash("varArg1");
 	fi;
 	if lev>1 then
-		PrintTo(fName2,StringFile(fNameTemp6));
-		if tempFileExist then
-			RemoveFile(tempFile);
+		PrintTo(fNewAbove,StringFile(fLevelAboveCumulative));
+		if breakPointCheckExist then
+			RemoveFile(fBreakPointCheck);
 		fi;
-		RemoveFile(fNameTemp2);
-		RemoveFile(fNameTemp6);
+		RemoveFile(fLevelAboveSingle);
+		RemoveFile(fLevelAboveCumulative);
 	fi;
 fi;
 return;
