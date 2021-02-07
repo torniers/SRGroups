@@ -73,7 +73,7 @@ od;
 if check=0 then
 	Print("All groups project correctly.");
 else
-	Print(check,"groups did not project corrrectly.");
+	Print(check," groups did not project corrrectly.");
 fi;
 
 return;

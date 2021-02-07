@@ -1,4 +1,4 @@
-# Input:: Any integer in the range [0,31], which denotes the degree of the regular rooted tree being assessed. If the input is 0 or 1, the degree is chosen to be the lowest degree not stored.
+# Input:: Any integer in the range [0,31], which denotes the degree of the regular rooted tree being organised. If the input is 0 or 1, the degree is chosen to be the lowest degree not stored.
 # Output:: The file containing all self-replicating groups of the rooted k-tree at the lowest level not stored.
 InstallGlobalFunction(SRGroupFile, function(arg)
 local count, fNew, dirData, k, prevLev, srFiles, i, x, dataContents, list2, groupGens, deg, lev, y, fExtensions, groupList, entryPoint, breakPoint, fBreakPointCheck, groupInfo, unsortedLists, sortedList, prevPosList, yCount, zCount1, posList, z , w, yVisited, vertices, zCount2, fLevelAboveSingle, groupInfoAbove, m, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, totaltemp, kk, reEntryCheck, zCount1, y, z, sortedList, unsortedList, posList, dirTempFiles, fNewAbove, breakPointCheckExist;
@@ -17,11 +17,11 @@ if arg[1]=0 or arg[1]=1 then
 		if StartsWith(dataContents[count],"sr_") then
 			Add(srFiles,dataContents[count]);
 		fi;
-	od; 
+	od;
 	# 1.1.1. Set the degree=deg to be 1 higher than the highest degree stored.
 	deg:=EvalString(SplitString(srFiles[Length(srFiles)], ".", "_")[2])+1;
 	
-	# 1.2. Create required filenames.
+	# 1.2. Create required filenames. #########Fix#########
 	fNew:=Filename(dirData[1], Concatenation("sr_", "_", String(deg), "_1.grp"));
 	fSingleGroup:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_1_indiv.grp"));
 	fCumulative:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_1_full.grp"));
@@ -32,6 +32,7 @@ if arg[1]=0 or arg[1]=1 then
 			reEntryCheck:=true;
 			Read(fVariables);
 			initialx:=EvalString("varArg1");
+	# 1.2.2. No re-entry condition. Start from beginning by initialising required variables.
 	else
 		reEntry:=false;
 		reEntryCheck:=false;
@@ -49,7 +50,7 @@ if arg[1]=0 or arg[1]=1 then
 		groupInfo[x][2]:=Concatenation("\"SRGroup(",String(deg),",1,",String(x),")\"");
 		groupInfo[x][3]:="\"emptyset\"";
 		groupInfo[x][4]:="[\"the classes it extends to\"]";
-		# 1.3.2. Print all individual group information (in correct format) to "temp_deg_1_indiv.grp".
+		# 1.3.2. Separately print individual group information (in correct format) to "temp_deg_1_indiv.grp".
 		if not x=1 then
 			PrintTo(fSingleGroup,Concatenation("\n\n\t[\n\t\t",String(groupInfo[x][1])));
 		else
@@ -69,9 +70,10 @@ if arg[1]=0 or arg[1]=1 then
 		AppendTo(fCumulative,StringFile(fSingleGroup));
 		PrintTo(fVariables,EnString(x)); # Save-point
 	od;
+	# 1.3.4. Append end of list containing groups.
 	AppendTo(fCumulative,"\n]);");
 	
-	# 1.4. Print all group information to final "sr_deg_1.grp" file, remove all associated temporary files, and unbind all residual variables.
+	# 1.4. Print all formatted group information to final "sr_deg_1.grp" file, remove all associated temporary files, and unbind all residual variables.
 	PrintTo(fNew, StringFile(fCumulative));
 	RemoveFile(fSingleGroup);
 	RemoveFile(fCumulative);
@@ -158,32 +160,36 @@ else
 		
 	# 2.5. Level>1 case.
 	else
-		# 2.5.1. Check whether some (or all) groups have already been extended (stored in "temp_deg_lev.grp") and continue from this point.
+		# 2.5.1 Create required filenames.
+		fLevelAboveSingle:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_above_indiv.grp"));
+		fLevelAboveCumulative:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_above.grp"));
+		
+		# 2.5.2. Check whether some (or all) groups have already been extended (stored in "temp_deg_lev.grp") and continue from this point.
+		# This is done by creating a file "temp_deg_lev_check.grp" to count the number of stored variables containing the conjugacy class representatives.
 		entryPoint:=1;
 		if IsExistingFile(fExtensions) then
-			# 2.5.1.1. To count the number of stored variables containing the conjugacy class representatives, create a file "temp_deg_lev_check.grp".
 			Read(fExtensions);
 			fBreakPointCheck:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_check.grp"));
 			breakPointCheckExist:=true;
 			breakPoint:=0;
 			while breakPoint=entryPoint-1 do
 				breakPoint:=entryPoint;
-				# 2.5.1.2. Print a statement to this file which declares a new variable called newEntryPoint, that increments if the variable temp_deg_lev-1_initial_proj exists.
+				# 2.5.2.1. Print a statement to this file which declares a new variable called newEntryPoint, that increments if the variable temp_deg_lev-1_initial_proj exists.
 				PrintTo(fBreakPointCheck,Concatenation("newEntryPoint:=",String(entryPoint),";\n\nif IsBound(temp_",String(deg),"_",String(lev-1),"_",String(entryPoint),"_proj) then\n\tinitial1:=newEntryPoint+1;\nfi;"));
 				Read(fBreakPointCheck);
-				# 2.5.1.3. The variable entryPoint is then incremented by setting its new value to newEntryPoint, and loops only if this value increases.
+				# 2.5.2.2. The variable entryPoint is then incremented by setting its new value to newEntryPoint, and loops only if this value increases.
 				entryPoint:=EvalString("newEntryPoint");
 				if breakPoint=entryPoint-1 then
 					MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(breakPoint),"_proj"));
 					UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(breakPoint),"_proj"));
 				fi;
-				# 2.5.1.4. Unbind residual variable newEntryPoint.
+				# 2.5.2.3. Unbind residual variable newEntryPoint.
 				UnbindGlobal("newEntryPoint");
-				# 2.5.1.5. The loop won't repeat once it finds an unbound temp_deg_lev-1_initial_proj variable.
+				# 2.5.2.4. The loop won't repeat once it finds an unbound temp_deg_lev-1_initial_proj variable.
 			od;
 		fi;
 		
-		# 2.5.2. Extend each group on level lev-1 to all conjugacy class representatives and store their generators.
+		# 2.5.3. Extend each group on level lev-1 to all conjugacy class representatives and store their generators.
 		groupGens:=[];
 		if entryPoint<=Length(SRGroup(deg,lev-1)) then
 			for x in [entryPoint..Length(SRGroup(deg,lev-1))] do
@@ -204,14 +210,17 @@ else
 			od;
 		fi;
 		
-		# 
-		fLevelAboveSingle:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_above_indiv.grp"));
-		fLevelAboveCumulative:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_above.grp"));
-		groupInfo:=[];
-		groupInfoAbove:=[];
-		if lev=2 then
-			Read(fExtensions);
+		# 2.5.4. Initialise group variables and variables (lists within lists) containing formatted group information for levels lev and lev-1.
+		Read(fExtensions); # Group variables (of the form temp_deg_lev-1_num_proj)
+		groupInfo:=[]; # Level=lev variable
+		groupInfoAbove:=[]; # Level=lev-1 variable
+
+		
+		# 2.5.5. Level=2 case.
+		if lev=2 then			
+			# 2.5.5.1. Check if the group files have already been partially created (re-entry condition). If so, read these files to continue from the previous save-point.
 			if IsExistingFile(fCumulative) and IsExistingFile(fVariables) then
+				######Fix#######
 				reEntry:=true;
 				reEntryCheck:=true;
 				Read(fVariables);
@@ -226,41 +235,62 @@ else
 				prevPosList:=EvalString("varArg9");
 				vertices:=EvalString("varArg10");
 				totaltemp:=0;
+				# 2.5.5.1.1. Unbind temp_deg_1_num_proj variables which have already been completely used from previous run. ####Fix####
 				if y>1 then
 					for k in [1..y-1] do
 					MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(prevPosList[k]),"_proj"));
 					UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(prevPosList[k]),"_proj"));
 					od;
 				fi;
+			
+			# 2.5.5.2. No re-entry condition. Start from beginning by initialising required variables.
 			else
 				reEntry:=false;
 				reEntryCheck:=false;
+				# 2.5.5.2.1. Create list containing the number of extensions from each group on level 1.
 				unsortedList:=[];
-				sortedList:=[];
-				prevPosList:=[];
 				for x in [1..Length(SRGroup(deg, lev-1))] do
 					unsortedList[x]:=Length(EvalString(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(x),"_proj")));
 				od;
+				sortedList:=[];
+				prevPosList:=[];
+				# 2.5.5.2.2. Sort unsortedList so that the groups can be formatted based on this order.
 				sortedList:=SortedList(unsortedList);
 				y:=1;
 				zCount1:=1;
 				zCount2:=1;
 				initialz:=1;
-				vertices:=Length(SRGroup(deg, lev-1));
+				vertices:=Length(SRGroup(deg, lev-1)); # Number of groups on level 1
 			fi;
+			
+			# 2.5.5.3. Loop through every group on level 1 to extract extension information and format group files.
+			# A while loop has been used here since y can iterate more than once per loop due to the variable posList.
 			while y<=Length(SRGroup(deg, lev-1))do
-				posList:=Positions(unsortedList, sortedList[y]);
+			
+				# 2.5.5.3.1. Create a list of positions from unsortedList for next lowest number of extensions. Upon re-entry, posList is already defined.
+				# For each position, store it in a list which recalls the position, then format group information for each group extending from that position.
+				# A for loop has been used here since the loop must be entered, no matter whether the re-entry condition is true or false (it turns off the condition upon re-enterting sucessfully).
+				if not reEntry then
+					posList:=Positions(unsortedList, sortedList[y]);
+				fi;
 				for z in [initialz..Length(posList)] do
+					
+					# 2.5.5.3.2. Upon re-entry these variables are already defined.
 					if not reEntry then
 						prevPosList[y]:=posList[z];
 						w:=1;
 					fi;
+					
+					# 2.5.5.3.3. Store the formatted information of all groups extending from group number prevPosList[y]. See any "sr_deg_lev.grp" file for how this formatting is done. 
+					# A while loop is used here so that if w=sortedList[y]+1 from reading fVariables, it will skip the loop due to already having completed all formatting for these groups.
 					while w<=sortedList[y] do
+						# 2.5.5.3.3.1. Create entries containing individual group information.
 						groupInfo[zCount1]:=[];
 						groupInfo[zCount1][1]:=EvalString(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(prevPosList[y]),"_proj"))[w];
 						groupInfo[zCount1][2]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(zCount1),")\"");
 						groupInfo[zCount1][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(y),")\"");
 						groupInfo[zCount1][4]:="[\"the classes it extends to\"]";
+						# 2.5.5.3.3.2. Print all individual group information (in correct format) to "temp_deg_2_indiv.grp".
 						if not zCount1=1 then
 							PrintTo(fSingleGroup,Concatenation("\n\n\t[\n\t\t",String(groupInfo[zCount1][1])));
 						else
@@ -273,19 +303,28 @@ else
 						else
 							AppendTo(fSingleGroup,",\n\t\t",groupInfo[zCount1][4],"\n\t]");
 						fi;
+						# 2.5.5.3.3.3. If fCumulative does not exist, it must be created and the first lines populated.
 						if not IsExistingFile(fCumulative) then
 							PrintTo(fCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
 						fi;
+						# 2.5.5.3.3.4. Print formatted individual group information to "temp_deg_2_full.grp" and save this point.
 						AppendTo(fCumulative,StringFile(fSingleGroup));
-						PrintTo(fVariables,EnString(z, posList, sortedList, unsortedList, w, zCount2, zCount1, y, prevPosList, vertices));
+						PrintTo(fVariables,EnString(z, posList, sortedList, unsortedList, w, zCount2, zCount1, y, prevPosList, vertices)); # Save-point
+						# 2.5.5.3.3.5. Check and declare if re-entry was completed (by setting reEntry to false and resetting initialz).
 						if reEntry then
 							reEntry:=false;
 							initialz:=1;
 						fi;
 						w:=w+1;
-						zCount1:=zCount1+1;
+						zCount1:=zCount1+1; # Counter 1 for z that never resets
 					od;
-					if not zCount2=zCount1 then
+					
+					# 2.5.5.3.4. Re-arrange and re-format the group information for groups on level 1.
+					# The if statement is used because upon re-entry the zCount values will dictate whether only formatting of level 2 has been completed (this is the case when zCount1=/=zCount2).
+					if not zCount2 = zCount1 then
+						# 2.5.5.3.4.1. Compile updated position of groups on level 1.
+						# Index 2 of each group's information must be changed to reflect it's changed name based on the updated position.
+						# Index 4 of each group's information must also be changed to reflect the known groups it extends to.
 						groupInfoAbove[y]:=SRGroup(deg, lev-1)[prevPosList[y]];
 						groupInfoAbove[y][2]:=String(Concatenation("\"SRGroup(", String(deg), ",", String(lev-1), ",", String(y), ")\""));
 						PrintTo(fLevelAboveSingle, "\n\t", "[");
@@ -303,35 +342,47 @@ else
 							else 
 								AppendTo(fLevelAboveSingle, "\n\t\t", groupInfoAbove[y][4], ",");
 							fi;
-							zCount2:=zCount2+1;
+							zCount2:=zCount2+1; # Counter 2 for z that never resets
 						od;
+						# 2.5.5.3.4.2. Unbind temp_deg_1_y_proj since this is the last place it is needed.
 						MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(prevPosList[y]),"_proj"));
 						UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(prevPosList[y]),"_proj"));
-						vertices:=vertices-1;
+						# 2.5.5.3.4.3. Decrease vertices as the group has been successfully formatted.
+						vertices:=vertices-1; 
+						# 2.5.5.3.4.4. If fLevelAboveCumulative does not exist, it must be created and its first lines populated.
 						if not IsExistingFile(fLevelAboveCumulative) then
 							PrintTo(fLevelAboveCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev-1), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev-1),"\",\n["));
 						fi;
+						# 2.5.5.3.4.5. If the very final group has been successfully formatted (i.e. vertices=0), then append the final line of fLevelAboveCumulative.
+						# Otherwise, append a new line indicating another group entry will be added.
 						if vertices = 0 then
 							AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),"\n]);");
 						else
 							AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),",\n");
 						fi;
-						PrintTo(fVariables,EnString(z, posList, sortedList, unsortedList, w, zCount2, zCount1, y, prevPosList, vertices));
+						PrintTo(fVariables,EnString(z, posList, sortedList, unsortedList, w, zCount2, zCount1, y, prevPosList, vertices)); # Save-point
+						# 2.5.5.3.4.6. Check and declare if re-entry was completed (by setting reEntry to false and resetting initialz).
 						if reEntry then
 							reEntry:=false;
 							initialz:=1;
 						fi;
 					fi;
+					# 2.5.5.3.5. Check and declare if re-entry was completed (by setting reEntry to false, resetting initialz, and unbinding temp_deg_1_prevPosList[y]_proj).
+					# This is required if both level 2 and level 1 formatting has already been completed, but has not yet looped to the next group's save-point.
 					if reEntry then
-						reEntry:=false;
+						MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(prevPosList[y]),"_proj"));
+						UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(prevPosList[y]),"_proj"));
 						initialz:=1;
+						reEntry:=false;
 					fi;
+					# 2.5.5.3.6. Loop y within the loop for z (since more than one group could extend to the same number of groups).
 					y:=y+1;
 				od;
 			od;
-		else 
-			Read(fExtensions);
-			
+		
+		# 2.5.6. Level>2 case.
+		else
+			# 2.5.6.1. Check if the group files have already been partially created (re-entry condition). If so, read these files to continue from the previous save-point.
 			if IsExistingFile(fCumulative) and IsExistingFile(fVariables) then
 				reEntry:=true;
 				reEntryCheck:=true;
@@ -350,6 +401,9 @@ else
 				posList:=EvalString("varArg12");
 				prevPosList:=EvalString("varArg13");
 				vertices:=EvalString("varArg14");
+				# 2.5.6.1.1. Unbind temp_deg_lev-1_num_proj variables which have already been completely used from previous run. ####Fix Comment####
+				# x denotes group number on level lev-2, k denotes group number on level lev-1 extending from group x. ####Fix yVisited######
+				# Start by looping through all groups on lev-2 up to 
 				totaltemp:=0;
 				for x in [1..initialx] do
 					if x=initialx then
@@ -358,7 +412,7 @@ else
 							UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited+prevPosList[x][k]),"_proj"));
 						od;
 					else
-						if x>1 then
+						if x>1 then ####Fix yVisited######  (these next lines will no longer be necessary)
 							for kk in [1..x-1] do
 								totaltemp:=totaltemp+Length(unsortedLists[kk]);
 							od;
@@ -369,17 +423,25 @@ else
 						od;
 					fi;
 				od;
+			
+			# 2.5.6.2. No re-entry condition. Start from beginning by initialising required variables.
 			else
 				reEntry:=false;
 				reEntryCheck:=false;
+				# 2.5.6.2.1. Create list containing the number of extensions from each group on level lev-1.
 				unsortedList:=[];
 				for x in [1..Length(SRGroup(deg,lev-1))] do
 					unsortedList[x]:=Length(EvalString(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(x),"_proj")));
+					# if x>1 then
+						# yVisited[x]:=yVisited[x-1]+Length(SRGroup(deg,lev-1,0,x-1));
+					# else
+						# yVisited[x]:=0;
+					# fi;
 				od;
 				unsortedLists:=[];
-				sortedList:=[];
-				prevPosList:=[];
-				vertices:=Length(SRGroup(deg,lev-1));
+				sortedList:=[]; ##########Petition to change to sortedLists############
+				prevPosList:=[]; ##########Petition to change to prevPosLists############
+				vertices:=Length(SRGroup(deg,lev-1));  # Number of groups on level lev-1
 				yVisited:=0;
 				yCount:=1;
 				zCount1:=1;
@@ -387,26 +449,42 @@ else
 				initialx:=1;
 				initialz:=1;
 			fi;
+			
+			# 2.5.6.3. Groups on level lev-1 must be re-arranged, but can only be re-arranged if they extend from a common group.
+			# Therefore, divide the lists into lists containing lists to capture this, from which each list within the lists is sorted in the required order.
+			# x denotes group number on level lev-2, y denotes group number on level lev-1 extending from group x.
 			for x in [initialx..Length(SRGroup(deg,lev-2))] do
-				groupInfoAbove[x]:=[];
+				# 2.5.6.3.1. Upon re-entry these variables are already defined.
 				if not reEntry then
+					# 2.5.6.3.1.1. Initialise list entries within ...Lists variables.
 					unsortedLists[x]:=[];
 					sortedList[x]:=[];
 					prevPosList[x]:=[];
-					if x>1 then
+					if x>1 then ###Fix yVisited### (these next lines will no longer be necessary)
 						yVisited:=yVisited+Length(SRGroup(deg,lev-1,0,x-1));
 					fi;
+					# 2.5.6.3.1.2. Divide unsortedList into unsortedLists indexed by x (i.e. the groups on level lev-2), since you can only re-arrange groups extending from a common group.
+					###Fix yVisited### (replace yCount with yVisited+y)
 					for y in [1..Length(SRGroup(deg,lev-1,0,x))] do
 						unsortedLists[x][y]:=unsortedList[yCount];
-						yCount:=yCount+1;
+						yCount:=yCount+1; # Counter for y that never resets
 					od;
 					y:=1;
+					# 2.5.6.3.1.3. Sort unsortedLists[x] so that the groups can be formatted based on this revised order.
 					sortedList[x]:=SortedList(unsortedLists[x]);
 				fi;
+				
+				# 2.5.6.3.2 Loop through every group on level 1 to extract extension information and format group files.
+				# A while loop has been used here since y can iterate more than once per loop due to the variable posList.
 				while y<=Length(SRGroup(deg,lev-1,0,x)) do
+				
+					# 2.5.6.3.2.1. Create a list of positions=posList from unsortedList for next lowest number of extensions. Upon re-entry, posList is already defined.
 					if not reEntry then
 						posList:=Positions(unsortedLists[x],sortedList[x][y]);
 					fi;
+					
+					# 2.5.6.3.2.2. For each position=posList[z], store it in a list which recalls the position, then format group information for each group extending from that position.
+					# A for loop has been used here since the loop must be entered, no matter whether the re-entry condition is true or false (it turns off the condition upon re-enterting sucessfully).
 					for z in [initialz..Length(posList)] do
 						if not reEntry then
 							prevPosList[x][y]:=posList[z];
@@ -442,7 +520,10 @@ else
 							w:=w+1;
 							zCount1:=zCount1+1;
 						od;
-						if not zCount2=zCount1 then
+						if not zCount2 = zCount1 then
+							if not IsBound(groupInfoAbove[x]) then 
+								groupInfoAbove[x]:=[];
+							fi;
 							groupInfoAbove[x][y]:=SRGroup(deg,lev-1)[yVisited+prevPosList[x][y]];
 							groupInfoAbove[x][y][2]:=String(Concatenation("\"SRGroup(", String(deg), ",", String(lev-1), ",", String(yVisited+y), ")\""));
 							PrintTo(fLevelAboveSingle, "\n\t", "[");
@@ -480,8 +561,10 @@ else
 							fi;
 						fi;
 						if reEntry then
-							reEntry:=false;
+							MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited+prevPosList[x][y]),"_proj"));
+							UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited+prevPosList[x][y]),"_proj"));
 							initialz:=1;
+							reEntry:=false;
 						fi;
 						y:=y+1;
 					od;
@@ -489,9 +572,10 @@ else
 			od;
 		fi;
 	fi;
+	# 2.5.7. Append end of list containing groups.
 	AppendTo(fCumulative,"\n]);");
 	
-	# _._. Print all group information to final sr_deg_lev.grp file, remove all associated temporary files, and unbind all residual variables.
+	# 2.6. Print all group information to final sr_deg_lev.grp file (and sr_deg_lev-1.grp in the case for level>1), remove all associated temporary files, and unbind all residual variables.
 	PrintTo(fNew,StringFile(fCumulative));
 	RemoveFile(fExtensions);
 	RemoveFile(fSingleGroup);
