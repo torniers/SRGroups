@@ -1,7 +1,7 @@
 # Input:: Any integer in the range [0,31], which denotes the degree of the regular rooted tree being organised. If the input is 0 or 1, the degree is chosen to be the lowest degree not stored.
 # Output:: The file containing all self-replicating groups of the rooted k-tree at the lowest level not stored.
 InstallGlobalFunction(SRGroupFile, function(arg)
-local count, fNew, dirData, k, prevLev, srFiles, i, x, dataContents, list2, groupGens, deg, lev, y, fExtensions, groupList, entryPoint, breakPoint, fBreakPointCheck, groupInfo, unsortedLists, sortedList, prevPosLists, yCount, wCount, posList, z , w, yVisited, vertices, vCount, fLevelAboveSingle, groupInfoAbove, v, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, totaltemp, kk, reEntryCheck, wCount, y, z, sortedLists, unsortedList, posList, dirTempFiles, fNewAbove, breakPointCheckExist;
+local count, fNew, dirData, k, prevLev, srFiles, x, dataContents, list2, groupGens, deg, lev, fExtensions, groupList, entryPoint, breakPoint, fBreakPointCheck, groupInfo, unsortedLists, sortedList, prevPosLists, yCount, posList, z , w, yVisited, vertices, vCount, fLevelAboveSingle, groupInfoAbove, v, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, totaltemp, kk, reEntryCheck, wCount, y, sortedLists, unsortedList, dirTempFiles, fNewAbove, breakPointCheckExist, prevPosList;
 
 # 0. Create directories to be used (dirData: storage of final group files, dirTempFiles: storage of temporary files).
 dirData:=DirectoriesPackageLibrary("SRGroups", "data");
@@ -88,19 +88,18 @@ else
 	deg:=arg[1];
 	
 	# 2.2. Finding the level to begin. If an element of list begins with "sr_arg[1]_", then store it as our value of prevLev. Each time we find another value in list that begins with the same string, overwrite prevLev as the list is sorted in an increasing sequence so naturally it will store the greatest value of prevLev last.
-	i:=1;
+	count:=1;
 	prevLev:=0;
-	while i < Length(dataContents)+1 do
-		if StartsWith(dataContents[i], Concatenation("sr_", String(deg))) then
-			prevLev:=dataContents[i];
+	while count < Length(dataContents)+1 do
+		if StartsWith(dataContents[count], Concatenation("sr_", String(deg))) then
+			prevLev:=dataContents[count];
 		fi;
-		i:=i+1;
+		count:=count+1;
 	od;
 	if prevLev=0 then 
 		lev:=1;
 	else
-		i:=SplitString(prevLev, ".", "_");
-		lev:=EvalString(i[3])+1;
+		lev:=EvalString(SplitString(prevLev, ".", "_")[3]) + 1;
 	fi;
 	
 	# 2.3. Create required filenames.
