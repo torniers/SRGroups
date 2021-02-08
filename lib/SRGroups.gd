@@ -19,8 +19,8 @@
 DeclareGlobalFunction( "SRGroup" );
 DeclareGlobalFunction( "CheckSRProjections" );
 DeclareGlobalFunction( "SRGroupFile" );
-DeclareGlobalFunction( "EnString" );
-DeclareGlobalFunction( "Unleash" );
+DeclareGlobalFunction( "StringVariables" );
+DeclareGlobalFunction( "UnbindVariables" );
 
 DeclareGlobalFunction( "AutT" );
 DeclareGlobalFunction( "IsSelfReplicating" );

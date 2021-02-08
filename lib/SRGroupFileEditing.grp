@@ -1,7 +1,7 @@
 # Input:: Any integer in the range [0,31], which denotes the degree of the regular rooted tree being organised. If the input is 0 or 1, the degree is chosen to be the lowest degree not stored.
 # Output:: The file containing all self-replicating groups of the rooted k-tree at the lowest level not stored.
 InstallGlobalFunction(SRGroupFile, function(arg)
-local count, fNew, dirData, k, prevLev, srFiles, i, x, dataContents, list2, groupGens, deg, lev, y, fExtensions, groupList, entryPoint, breakPoint, fBreakPointCheck, groupInfo, unsortedLists, sortedList, prevPosLists, yCount, wCount, posList, z , w, yVisited, vertices, vCount, fLevelAboveSingle, groupInfoAbove, v, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, totaltemp, kk, reEntryCheck, wCount, y, z, sortedLists, unsortedList, posList, dirTempFiles, fNewAbove, breakPointCheckExist;
+local count, fNew, dirData, k, prevLev, srFiles, i, x, dataContents, list2, groupGens, deg, lev, fExtensions, groupList, entryPoint, breakPoint, fBreakPointCheck, groupInfo, unsortedLists, sortedList, prevPosLists, yCount, w, yVisited, vertices, vCount, fLevelAboveSingle, groupInfoAbove, v, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, totaltemp, kk, reEntryCheck, wCount, y, z, sortedLists, unsortedList, posList, dirTempFiles, fNewAbove, breakPointCheckExist, prevPosList;
 
 # 0. Create directories to be used (dirData: storage of final group files, dirTempFiles: storage of temporary files).
 dirData:=DirectoriesPackageLibrary("SRGroups", "data");
@@ -175,7 +175,7 @@ else
 			while breakPoint=entryPoint-1 do
 				breakPoint:=entryPoint;
 				# 2.5.2.1. Print a statement to this file which declares a new variable called newEntryPoint, that increments if the variable temp_deg_lev-1_initial_proj exists.
-				PrintTo(fBreakPointCheck,Concatenation("newEntryPoint:=",String(entryPoint),";\n\nif IsBound(temp_",String(deg),"_",String(lev-1),"_",String(entryPoint),"_proj) then\n\tinitial1:=newEntryPoint+1;\nfi;"));
+				PrintTo(fBreakPointCheck,Concatenation("newEntryPoint:=",String(entryPoint),";\n\nif IsBound(temp_",String(deg),"_",String(lev-1),"_",String(entryPoint),"_proj) then\n\tnewEntryPoint:=newEntryPoint+1;\nfi;"));
 				Read(fBreakPointCheck);
 				# 2.5.2.2. The variable entryPoint is then incremented by setting its new value to newEntryPoint, and loops only if this value increases.
 				entryPoint:=EvalString("newEntryPoint");
@@ -430,6 +430,7 @@ else
 				reEntryCheck:=false;
 				# 2.5.6.2.1. Create list containing the number of extensions from each group on level lev-1.
 				unsortedList:=[];
+				# yVisited:=[];
 				for x in [1..Length(SRGroup(deg,lev-1))] do
 					unsortedList[x]:=Length(EvalString(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(x),"_proj")));
 					# if x>1 then
