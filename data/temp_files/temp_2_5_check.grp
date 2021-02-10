@@ -1,5 +1,5 @@
-newEntryPoint:=17;
+newEntryPoint:=25;
 
-if IsBound(temp_2_4_17_proj) then
+if IsBound(temp_2_4_25_proj) then
 	newEntryPoint:=newEntryPoint+1;
 fi;

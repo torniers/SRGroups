@@ -240,10 +240,79 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,f
 	return list;
 end);
 
+InstallGlobalFunction(FormatSRFile, function(deg,lev)
+local pr, fSingleGroup, fCumulative, numGroupsAbove, numProj, k, groupInfo, projAbove, prAbove, aboveCount, i, j, fNew, dirData, dirTempFiles;
+
+dirData:=DirectoriesPackageLibrary("SRGroups", "data");
+dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
+pr:=Projection(AutT(deg,lev));
+fSingleGroup:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_indiv.grp"));
+fCumulative:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_full.grp"));
+fNew:=Filename(dirData[1],Concatenation("sr_",String(deg),"_",String(lev),".grp"));
+numGroupsAbove:=EvalString(SplitString(SplitString(SRGroup(deg,lev)[Length(SRGroup(deg,lev))][3],",")[3],")")[1]);
+numProj:=[];
+for k in [1..numGroupsAbove] do
+	if k>1 then
+		numProj[k]:=numProj[k-1]+Length(SRGroup(deg,lev,0,k));
+	else
+		numProj[k]:=Length(SRGroup(deg,lev,0,k));
+	fi;
+od;
+groupInfo:=[];
+projAbove:=[];
+prAbove:=Projection(AutT(deg,lev+1));
+aboveCount:=1;
+i:=1;
+
+for k in [1..Length(SRGroup(deg,lev))] do
+	projAbove[k]:=SRGroup(deg,lev+1,0,k);
+	groupInfo[k]:=[];
+	groupInfo[k][1]:=GeneratorsOfGroup(Image(prAbove,Group(projAbove[k][1][1])));
+	groupInfo[k][2]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(k),")\"");
+	PrintTo(fSingleGroup, "\n\t", "[");
+	AppendTo(fSingleGroup, "\n\t\t", groupInfo[k][1], ",");
+	AppendTo(fSingleGroup, "\n\t\t", groupInfo[k][2], ",");
+	if k<=numProj[aboveCount] then
+		groupInfo[k][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(aboveCount),")\"");
+	else
+		aboveCount:=aboveCount+1;
+		groupInfo[k][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(aboveCount),")\"");
+	fi;
+	AppendTo(fSingleGroup, "\n\t\t", groupInfo[k][3], ",");
+	groupInfo[k][4]:=[];
+	for j in [1..Length(projAbove[k])] do
+		groupInfo[k][4][j]:=projAbove[k][j][2];
+		if Length(projAbove[k])=1 then
+			AppendTo(fSingleGroup,"\n\t\t", "[\"", groupInfo[k][4][j], "\"]\n\t]");
+		elif j=1 then
+			AppendTo(fSingleGroup, "\n\t\t", "[\"", groupInfo[k][4][j], "\",");
+		elif j=Length(projAbove[k]) then
+			AppendTo(fSingleGroup, "\n\t\t\"", groupInfo[k][4][j], "\"]\n\t]");
+		else 
+			AppendTo(fSingleGroup, "\n\t\t\"", groupInfo[k][4][j], "\",");
+		fi;
+	od;
+	if not IsExistingFile(fCumulative) then
+	PrintTo(fCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
+	fi;
+	if k=Length(SRGroup(deg,lev)) then
+		AppendTo(fCumulative,StringFile(fSingleGroup),"\n]);");
+	else
+		AppendTo(fCumulative,StringFile(fSingleGroup),",\n");
+	fi;
+od;
+
+PrintTo(fNew,StringFile(fCumulative));
+RemoveFile(fSingleGroup);
+RemoveFile(fCumulative);
+
+return;
+end);
+
 # Input:: Any integer in the range [0,31], which denotes the degree of the regular rooted tree being organised. If the input is 0 or 1, the degree is chosen to be the lowest degree not stored.
 # Output:: The file containing all self-replicating groups of the rooted k-tree at the lowest level not stored.
 InstallGlobalFunction(SRGroupFile, function(arg)
-local count, fNew, dirData, k, prevLev, srDegrees, i, x, dataContents, list2, groupGens, deg, lev, fExtensions, groupList, entryPoint, breakPoint, fBreakPointCheck, groupInfo, unsortedLists, sortedList, prevPosLists, yCount, w, yVisited, vCount, fLevelAboveSingle, groupInfoAbove, v, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, reEntryCheck, wCount, y, z, sortedLists, unsortedList, posList, dirTempFiles, fNewAbove, breakPointCheckExist, prevPosList, j, srLevels;
+local count, fNew, dirData, k, prevLev, srDegrees, i, x, dataContents, list2, groupGens, deg, lev, fExtensions, groupList, entryPoint, breakPoint, fBreakPointCheck, groupInfo, unsortedLists, sortedList, prevPosLists, yCount, w, yVisited, vCount, fLevelAboveSingle, groupInfoAbove, v, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, reEntryCheck, wCount, y, z, sortedLists, unsortedList, posList, dirTempFiles, fNewAbove, breakPointCheckExist, prevPosList, j, srLevels, incompleteLevels, m;
 
 # 0. Create directories to be used (dirData: storage of final group files, dirTempFiles: storage of temporary files).
 dirData:=DirectoriesPackageLibrary("SRGroups", "data");
@@ -353,6 +422,23 @@ else
 			Add(srLevels,EvalString(SplitString(dataContents[count], ".", "_")[3]));
 		fi;
 	od;
+	
+	##### Comment #####
+	incompleteLevels:=[];
+	m:=1;
+	for count in [1..Length(srLevels)] do
+		if SRGroup(deg,srLevels[count])[1][4]=["the classes it extends to"] then
+			if IsExistingFile(Filename(dirData[1], Concatenation("sr_", String(deg), "_", String(srLevels[count]+1), ".grp"))) then
+				incompleteLevels[m]:=srLevels[count];
+				m:=m+1;
+			fi;
+		fi;
+	od;
+	
+	for j in [1..Length(incompleteLevels)] do
+		FormatSRFile(deg,incompleteLevels[j]);
+	od;
+	
 	lev:=1;
 	# 2.2.1. Set the level=lev to be 1 higher than the highest level stored that is consecutive with 1.
 	if not IsEmpty(srLevels) then
@@ -364,7 +450,7 @@ else
 				break;
 			fi;
 		od;
-	fi;
+	fi;	
 	
 	# 2.3. Create required filenames.
 	fNew:=Filename(dirData[1], Concatenation("sr_", String(deg), "_", String(lev), ".grp"));

@@ -1,0 +1,102 @@
+FormatSRFile:=function(deg,lev)
+local pr, fSingleGroup, fCumulative, numGroupsAbove, numProj, k, groupInfo, projAbove, prAbove, aboveCount, i, j;
+
+pr:=Projection(AutT(deg,lev));
+fSingleGroup:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_indiv.grp"));
+fCumulative:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_full.grp"));
+numGroupsAbove:=EvalString(SplitString(SplitString(SRGroup(deg,lev)[Length(SRGroup(deg,lev))][3],",")[3],")")[1]);
+numProj:=[];
+for k in [1..numGroupsAbove] do
+	numProj[k]:=Length(SRGroup(deg,lev,0,k));
+od;
+groupInfo:=[];
+projAbove:=[];
+prAbove:=Projection(AutT(deg,lev+1));
+aboveCount:=1;
+i:=1;
+
+for k in [1..Length(SRGroup(deg,lev))] do
+	projAbove[k]:=SRGroup(deg,lev+1,0,k);
+	groupInfo[k]:=[];
+	groupInfo[k][1]:=GeneratorsOfGroup(Image(prAbove,Group(projAbove[k][1][1])));
+	groupInfo[k][2]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(k),")\"");
+	PrintTo(fSingleGroup, "\n\t", "[");
+	AppendTo(fSingleGroup, "\n\t\t", groupInfo[k][1], ",");
+	AppendTo(fSingleGroup, "\n\t\t", groupInfo[k][2], ",");
+	if i<=numProj[aboveCount] then
+		groupInfo[k][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(aboveCount),")\"");
+		i:=i+1;
+	else
+		aboveCount:=aboveCount+1;
+		groupInfo[k][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(aboveCount),")\"");
+		i:=1;
+	fi;
+	AppendTo(fSingleGroup, "\n\t\t", groupInfo[k][3], ",");
+	groupInfo[k][4]:=[];
+	for j in [1..Length(projAbove[k])] do
+		groupInfo[k][4][j]:=projAbove[k][j][2];
+		if Length(projAbove[k])=1 then
+			AppendTo(fSingleGroup,"\n\t\t", "[\"", groupInfo[k][4][j], "\"]\n\t]");
+		elif j=1 then
+			AppendTo(fSingleGroup, "\n\t\t", "[\"", groupInfo[k][4][j], "\",");
+		elif j=Length(projAbove[k]) then
+			AppendTo(fSingleGroup, "\n\t\t\"", groupInfo[k][4][j], "\"]\n\t]");
+		else 
+			AppendTo(fSingleGroup, "\n\t\t\"", groupInfo[k][4][j], "\",");
+		fi;
+	od;
+	if not IsExistingFile(fCumulative) then
+	PrintTo(fCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
+	fi;
+	if k=Length(SRGroup(deg,lev)) then
+		AppendTo(fCumulative,StringFile(fSingleGroup),"\n]);");
+	else
+		AppendTo(fCumulative,StringFile(fSingleGroup),",\n");
+	fi;
+od;
+
+return;
+end;
+
+# 1. Store the directory information
+	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
+	dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
+
+# 1.1.
+
+
+# 2. Create a list of the contents of the directory
+	dataContents:=DirectoryContents(dirData[1]);
+
+# 3. Reading through the contents of the directory to establish the files which are stored on degree = deg.
+	srLevels:=[];
+	for count in [1..Length(dataContents)] do
+		if StartsWith(dataContents[count],Concatenation("sr_",String(deg))) then
+			Add(srLevels,EvalString(SplitString(dataContents[count], ".", "_")[3]));
+		fi;
+	od;
+# 3.1. Looping through each of the group informations for the data stored in SRGroup(deg, srLevels[count])
+# 3.1.1. Create a list to store which levels are complete. 
+	incompleteLevels:=[];
+	m:=1;
+	for count in [1..Length(srLevels)] do
+		if SRGroup(deg,srLevels[count])[1][4]=["the classes it extends to"] then
+			if IsExistingFile(Filename(dirData[1], Concatenation("sr_", String(deg), "_", String(srLevels[count]+1), ".grp"))) then
+				incompleteLevels[m]:=srLevels[count];
+				m:=m+1;
+			fi;
+		fi;
+	od;
+
+# 3.2. Check if the file on level = lev+1 exists.
+# 3.2.1. If it does then continue with the function and proceed to completing the file; otherwise the file is considered an "end-of-sequence file", break.
+
+# 3.3 Check if the file on level = lev+1 is complete.
+# 3.3.1. If the fourth entry is incomplete, i.e. if it contains "The classes it extends to", then continue with the function; otherwise the file is considered completed. 
+
+# 4. Sorting of file sr_deg_lev.grp
+# 4.1 The elements in the extensions section of each group in sr_deg_lev.grp are gathered from the information stored in the projection section of the groups in the sr_deg_(lev+1).grp file
+
+for j in [1..Length(incompleteLevels)] do
+	FormatSRFile(deg,incompleteLevels[j]);
+od;
