@@ -1,5 +1,0 @@
-newEntryPoint:=17;
-
-if IsBound(temp_2_4_17_proj) then
-	newEntryPoint:=newEntryPoint+1;
-fi;
