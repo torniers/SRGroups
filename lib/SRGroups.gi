@@ -241,7 +241,7 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,f
 end);
 
 InstallGlobalFunction(FormatSRFile, function(deg,lev)
-local pr, fSingleGroup, fCumulative, numGroupsAbove, numProj, k, groupInfo, projBelow, prBelow, aboveCount, j, fNew, dirData, dirTempFiles,reEntry, reEntryCheck, fVariables, numGroups, gens, gensAbove, gensAboveTemp, currentGens, m, fGens, fGensAbove, projCount;
+local pr, fSingleGroup, fCumulative, numGroupsAbove, numProj, k, groupInfo, projBelow, prBelow, aboveCount, j, fNew, dirData, dirTempFiles,reEntry, reEntryCheck, fVariables, numGroups, gens, gensAbove, gensAboveTemp, currentGens, m, fGens, fGensAbove, groupNum;
 
 dirData:=DirectoriesPackageLibrary("SRGroups", "data");
 dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
@@ -275,7 +275,7 @@ if IsExistingFile(fVariables) then
 		if k>numGroups then
 			aboveCount:=EvalString("varArg7");
 			m:=EvalString("varArg8");
-			UnbindVariables("varArg1","varArg2","varArg3","varArg4","varArg5","varArg6","varArg7","varArg8");
+			UnbindVariables("varArg7","varArg8");
 		fi;
 	fi;
 else
@@ -290,8 +290,8 @@ else
 fi;
 
 projBelow:=[];
-for projCount in [1..numGroups] do
-	projBelow[projCount]:=SRGroup(deg,lev+1,0,projCount);
+for groupNum in [1..numGroups] do
+	projBelow[groupNum]:=SRGroup(deg,lev+1,0,groupNum);
 od;
 
 if IsExistingFile(fNew) then
@@ -319,6 +319,7 @@ else
 		numGroupsAbove:=0;
 		if IsExistingFile(fGens) then
 			Read(fGens);
+			gens:=EvalString("gensTemp");
 		else
 			gens:=[];
 		fi;
@@ -342,7 +343,7 @@ else
 			if k=1 then
 				AppendTo(fGensAbove,",\n\t",gensAbove[numGroupsAbove]);
 			else
-				PrintTo(fGensAbove,"BindGlobal(\"gens\",\n[\n\t",gensAbove[numGroupsAbove]);
+				PrintTo(fGensAbove,"BindGlobal(\"gensTemp\",\n[\n\t",gensAbove[numGroupsAbove]);
 			fi;
 		fi;
 		if k=numGroups then
@@ -402,6 +403,10 @@ od;
 if not IsExistingFile(fNew) then
 	if IsExistingFile(fGens) then
 		RemoveFile(fGens);
+	fi;
+	if IsBound(gensTemp) then
+		MakeReadWriteGlobal("gensTemp");
+		UnbindGlobal("gensTemp");
 	fi;
 fi;
 
@@ -648,8 +653,8 @@ else
 		
 		# 2.5.3. Extend each group on level lev-1 to all conjugacy class representatives and store their generators.
 		groupGens:=[];
-		if entryPoint<=Length(SRGroup(deg,lev-1)) then
-			if not projectionProtocol then
+		if not projectionProtocol then
+			if entryPoint<=Length(SRGroup(deg,lev-1)) then
 				for i in [entryPoint..Length(SRGroup(deg,lev-1))] do
 					groupList:=ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection(deg, lev, Group(SRGroup(deg, lev-1, i)[1]));
 					if i=1 then
@@ -666,13 +671,13 @@ else
 						fi;
 					od;
 				od;
-			else
-				for i in [1..levGap] do
-					FormatSRFile(deg,lev);
-					lev:=lev-1;
-				od;
-				RemoveFile(Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_gens.grp")));
 			fi;
+		else
+			for i in [1..levGap] do
+				FormatSRFile(deg,lev);
+				lev:=lev-1;
+			od;
+			RemoveFile(Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_gens.grp")));
 		fi;
 		
 		if not projectionProtocol then
