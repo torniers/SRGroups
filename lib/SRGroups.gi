@@ -241,78 +241,182 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,f
 end);
 
 InstallGlobalFunction(FormatSRFile, function(deg,lev)
-local pr, fSingleGroup, fCumulative, numGroupsAbove, numProj, k, groupInfo, projAbove, prAbove, aboveCount, i, j, fNew, dirData, dirTempFiles;
+local pr, fSingleGroup, fCumulative, numGroupsAbove, numProj, k, groupInfo, projBelow, prBelow, aboveCount, j, fNew, dirData, dirTempFiles,reEntry, reEntryCheck, fVariables, numGroups, gens, gensAbove, gensAboveTemp, currentGens, m, fGens, fGensAbove, projCount;
 
 dirData:=DirectoriesPackageLibrary("SRGroups", "data");
 dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
 pr:=Projection(AutT(deg,lev));
+prBelow:=Projection(AutT(deg,lev+1));
 fSingleGroup:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_indiv.grp"));
 fCumulative:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_full.grp"));
 fNew:=Filename(dirData[1],Concatenation("sr_",String(deg),"_",String(lev),".grp"));
-numGroupsAbove:=EvalString(SplitString(SplitString(SRGroup(deg,lev)[Length(SRGroup(deg,lev))][3],",")[3],")")[1]);
-numProj:=[];
-for k in [1..numGroupsAbove] do
-	if k>1 then
-		numProj[k]:=numProj[k-1]+Length(SRGroup(deg,lev,0,k));
-	else
-		numProj[k]:=Length(SRGroup(deg,lev,0,k));
-	fi;
-od;
-groupInfo:=[];
-projAbove:=[];
-prAbove:=Projection(AutT(deg,lev+1));
-aboveCount:=1;
-i:=1;
+fVariables:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_format_var.grp"));
 
-for k in [1..Length(SRGroup(deg,lev))] do
-	projAbove[k]:=SRGroup(deg,lev+1,0,k);
-	groupInfo[k]:=[];
-	groupInfo[k][1]:=GeneratorsOfGroup(Image(prAbove,Group(projAbove[k][1][1])));
-	groupInfo[k][2]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(k),")\"");
+if IsExistingFile(fVariables) then
+	reEntry:=true;
+	reEntryCheck:=true;
+	Read(fVariables);
+	if IsExistingFile(fNew) then
+		numGroups:=EvalString("varArg1");
+		gens:=EvalString("varArg2");
+		numProj:=EvalString("varArg3");
+		numGroupsAbove:=EvalString("varArg4");
+		aboveCount:=EvalString("varArg5");
+		m:=EvalString("varArg6");
+		UnbindVariables("varArg1","varArg2","varArg3","varArg4","varArg5","varArg6");
+	else
+		numGroups:=EvalString("varArg1");
+		k:=EvalString("varArg2");
+		gens:=EvalString("varArg3");
+		numProj:=EvalString("varArg4");
+		numGroupsAbove:=EvalString("varArg5");
+		gensAbove:=EvalString("varArg6");
+		UnbindVariables("varArg1","varArg2","varArg3","varArg4","varArg5","varArg6");
+		if k>numGroups then
+			aboveCount:=EvalString("varArg7");
+			m:=EvalString("varArg8");
+			UnbindVariables("varArg1","varArg2","varArg3","varArg4","varArg5","varArg6","varArg7","varArg8");
+		fi;
+	fi;
+else
+	reEntry:=false;
+	reEntryCheck:=false;
+	numProj:=[];
+	numGroups:=EvalString(SplitString(SplitString(SRGroup(deg,lev+1)[Length(SRGroup(deg,lev+1))][3],",")[3],")")[1]);
+	groupInfo:=[];
+	aboveCount:=1;
+	m:=1;
+	k:=1;
+fi;
+
+projBelow:=[];
+for projCount in [1..numGroups] do
+	projBelow[projCount]:=SRGroup(deg,lev+1,0,projCount);
+od;
+
+if IsExistingFile(fNew) then
+	if not reEntry then
+		gens:=[];
+		for k in [1..numGroups] do
+			gens[k]:=GeneratorsOfGroup(Image(prBelow,Group(projBelow[k][1][1])));
+		od;
+		numGroupsAbove:=EvalString(SplitString(SplitString(SRGroup(deg,lev)[Length(SRGroup(deg,lev))][3],",")[3],")")[1]);
+		for k in [1..numGroupsAbove] do
+			if k>1 then
+				numProj[k]:=numProj[k-1]+Length(SRGroup(deg,lev,0,k));
+			else
+				numProj[k]:=Length(SRGroup(deg,lev,0,k));
+			fi;
+		od;
+	fi;
+else
+	fGens:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_gens.grp"));
+	fGensAbove:=Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev-1),"_gens.grp"));
+	if not reEntry then
+		currentGens:=[()];
+		gens:=[];
+		gensAbove:=[];
+		numGroupsAbove:=0;
+		if IsExistingFile(fGens) then
+			Read(fGens);
+		else
+			gens:=[];
+		fi;
+	fi;
+	while k<=numGroups do
+		if not (IsExistingFile(fGens) and reEntry) then
+			gens[k]:=GeneratorsOfGroup(Image(prBelow,Group(projBelow[k][1][1])));
+		fi;
+		gensAboveTemp:=GeneratorsOfGroup(Image(pr,Group(gens[k])));
+		if Group(gensAboveTemp)=Group(currentGens) then
+			numProj[numGroupsAbove]:=numProj[numGroupsAbove]+1;
+		else
+			numGroupsAbove:=numGroupsAbove+1;
+			gensAbove[numGroupsAbove]:=gensAboveTemp;
+			currentGens:=gensAbove[numGroupsAbove];
+			if k>1 then
+				numProj[numGroupsAbove]:=numProj[numGroupsAbove-1]+1;
+			else
+				numProj[numGroupsAbove]:=1;
+			fi;
+			if k=1 then
+				AppendTo(fGensAbove,",\n\t",gensAbove[numGroupsAbove]);
+			else
+				PrintTo(fGensAbove,"BindGlobal(\"gens\",\n[\n\t",gensAbove[numGroupsAbove]);
+			fi;
+		fi;
+		if k=numGroups then
+			AppendTo(fGensAbove,"\n]);");
+		fi;
+		k:=k+1;
+		PrintTo(fVariables,StringVariables(numGroups,k,gens,numProj,numGroupsAbove,gensAbove));
+	od;
+fi;
+
+groupInfo:=[];
+
+while m<=numGroups do
+	groupInfo[m]:=[];
+	groupInfo[m][1]:=gens[m];
+	groupInfo[m][2]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(m),")\"");
 	PrintTo(fSingleGroup, "\n\t", "[");
-	AppendTo(fSingleGroup, "\n\t\t", groupInfo[k][1], ",");
-	AppendTo(fSingleGroup, "\n\t\t", groupInfo[k][2], ",");
-	if k<=numProj[aboveCount] then
-		groupInfo[k][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(aboveCount),")\"");
+	AppendTo(fSingleGroup, "\n\t\t", groupInfo[m][1], ",");
+	AppendTo(fSingleGroup, "\n\t\t", groupInfo[m][2], ",");
+	if m<=numProj[aboveCount] then
+		groupInfo[m][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(aboveCount),")\"");
 	else
 		aboveCount:=aboveCount+1;
-		groupInfo[k][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(aboveCount),")\"");
+		groupInfo[m][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(aboveCount),")\"");
 	fi;
-	AppendTo(fSingleGroup, "\n\t\t", groupInfo[k][3], ",");
-	groupInfo[k][4]:=[];
-	for j in [1..Length(projAbove[k])] do
-		groupInfo[k][4][j]:=projAbove[k][j][2];
-		if Length(projAbove[k])=1 then
-			AppendTo(fSingleGroup,"\n\t\t", "[\"", groupInfo[k][4][j], "\"]\n\t]");
+	AppendTo(fSingleGroup, "\n\t\t", groupInfo[m][3], ",");
+	groupInfo[m][4]:=[];
+	for j in [1..Length(projBelow[m])] do
+		groupInfo[m][4][j]:=projBelow[m][j][2];
+		if Length(projBelow[m])=1 then
+			AppendTo(fSingleGroup,"\n\t\t", "[\"", groupInfo[m][4][j], "\"]\n\t]");
 		elif j=1 then
-			AppendTo(fSingleGroup, "\n\t\t", "[\"", groupInfo[k][4][j], "\",");
-		elif j=Length(projAbove[k]) then
-			AppendTo(fSingleGroup, "\n\t\t\"", groupInfo[k][4][j], "\"]\n\t]");
+			AppendTo(fSingleGroup, "\n\t\t", "[\"", groupInfo[m][4][j], "\",");
+		elif j=Length(projBelow[m]) then
+			AppendTo(fSingleGroup, "\n\t\t\"", groupInfo[m][4][j], "\"]\n\t]");
 		else 
-			AppendTo(fSingleGroup, "\n\t\t\"", groupInfo[k][4][j], "\",");
+			AppendTo(fSingleGroup, "\n\t\t\"", groupInfo[m][4][j], "\",");
 		fi;
 	od;
 	if not IsExistingFile(fCumulative) then
 	PrintTo(fCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
 	fi;
-	if k=Length(SRGroup(deg,lev)) then
+	if m=numGroups then
 		AppendTo(fCumulative,StringFile(fSingleGroup),"\n]);");
 	else
 		AppendTo(fCumulative,StringFile(fSingleGroup),",\n");
 	fi;
+	m:=m+1;
+	PrintTo(fVariables,StringVariables(k,m));
+	if IsExistingFile(fNew) then
+		PrintTo(fVariables,StringVariables(numGroups,gens,numProj,numGroupsAbove,aboveCount,m));
+	else
+		PrintTo(fVariables,StringVariables(numGroups,k,gens,numProj,numGroupsAbove,gensAbove,aboveCount,m));
+	fi;
 od;
 
+if not IsExistingFile(fNew) then
+	if IsExistingFile(fGens) then
+		RemoveFile(fGens);
+	fi;
+fi;
+
 PrintTo(fNew,StringFile(fCumulative));
+
 RemoveFile(fSingleGroup);
 RemoveFile(fCumulative);
-
+RemoveFile(fVariables);
 return;
 end);
 
 # Input:: Any integer in the range [0,31], which denotes the degree of the regular rooted tree being organised. If the input is 0 or 1, the degree is chosen to be the lowest degree not stored.
 # Output:: The file containing all self-replicating groups of the rooted k-tree at the lowest level not stored.
 InstallGlobalFunction(SRGroupFile, function(arg)
-local count, fNew, dirData, k, prevLev, srDegrees, i, x, dataContents, list2, groupGens, deg, lev, fExtensions, groupList, entryPoint, breakPoint, fBreakPointCheck, groupInfo, unsortedLists, sortedList, prevPosLists, yCount, w, yVisited, vCount, fLevelAboveSingle, groupInfoAbove, v, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, reEntryCheck, wCount, y, z, sortedLists, unsortedList, posList, dirTempFiles, fNewAbove, breakPointCheckExist, prevPosList, j, srLevels, incompleteLevels, m;
+local count, fNew, dirData, k, prevLev, srDegrees, i, x, dataContents, list2, groupGens, deg, lev, fExtensions, groupList, entryPoint, breakPoint, fBreakPointCheck, groupInfo, unsortedLists, sortedList, prevPosLists, yCount, w, yVisited, vCount, fLevelAboveSingle, groupInfoAbove, v, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, reEntryCheck, wCount, y, z, sortedLists, unsortedList, posList, dirTempFiles, fNewAbove, breakPointCheckExist, prevPosList, j, srLevels, incompleteLevels, m, projectionProtocol, levGap;
 
 # 0. Create directories to be used (dirData: storage of final group files, dirTempFiles: storage of temporary files).
 dirData:=DirectoriesPackageLibrary("SRGroups", "data");
@@ -441,16 +545,20 @@ else
 	
 	lev:=1;
 	# 2.2.1. Set the level=lev to be 1 higher than the highest level stored that is consecutive with 1.
+	projectionProtocol:=false;
 	if not IsEmpty(srLevels) then
 		StableSort(srLevels);
 		for count in [1..Length(srLevels)] do
 			if srLevels[count]=count then
 				lev:=count+1;
 			else
+				lev:=srLevels[count]-1;
+				levGap:=lev-srLevels[count-1];
+				projectionProtocol:=true;
 				break;
 			fi;
 		od;
-	fi;	
+	fi;
 	
 	# 2.3. Create required filenames.
 	fNew:=Filename(dirData[1], Concatenation("sr_", String(deg), "_", String(lev), ".grp"));
@@ -541,31 +649,41 @@ else
 		# 2.5.3. Extend each group on level lev-1 to all conjugacy class representatives and store their generators.
 		groupGens:=[];
 		if entryPoint<=Length(SRGroup(deg,lev-1)) then
-			for i in [entryPoint..Length(SRGroup(deg,lev-1))] do
-				groupList:=ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection(deg, lev, Group(SRGroup(deg, lev-1, i)[1]));
-				if i=1 then
-					AppendTo(fExtensions,Concatenation("BindGlobal(\"temp_",String(deg),"_",String(lev-1),"_",String(i),"_proj\",\n["));
-				else
-					AppendTo(fExtensions,Concatenation("\n\nBindGlobal(\"temp_",String(deg),"_",String(lev-1),"_",String(i),"_proj\",\n["));
-				fi;
-				for j in [1..Length(groupList)] do
-					groupGens[j]:=GeneratorsOfGroup(groupList[j]);
-					if j=Length(groupList) then
-						AppendTo(fExtensions,Concatenation("\n\t",String(groupGens[j]),"\n]);"));
+			if not projectionProtocol then
+				for i in [entryPoint..Length(SRGroup(deg,lev-1))] do
+					groupList:=ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection(deg, lev, Group(SRGroup(deg, lev-1, i)[1]));
+					if i=1 then
+						AppendTo(fExtensions,Concatenation("BindGlobal(\"temp_",String(deg),"_",String(lev-1),"_",String(i),"_proj\",\n["));
 					else
-						AppendTo(fExtensions,Concatenation("\n\t",String(groupGens[j]),","));
+						AppendTo(fExtensions,Concatenation("\n\nBindGlobal(\"temp_",String(deg),"_",String(lev-1),"_",String(i),"_proj\",\n["));
 					fi;
+					for j in [1..Length(groupList)] do
+						groupGens[j]:=GeneratorsOfGroup(groupList[j]);
+						if j=Length(groupList) then
+							AppendTo(fExtensions,Concatenation("\n\t",String(groupGens[j]),"\n]);"));
+						else
+							AppendTo(fExtensions,Concatenation("\n\t",String(groupGens[j]),","));
+						fi;
+					od;
 				od;
-			od;
+			else
+				for i in [1..levGap] do
+					FormatSRFile(deg,lev);
+					lev:=lev-1;
+				od;
+				RemoveFile(Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_gens.grp")));
+			fi;
 		fi;
 		
-		# 2.5.4. Initialise group variables and variables (lists within lists) containing formatted group information for levels lev and lev-1.
-		Read(fExtensions); # Group variables (of the form temp_deg_lev-1_num_proj)
-		groupInfo:=[]; # Level=lev variable
-		groupInfoAbove:=[]; # Level=lev-1 variable
+		if not projectionProtocol then
+			# 2.5.4. Initialise group variables and variables (lists within lists) containing formatted group information for levels lev and lev-1.
+			Read(fExtensions); # Group variables (of the form temp_deg_lev-1_num_proj)
+			groupInfo:=[]; # Level=lev variable
+			groupInfoAbove:=[]; # Level=lev-1 variable
+		fi;
 
 		# 2.5.5. Level=2 case.
-		if lev=2 then			
+		if lev=2 and not projectionProtocol then			
 			# 2.5.5.1. Check if the group files have already been partially created (re-entry condition). If so, read these files to continue from the previous save-point.
 			if IsExistingFile(fCumulative) and IsExistingFile(fVariables) then
 				######Fix#######
@@ -724,7 +842,7 @@ else
 			od;
 		
 		# 2.5.6. Level>2 case.
-		else
+		elif lev>2 and not projectionProtocol then
 			# 2.5.6.1. Check if the group files have already been partially created (re-entry condition). If so, read these files to continue from the previous save-point.
 			if IsExistingFile(fCumulative) and IsExistingFile(fVariables) then
 				reEntry:=true;
@@ -923,29 +1041,31 @@ else
 			od;
 		fi;
 	fi;
-	# 2.5.7. Append end of list containing groups.
-	AppendTo(fCumulative,"\n]);");
-	
-	# 2.6. Print all group information to final sr_deg_lev.grp file (and sr_deg_lev-1.grp in the case for level>1), remove all associated temporary files, and unbind all residual variables.
-	PrintTo(fNew,StringFile(fCumulative));
-	RemoveFile(fExtensions);
-	RemoveFile(fSingleGroup);
-	RemoveFile(fCumulative);
-	RemoveFile(fVariables);
-	if reEntryCheck and lev>2 then
-		UnbindVariables("varArg1", "varArg2", "varArg3", "varArg4", "varArg5", "varArg6", "varArg7", "varArg8", "varArg9", "varArg10", "varArg11", "varArg12", "varArg13");
-	elif reEntryCheck and lev=2 then
-		UnbindVariables("varArg1", "varArg2", "varArg3", "varArg4", "varArg5", "varArg6", "varArg7", "varArg8", "varArg9");
-	elif reEntryCheck and lev=1 then
-		UnbindVariables("varArg1");
-	fi;
-	if lev>1 then
-		PrintTo(fNewAbove,StringFile(fLevelAboveCumulative));
-		if breakPointCheckExist then
-			RemoveFile(fBreakPointCheck);
+	if not projectionProtocol then
+		# 2.5.7. Append end of list containing groups.
+		AppendTo(fCumulative,"\n]);");
+		
+		# 2.6. Print all group information to final sr_deg_lev.grp file (and sr_deg_lev-1.grp in the case for level>1), remove all associated temporary files, and unbind all residual variables.
+		PrintTo(fNew,StringFile(fCumulative));
+		RemoveFile(fExtensions);
+		RemoveFile(fSingleGroup);
+		RemoveFile(fCumulative);
+		RemoveFile(fVariables);
+		if reEntryCheck and lev>2 then
+			UnbindVariables("varArg1", "varArg2", "varArg3", "varArg4", "varArg5", "varArg6", "varArg7", "varArg8", "varArg9", "varArg10", "varArg11", "varArg12", "varArg13");
+		elif reEntryCheck and lev=2 then
+			UnbindVariables("varArg1", "varArg2", "varArg3", "varArg4", "varArg5", "varArg6", "varArg7", "varArg8", "varArg9");
+		elif reEntryCheck and lev=1 then
+			UnbindVariables("varArg1");
 		fi;
-		RemoveFile(fLevelAboveSingle);
-		RemoveFile(fLevelAboveCumulative);
+		if lev>1 then
+			PrintTo(fNewAbove,StringFile(fLevelAboveCumulative));
+			if breakPointCheckExist then
+				RemoveFile(fBreakPointCheck);
+			fi;
+			RemoveFile(fLevelAboveSingle);
+			RemoveFile(fLevelAboveCumulative);
+		fi;
 	fi;
 fi;
 return;
