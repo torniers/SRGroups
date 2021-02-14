@@ -54,6 +54,26 @@ UnbindGlobal(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
 return G;
 end);
 
+InstallGlobalFunction(AllSRGroups,function(arg)
+Local deg, lev, num;
+
+count:=0;
+
+if Position(arg,Degree) then
+	deg:=arg[Position(arg,Degree)+1];
+	count:=count+1;
+fi;
+if Position(arg,Depth) then
+	lev:=arg[Position(arg,Depth)+1];
+	count:=count+1;
+fi;
+if Position(arg,Number) then
+	num:=arg[Position(arg,Number)+1];
+	count:=count+1;
+fi;
+return;
+end);
+
 InstallGlobalFunction(CheckSRProjections,function(arg)
 local dir, fnam, list1, list2, pr, i, G1, G2, check;
 

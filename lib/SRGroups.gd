@@ -17,6 +17,7 @@
 #! @Description
 #!   Insert documentation for your function here
 DeclareGlobalFunction( "SRGroup" );
+DeclareGlobalFunction( "AllSRGroups" );
 DeclareGlobalFunction( "CheckSRProjections" );
 DeclareGlobalFunction( "SRGroupFile" );
 DeclareGlobalFunction( "StringVariables" );
