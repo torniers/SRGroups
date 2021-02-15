@@ -1,0 +1,5 @@
+newEntryPoint:=28;
+
+if IsBound(temp_2_4_28_proj) then
+	newEntryPoint:=newEntryPoint+1;
+fi;

@@ -18,7 +18,6 @@
 #!   Insert documentation for your function here
 DeclareGlobalFunction( "SRGroup" );
 DeclareGlobalFunction( "CheckSRProjections" );
-DeclareGlobalFunction( "SRGroupFile" );
 DeclareGlobalFunction( "StringVariables" );
 DeclareGlobalFunction( "UnbindVariables" );
 
@@ -32,3 +31,5 @@ DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
 DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroups" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection" );
+DeclareGlobalFunction( "FormatSRFile" );
+DeclareGlobalFunction( "SRGroupFile" );
