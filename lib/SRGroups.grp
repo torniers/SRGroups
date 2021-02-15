@@ -4,161 +4,280 @@
 # Routines
 #
 
-# arg[1]:=degree
-# arg[2]:=level
-# arg[3]:=number
-# arg[4]:=groups with same projection (arg[3]=0 is required)
-# arg[5]:=position (arg[3]=0 and arg[4]=0 is required)
+# arg[1]:=degree (int > 1)
+# arg[2]:=depth (int > 0)
+# arg[3]:=number (int > 0)
+# arg[4]:=groups with same projection (integer; arg[3]=0 is required)
+# arg[5]:=position (integer; one of arg[3]=0 or arg[4]=0 is required)
+# arg[6]:=abelian check (boolean)
+# All arguments can be set to 0 to ignore them.
 InstallGlobalFunction(SRGroup,function(arg)
-local dir, fnam, G, list, i, Gpos, last, zeros;
-
-zeros:=Positions(arg,0);
-last:=0;
-for i in [1..Length(arg)] do
-	if not arg[i]=0 then
-		last:=i;
-	fi;
-od;
-
-dir:= DirectoriesPackageLibrary( "SRGroups", "data" );
-if 1 in zeros then
+	local dir, fnam, G, list, listTemp, i, j, Gpos, last, zeros, srDegrees, srLevels;
 	
-elif 2 in zeros then
-	
-elif IsEmpty(arg) then
-	
-else
-	if IsExistingFile(Filename( dir[1], Concatenation("sr_",String(arg[1]),"_",String(arg[2]),".grp"))) then
-		fnam:=Filename( dir, Concatenation("sr_",String(arg[1]),"_",String(arg[2]),".grp"));
-		Read(fnam);
-		list:=EvalString(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
-		MakeReadWriteGlobal(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
-		UnbindGlobal(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
-	else
-		Print("These groups are not available (yet)!");
-		return;
-	fi;
-fi;
-
-if (Length(arg)>=3 and last=3) then
-	G:=list[arg[3]];
-elif (Length(arg)>=2 and last=2) then
-	G:=list;
-elif (Length(arg)>=4 and last=4 and 3 in zeros) then
-	Gpos:=1;
-	G:=[];
-	for i in [1..Length(list)] do
-		if EndsWith(list[i][3],Concatenation(",",String(arg[4]),")")) then
-			G[Gpos]:=list[i];
-			Gpos:=Gpos+1;
+	zeros:=Positions(arg,0);
+	last:=0;
+	for i in [1..Length(arg)] do
+		if IsInt(arg[i]) and (not arg[i]=0) then
+			last:=i;
 		fi;
-	od;	
-elif (Length(arg)>=5 and last=5 and 3 in zeros) then
-		Gpos:=1;
-		G:=[];
-		if 4 in zeros then
-			for i in [1..Length(list)] do
-				G[Gpos]:=list[i][arg[5]];
-				Gpos:=Gpos+1;
+	od;
+
+	dir:= DirectoriesPackageLibrary( "SRGroups", "data" );
+	if (1 in zeros and (not 2 in zeros)) then
+		srDegrees:=DuplicateFreeList(SRDegrees());
+		list:=[];
+		if not IsEmpty(srDegrees) then
+			for i in [1..Length(srDegrees)] do
+				if IsExistingFile(Filename( dir[1], Concatenation("sr_",String(srDegrees[i]),"_",String(arg[2]),".grp"))) then
+					fnam:=Filename( dir[1], Concatenation("sr_",String(srDegrees[i]),"_",String(arg[2]),".grp"));
+					Read(fnam);
+					listTemp:=EvalString(Concatenation("sr_",String(srDegrees[i]),"_",String(arg[2])));
+					Append(list,listTemp);
+					MakeReadWriteGlobal(Concatenation("sr_",String(srDegrees[i]),"_",String(arg[2])));
+					UnbindGlobal(Concatenation("sr_",String(srDegrees[i]),"_",String(arg[2])));
+				fi;
+			od;
+			if IsEmpty(list) then
+				Print("These groups are not available (yet)!");
+				return;
+			fi;
+		else
+			Print("These groups are not available (yet)!");
+			return;
+		fi;
+	elif ((not 1 in zeros) and 2 in zeros) then
+		srLevels:=SRLevels(arg[1]);
+		list:=[];
+		if not IsEmpty(srLevels) then
+			for i in [1..Length(srLevels)] do
+				fnam:=Filename( dir[1], Concatenation("sr_",String(arg[1]),"_",String(srLevels[i]),".grp"));
+				Read(fnam);
+				listTemp:=EvalString(Concatenation("sr_",String(arg[1]),"_",String(srLevels[i])));
+				Append(list,listTemp);
+				MakeReadWriteGlobal(Concatenation("sr_",String(arg[1]),"_",String(srLevels[i])));
+				UnbindGlobal(Concatenation("sr_",String(arg[1]),"_",String(srLevels[i])));
 			od;
 		else
+			Print("These groups are not available (yet)!");
+			return;
+		fi;
+	elif (1 in zeros and 2 in zeros) then
+		srDegrees:=DuplicateFreeList(SRDegrees());
+		if IsEmpty(srDegrees) then
+			for i in [1..Length(srDegrees)] do
+				srLevels:=SRLevels(srDegrees[i]);
+				for j in [1..Length(srLevels)] do
+					fnam:=Filename( dir[1], Concatenation("sr_",String(srDegrees[i]),"_",String(srLevels[j]),".grp"));
+					Read(fnam);
+					listTemp:=EvalString(Concatenation("sr_",String(srDegrees[i]),"_",String(srLevels[j])));
+					Append(list,listTemp);
+					MakeReadWriteGlobal(Concatenation("sr_",String(srDegrees[i]),"_",String(srLevels[j])));
+					UnbindGlobal(Concatenation("sr_",String(srDegrees[i]),"_",String(srLevels[j])));
+				od;
+			od;
+		else
+			Print("These groups are not available (yet)!");
+			return;
+		fi;
+	else
+		if IsExistingFile(Filename( dir[1], Concatenation("sr_",String(arg[1]),"_",String(arg[2]),".grp"))) then
+			fnam:=Filename( dir[1], Concatenation("sr_",String(arg[1]),"_",String(arg[2]),".grp"));
+			Read(fnam);
+			list:=EvalString(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
+			MakeReadWriteGlobal(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
+			UnbindGlobal(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
+		else
+			Print("These groups are not available (yet)!");
+			return;
+		fi;
+	fi;
+	
+	if Length(arg)>=6 and (not 6 in zeros) then
+		listTemp:=[];
+		for i in [1..Length(list)] do
+			if IsAbelian(Group(list[i][1]))=arg[6] then
+				Add(listTemp,list[i]);
+			fi;
+		od;
+		list:=listTemp;
+	fi;
+	
+	if (Length(arg)>=3 and last=3) then
+		if not (1 in zeros or 2 in zeros) then
+			G:=list[arg[3]];
+		else
+			Gpos:=1;
+			G:=[];
 			for i in [1..Length(list)] do
-				if EndsWith(list[i][3],Concatenation(",",String(arg[4]),")")) then
-					G[Gpos]:=list[i][arg[5]];
+				if EndsWith(list[i][2],Concatenation(",",String(arg[3]),")")) then
+					G[Gpos]:=list[i];
 					Gpos:=Gpos+1;
 				fi;
 			od;
 		fi;
-else
-	Print("No method exists!");
-	return;
-fi;
+	elif (Length(arg)>=1 and (last=2 or last=1)) then
+		G:=list;
+	elif (Length(arg)>=4 and last=4 and 3 in zeros and not (1 in zeros or 2 in zeros)) then
+		Gpos:=1;
+		G:=[];
+		for i in [1..Length(list)] do
+			if EndsWith(list[i][3],Concatenation(",",String(arg[4]),")")) then
+				G[Gpos]:=list[i];
+				Gpos:=Gpos+1;
+			fi;
+		od;	
+	elif (Length(arg)>=5 and last=5 and (3 in zeros or 4 in zeros)) then
+			Gpos:=1;
+			G:=[];
+			if (3 in zeros and 4 in zeros) then
+				for i in [1..Length(list)] do
+					G[i]:=list[i][arg[5]];
+				od;
+			elif 4 in zeros then
+				for i in [1..Length(list)] do
+					if EndsWith(list[i][2],Concatenation(",",String(arg[3]),")")) then
+						G[Gpos]:=list[i][arg[5]];
+						Gpos:=Gpos+1;
+					fi;
+				od;
+			else
+				for i in [1..Length(list)] do
+					if EndsWith(list[i][3],Concatenation(",",String(arg[4]),")")) then
+						G[Gpos]:=list[i][arg[5]];
+						Gpos:=Gpos+1;
+					fi;
+				od;
+			fi;
+	else
+		Print("No method exists!");
+		return;
+	fi;
 
-return G;
+	return G;
 end);
 
 InstallGlobalFunction(AllSRGroups,function(arg)
-local inputArgs, deg, lev, num, proj, index;
+	local inputArgs, deg, lev, num, proj, index, abelian;
 
-inputArgs:=[];
+	inputArgs:=[];
 
-if IsInt(Position(arg,Degree)) then
-	deg:=arg[Position(arg,Degree)+1];
-	Add(inputArgs,deg);
-else
-	Add(inputArgs,0);
-fi;
-if IsInt(Position(arg,Depth)) then
-	lev:=arg[Position(arg,Depth)+1];
-	Add(inputArgs,lev);
-else
-	Add(inputArgs,0);
-fi;
-if IsInt(Position(arg,Number)) then
-	num:=arg[Position(arg,Number)+1];
-	Add(inputArgs,num);
-else
-	Add(inputArgs,0);
-fi;
-if IsInt(Position(arg,Projection)) then
-	proj:=arg[Position(arg,Projection)+1];
-	Add(inputArgs,proj);
-else
-	Add(inputArgs,0);
-fi;
-if IsInt(Position(arg,Index)) then
-	index:=arg[Position(arg,Index)+1];
-	Add(inputArgs,index);
-else
-	Add(inputArgs,0);
-fi;
+	if IsInt(Position(arg,Degree)) then
+		deg:=arg[Position(arg,Degree)+1];
+		Add(inputArgs,deg);
+	else
+		Add(inputArgs,0);
+	fi;
+	if IsInt(Position(arg,Depth)) then
+		lev:=arg[Position(arg,Depth)+1];
+		Add(inputArgs,lev);
+	else
+		Add(inputArgs,0);
+	fi;
+	if IsInt(Position(arg,Number)) then
+		num:=arg[Position(arg,Number)+1];
+		Add(inputArgs,num);
+	else
+		Add(inputArgs,0);
+	fi;
+	if IsInt(Position(arg,Projection)) then
+		proj:=arg[Position(arg,Projection)+1];
+		Add(inputArgs,proj);
+	else
+		Add(inputArgs,0);
+	fi;
+	if IsInt(Position(arg,Index)) then
+		index:=arg[Position(arg,Index)+1];
+		Add(inputArgs,index);
+	else
+		Add(inputArgs,0);
+	fi;
+	if IsInt(Position(arg,IsAbelian)) then
+		abelian:=arg[Position(arg,IsAbelian)+1];
+		Add(inputArgs,abelian);
+	else
+		Add(inputArgs,0);
+	fi;
 
-return CallFuncList(SRGroup,inputArgs);
+	return CallFuncList(SRGroup,inputArgs);
 end);
 
 InstallGlobalFunction(CheckSRProjections,function(arg)
-local dir, fnam, list1, list2, pr, i, G1, G2, check;
+	local dir, fnam, list1, list2, pr, i, G1, G2, check;
 
-check:=0;
-list1:=SRGroup(arg[1],arg[2],0,0,1);
-list2:=SRGroup(arg[1],arg[2],0,0,3);
-pr:=Projection(AutT(arg[1],arg[2]));
-for i in [1..Length(list1)] do
-	G1:=Image(pr,Group(list1[i]));
-	G2:=Group(EvalString(list2[i])[1]);
-	if not G1=G2 then
-		Print("SRGroup(",String(arg[1]),",",String(arg[2]),")[",String(i),"]\n");
-		check:=check+1;
+	check:=0;
+	list1:=SRGroup(arg[1],arg[2],0,0,1);
+	list2:=SRGroup(arg[1],arg[2],0,0,3);
+	pr:=Projection(AutT(arg[1],arg[2]));
+	for i in [1..Length(list1)] do
+		G1:=Image(pr,Group(list1[i]));
+		G2:=Group(EvalString(list2[i])[1]);
+		if not G1=G2 then
+			Print("SRGroup(",String(arg[1]),",",String(arg[2]),")[",String(i),"]\n");
+			check:=check+1;
+		fi;
+	od;
+
+	if check=0 then
+		Print("All groups project correctly.");
+	else
+		Print(check," groups did not project corrrectly.");
 	fi;
-od;
 
-if check=0 then
-	Print("All groups project correctly.");
-else
-	Print(check," groups did not project corrrectly.");
-fi;
-
-return;
+	return;
 end);
 
 InstallGlobalFunction(StringVariables, function(arg)
-local Superstring, i;
+	local Superstring, i;
 
-for i in [1..Length(arg)] do
-	if i=1 then
-		Superstring:=Concatenation("varArg",String(i),":=",String(arg[i]),";");
-	else
-		Superstring:=Concatenation(Superstring,"\nvarArg",String(i),":=",String(arg[i]),";");
-	fi;
-od;
+	for i in [1..Length(arg)] do
+		if i=1 then
+			Superstring:=Concatenation("varArg",String(i),":=",String(arg[i]),";");
+		else
+			Superstring:=Concatenation(Superstring,"\nvarArg",String(i),":=",String(arg[i]),";");
+		fi;
+	od;
 
-return Superstring;
+	return Superstring;
 end);
 
 InstallGlobalFunction(UnbindVariables, function(arg)
-local k;
+	local k;
 
-for k in [1..Length(arg)] do
-	UnbindGlobal(arg[k]);
-od;
+	for k in [1..Length(arg)] do
+		UnbindGlobal(arg[k]);
+	od;
+	
+	return;
+end);
+
+InstallGlobalFunction(SRDegrees,function()
+	local srDegrees, count, dirData, dataContents;
+
+	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
+	dataContents:=DirectoryContents(dirData[1]);
+
+	srDegrees:=[];
+	for count in [1..Length(dataContents)] do
+		if StartsWith(dataContents[count],"sr_") then
+			Add(srDegrees,EvalString(SplitString(dataContents[count], ".", "_")[2]));
+		fi;
+	od;
+	StableSort(srDegrees);
+	return srDegrees;
+end);
+
+InstallGlobalFunction(SRLevels,function(deg)
+	local srLevels, count, dirData, dataContents;
+
+	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
+	dataContents:=DirectoryContents(dirData[1]);
+
+	srLevels:=[];
+	for count in [1..Length(dataContents)] do
+		if StartsWith(dataContents[count],Concatenation("sr_",String(deg))) then
+			Add(srLevels,EvalString(SplitString(dataContents[count], ".", "_")[3]));
+		fi;
+	od;
+	StableSort(srLevels);
+	return srLevels;
 end);
