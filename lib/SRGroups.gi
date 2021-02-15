@@ -477,16 +477,10 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 	# 1. First check if the input argument is 0 or 1. If so, the tree level is automatically set to 1.
 	if arg[1]=0 or arg[1]=1 then
 		# 1.1. Create a list which contains the degrees already stored in the Data folder for the SRGroups package.
-		srDegrees:=[];
-		for count in [1..Length(dataContents)] do
-			if StartsWith(dataContents[count],"sr_") then
-				Add(srDegrees,EvalString(SplitString(dataContents[count], ".", "_")[2]));
-			fi;
-		od;
+		srDegrees:=SRDegrees();
 		deg:=2;
 		# 1.1.1. Set the degree=deg to be 1 higher than the highest degree stored that is consecutive with 2.
 		if not IsEmpty(srDegrees) then
-			StableSort(srDegrees);
 			for count in [1..Length(srDegrees)] do
 				if count=1 then
 					if not srDegrees[count]=deg then
@@ -574,19 +568,13 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 		Print("You have requested to make group files for degree ", deg, ".");
 		
 		# 2.2. Finding the level to begin. If an element of list begins with "sr_arg[1]_", then store it in srLevels.
-		srLevels:=[];
-		for count in [1..Length(dataContents)] do
-			if StartsWith(dataContents[count],Concatenation("sr_",String(deg))) then
-				Add(srLevels,EvalString(SplitString(dataContents[count], ".", "_")[3]));
-			fi;
-		od;
+		srLevels:=SRLevels(deg);
 		
 		# 2.2.1. Scan currently stored levels for any incomplete files (i.e. group files with index 4 of the group information that say "the classes it extends to").
 		# Store any incomplete files which have an existing group file on the level srLevels[count]+1 in the list incompleteLevels.
 		incompleteLevels:=[];
 		m:=1;
 		if not IsEmpty(srLevels) then
-			StableSort(srLevels);
 			for count in [1..Length(srLevels)] do
 				if SRGroup(deg,srLevels[count])[1][4]=["the classes it extends to"] then
 					if IsExistingFile(Filename(dirData[1], Concatenation("sr_", String(deg), "_", String(srLevels[count]+1), ".grp"))) then

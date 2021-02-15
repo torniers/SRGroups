@@ -17,9 +17,12 @@
 #! @Description
 #!   Insert documentation for your function here
 DeclareGlobalFunction( "SRGroup" );
+DeclareGlobalFunction( "AllSRGroups" );
 DeclareGlobalFunction( "CheckSRProjections" );
 DeclareGlobalFunction( "StringVariables" );
 DeclareGlobalFunction( "UnbindVariables" );
+DeclareGlobalFunction( "SRDegrees" );
+DeclareGlobalFunction( "SRLevels" );
 
 DeclareGlobalFunction( "AutT" );
 DeclareGlobalFunction( "IsSelfReplicating" );
