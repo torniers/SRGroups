@@ -108,7 +108,7 @@ InstallGlobalFunction(SRGroup,function(arg)
 		return G;
 	fi;
 	
-	if Length(arg)>=3 and 4 in zeros and (not 3 in zeros) then
+	if Length(arg)>=3 and (not 3 in zeros) then
 		if not (1 in zeros or 2 in zeros) then
 			list:=list[arg[3]];
 		else
