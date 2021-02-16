@@ -1,0 +1,86 @@
+deg:=2;
+lev:=4;
+subgroups:=[];
+nodes:=[];
+dir:=DirectoriesPackageLibrary("SRGroups","Digraphs");
+fName:=Filename(dir[1],Concatenation(String(deg),"_",String(lev),".dot"));
+for i in [1..Length(SRGroup(deg,lev))] do
+	subgroups[i]:=[];
+	k:=1;
+	for j in [1..Length(SRGroup(deg,lev))] do
+		if i = j then
+			continue;
+		else
+			if IsSubgroup(Group(SRGroup(deg,lev,i)[1]), Group(SRGroup(deg,lev,j)[1])) then
+				subgroups[i][k]:=j;
+				k:=k+1;
+			fi;
+		fi;
+	od;
+	if not IsEmpty(subgroups[i]) then 
+		Add(nodes,i);
+	fi;
+od;
+
+for i in [1..Length(nodes)] do
+	for j in [1..Length(nodes)] do
+		if nodes[j] in subgroups[nodes[i]] then
+			for k in [1..Length(subgroups[nodes[j]])] do
+				if subgroups[nodes[j]][k] in subgroups[nodes[i]] then
+					Remove(subgroups[nodes[i]],Position(subgroups[nodes[i]],subgroups[nodes[j]][k]));
+				fi;
+			od;
+		fi;
+	od;
+	count:=1;
+	antiList:=[];
+	counter:=1;
+	if i = 1 then
+		PrintTo(fName, "digraph G {");
+		AppendTo(fName, "\n\t{");
+		AppendTo(fName, "\n\tnode ", "[shape=diamond", ",", " style=bold]");
+		AppendTo(fName, "\n\t", nodes[Length(nodes)], "[colour=darkgreen]");
+		AppendTo(fName, "\n\t}");
+		AppendTo(fName, "\n\t{");
+		AppendTo(fName, "\n\tnode ", "[shape=diamond", ",", " style=filled]");
+		for j in [1..Length(SRGroup(deg,lev))] do
+			if not j in nodes then
+				antiList[counter]:= j;
+				counter:=counter+1;
+			fi;
+		od;
+		AppendTo(fName, "\n\t");
+		for j in [1..Length(antiList)] do
+			if j < Length(antiList) then
+				AppendTo(fName, antiList[j], ", ");
+			else 
+				AppendTo(fName, antiList[j], " [fillcolour=grey]");
+			fi;
+		od;
+		AppendTo(fName, "\n\t}");
+		AppendTo(fName, "\n\t{");
+		AppendTo(fName, "\n\tnode ", "[shape=box", ",", " width=0.5", ",", " height=0.3]");
+		AppendTo(fName, "\n\t");
+		for j in [1..Length(nodes)-1] do
+			if j < Length(nodes)-1 then
+				AppendTo(fName, nodes[j], ", ");
+			else
+				AppendTo(fName, nodes[j]);
+			fi;
+		od;
+		AppendTo(fName, "\n\t}");
+		AppendTo(fName, "\n", nodes[i], " -> ");
+	else
+		AppendTo(fName,"\n", nodes[i], " -> ");
+	fi;
+	for k in [1..Length(subgroups[nodes[i]])] do
+		if count > 1 then
+			AppendTo(fName,", ", subgroups[nodes[i]][k]);
+			count:=count+1;
+		else
+			AppendTo(fName,subgroups[nodes[i]][k]);
+			count:=count+1;
+		fi;
+	od;
+od;
+AppendTo(fName, "\n", "}");
