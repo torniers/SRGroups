@@ -157,12 +157,16 @@ InstallGlobalFunction(SRGroup,function(arg)
 			return G;
 		fi;
 	fi;
-	
+
 	if (Length(arg)>=6 and (3 in zeros or 4 in zeros) and (not 6 in zeros)) then
 		listTemp:=[];
-		for i in [1..Length(list)] do
-			listTemp[i]:=list[i][arg[6]];
-		od;
+		if 3 in zeros then
+			for i in [1..Length(list)] do
+				listTemp[i]:=list[i][arg[6]];
+			od;
+		else
+			listTemp:=list[arg[6]];
+		fi;
 		list:=listTemp;
 		if last=6 then
 			G:=list;
