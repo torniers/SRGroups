@@ -1,5 +1,4 @@
-deg:=2;
-lev:=3;
+InstallGlobalFunction(HasseDiagram, function(deg,lev)
 subgroups:=[];
 nodes:=[];
 abelianGroups:=[];
@@ -97,3 +96,4 @@ for i in [1..Length(nodes)] do
 	od;
 od;
 AppendTo(fName, "\n", "}");
+end);
