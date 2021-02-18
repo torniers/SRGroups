@@ -1,0 +1,19 @@
+digraph G {
+	{
+	node [shape=diamond, style=bold]
+	2[color=darkgreen]
+	}
+	{
+	node [shape=diamond, style=filled]
+	1 [fillcolor=grey]
+	}
+	{
+	node [shape=box, width=0.5, height=0.3]
+	
+	}
+	{
+	node [shape=diamond, style=filled]
+	1 [fillcolor=red]
+	}
+2 -> 1
+}

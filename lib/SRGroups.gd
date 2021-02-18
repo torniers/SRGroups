@@ -36,3 +36,4 @@ DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroups" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection" );
 DeclareGlobalFunction( "FormatSRFile" );
 DeclareGlobalFunction( "SRGroupFile" );
+DeclareGlobalFunction( "HasseDiagram");
