@@ -1268,4 +1268,62 @@ for i in [1..Length(nodes)] do
 	od;
 od;
 AppendTo(fName, "\n", "}");
+return;
+end);
+
+# Input::
+# Output::
+InstallGlobalFunction(ExtensionsMapping, function(deg)
+local dirData, dirDigraphs, list, levelCounter, levels, fName, numberCounter, i, j, k;
+
+dirData:= DirectoriesPackageLibrary( "SRGroups", "data" );
+dirDigraphs:= DirectoriesPackageLibrary( "SRGroups", "Digraphs" );
+
+list:=[];
+levelCounter:=1;
+levels:=[];
+while levelCounter > 0 do
+	list[levelCounter]:=[];
+	levels[levelCounter]:=levelCounter;
+	if IsExistingFile(Filename(dirData[1],Concatenation("sr_", String(deg), "_", String(levelCounter), ".grp"))) then
+		if not IsExistingFile(Filename(dirData[1],Concatenation("sr_", String(deg), "_", String(levelCounter + 1), ".grp"))) then 
+			levelCounter:=0;
+			break;
+		else
+			for numberCounter in [1..Length(SRGroup(deg, levelCounter))] do
+				list[levelCounter][numberCounter]:=SRGroup(deg, levelCounter,numberCounter)[4];
+			od;
+			levelCounter:=levelCounter+1;
+		fi;
+	else
+		break;
+	fi;
+od;
+
+fName:=Filename(dirDigraphs[1], Concatenation("sr_", String(deg), "_", "Extensions_Mapping.dot"));
+for i in [1..Length(levels)] do
+	for j in [1..Length(list[i])] do
+		if i = 1 and j=1 then
+			PrintTo(fName, "digraph G {");
+			AppendTo(fName,"\n", Concatenation("\"(", String(deg), ",", String(i), ",", String(j), ")\""), " -> ");
+			for k in [1..Length(list[i][j])] do
+				if k < Length(list[i][j]) then
+					AppendTo(fName, "\"", String(SplitString(list[i][j][k], "SRGroup")[Length(SplitString(list[i][j][k], "SRGroup"))]), "\"", ", ");
+				else
+					AppendTo(fName, "\"", String(SplitString(list[i][j][k], "SRGroup")[Length(SplitString(list[i][j][k], "SRGroup"))]), "\"");
+				fi;
+			od;
+		else
+			AppendTo(fName,"\n", Concatenation("\"(", String(deg), ",", String(i), ",", String(j), ")\""), " -> ");
+			for k in [1..Length(list[i][j])] do
+				if k < Length(list[i][j]) then
+					AppendTo(fName, "\"", String(SplitString(list[i][j][k], "SRGroup")[Length(SplitString(list[i][j][k], "SRGroup"))]), "\"", ", ");
+				else
+					AppendTo(fName, "\"", String(SplitString(list[i][j][k], "SRGroup")[Length(SplitString(list[i][j][k], "SRGroup"))]), "\"");
+				fi;
+			od;
+		fi;
+	od;
+od;
+AppendTo(fName, "\n", "}");
 end);
