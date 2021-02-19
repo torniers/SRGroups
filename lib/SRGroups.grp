@@ -8,9 +8,10 @@
 # arg[2]:=depth (int > 0)
 # arg[3]:=number (int > 0)
 # arg[4]:=groups with same projection (integer; arg[3]=0 is required)
-# arg[5]:= size (int > degree^depth) (arg[3]=0 is required)
-# arg[6]:=position/index (integer; one of arg[3]=0 or arg[4]=0 is required)
-# arg[7]:=abelian check (boolean)
+# arg[5]:=subgroups of group (integer; arg[3])
+# arg[6]:=size (int >= degree^depth) (arg[3]=0 is required)
+# arg[7]:=position/index (integer; one of arg[3]=0 or arg[4]=0 is required)
+# arg[8]:=abelian check (boolean)
 # All arguments can be set to 0 to ignore them.
 InstallGlobalFunction(SRGroup,function(arg)
 	local dir, fnam, G, list, listTemp, i, j, Gpos, last, zeros, srDegrees, srLevels;
@@ -93,10 +94,10 @@ InstallGlobalFunction(SRGroup,function(arg)
 		fi;
 	fi;
 	
-	if Length(arg)>=7 and (not 7 in zeros) then
+	if Length(arg)>=8 and (not 8 in zeros) then
 		listTemp:=[];
 		for i in [1..Length(list)] do
-			if IsAbelian(Group(list[i][1]))=arg[7] then
+			if IsAbelian(Group(list[i][1]))=arg[8] then
 				Add(listTemp,list[i]);
 			fi;
 		od;
@@ -144,11 +145,13 @@ InstallGlobalFunction(SRGroup,function(arg)
 		fi;
 	fi;
 	
-	if Length(arg)>=5 and 3 in zeros and (not 5 in zeros) then
+	if (Length(arg)>=5 and 3 in zeros and (not (1 in zeros or 2 in zeros)) and (not 5 in zeros)) then
+		Gpos:=1;
 		listTemp:=[];
 		for i in [1..Length(list)] do
-			if Size(Group(list[i][1]))=arg[5] then
-				Add(listTemp,list[i]);
+			if IsSubgroup(Group(list[arg[5]][1]),Group(list[i][1])) and (not i=arg[5]) then
+				listTemp[Gpos]:=list[i];
+				Gpos:=Gpos+1;
 			fi;
 		od;
 		list:=listTemp;
@@ -157,18 +160,32 @@ InstallGlobalFunction(SRGroup,function(arg)
 			return G;
 		fi;
 	fi;
+	
+	if Length(arg)>=6 and 3 in zeros and (not 6 in zeros) then
+		listTemp:=[];
+		for i in [1..Length(list)] do
+			if Size(Group(list[i][1]))=arg[6] then
+				Add(listTemp,list[i]);
+			fi;
+		od;
+		list:=listTemp;
+		if last=6 then
+			G:=list;
+			return G;
+		fi;
+	fi;
 
-	if (Length(arg)>=6 and (3 in zeros or 4 in zeros) and (not 6 in zeros)) then
+	if (Length(arg)>=7 and (3 in zeros or 4 in zeros) and (not 7 in zeros)) then
 		listTemp:=[];
 		if 3 in zeros then
 			for i in [1..Length(list)] do
-				listTemp[i]:=list[i][arg[6]];
+				listTemp[i]:=list[i][arg[7]];
 			od;
 		else
-			listTemp:=list[arg[6]];
+			listTemp:=list[arg[7]];
 		fi;
 		list:=listTemp;
-		if last=6 then
+		if last=7 then
 			G:=list;
 			return G;
 		fi;
@@ -183,59 +200,58 @@ InstallGlobalFunction(SRGroup,function(arg)
 end);
 
 InstallGlobalFunction(AllSRGroups,function(arg)
-	local inputArgs, deg, lev, num, proj, size, pos, abelian;
+	local inputArgs;
 
 	inputArgs:=[];
 
 	if IsInt(Position(arg,Degree)) then
-		deg:=arg[Position(arg,Degree)+1];
-		Add(inputArgs,deg);
+		Add(inputArgs,arg[Position(arg,Degree)+1]);
 	else
 		Add(inputArgs,0);
 	fi;
 	
 	if IsInt(Position(arg,Depth)) then
-		lev:=arg[Position(arg,Depth)+1];
-		Add(inputArgs,lev);
+		Add(inputArgs,arg[Position(arg,Depth)+1]);
 	else
 		Add(inputArgs,0);
 	fi;
 	
 	if IsInt(Position(arg,Number)) then
-		num:=arg[Position(arg,Number)+1];
-		Add(inputArgs,num);
+		Add(inputArgs,arg[Position(arg,Number)+1]);
 	else
 		Add(inputArgs,0);
 	fi;
 	
 	if IsInt(Position(arg,Projection)) then
-		proj:=arg[Position(arg,Projection)+1];
-		Add(inputArgs,proj);
+		Add(inputArgs,arg[Position(arg,Projection)+1]);
+	else
+		Add(inputArgs,0);
+	fi;
+	
+	if IsInt(Position(arg,IsSubgroup)) then
+		Add(inputArgs,arg[Position(arg,IsSubgroup)+1]);
 	else
 		Add(inputArgs,0);
 	fi;
 	
 	if IsInt(Position(arg,Size)) then
-		size:=arg[Position(arg,Size)+1];
-		Add(inputArgs,size);
+		Add(inputArgs,arg[Position(arg,Size)+1]);
 	else
 		Add(inputArgs,0);
 	fi;
 	
 	if IsInt(Position(arg,Index)) or IsInt(Position(arg,Position)) then
 		if IsInt(Position(arg,Index)) then
-			pos:=arg[Position(arg,Index)+1];
+			Add(inputArgs,arg[Position(arg,Index)+1]);
 		elif IsInt(Position(arg,Position)) then
-			pos:=arg[Position(arg,Position)+1];
+			Add(inputArgs,arg[Position(arg,Position)+1]);
 		fi;
-		Add(inputArgs,pos);
 	else
 		Add(inputArgs,0);
 	fi;
 	
 	if IsInt(Position(arg,IsAbelian)) then
-		abelian:=arg[Position(arg,IsAbelian)+1];
-		Add(inputArgs,abelian);
+		Add(inputArgs,arg[Position(arg,IsAbelian)+1]);
 	else
 		Add(inputArgs,0);
 	fi;
