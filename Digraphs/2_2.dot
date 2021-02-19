@@ -16,4 +16,6 @@ digraph G {
 	1, 2 [fillcolor=red]
 	}
 3 -> 1, 2
+	{rank=same;1;2}
+	{rank=same;3}
 }

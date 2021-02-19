@@ -1169,16 +1169,21 @@ end);
 # Input:: deg: an integer of at least 2 representing the degree of the SRGroup that one wishes to find the HasseDiagram of, lev: and integer of at least 1, representing the level of the SRGroup on the degree deg 
 # Output:: a plain text file stored in the form of a .dot file, which can be run through command prompt and Graphviz  
 InstallGlobalFunction(HasseDiagram, function(deg,lev)
-local subgroups, nodes, abelianGroups, dir, fName, i, k, j, count, antiList, counter;
+local subgroups, nodes, abelianGroups, dir, fName, i, k, j, count, antiList, counter, sizeLists, autIndex, sizeTemp;
 
 subgroups:=[];
 nodes:=[];
 abelianGroups:=[];
+sizeLists:=[];
 dir:=DirectoriesPackageLibrary("SRGroups","Digraphs");
 fName:=Filename(dir[1],Concatenation(String(deg),"_",String(lev),".dot"));
 for i in [1..Length(SRGroup(deg,lev))] do
 	subgroups[i]:=[];
 	k:=1;
+	sizeTemp:=Size(Group(SRGroup(deg,lev,i)[1]));
+	if sizeTemp=Factorial(deg)^(((deg^lev)-1)/(deg-1)) then
+		autIndex:=i;
+	fi;
 	if IsAbelian(Group(SRGroup(deg,lev,i)[1])) then
 		Add(abelianGroups,i);
 	fi;
@@ -1195,6 +1200,20 @@ for i in [1..Length(SRGroup(deg,lev))] do
 	if not IsEmpty(subgroups[i]) then 
 		Add(nodes,i);
 	fi;
+	if IsEmpty(sizeLists) then
+		sizeLists[1]:=[];
+		Add(sizeLists[1], i);
+	else
+		for j in [1..Length(sizeLists)] do
+			if sizeTemp=Size(Group(SRGroup(deg,lev,sizeLists[j][1])[1])) then
+				Add(sizeLists[j],i);
+				break;
+			elif j=Length(sizeLists) then
+				sizeLists[j+1]:=[];
+				Add(sizeLists[j+1], i);
+			fi;
+		od;
+	fi;
 od;
 
 for i in [1..Length(nodes)] do
@@ -1209,7 +1228,7 @@ for i in [1..Length(nodes)] do
 		PrintTo(fName, "digraph G {");
 		AppendTo(fName, "\n\t{");
 		AppendTo(fName, "\n\tnode ", "[shape=diamond", ",", " style=bold]");
-		AppendTo(fName, "\n\t", nodes[Length(nodes)], "[color=darkgreen]");
+		AppendTo(fName, "\n\t", autIndex, "[color=darkgreen]");
 		AppendTo(fName, "\n\t}");
 		AppendTo(fName, "\n\t{");
 		AppendTo(fName, "\n\tnode ", "[shape=diamond", ",", " style=filled]");
@@ -1232,8 +1251,8 @@ for i in [1..Length(nodes)] do
 		AppendTo(fName, "\n\t{");
 		AppendTo(fName, "\n\tnode ", "[shape=box", ",", " width=0.5", ",", " height=0.3]");
 		AppendTo(fName, "\n\t");
-		for j in [1..Length(nodes)-1] do
-			if j < Length(nodes)-1 then
+		for j in [1..Length(nodes)] do
+			if j < Length(nodes) then
 				AppendTo(fName, nodes[j], ", ");
 			else
 				AppendTo(fName, nodes[j]);
@@ -1267,6 +1286,17 @@ for i in [1..Length(nodes)] do
 		fi;
 	od;
 od;
+for j in [1..Length(sizeLists)] do
+	AppendTo(fName, "\n\t", "{rank=same;");
+	for k in [1..Length(sizeLists[j])] do
+		if k = 1 then
+			AppendTo(fName, String(sizeLists[j][k]));
+		else 
+			AppendTo(fName, ";", String(sizeLists[j][k]));
+		fi;
+	od;
+	AppendTo(fName, "}");
+od;
 AppendTo(fName, "\n", "}");
 return;
 end);
@@ -1274,7 +1304,7 @@ end);
 # Input::
 # Output::
 InstallGlobalFunction(ExtensionsMapping, function(deg)
-local dirData, dirDigraphs, list, levelCounter, levels, fName, numberCounter, i, j, k;
+local dirData, dirDigraphs, list, levelCounter, levels, fName, numberCounter, i, j, k, abelianGroups, count;
 
 dirData:= DirectoriesPackageLibrary( "SRGroups", "data" );
 dirDigraphs:= DirectoriesPackageLibrary( "SRGroups", "Digraphs" );
@@ -1282,6 +1312,8 @@ dirDigraphs:= DirectoriesPackageLibrary( "SRGroups", "Digraphs" );
 list:=[];
 levelCounter:=1;
 levels:=[];
+count:=1;
+abelianGroups:=[];
 while levelCounter > 0 do
 	list[levelCounter]:=[];
 	levels[levelCounter]:=levelCounter;
@@ -1292,6 +1324,9 @@ while levelCounter > 0 do
 		else
 			for numberCounter in [1..Length(SRGroup(deg, levelCounter))] do
 				list[levelCounter][numberCounter]:=SRGroup(deg, levelCounter,numberCounter)[4];
+				if IsAbelian(Group(SRGroup(deg,levelCounter,numberCounter)[1])) then
+					Add(abelianGroups, Concatenation("\"", "(", String(deg), ",", String(levelCounter), ",", String(numberCounter), ")", "\""));
+				fi;
 			od;
 			levelCounter:=levelCounter+1;
 		fi;
@@ -1300,11 +1335,26 @@ while levelCounter > 0 do
 	fi;
 od;
 
+
+
 fName:=Filename(dirDigraphs[1], Concatenation("sr_", String(deg), "_", "Extensions_Mapping.dot"));
 for i in [1..Length(levels)] do
 	for j in [1..Length(list[i])] do
 		if i = 1 and j=1 then
 			PrintTo(fName, "digraph G {");
+			count:=1;
+			AppendTo(fName, "\n\t{");
+			AppendTo(fName, "\n\tnode ", "[shape=diamond", ",", " style=filled]");
+			AppendTo(fName, "\n\t");
+			for count in [1..Length(abelianGroups)] do
+				if count < Length(abelianGroups) then
+					AppendTo(fName, abelianGroups[count], ", ");
+				else
+					AppendTo(fName, abelianGroups[count]);
+				fi;
+			od;
+			AppendTo(fName, " [fillcolor=red]");
+			AppendTo(fName, "\n\t}");
 			AppendTo(fName,"\n", Concatenation("\"(", String(deg), ",", String(i), ",", String(j), ")\""), " -> ");
 			for k in [1..Length(list[i][j])] do
 				if k < Length(list[i][j]) then
