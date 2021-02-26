@@ -1,0 +1,41 @@
+G:=Group(SRGroup(2,5,88)[1]);
+dir:=DirectoriesPackageLibrary("SRGroups","Digraphs");
+fName:=Filename(dir[1],"testperm.dot");
+
+elmG:=Elements(G);
+
+for elm in elmG do
+	DigraphPerm(elm,fName);
+od;
+
+deg:=3;
+lev:=3;
+x:=[];
+y:=[];
+vertices:=deg^lev;
+r:=vertices/3;
+dir:=DirectoriesPackageLibrary("SRGroups","Digraphs");
+fName:=Filename(dir[1],"testperm.dot");
+
+PrintTo(fName,"digraph G {");
+AppendTo(fName,"node[shape=circle,fontname=helvetica]");
+AppendTo(fName,"\n\tlayout=\"neato\"");
+for i in [1..vertices] do
+	x[i]:=r*Cos((2*FLOAT.PI/vertices)*i);
+	y[i]:=r*Sin((2*FLOAT.PI/vertices)*i);
+	AppendTo(fName,"\n\t",i,"[pos=\"",Float(x[i]),",",Float(y[i]),"!\"];");
+od;
+
+G:=Group(SRGroup(deg,lev,18)[1]);
+elm:=SRGroup(deg,lev,18)[1][2];
+
+list:=ListPerm(elm);
+AppendTo(fName,"\n");
+for i in [1..Length(list)] do
+	if i=list[list[i]] and i<list[i] then
+		AppendTo(fName,"\n\t",i," -> ",list[i], " [dir=both]");
+	elif i<>list[list[i]] then
+		AppendTo(fName,"\n\t",i," -> ",list[i]);
+	fi;
+od;
+AppendTo(fName,"\n}");

@@ -773,8 +773,8 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 					formatAbove:=false;
 					Print("\nFormatting file ",Concatenation("sr_", String(deg), "_", String(lev), ".grp")," now.");
 				fi;
-				
 			fi;
+			
 			# 2.5.5. Level=2 case.
 			if lev=2 and not projectionProtocol then			
 				# 2.5.5.1. Check if the group files have already been partially created (re-entry condition). If so, read these files to continue from the previous save-point.
@@ -1152,7 +1152,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 			elif reEntryCheck and lev=1 then
 				UnbindVariables("varArg1");
 			fi;
-			if lev>1 then
+			if lev>1 and formatAbove then
 				PrintTo(fNewAbove,StringFile(fLevelAboveCumulative));
 				if breakPointCheckExist then
 					RemoveFile(fBreakPointCheck);
