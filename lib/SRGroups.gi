@@ -51,10 +51,14 @@ InstallGlobalFunction(BelowAction,function(k,n,aut,i)
 end);
 
 
-# Input::	k: integer at least 2, n: integer at least 1, G: a self-replicating subgroup of AutT(k,n)
+# Input::	k: integer at least 2, n: integer at least 1, G: a self-replicating subgroup of AutT(k,n) with sufficient rigid automorphisms
 # Output::	the maximal self-replicating extension of G in AutT(k,n+1)
 InstallGlobalFunction(MaximalExtension,function(k,n,G)
 	local gensMG, pr, gensG, a, pre_a, b, extn, i, prG, kerG;
+	
+	if not HasSufficientRigidAutomorphisms(k,n,G) then
+		Error("Input groups needs to have sufficient rigid automorphisms.");
+	fi;
 		
 	gensMG:=[];
 	pr:=Projection(AutT(k,n+1));
@@ -111,16 +115,18 @@ InstallGlobalFunction(RepresentativeWithSufficientRigidAutomorphisms,function(k,
 	F:=AutT(k,n);
 	F_0:=Stabilizer(F,[1..k^(n-1)],OnSets);
 	pr:=Projection(F);
-	# if the projection of G has sufficient rigid automorphisms, preserve it
+	# if the projection of G has sufficient rigid automorphisms, preserve it (Horadam, (proof of) Proposition 3.9)
 	if HasSufficientRigidAutomorphisms(k,n-1,Image(pr,G)) then
 		for a in Intersection(Kernel(pr),F_0) do
+			# Proposition 3.10
 			if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
-			if IsSelfReplicating(k,n,G^a) and HasSufficientRigidAutomorphisms(k,n,G^a) then return G^a; fi;
+			if HasSufficientRigidAutomorphisms(k,n,G^a) and IsSelfReplicating(k,n,G^a) then return G^a; fi;
 		od;
 	else
 		for a in F_0 do
+			# Proposition 3.10
 			if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
-			if IsSelfReplicating(k,n,G^a) and HasSufficientRigidAutomorphisms(k,n,G^a) then return G^a; fi;
+			if HasSufficientRigidAutomorphisms(k,n,G^a) and IsSelfReplicating(k,n,G^a) then return G^a; fi;
 		od;
 	fi;
 end);
