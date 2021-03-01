@@ -1381,7 +1381,7 @@ end);
 #Input::
 #Output::
 InstallGlobalFunction(PermutationMapping, function(deg, lev)
-local dirDigraphs, group, element, x, y, vertices, radius, i, list, fName, count;
+local dirDigraphs, group, element, x, y, vertices, radius, i, list, fName, count, groupElements;
 
 dirDigraphs:=DirectoriesPackageLibrary("SRGroups","Digraphs");
 
@@ -1389,19 +1389,21 @@ vertices:=deg^lev;
 radius:= vertices/3;
 x:=[];
 y:=[];
+groupElements:=[];
 
 for group in [1..Length(SRGroup(deg,lev))] do
-	fName:=Filename(dirDigraphs[1], Concatenation("Perm_", String(deg), "_", String(lev), "_", String(group), ".gv"));
+	groupElements:=Elements(Group(SRGroup(deg,lev,group)[1]));
+	fName:=Filename(dirDigraphs[1], Concatenation("Perm_", String(deg), "_", String(lev), "_", String(group), ".dot"));
 	PrintTo(fName,"digraph G {");
 	AppendTo(fName,"node[shape=circle,fontname=helvetica]");
 	AppendTo(fName,"\n\tlayout=\"neato\"");
 	for i in [1..vertices] do
 		x[i]:=radius*Cos((2*FLOAT.PI/vertices)*i);
 		y[i]:=radius*Sin((2*FLOAT.PI/vertices)*i);
-		AppendTo(fName,"\n\t",i,"[pos=\"",Float(x[i]),",",Float(y[i]),"!\"];");
+		AppendTo(fName,"\n\t",i,"[pos=\"",Float(x[i]),",",Float(y[i]),"!\", label=", String(i), "];");
 	od;
-	for count in [1..Length(SRGroup(deg,lev,group)[1])] do
-		element:=SRGroup(deg,lev,group)[1][count];
+	for count in [1..Length(groupElements)] do
+		element:= groupElements[count];
 		list:=ListPerm(element);
 		AppendTo(fName,"\n");
 		if not count = 1 then 
@@ -1411,7 +1413,8 @@ for group in [1..Length(SRGroup(deg,lev))] do
 			for i in [1..vertices] do
 				x[i]:=radius*Cos((2*FLOAT.PI/vertices)*i);
 				y[i]:=radius*Sin((2*FLOAT.PI/vertices)*i);
-				AppendTo(fName,"\n\t",i,"[pos=\"",Float(x[i]),",",Float(y[i]),"!\"];");
+				AppendTo(fName,"\n\t",i,"[pos=\"",Float(x[i]),",",Float(y[i]),"!\", label=", String(i), "];");
+				# When printing multiple graphs in one file GraphViz will rename nodes of the same name. The nodes behave as unique entities within their individual subgraph but will display the label that is common amongst all graphs. 
 			od;
 		fi;
 		for i in [1..Length(list)] do
@@ -1425,3 +1428,11 @@ for group in [1..Length(SRGroup(deg,lev))] do
 	od;
 od;
 end);
+
+### To arrange the graphs produced in multiple files in columns left to right use the command 
+### "dot file1.dot file2.dot file3.dot | gvpack -array_r | neato -n2 -Tpng -o outputFile.png"
+
+### To arrange the graphs produced in multiple files one on top of another (i.e. in rows) use the command
+### "file1.dot file2.dot file3.dot | gvpack -array_c | neato -n2 -Tpng -o outputFile.png"
+
+### At the moment it is printing all of the elements from one group into the same file because I want to find a way to put all of those graphs into the one display. 
