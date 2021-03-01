@@ -240,6 +240,15 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,f
 	return list;
 end);
 
+
+
+
+
+
+
+
+
+
 # Input:: deg: degree of the tree (integer at least 2), lev: level of the tree (integer at least 1; if lev=1, then the unformatted "sr_deg_1.grp" file must already exist) (requires "sr_deg_lev+1.grp" file to exist)
 # Output:: Formatted version of the file "sr_deg_lev.grp"
 InstallGlobalFunction(FormatSRFile, function(deg,lev)
@@ -463,6 +472,7 @@ InstallGlobalFunction(FormatSRFile, function(deg,lev)
 	RemoveFile(fVariables);
 	return;
 end);
+
 
 # Input:: Any integer in the range [0,31], which denotes the degree of the regular rooted tree being organised. If the input is 0 or 1, the degree is chosen to be the lowest degree not stored.
 # Output:: The file containing all self-replicating groups of the rooted k-tree at the lowest level not stored.
@@ -1166,6 +1176,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 	return;
 end);
 
+
 # Input:: deg: an integer of at least 2 representing the degree of the SRGroup that one wishes to find the HasseDiagram of, lev: and integer of at least 1, representing the level of the SRGroup on the degree deg 
 # Output:: a plain text file stored in the form of a .dot file, which can be run through command prompt and Graphviz  
 InstallGlobalFunction(HasseDiagram, function(deg,lev)
@@ -1300,6 +1311,7 @@ od;
 AppendTo(fName, "\n", "}");
 return;
 end);
+
 
 # Input::
 # Output::
