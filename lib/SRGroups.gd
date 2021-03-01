@@ -38,3 +38,4 @@ DeclareGlobalFunction( "FormatSRFile" );
 DeclareGlobalFunction( "SRGroupFile" );
 DeclareGlobalFunction( "HasseDiagram" );
 DeclareGlobalFunction( "ExtensionsMapping" );
+DeclareGlobalFunction( "PermutationMapping" );
