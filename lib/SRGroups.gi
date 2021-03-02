@@ -106,29 +106,23 @@ end);
 # Input::	k: integer at least 2, n: integer at least 1, G: a self-replicating subgroup of AutT(k,n)
 # Output::	a self-replicating AutT(k,n)-conjugate of G with sufficient rigid automorphisms, and the same projection to T_{k,n-1} as G if the projection of G has sufficient rigid automorphisms
 InstallGlobalFunction(RepresentativeWithSufficientRigidAutomorphisms,function(k,n,G)
-	local F, F_0, pr, a;
+	local F, F_0, pr, conjugators, a;
 
-	if n=1 or HasSufficientRigidAutomorphisms(k,n,G) then
-		return G;
-	fi;
+	if n=1 or HasSufficientRigidAutomorphisms(k,n,G) then return G; fi;
 	
 	F:=AutT(k,n);
 	F_0:=Stabilizer(F,[1..k^(n-1)],OnSets);
 	pr:=Projection(F);
-	# if the projection of G has sufficient rigid automorphisms, preserve it (Horadam, (proof of) Proposition 3.9)
+	# if the projection of G has sufficient rigid automorphisms, preserve it (cf. Horadam, (proof of) Proposition 3.9, 3.10)
+	conjugators:=F_0;
 	if HasSufficientRigidAutomorphisms(k,n-1,Image(pr,G)) then
-		for a in Intersection(Kernel(pr),F_0) do
-			# Proposition 3.10
-			if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
-			if HasSufficientRigidAutomorphisms(k,n,G^a) and IsSelfReplicating(k,n,G^a) then return G^a; fi;
-		od;
-	else
-		for a in F_0 do
-			# Proposition 3.10
-			if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
-			if HasSufficientRigidAutomorphisms(k,n,G^a) and IsSelfReplicating(k,n,G^a) then return G^a; fi;
-		od;
+		conjugators:=Intersection(conjugators,Kernel(pr));
 	fi;
+		
+	for a in conjugators do
+		if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
+		if HasSufficientRigidAutomorphisms(k,n,G^a) and IsSelfReplicating(k,n,G^a) then return G^a; fi;
+	od;
 end);
 
 
@@ -156,7 +150,7 @@ end);
 
 
 # Input::	k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
-# Output::	a list of AutT(k,n)-conjugacy class representatives of maximal self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto G
+# Output::	a list of AutT(k,n)-conjugacy class representatives of maximal self-replicating subgroups of M(G) with sufficient rigid automorphisms that project onto G
 InstallGlobalFunction(ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection,function(k,n,G)
 	local F, pr, list, class, H, new, i;
 
@@ -180,69 +174,65 @@ InstallGlobalFunction(ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjectio
 end);
 
 
-# Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1)
+# Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n)
 # Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of G with sufficient rigid automorphisms
 InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroups,function(k,n,G)
-	local F, list, listtemp, H, new, listHcheck, listH, add, I, J;
+	local F, list, list_temp, H, listH, listH_temp, K, L;
 
 	F:=AutT(k,n);
 	list:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,G));
-	listtemp:=ShallowCopy(list);
-	while not IsEmpty(listtemp) do
-		for H in listtemp do
-			new:=true;
-			if IsTrivial(MaximalSubgroupClassReps(H)) then new:=false; fi;
-			listHcheck:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,H));
-			listH:=[];
-			if new then
-				for I in listHcheck do
-					add:=true;
-					for J in list do
-						if IsConjugate(F,I,J) then add:=false; break; fi;
+	list_temp:=ShallowCopy(list);
+	while not IsEmpty(list_temp) do
+		for H in list_temp do
+			if not MaximalSubgroupClassReps(H)=[Group(())] then
+				listH:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,H));
+				listH_temp:=ShallowCopy(listH);
+				for K in listH do
+					for L in list do
+						if IsConjugate(F,K,L) then Remove(listH_temp,Position(listH_temp,K)); break; fi;
 					od;
-					if add then Add(listH,RepresentativeWithSufficientRigidAutomorphisms(k,n,I)); fi;
 				od;
-				Append(listtemp,listH);
-				Append(list,listH);
+				Append(list_temp,listH_temp);
+				Append(list,listH_temp);
 			fi;
-			Remove(listtemp,Position(listtemp,H));
+			Remove(list_temp,Position(list_temp,H));
 		od;
 	od;
-	Add(list,G);
-	return list; 
+	Add(list,G,1);
+	return list;
 end);
+
 
 # Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
 # Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto G
 InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,function(k,n,G)
-	local F, pr, list, listtemp, H, new, listHcheck, listH, add, I, J;
+	local F, pr, list, list_temp, H, listH, listH_temp, K, L;
 
 	F:=AutT(k,n);
 	pr:=Projection(F);
 	list:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection(k,n,G));
-	listtemp:=ShallowCopy(list);
-	while not IsEmpty(listtemp) do
-		for H in listtemp do
-			new:=true;
-			if IsTrivial(MaximalSubgroupClassReps(H)) then new:=false; fi;
-			listHcheck:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,H));
-			listH:=[];
-			if new then
-				for I in listHcheck do
-					add:=true;
-					if not Image(pr,I)=G then continue; fi;
-					for J in list do
-						if IsConjugate(F,I,J) then add:=false; break; fi;
+	list_temp:=ShallowCopy(list);
+	while not IsEmpty(list_temp) do
+		for H in list_temp do
+			if not MaximalSubgroupClassReps(H)=[Group(())] then
+				listH:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,H));
+				listH_temp:=ShallowCopy(listH);
+				for K in listH do
+					if not Image(pr,K)=G then
+						Remove(listH_temp,Position(listH_temp,K));
+						continue;
+					fi;
+					for L in list do
+						if IsConjugate(F,K,L) then Remove(listH_temp,Position(listH_temp,K)); break; fi;
 					od;
-					if add then Add(listH,RepresentativeWithSufficientRigidAutomorphisms(k,n,I)); fi;
 				od;
-				Append(listtemp,listH);
-				Append(list,listH);
+				Append(list_temp,listH_temp);
+				Append(list,listH_temp);
 			fi;
-			Remove(listtemp,Position(listtemp,H));
+			Remove(list_temp,Position(list_temp,H));
 		od;
 	od;
-	Add(list,MaximalExtension(k,n-1,G));
+	Add(list,MaximalExtension(k,n-1,G),1);
 	return list;
 end);
 
