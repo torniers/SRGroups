@@ -714,16 +714,19 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 					UnbindGlobal("newEntryPoint");
 					# 2.5.2.4. The loop won't repeat once it finds an unbound temp_deg_lev-1_initial_proj variable.
 				od;
+				RemoveFile(fBreakPointCheck);
 			fi;
 			
 			# 2.5.3. This is where the group information is gathered. Two protocols exist: the normal protocol; and the projection protocol.
 			if not projectionProtocol then
 				# 2.5.3.1. Normal protocol: Extend each group on level lev-1 to all conjugacy class representatives and store their generators in the file "temp_deg_lev.grp".
 				groupGens:=[];
-				Print("\nEvaluating groups extending from:"); 
 				if entryPoint<=Length(SRGroup(deg,lev-1)) then
+					Print("\nEvaluating groups extending from:");
+					if entryPoint=1 then
+						Print("\n",Concatenation("SRGroup(",String(deg),",",String(lev-1),",1)"),"  (",i,"/",Length(SRGroup(deg,lev-1)),")");
+					fi;
 					for i in [entryPoint..Length(SRGroup(deg,lev-1))] do
-						Print("\n",Concatenation("SRGroup(",String(deg),",",String(lev-1),",",String(i),")"),"  (",i,"/",Length(SRGroup(deg,lev-1)),")");
 						groupList:=ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection(deg, lev, Group(SRGroup(deg, lev-1, i)[1]));
 						if i=1 then
 							AppendTo(fExtensions,Concatenation("BindGlobal(\"temp_",String(deg),"_",String(lev-1),"_",String(i),"_proj\",\n["));
@@ -738,6 +741,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 								AppendTo(fExtensions,Concatenation("\n\t",String(groupGens[j]),","));
 							fi;
 						od;
+						Print("\n",Concatenation("SRGroup(",String(deg),",",String(lev-1),",",String(i+1),")"),"  (",i,"/",Length(SRGroup(deg,lev-1)),")");
 					od;
 				fi;
 			else
@@ -924,10 +928,12 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 						# 2.5.5.3.5. Check and declare if re-entry was completed (by setting reEntry to false, resetting initialz, and unbinding temp_deg_1_prevPosList[y]_proj).
 						# This is required if both level 2 and level 1 formatting has already been completed, but has not yet looped to the next group's save-point.
 						if reEntry then
-							MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(prevPosList[y]),"_proj"));
-							UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(prevPosList[y]),"_proj"));
 							initialz:=1;
 							reEntry:=false;
+						fi;
+						if IsBoundGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(prevPosList[y]),"_proj")) then
+							MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(prevPosList[y]),"_proj"));
+							UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(prevPosList[y]),"_proj"));
 						fi;
 						# 2.5.5.3.6. Loop y within the loop for z (since more than one group could extend to the same number of groups).
 						y:=y+1;
@@ -959,10 +965,17 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 					# x denotes group number on level lev-2, k denotes group number on level lev-1 extending from group x.
 					# Start by looping through all groups on level lev-2, then groups on level lev-1 extending from group x.
 					for x in [1..initialx] do
-						for k in [1..y-1] do
-							MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited[x]+prevPosLists[x][k]),"_proj"));
-							UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited[x]+prevPosLists[x][k]),"_proj"));
-						od;
+						if x<>initialx then
+							for k in [1..Length(prevPosLists[x])] do
+								MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited[x]+prevPosLists[x][k]),"_proj"));
+								UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited[x]+prevPosLists[x][k]),"_proj"));
+							od;
+						else
+							for k in [1..y-1] do
+								MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited[x]+prevPosLists[x][k]),"_proj"));
+								UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited[x]+prevPosLists[x][k]),"_proj"));
+							od;
+						fi;
 					od;
 				
 				# 2.5.6.2. No re-entry condition. Start from beginning by initialising required variables.
@@ -1060,7 +1073,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 								fi;
 								# 2.5.6.3.2.2.2.4. Print formatted individual group information to "temp_deg_lev_full.grp" and save this point.
 								AppendTo(fCumulative,StringFile(fSingleGroup));
-								PrintTo(fVariables,StringVariables(x, z, posList, prevPosLists, sortedLists, unsortedList, unsortedLists, yVisited, vCount, wCount, yCount, w, y)); # Save-point
+								PrintTo(fVariables,StringVariables(x, z, posList, prevPosLists, sortedLists, unsortedList, unsortedLists, vCount, wCount, yCount, yVisited, w, y)); # Save-point
 								# 2.5.6.3.2.2.2.5. Check and declare if re-entry was completed (by setting reEntry to false and resetting initialz).
 								if reEntry then
 									reEntry:=false;
@@ -1113,7 +1126,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 								else
 									AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),",\n");
 								fi;
-								PrintTo(fVariables,StringVariables(x, z, posList, prevPosLists, sortedLists, unsortedList, unsortedLists, yVisited, vCount, wCount, yCount, w, y)); # Save-point
+								PrintTo(fVariables,StringVariables(x, z, posList, prevPosLists, sortedLists, unsortedList, unsortedLists, vCount, wCount, yCount, yVisited, w, y)); # Save-point
 								# 2.5.6.3.2.2.3.8. Check and declare if re-entry was completed (by setting reEntry to false and resetting initialz).
 								if reEntry then
 									reEntry:=false;
@@ -1123,10 +1136,12 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 							# 2.5.6.3.2.2.4. Check and declare if re-entry was completed (by setting reEntry to false, resetting initialz, and unbinding temp_deg_lev-1_num_proj).
 							# This is required if both level lev and level lev-1 formatting has already been completed, but has not yet looped to the next group's save-point.
 							if reEntry then
-								MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited[x]+prevPosLists[x][y]),"_proj"));
-								UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited[x]+prevPosLists[x][y]),"_proj"));
 								initialz:=1;
 								reEntry:=false;
+							fi;
+							if IsBoundGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited[x]+prevPosLists[x][y]),"_proj")) then
+								MakeReadWriteGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited[x]+prevPosLists[x][y]),"_proj"));
+								UnbindGlobal(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited[x]+prevPosLists[x][y]),"_proj"));
 							fi;
 							# 2.5.6.3.2.2.5. Loop y within the loop for z (since more than one group could extend to the same number of groups).
 							y:=y+1;
