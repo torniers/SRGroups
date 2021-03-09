@@ -126,6 +126,39 @@ InstallGlobalFunction(RepresentativeWithSufficientRigidAutomorphisms,function(k,
 end);
 
 
+InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjectionHoradam,function(k,n,G)
+	local F, allGroups, currentLayer, newGroups, currentGroup, subgroups, i, j;
+
+	F:=AutT(k,n);
+	allGroups:=MaximalExtension(k,n-1,G);
+	currentLayer:=ShallowCopy(allGroups);
+	while not IsEmpty(currentLayer) do
+		newGroups:=[];
+		for currentGroup in currentLayer do
+			subgroups:=MaximalSubgroups(currentGroup);
+			for i in [Length(subgroups),Length(subgroups)-1..1] do
+				if not IsSelfReplicating(k,n,subgroups[i]) then
+					Remove(subgroups,i);
+				fi;
+			od;
+			Append(newGroups,subgroups);
+		od;
+		# RemoveConjugates(newGroups);
+		for i in [Length(newGroups),Length(newGroups)-1..1] do
+			for j in [i,i-1..1] do
+				if IsConjugate(F,newGroups(j),newGroups(i)) then
+					Remove(newGroups,i);
+					break;
+				fi;
+			od;
+		od;
+		currentLayer:=newGroups;
+		Append(allGroups,newGroups);
+	od;
+	return allGroups;
+end);
+
+
 # Input::	k: integer at least 2, n: integer at least 2, G: a subgroup of AutT(k,n)
 # Output::	a list of AutT(k,n)-conjugacy class representatives of maximal self-replicating subgroups of G with sufficient rigid automorphisms
 InstallGlobalFunction(ConjugacyClassRepsMaxSelfReplicatingSubgroups,function(k,n,G)

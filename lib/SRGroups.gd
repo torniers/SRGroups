@@ -30,6 +30,8 @@ DeclareGlobalFunction( "BelowAction" );
 DeclareGlobalFunction( "MaximalExtension" );
 DeclareGlobalFunction( "HasSufficientRigidAutomorphisms" );
 DeclareGlobalFunction( "RepresentativeWithSufficientRigidAutomorphisms" );
+DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithProjectionHoradam" );
+
 DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
 DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroups" );
