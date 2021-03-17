@@ -16,7 +16,7 @@ for group in [1..Length(SRGroup(deg,lev))] do
 	AppendTo(fName,"node[shape=circle,fontname=helvetica]");
 	AppendTo(fName,"\n\tlayout=\"neato\"");
 	for i in [1..vertices] do
-		x[i]:=radius*Cos((2*FLOAT.PI/vertices)*i);
+		x[i]:=-radius*Cos((2*FLOAT.PI/vertices)*i);
 		y[i]:=radius*Sin((2*FLOAT.PI/vertices)*i);
 		AppendTo(fName,"\n\t",i,"[pos=\"",Float(x[i]),",",Float(y[i]),"!\"];");
 	od;

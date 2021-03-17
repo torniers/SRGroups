@@ -209,35 +209,38 @@ end);
 # Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
 # Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto G
 InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,function(k,n,G)
-	local F, pr, list, listtemp, H, new, listHcheck, listH, add, I, J;
+	local F, pr, allGroups, currentLayer, newGroups, currentGroup, subgroups, i, j;
 
 	F:=AutT(k,n);
 	pr:=Projection(F);
-	list:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection(k,n,G));
-	listtemp:=ShallowCopy(list);
-	while not IsEmpty(listtemp) do
-		for H in listtemp do
-			new:=true;
-			if IsTrivial(MaximalSubgroupClassReps(H)) then new:=false; fi;
-			listHcheck:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,H));
-			listH:=[];
-			if new then
-				for I in listHcheck do
-					add:=true;
-					if not Image(pr,I)=G then continue; fi;
-					for J in list do
-						if IsConjugate(F,I,J) then add:=false; break; fi;
-					od;
-					if add then Add(listH,RepresentativeWithSufficientRigidAutomorphisms(k,n,I)); fi;
-				od;
-				Append(listtemp,listH);
-				Append(list,listH);
-			fi;
-			Remove(listtemp,Position(listtemp,H));
+	allGroups:=[MaximalExtension(k,n-1,G)];
+	currentLayer:=ShallowCopy(allGroups);
+	while not IsEmpty(currentLayer) do
+		newGroups:=[];
+		for currentGroup in currentLayer do
+			subgroups:=ShallowCopy(MaximalSubgroups(currentGroup));
+			for i in [Length(subgroups),Length(subgroups)-1..1] do
+				if not IsSelfReplicating(k,n,subgroups[i]) or not Image(pr,subgroups[i])=G then
+					Remove(subgroups,i);
+				fi;
+			od;
+			Append(newGroups,subgroups);
 		od;
+		# RemoveConjugates(newGroups);
+		for i in [Length(newGroups),Length(newGroups)-1..2] do
+			for j in [i-1,i-2..1] do
+				if IsConjugate(F,newGroups[j],newGroups[i]) then
+					Remove(newGroups,i);
+					break;
+				fi;
+			od;
+		od;
+		currentLayer:=newGroups;
+		Append(allGroups,newGroups);
 	od;
-	Add(list,MaximalExtension(k,n-1,G));
-	return list;
+	# representatives with sufficient rigid automorphisms
+	Apply(allGroups,H->RepresentativeWithSufficientRigidAutomorphisms(k,n,H));
+	return allGroups;
 end);
 
 # Input:: deg: degree of the tree (integer at least 2), lev: level of the tree (integer at least 1; if lev=1, then the unformatted "sr_deg_1.grp" file must already exist) (requires "sr_deg_lev+1.grp" file to exist)
@@ -724,7 +727,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 				if entryPoint<=Length(SRGroup(deg,lev-1)) then
 					Print("\nEvaluating groups extending from:");
 					if entryPoint=1 then
-						Print("\n",Concatenation("SRGroup(",String(deg),",",String(lev-1),",1)"),"  (",i,"/",Length(SRGroup(deg,lev-1)),")");
+						Print("\n",Concatenation("SRGroup(",String(deg),",",String(lev-1),",1)"),"  (",1,"/",Length(SRGroup(deg,lev-1)),")");
 					fi;
 					for i in [entryPoint..Length(SRGroup(deg,lev-1))] do
 						groupList:=ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection(deg, lev, Group(SRGroup(deg, lev-1, i)[1]));
@@ -1396,25 +1399,25 @@ end);
 #Input::
 #Output::
 InstallGlobalFunction(PermutationMapping, function(deg, lev)
-local dirDigraphs, group, element, x, y, vertices, radius, i, list, fName, count, groupElements;
+local dirPermDigraphs, group, element, x, y, leaves, radius, i, list, fName, count, groupElements;
 
-dirDigraphs:=DirectoriesPackageLibrary("SRGroups","Digraphs");
+dirPermDigraphs:=DirectoriesPackageLibrary("SRGroups","PermDigraphs");
 
-vertices:=deg^lev;
-radius:= vertices/3;
+leaves:=deg^lev;
+radius:= leaves/3;
 x:=[];
 y:=[];
 groupElements:=[];
 
 for group in [1..Length(SRGroup(deg,lev))] do
 	groupElements:=Elements(Group(SRGroup(deg,lev,group)[1]));
-	fName:=Filename(dirDigraphs[1], Concatenation("Perm_", String(deg), "_", String(lev), "_", String(group), ".dot"));
+	fName:=Filename(dirPermDigraphs[1], Concatenation("Perm_", String(deg), "_", String(lev), "_", String(group), ".dot"));
 	PrintTo(fName,"digraph G {");
 	AppendTo(fName,"node[shape=circle,fontname=helvetica]");
 	AppendTo(fName,"\n\tlayout=\"neato\"");
-	for i in [1..vertices] do
-		x[i]:=radius*Cos((2*FLOAT.PI/vertices)*i);
-		y[i]:=radius*Sin((2*FLOAT.PI/vertices)*i);
+	for i in [1..leaves] do
+		x[i]:=-radius*Cos((2*FLOAT.PI/leaves)*i);
+		y[i]:=radius*Sin((2*FLOAT.PI/leaves)*i);
 		AppendTo(fName,"\n\t",i,"[pos=\"",Float(x[i]),",",Float(y[i]),"!\", label=", String(i), "];");
 	od;
 	for count in [1..Length(groupElements)] do
@@ -1425,9 +1428,9 @@ for group in [1..Length(SRGroup(deg,lev))] do
 			AppendTo(fName, "digraph G {");
 			AppendTo(fName,"node[shape=circle,fontname=helvetica]");
 			AppendTo(fName,"\n\tlayout=\"neato\"");
-			for i in [1..vertices] do
-				x[i]:=radius*Cos((2*FLOAT.PI/vertices)*i);
-				y[i]:=radius*Sin((2*FLOAT.PI/vertices)*i);
+			for i in [1..leaves] do
+				x[i]:=-radius*Cos((2*FLOAT.PI/leaves)*i);
+				y[i]:=radius*Sin((2*FLOAT.PI/leaves)*i);
 				AppendTo(fName,"\n\t",i,"[pos=\"",Float(x[i]),",",Float(y[i]),"!\", label=", String(i), "];");
 				# When printing multiple graphs in one file GraphViz will rename nodes of the same name. The nodes behave as unique entities within their individual subgraph but will display the label that is common amongst all graphs. 
 			od;
