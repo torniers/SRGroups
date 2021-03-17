@@ -1194,7 +1194,7 @@ nodes:=[];
 abelianGroups:=[];
 sizeLists:=[];
 dir:=DirectoriesPackageLibrary("SRGroups","Digraphs");
-fName:=Filename(dir[1],Concatenation(String(deg),"_",String(lev),".dot"));
+fName:=Filename(dir[1],Concatenation("HasseDiagram_", String(deg),"_",String(lev),".dot"));
 for i in [1..Length(SRGroup(deg,lev))] do
 	subgroups[i]:=[];
 	k:=1;
