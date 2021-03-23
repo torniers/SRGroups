@@ -1,0 +1,9 @@
+
+	[
+		[ (1,2) ],
+		"SRGroup(2,1,1)",
+		"emptyset",
+		["SRGroup(2,2,1)",
+		"SRGroup(2,2,2)",
+		"SRGroup(2,2,3)"]
+	]
