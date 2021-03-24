@@ -1635,7 +1635,7 @@ InstallGlobalFunction(ReorderSRFiles,function(deg,lev,initialLev,prevPosList,uns
 				od;
 				MakeReadWriteGlobal(SplitString(listDirContents[j],".")[1]);
 				UnbindGlobal(SplitString(listDirContents[j],".")[1]);
-				# RemoveFile(fExtension);
+				RemoveFile(fExtension);
 			fi;
 			j:=j+1;
 		elif StartsWith(listDirContents[j],stringInitialBelow) then
