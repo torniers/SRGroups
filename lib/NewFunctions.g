@@ -162,3 +162,64 @@ InstallGlobalFunction(LengthSingleExtension,function(deg,lev,numList)
 	
 	return length;
 end);
+
+InstallGlobalFunction(ReorderSRFiles,function(deg,lev,initialLev,prevPosList,unsortedList)
+	local stringInitial, stringInitialBelow, string, dirTempSingleFiles, fNewExtension, fExtension, listDirContents, newString, stringList, groupList, count, j, i, countAboveList, countAbove;
+	
+	stringInitial:=Concatenation("temp_",String(deg),"_",String(initialLev));
+	stringInitialBelow:=Concatenation("temp_",String(deg),"_",String(initialLev+1));
+	string:=Concatenation("temp_",String(deg),"_",String(lev));
+	dirTempSingleFiles:=DirectoriesPackageLibrary("SRGroups", Concatenation("data/temp_files/",string,"/"));
+	listDirContents:=DirectoryContents(dirTempSingleFiles[1]);
+	Remove(listDirContents,Position(listDirContents,"."));
+	Remove(listDirContents,Position(listDirContents,".."));
+	countAboveList:=[];
+	for count in [1..Length(unsortedList)] do
+		for j in [1..unsortedList[count]] do
+			if EvalString(SplitString(listDirContents[1],"_")[4])=count and EvalString(SplitString(listDirContents[1],"_")[5])=j then
+				i:=countAbove;
+			fi;
+			countAboveList[countAbove]:=j;
+			countAbove:=countAbove+1;
+		od;
+	od;
+	j:=1;
+	
+	while i<=Length(prevPosList) and j<=Length(listDirContents) do
+		if StartsWith(listDirContents[j],stringInitial) and EvalString(SplitString(listDirContents[j],"_")[5])=countAboveList[i] then
+			newString:=stringInitialBelow;
+			stringList:=SplitString(listDirContents[j],"_");
+			for k in [5..Length(stringList)] do
+				if  k<>5 then
+					newString:=Concatenation(newString,"_",stringList[k]);
+				else
+					newString:=Concatenation(newString,"_",String(Position(prevPosList,i)));
+				fi;
+			od;
+			fNewExtension:=Filename(dirTempSingleFiles[1],newString);
+			fExtension:=Filename(dirTempSingleFiles[1],listDirContents[j]);
+			if IsExistingFile(fExtension) then
+				Read(fExtension);
+				PrintTo(fNewExtension,Concatenation("BindGlobal(\"",SplitString(newString,".")[1],"\",\n["));
+				groupList:=EvalString(SplitString(listDirContents[j],".")[1]);
+				for k in [1..Length(groupList)] do
+					if k=Length(groupList) then
+						AppendTo(fNewExtension,Concatenation("\n\t",String(groupList[k]),"\n]);"));
+					else
+						AppendTo(fNewExtension,Concatenation("\n\t",String(groupList[k]),","));
+					fi;
+				od;
+				# RemoveFile(fExtension);
+			fi;
+			j:=j+1;
+		elif StartsWith(listDirContents[j],stringInitialBelow) then
+			break;
+		else
+			while EvalString(SplitString(listDirContents[j],"_")[5])<>countAboveList[i] do
+				i:=i+1;
+			od;
+		fi;
+	od;
+
+	return;
+end);

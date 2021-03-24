@@ -1177,7 +1177,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 				Remove(listDirContentsSingleFiles,Position(listDirContentsSingleFiles,".."));
 				for j in [1..Length(listDirContentsSingleFiles)] do
 					if StartsWith(listDirContentsSingleFiles[j],Concatenation("temp_",String(deg),"_",String(lev-1))) then
-						ReorderSRFiles(deg,i,lev-1,prevPosListBelow);
+						ReorderSRFiles(deg,i,lev-1,prevPosListBelow,unsortedList);
 						break;
 					fi;
 				od;
@@ -1586,94 +1586,67 @@ InstallGlobalFunction(CombineSRFiles,function(deg,lev)
 	return;
 end);
 
-InstallGlobalFunction(ReorderSRFiles,function(deg,lev,initialLev,prevPosList)
-	local stringInitial, stringInitialBelow, string, dirTempSingleFiles, fTempExtensionList, fExtensionList, listDirContents, newString, stringList, groupList, i, j, k, m, countAbove, contentsCount;
+InstallGlobalFunction(ReorderSRFiles,function(deg,lev,initialLev,prevPosList,unsortedList)
+	local stringInitial, stringInitialBelow, string, dirTempSingleFiles, fNewExtension, fExtension, listDirContents, newString, stringList, groupList, count, j, i, k, countAboveList, countAbove;
 	
 	stringInitial:=Concatenation("temp_",String(deg),"_",String(initialLev));
 	stringInitialBelow:=Concatenation("temp_",String(deg),"_",String(initialLev+1));
 	string:=Concatenation("temp_",String(deg),"_",String(lev));
 	dirTempSingleFiles:=DirectoriesPackageLibrary("SRGroups", Concatenation("data/temp_files/",string,"/"));
-	fTempExtensionList:=[];
-	fExtensionList:=[];
-	fVariables:=Filename(dirTempSingleFiles[1],Concatenation("temp_",String(deg),"_",String(initialLev),"_var.grp"));
-	if IsExistingFile(fVariables) then
-		reEntry:=true;
-		Read(fVariables);
-		listDirContents:=EvalString("varArg1");
-		listsDirContents:=EvalString("varArg2");
-		i:=EvalString("varArg3");
-		j:=EvalString("varArg4");
-		countAbove:=EvalString("varArg5");
-	else
-		reEntry:=false;
-		listDirContents:=DirectoryContents(dirTempSingleFiles[1]);
-		listsDirContents:=[];
-		Remove(listDirContents,Position(listDirContents,"."));
-		Remove(listDirContents,Position(listDirContents,".."));
-		i:=1;
-		j:=1;
-		while x<=Length(prevPosList) do
-			countAbove:=EvalString(SplitString(listDirContents[j],"_")[5]);
-			m:=1;
-			listsDirContents[x]:=[];
-			while EvalString(SplitString(listDirContents[j],"_")[5])=countAbove do
-				listsDirContents[x][m]:=listDirContents[j];
-				j:=j+1;
-				m:=m+1;
-			od;
-			counter:=1;
-			while not EvalString(SplitString(listDirContents[j],"_")[5])=countAbove+counter do
-				counter:=counter+1;
-			od;
+	listDirContents:=DirectoryContents(dirTempSingleFiles[1]);
+	Remove(listDirContents,Position(listDirContents,"."));
+	Remove(listDirContents,Position(listDirContents,".."));
+	countAboveList:=[];
+	countAbove:=1;
+	for count in [1..Length(unsortedList)] do
+		for j in [1..unsortedList[count]] do
+			if EvalString(SplitString(listDirContents[1],"_")[4])=count and EvalString(SplitString(listDirContents[1],"_")[5])=j then
+				i:=countAbove;
+			fi;
+			countAboveList[countAbove]:=j;
+			countAbove:=countAbove+1;
 		od;
-		j:=1;
-		m:=1;
-		countAbove:=EvalString(SplitString(listsDirContents[prevPosList[i]][m],"_")[5]);
-	fi;
-
+	od;
+	j:=1;
+	
 	while i<=Length(prevPosList) and j<=Length(listDirContents) do
-		if StartsWith(listsDirContents[prevPosList[i]][m],stringInitial) and EvalString(SplitString(listDirContents[prevPosList[i]][m],"_")[5])=countAbove then
-			fTempExtensionList[i]:=[];
-			fExtensionList[prevPosList[i]]:=[];
+		if StartsWith(listDirContents[j],stringInitial) and EvalString(SplitString(listDirContents[j],"_")[5])=countAboveList[i] then
 			newString:=stringInitialBelow;
 			stringList:=SplitString(listDirContents[j],"_");
 			for k in [5..Length(stringList)] do
 				if  k<>5 then
 					newString:=Concatenation(newString,"_",stringList[k]);
 				else
-					newString:=Concatenation(newString,"_",String(i));
+					newString:=Concatenation(newString,"_",String(Position(prevPosList,i)));
 				fi;
 			od;
-			fTempExtensionList[i][m]:=Filename(dirTempSingleFiles[1],newString);
-			fExtensionList[prevPosList[i]][m]:=Filename(dirTempSingleFiles[1],listsDirContents[prevPosList[i]][m]);
-			if IsExistingFile(fExtensionList[prevPosList[i]][m]) then
-				Read(fExtensionList[prevPosList[i]][m]);
-				PrintTo(fTempExtensionList[i][m],Concatenation("BindGlobal(\"",SplitString(newString,".")[1],"\",\n["));
-				groupList:=EvalString(SplitString(listsDirContents[prevPosList[i]][m],".")[1]);
+			fNewExtension:=Filename(dirTempSingleFiles[1],newString);
+			fExtension:=Filename(dirTempSingleFiles[1],listDirContents[j]);
+			if IsExistingFile(fExtension) then
+				Read(fExtension);
+				PrintTo(fNewExtension,Concatenation("BindGlobal(\"",SplitString(newString,".")[1],"\",\n["));
+				groupList:=EvalString(SplitString(listDirContents[j],".")[1]);
 				for k in [1..Length(groupList)] do
 					if k=Length(groupList) then
-						AppendTo(fTempExtensionList[i][m],Concatenation("\n\t",String(groupList[k]),"\n]);"));
+						AppendTo(fNewExtension,Concatenation("\n\t",String(groupList[k]),"\n]);"));
 					else
-						AppendTo(fTempExtensionList[i][m],Concatenation("\n\t",String(groupList[k]),","));
+						AppendTo(fNewExtension,Concatenation("\n\t",String(groupList[k]),","));
 					fi;
 				od;
-				# RemoveFile(fExtensionList[prevPosList[i]][m]);
+				MakeReadWriteGlobal(SplitString(listDirContents[j],".")[1]);
+				UnbindGlobal(SplitString(listDirContents[j],".")[1]);
+				# RemoveFile(fExtension);
 			fi;
 			j:=j+1;
-			m:=m+1;
-			PrintTo(fVariables,StringVariables(listDirContents,listsDirContents,i,j,m));
+		elif StartsWith(listDirContents[j],stringInitialBelow) then
+			break;
 		else
-			i:=i+1;
-			m:=1;
-			countAbove:=EvalString(SplitString(listsDirContents[prevPosList[i]][m],"_")[5]);
-			PrintTo(fVariables,StringVariables(listDirContents,listsDirContents,i,j,m));
+			while EvalString(SplitString(listDirContents[j],"_")[5])<>countAboveList[i] do
+				i:=i+1;
+			od;
 		fi;
 	od;
-	
-	if reEntry then
-		RemoveFile(fVariables);
-	fi;
-	
+
 	return;
 end);
 
