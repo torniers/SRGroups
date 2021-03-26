@@ -42,4 +42,4 @@ DeclareGlobalFunction( "PermutationMapping" );
 DeclareGlobalFunction( "ExtendSRGroup" );
 DeclareGlobalFunction( "CombineSRFiles" );
 DeclareGlobalFunction( "ReorderSRFiles" );
-DeclareGlobalFunction( "LengthSingleExtension" );
+DeclareGlobalFunction( "NumberExtensionsUnformatted" );
