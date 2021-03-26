@@ -1650,28 +1650,28 @@ InstallGlobalFunction(ReorderSRFiles,function(deg,lev,initialLev,prevPosList,uns
 	return;
 end);
 
-InstallGlobalFunction(LengthSingleExtension,function(deg,lev,num)
-	local numList, initialLev, stringInitial, string, stringSuffix, dirData, dirTempFiles, dirTempSingleFilesAbove, fGLocation, length;
+InstallGlobalFunction(LengthSingleExtension,function(arg)
+	local deg, lev, groupPosition, initialLev, stringPrefix, stringSuffix, string, dirTempFiles, dirTempSingleFiles, fGroupExtensions, numExtensions, i;
 	
-	if not IsList(num) then
-		numList:=[num];
-	else
-		numList:=num;
-	fi;
-	initialLev:=lev-Length(numList);
-	stringInitial:=Concatenation("temp_",String(deg),"_",String(initialLev));
+	arg[1]:=deg;
+	arg[2]:=lev;
+	groupPosition:=[];
+	for i in [3..arg[Length(arg)]] do
+		groupPosition[i-2]:=arg[i];
+	od;
+	initialLev:=lev-Length(groupPosition);
+	stringPrefix:=Concatenation("temp_",String(deg),"_",String(initialLev));
+	stringSuffix:=Concatenation("_",JoinStringsWithSeparator(List(groupPosition,String),"_"));
 	string:=Concatenation("temp_",String(deg),"_",String(lev));
-	stringSuffix:=Concatenation("_",JoinStringsWithSeparator(List(numList,String),"_"));
-	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
 	dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
 	if IsDirectoryPath(Filename(dirTempFiles[1],Concatenation(string,"/"))) then
-		dirTempSingleFilesAbove:=DirectoriesPackageLibrary("SRGroups", Concatenation("data/temp_files/",string,"/"));
-		fGLocation:=Filename(dirTempSingleFilesAbove[1],Concatenation(stringInitial,stringSuffix,"_proj.grp"));
-		if IsExistingFile(fGLocation) then
-			Read(fGLocation);
-			length:=Length(EvalString(Concatenation(stringInitial,stringSuffix,"_proj")));
-			MakeReadWriteGlobal(Concatenation(stringInitial,stringSuffix,"_proj"));
-			UnbindGlobal(Concatenation(stringInitial,stringSuffix,"_proj"));
+		dirTempSingleFiles:=DirectoriesPackageLibrary("SRGroups", Concatenation("data/temp_files/",string,"/"));
+		fGroupExtensions:=Filename(dirTempSingleFiles[1],Concatenation(stringPrefix,stringSuffix,"_proj.grp"));
+		if IsExistingFile(fGroupExtensions) then
+			Read(fGroupExtensions);
+			numExtensions:=Length(EvalString(Concatenation(stringPrefix,stringSuffix,"_proj")));
+			MakeReadWriteGlobal(Concatenation(stringPrefix,stringSuffix,"_proj"));
+			UnbindGlobal(Concatenation(stringPrefix,stringSuffix,"_proj"));
 		else
 			Print("Group location does not exist");
 			return;
@@ -1681,5 +1681,5 @@ InstallGlobalFunction(LengthSingleExtension,function(deg,lev,num)
 		return;
 	fi;
 	
-	return length;
+	return numExtensions;
 end);
