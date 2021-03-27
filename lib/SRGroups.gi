@@ -1494,9 +1494,12 @@ end);
 
 ### At the moment it is printing all of the elements from one group into the same file because I want to find a way to put all of those graphs into the one display. 
 
+# Input:: arg[1] = degree of tree (int > 1), arg[2] = highest level of tree where the file "sr_k_n.grp" exists (int > 1), (arg[3],arg[4],...) = sequence of group numbers to extend from
+# Output:: File named "temp_deg_initialLev_arg[3]_arg[4]_..._arg[Length(arg)]_proj.grp" that contains extension information of group
 InstallGlobalFunction(ExtendSRGroup,function(arg)
-	local deg, lev, groupPosition, groupPositionAbove, initialLev, stringInitial, stringFolder, stringFolderAbove, stringSuffix, stringSuffixAbove, dirData, dirTempFiles, dirTempSingleFiles, dirTempSingleFilesAbove, fExtension, fExtensionAbove, G,  groupList, groupGens, i;
+	local deg, lev, groupPosition, groupPositionAbove, initialLev, stringPrefix, stringFolder, stringFolderAbove, stringSuffix, stringSuffixAbove, dirData, dirTempFiles, dirTempSingleFiles, dirTempSingleFilesAbove, fExtension, fExtensionAbove, G,  groupList, groupGens, i;
 	
+	# 1. Initialise degree, level, and group position.
 	deg:=arg[1];
 	lev:=arg[2];
 	groupPosition:=[];
@@ -1506,29 +1509,38 @@ InstallGlobalFunction(ExtendSRGroup,function(arg)
 	groupPositionAbove:=ShallowCopy(groupPosition);
 	Remove(groupPositionAbove,Length(groupPosition));
 	initialLev:=lev-Length(groupPosition);
-	stringInitial:=Concatenation("temp_",String(deg),"_",String(initialLev));
+	
+	# 2. Initialise strings that refer to file and variable names, and initialise first two directories.
+	stringPrefix:=Concatenation("temp_",String(deg),"_",String(initialLev));
 	stringFolder:=Concatenation("temp_",String(deg),"_",String(lev));
 	stringFolderAbove:=Concatenation("temp_",String(deg),"_",String(lev-1));
 	stringSuffix:=Concatenation("_",JoinStringsWithSeparator(List(groupPosition,String),"_"));
 	stringSuffixAbove:=Concatenation("_",JoinStringsWithSeparator(List(groupPositionAbove,String),"_"));
 	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
 	dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
+	
+	# 3. Determine the group, G, to extend.
+	# 3.1. Case 1: The group can be called directly from the file "sr_deg_initialLev.grp" using SRGroup(deg,initialLev,groupPosition[1]), if the file exists.
 	if Length(groupPosition)=1 and IsExistingFile(Filename(dirData[1],Concatenation("sr_",String(deg),"_",String(initialLev),".grp"))) then
+		# 3.1.1. Check whether the group position is within the range of groups available, and if so, initialise G.
 		if groupPosition[1]>=1 and groupPosition[1]<=Length(SRGroup(deg,lev-1)) then
 			G:=Group(SRGroup(deg,initialLev,groupPosition[1])[1]);
 		else
 			Print("Group location does not exist (group number). Please choose a group in the correct range (1<=num<=",Length(SRGroup(deg,lev-1)),")");
 			return;
 		fi;
+	# 3.2. Case 2: The group must be called from an individual extension file "temp_deg_initialLev_arg[3]_arg[4]_..._arg[Length(arg)-1]_proj.grp".
 	else
+		# 3.2.1. Check whether directory to individual extension file exists, and if so, initialise the directory and filename (named as in Step 3.2).
 		if IsDirectoryPath(Filename(dirTempFiles[1],Concatenation(stringFolderAbove,"/"))) then
 			dirTempSingleFilesAbove:=DirectoriesPackageLibrary("SRGroups", Concatenation("data/temp_files/",stringFolderAbove,"/"));
-			fExtensionAbove:=Filename(dirTempSingleFilesAbove[1],Concatenation(stringInitial,stringSuffixAbove,"_proj.grp"));
+			fExtensionAbove:=Filename(dirTempSingleFilesAbove[1],Concatenation(stringPrefix,stringSuffixAbove,"_proj.grp"));
+			# 3.2.1.1. Check whether file exists (named as in Step 3.2), and if so, read the file and initialise G (then unbind residual variable).
 			if IsExistingFile(fExtensionAbove) then
 				Read(fExtensionAbove);
-				G:=Group(EvalString(Concatenation(stringInitial,stringSuffixAbove,"_proj"))[groupPosition[Length(groupPosition)]]);
-				MakeReadWriteGlobal(Concatenation(stringInitial,stringSuffixAbove,"_proj"));
-				UnbindGlobal(Concatenation(stringInitial,stringSuffixAbove,"_proj"));
+				G:=Group(EvalString(Concatenation(stringPrefix,stringSuffixAbove,"_proj"))[groupPosition[Length(groupPosition)]]);
+				MakeReadWriteGlobal(Concatenation(stringPrefix,stringSuffixAbove,"_proj"));
+				UnbindGlobal(Concatenation(stringPrefix,stringSuffixAbove,"_proj"));
 			else
 				Print("Group location does not exist (missing file).");
 				return;
@@ -1538,17 +1550,25 @@ InstallGlobalFunction(ExtendSRGroup,function(arg)
 			return;
 		fi;
 	fi;
+	
+	# 4. Check whether directory to new file already exists (it will exist in the case other groups on the same level have already been extended).
+	# If it doesn't exist, create the directory and then initialise its corresponding variable name.
 	if not IsDirectoryPath(Filename(dirTempFiles[1],Concatenation(stringFolder,"/"))) then
 		CreateDir(Filename(dirTempFiles[1],Concatenation(stringFolder,"/")));
 	fi;
 	dirTempSingleFiles:=DirectoriesPackageLibrary("SRGroups", Concatenation("data/temp_files/",stringFolder,"/"));
-	fExtension:=Filename(dirTempSingleFiles[1],Concatenation(stringInitial,stringSuffix,"_proj.grp"));
+	
+	
+	# 5. Initialise new filename variable.
+	# 5.1. Case 1: If the file already exists, the group has already been extended.
+	fExtension:=Filename(dirTempSingleFiles[1],Concatenation(stringPrefix,stringSuffix,"_proj.grp"));
 	if IsExistingFile(fExtension) then
 		Print("Already extended group ",groupPosition[1],".");
 		return;
+	# 5.2. Case 2: If the file does not exist, extend the group and print/append to new file.
 	else
 		groupList:=ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection(deg,lev,G);
-		PrintTo(fExtension,Concatenation("BindGlobal(\"",stringInitial,stringSuffix,"_proj\",\n["));
+		PrintTo(fExtension,Concatenation("BindGlobal(\"",stringPrefix,stringSuffix,"_proj\",\n["));
 		groupGens:=[];
 		for i in [1..Length(groupList)] do
 			groupGens[i]:=GeneratorsOfGroup(groupList[i]);
@@ -1563,6 +1583,8 @@ InstallGlobalFunction(ExtendSRGroup,function(arg)
 	return;
 end);
 
+# Input::
+# Output:: 
 InstallGlobalFunction(CombineSRFiles,function(deg,lev)
 	local stringFolder, stringFolderAbove, dirTempFiles, dirTempSingleFiles, fExtension, fExtensions, i;
 	
@@ -1593,6 +1615,8 @@ InstallGlobalFunction(CombineSRFiles,function(deg,lev)
 	return;
 end);
 
+# Input::
+# Output:: 
 InstallGlobalFunction(ReorderSRFiles,function(deg,lev,initialLev,prevPosList,unsortedList)
 	local stringPrefixInitial, stringPrefixFinal, stringSuffixInitial, stringSuffixFinal, stringInitialList, stringFinal, stringFolder, dirTempSingleFiles, dirTempSingleFilesContents, fExtensionInitial, fExtensionFinal, groupPosition, groupGens, groupCount, groupCountBelow, groupCountBelowSpecific, groupCountBelowList, groupNumberFinal, filePos, i;
 	
@@ -1661,6 +1685,8 @@ InstallGlobalFunction(ReorderSRFiles,function(deg,lev,initialLev,prevPosList,uns
 	return;
 end);
 
+# Input::
+# Output:: 
 InstallGlobalFunction(NumberExtensionsUnformatted,function(arg)
 	local deg, lev, groupPosition, finalLev, stringPrefix, stringSuffix, stringFolder, dirTempFiles, dirTempSingleFiles, fExtension, fExtensions, numExtensions, i;
 	
