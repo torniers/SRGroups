@@ -470,7 +470,7 @@ end);
 # Input:: Any integer in the range [0,31], which denotes the degree of the regular rooted tree being organised. If the input is 0 or 1, the degree is chosen to be the lowest degree not stored.
 # Output:: The file containing all self-replicating groups of the rooted k-tree at the lowest level not stored.
 InstallGlobalFunction(SRGroupFile, function(arg)
-	local count, fNew, dirData, k, prevLev, srDegrees, i, x, dataContents, list2, groupGens, deg, lev, fExtensions, groupList, entryPoint, breakPoint, fBreakPointCheck, groupInfo, unsortedLists, sortedList, prevPosLists, yCount, w, yVisited, vCount, fLevelAboveSingle, groupInfoAbove, v, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, reEntryCheck, wCount, y, z, sortedLists, unsortedList, posList, dirTempFiles, fNewAbove, breakPointCheckExist, prevPosList, j, srLevels, incompleteLevels, m, projectionProtocol, levGap, formatAbove;
+	local count, fNew, dirData, k, prevLev, srDegrees, i, x, dataContents, list2, groupGens, deg, lev, fExtensions, groupList, entryPoint, breakPoint, fBreakPointCheck, groupInfo, unsortedLists, sortedList, prevPosLists, yCount, w, yVisited, vCount, fLevelAboveSingle, groupInfoAbove, v, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, reEntryCheck, wCount, y, z, sortedLists, unsortedList, posList, dirTempFiles, fNewAbove, breakPointCheckExist, prevPosList, prevPosListBelow, j, srLevels, incompleteLevels, m, projectionProtocol, levGap, formatAbove, dirTempFilesContents, dirTempSingleFilesContents, stringFolder, dirTempSingleFiles, levReorder;
 
 	# 0. Create directories to be used (dirData: storage of final group files, dirTempFiles: storage of temporary files).
 	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
@@ -744,7 +744,9 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 								AppendTo(fExtensions,Concatenation("\n\t",String(groupGens[j]),","));
 							fi;
 						od;
-						Print("\n",Concatenation("SRGroup(",String(deg),",",String(lev-1),",",String(i+1),")"),"  (",i,"/",Length(SRGroup(deg,lev-1)),")");
+						if entryPoint<>Length(SRGroup(deg,lev-1)) then
+							Print("\n",Concatenation("SRGroup(",String(deg),",",String(lev-1),",",String(i+1),")"),"  (",i+1,"/",Length(SRGroup(deg,lev-1)),")");
+						fi;
 					od;
 				fi;
 			else
@@ -793,12 +795,13 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 					initialz:=EvalString("varArg1");
 					posList:=EvalString("varArg2");
 					prevPosList:=EvalString("varArg3");
-					sortedList:=EvalString("varArg4");
-					unsortedList:=EvalString("varArg5");
-					vCount:=EvalString("varArg6");
-					wCount:=EvalString("varArg7");
-					w:=EvalString("varArg8");
-					y:=EvalString("varArg9");
+					prevPosListBelow:=EvalString("varArg4");
+					sortedList:=EvalString("varArg5");
+					unsortedList:=EvalString("varArg6");
+					vCount:=EvalString("varArg7");
+					wCount:=EvalString("varArg8");
+					w:=EvalString("varArg9");
+					y:=EvalString("varArg10");
 					# 2.5.5.1.1. Unbind temp_deg_1_num_proj variables which have already been completely used from previous run.
 					if y>1 then
 						for k in [1..y-1] do
@@ -824,6 +827,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 					wCount:=1;
 					vCount:=1;
 					initialz:=1;
+					prevPosListBelow:=[];
 				fi;
 				
 				# 2.5.5.3. Loop through every group on level 1 to extract extension information and format group files.
@@ -847,13 +851,18 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 						# 2.5.5.3.3. Store the formatted information of all groups extending from group number prevPosList[y]. See any "sr_deg_lev.grp" file for how this formatting is done. 
 						# A while loop is used here so that if w=sortedList[y]+1 from reading fVariables, it will skip the loop due to already having completed all formatting for these groups.
 						while w<=sortedList[y] do
-							# 2.5.5.3.3.1. Create entries containing individual group information.
+							# 2.5.5.3.3.1.
+							prevPosListBelow[wCount]:=w;
+							for count in [1..prevPosList[y]-1] do
+								prevPosListBelow[wCount]:=prevPosListBelow[wCount]+unsortedList[count];
+							od;
+							# 2.5.5.3.3.2. Create entries containing individual group information.
 							groupInfo[wCount]:=[];
 							groupInfo[wCount][1]:=EvalString(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(prevPosList[y]),"_proj"))[w];
 							groupInfo[wCount][2]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(wCount),")\"");
 							groupInfo[wCount][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(y),")\"");
 							groupInfo[wCount][4]:="[\"the classes it extends to\"]";
-							# 2.5.5.3.3.2. Print all individual group information (in correct format) to "temp_deg_2_indiv.grp".
+							# 2.5.5.3.3.3. Print all individual group information (in correct format) to "temp_deg_2_indiv.grp".
 							if not wCount=1 then
 								PrintTo(fSingleGroup,Concatenation("\n\n\t[\n\t\t",String(groupInfo[wCount][1])));
 							else
@@ -866,14 +875,14 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 							else
 								AppendTo(fSingleGroup,",\n\t\t",groupInfo[wCount][4],"\n\t]");
 							fi;
-							# 2.5.5.3.3.3. If fCumulative does not exist, it must be created and the first lines populated.
+							# 2.5.5.3.3.4. If fCumulative does not exist, it must be created and the first lines populated.
 							if not IsExistingFile(fCumulative) then
 								PrintTo(fCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
 							fi;
-							# 2.5.5.3.3.4. Print formatted individual group information to "temp_deg_2_full.grp" and save this point.
+							# 2.5.5.3.3.5. Print formatted individual group information to "temp_deg_2_full.grp" and save this point.
 							AppendTo(fCumulative,StringFile(fSingleGroup));
-							PrintTo(fVariables,StringVariables(z, posList, prevPosList, sortedList, unsortedList, vCount, wCount, w, y)); # Save-point
-							# 2.5.5.3.3.5. Check and declare if re-entry was completed (by setting reEntry to false and resetting initialz).
+							PrintTo(fVariables,StringVariables(z, posList, prevPosList, prevPosListBelow, sortedList, unsortedList, vCount, wCount, w, y)); # Save-point
+							# 2.5.5.3.3.6. Check and declare if re-entry was completed (by setting reEntry to false and resetting initialz).
 							if reEntry then
 								reEntry:=false;
 								initialz:=1;
@@ -921,7 +930,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 							else
 								AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),",\n");
 							fi;
-							PrintTo(fVariables,StringVariables(z, posList, prevPosList, sortedList, unsortedList, vCount, wCount, w, y)); # Save-point
+							PrintTo(fVariables,StringVariables(z, posList, prevPosList, prevPosListBelow, sortedList, unsortedList, vCount, wCount, w, y)); # Save-point
 							# 2.5.5.3.4.7. Check and declare if re-entry was completed (by setting reEntry to false and resetting initialz).
 							if reEntry then
 								reEntry:=false;
@@ -955,15 +964,17 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 					initialz:=EvalString("varArg2");
 					posList:=EvalString("varArg3");
 					prevPosLists:=EvalString("varArg4");
-					sortedLists:=EvalString("varArg5");
-					unsortedList:=EvalString("varArg6");
-					unsortedLists:=EvalString("varArg7");
-					vCount:=EvalString("varArg8");
-					wCount:=EvalString("varArg9");
-					yCount:=EvalString("varArg10");
-					yVisited:=EvalString("varArg11");
-					w:=EvalString("varArg12");
-					y:=EvalString("varArg13");
+					prevPosList:=EvalString("varArg5");
+					prevPosListBelow:=EvalString("varArg6");
+					sortedLists:=EvalString("varArg7");
+					unsortedList:=EvalString("varArg8");
+					unsortedLists:=EvalString("varArg9");
+					vCount:=EvalString("varArg10");
+					wCount:=EvalString("varArg11");
+					yCount:=EvalString("varArg12");
+					yVisited:=EvalString("varArg13");
+					w:=EvalString("varArg14");
+					y:=EvalString("varArg15");
 					# 2.5.6.1.1. Unbind temp_deg_lev-1_num_proj variables which have already been completely used from previous run.
 					# x denotes group number on level lev-2, k denotes group number on level lev-1 extending from group x.
 					# Start by looping through all groups on level lev-2, then groups on level lev-1 extending from group x.
@@ -1007,6 +1018,8 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 					vCount:=1;
 					initialx:=1;
 					initialz:=1;
+					prevPosList:=[];
+					prevPosListBelow:=[];
 				fi;
 				
 				# 2.5.6.3. Groups on level lev-1 must be re-arranged, but can only be re-arranged if they extend from a common group.
@@ -1045,19 +1058,25 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 							# 2.5.6.3.2.2.1. Upon re-entry these variables are already defined.
 							if not reEntry then
 								prevPosLists[x][y]:=posList[z];
+								prevPosList[yCount]:=yVisited[x]+prevPosLists[x][y];
 								w:=1;
 							fi;
 							
-							# 2.5.6.3.2.2.2. Store the formatted information of all groups extending from group number prevPosList[x][y]. See any "sr_deg_lev.grp" file for how this formatting is done.
+							# 2.5.6.3.2.2.2. Store the formatted information of all groups extending from group number prevPosLists[x][y]. See any "sr_deg_lev.grp" file for how this formatting is done.
 							# A while loop is used here so that if w=sortedList[x][y]+1 from reading fVariables, it will skip the loop due to already having completed all formatting for these groups.
 							while w<=sortedLists[x][y] do
-								# 2.5.6.3.2.2.2.1. Create entries containing individual group information.
+								# 2.5.6.3.2.2.2.1.
+								prevPosListBelow[wCount]:=w;
+								for count in [1..prevPosList[yCount]-1] do
+								prevPosListBelow[wCount]:=prevPosListBelow[wCount]+unsortedList[count];
+								od;
+								# 2.5.6.3.2.2.2.2. Create entries containing individual group information.
 								groupInfo[wCount]:=[];
 								groupInfo[wCount][1]:=EvalString(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(yVisited[x]+prevPosLists[x][y]),"_proj"))[w];
 								groupInfo[wCount][2]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(wCount),")\"");
 								groupInfo[wCount][3]:=Concatenation("\"SRGroup(",String(deg),",",String(lev-1),",",String(yVisited[x]+y),")\"");
 								groupInfo[wCount][4]:="[\"the classes it extends to\"]";
-								# 2.5.6.3.2.2.2.2. Print all individual group information (in correct format) to "temp_deg_lev_indiv.grp".
+								# 2.5.6.3.2.2.2.3. Print all individual group information (in correct format) to "temp_deg_lev_indiv.grp".
 								if not wCount=1 then
 									PrintTo(fSingleGroup,Concatenation("\n\n\t[\n\t\t",String(groupInfo[wCount][1])));
 								else
@@ -1070,14 +1089,14 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 								else
 									AppendTo(fSingleGroup,",\n\t\t",groupInfo[wCount][4],"\n\t]");
 								fi;
-								# 2.5.6.3.2.2.2.3. If fCumulative does not exist, it must be created and the first lines populated.
+								# 2.5.6.3.2.2.2.4. If fCumulative does not exist, it must be created and the first lines populated.
 								if not IsExistingFile(fCumulative) then
 									PrintTo(fCumulative, Concatenation("##This contains a list of the self-replicating groups on the rooted regular-", String(deg), " tree on level", " ", String(lev), "##\n\nBindGlobal(\"sr_",String(deg),"_",String(lev),"\",\n["));
 								fi;
-								# 2.5.6.3.2.2.2.4. Print formatted individual group information to "temp_deg_lev_full.grp" and save this point.
+								# 2.5.6.3.2.2.2.5. Print formatted individual group information to "temp_deg_lev_full.grp" and save this point.
 								AppendTo(fCumulative,StringFile(fSingleGroup));
-								PrintTo(fVariables,StringVariables(x, z, posList, prevPosLists, sortedLists, unsortedList, unsortedLists, vCount, wCount, yCount, yVisited, w, y)); # Save-point
-								# 2.5.6.3.2.2.2.5. Check and declare if re-entry was completed (by setting reEntry to false and resetting initialz).
+								PrintTo(fVariables,StringVariables(x, z, posList, prevPosLists, prevPosList, prevPosListBelow, sortedLists, unsortedList, unsortedLists, vCount, wCount, yCount, yVisited, w, y)); # Save-point
+								# 2.5.6.3.2.2.2.6. Check and declare if re-entry was completed (by setting reEntry to false and resetting initialz).
 								if reEntry then
 									reEntry:=false;
 									initialz:=1;
@@ -1129,7 +1148,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 								else
 									AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),",\n");
 								fi;
-								PrintTo(fVariables,StringVariables(x, z, posList, prevPosLists, sortedLists, unsortedList, unsortedLists, vCount, wCount, yCount, yVisited, w, y)); # Save-point
+								PrintTo(fVariables,StringVariables(x, z, posList, prevPosLists, prevPosList, prevPosListBelow, sortedLists, unsortedList, unsortedLists, vCount, wCount, yCount, yVisited, w, y)); # Save-point
 								# 2.5.6.3.2.2.3.8. Check and declare if re-entry was completed (by setting reEntry to false and resetting initialz).
 								if reEntry then
 									reEntry:=false;
@@ -1148,25 +1167,47 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 							fi;
 							# 2.5.6.3.2.2.5. Loop y within the loop for z (since more than one group could extend to the same number of groups).
 							y:=y+1;
+							yCount:=yCount+1; # Counter for y that never resets
 						od;
 					od;
 				od;
 			fi;
 		fi;
+		
+
+		
 		if not projectionProtocol then
 			# 2.5.7. Append end of list containing groups.
 			AppendTo(fCumulative,"\n]);");
 			
-			# 2.6. Print all group information to final sr_deg_lev.grp file (and sr_deg_lev-1.grp in the case for level>1), remove all associated temporary files, and unbind all residual variables.
+			# 2.6. 
+			dirTempFilesContents:=DirectoryContents(dirTempFiles[1]);
+			for levReorder in [1..Length(dirTempFilesContents)] do
+				stringFolder:=Concatenation("temp_",String(deg),"_",String(levReorder));
+				if stringFolder in dirTempFilesContents then
+					dirTempSingleFiles:=DirectoriesPackageLibrary("SRGroups",Concatenation("data/temp_files/",stringFolder,"/"));
+					dirTempSingleFilesContents:=DirectoryContents(dirTempSingleFiles[1]);
+					Remove(dirTempSingleFilesContents,Position(dirTempSingleFilesContents,"."));
+					Remove(dirTempSingleFilesContents,Position(dirTempSingleFilesContents,".."));
+					for j in [1..Length(dirTempSingleFilesContents)] do
+						if StartsWith(dirTempSingleFilesContents[j],Concatenation("temp_",String(deg),"_",String(lev-1))) then
+							ReorderSRFiles(deg,levReorder,lev-1,prevPosListBelow,unsortedList);
+							break;
+						fi;
+					od;
+				fi;
+			od;
+			
+			# 2.7. Print all group information to final sr_deg_lev.grp file (and sr_deg_lev-1.grp in the case for level>1), remove all associated temporary files, and unbind all residual variables.
 			PrintTo(fNew,StringFile(fCumulative));
 			RemoveFile(fExtensions);
 			RemoveFile(fSingleGroup);
 			RemoveFile(fCumulative);
 			RemoveFile(fVariables);
 			if reEntryCheck and lev>2 then
-				UnbindVariables("varArg1", "varArg2", "varArg3", "varArg4", "varArg5", "varArg6", "varArg7", "varArg8", "varArg9", "varArg10", "varArg11", "varArg12", "varArg13");
+				UnbindVariables("varArg1", "varArg2", "varArg3", "varArg4", "varArg5", "varArg6", "varArg7", "varArg8", "varArg9", "varArg10", "varArg11", "varArg12", "varArg13", "varArg14", "varArg15");
 			elif reEntryCheck and lev=2 then
-				UnbindVariables("varArg1", "varArg2", "varArg3", "varArg4", "varArg5", "varArg6", "varArg7", "varArg8", "varArg9");
+				UnbindVariables("varArg1", "varArg2", "varArg3", "varArg4", "varArg5", "varArg6", "varArg7", "varArg8", "varArg9", "varArg10");
 			elif reEntryCheck and lev=1 then
 				UnbindVariables("varArg1");
 			fi;
@@ -1181,6 +1222,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 		fi;
 		Print("\nDone.");
 	fi;
+	
 	return;
 end);
 
@@ -1454,3 +1496,301 @@ end);
 ### "file1.dot file2.dot file3.dot | gvpack -array_c | neato -n2 -Tpng -o outputFile.png"
 
 ### At the moment it is printing all of the elements from one group into the same file because I want to find a way to put all of those graphs into the one display. 
+
+# Input:: arg[1]: degree of tree (int > 1), arg[2]: highest level of tree where the file "sr_k_n.grp" exists (int > 1), (arg[3],arg[4],...): sequence of group numbers to extend from
+# Output:: File named "temp_deg_initialLev_arg[3]_arg[4]_..._arg[Length(arg)]_proj.grp" that contains extension information of group
+InstallGlobalFunction(ExtendSRGroup,function(arg)
+	local deg, lev, groupPosition, groupPositionAbove, initialLev, stringPrefix, stringFolder, stringFolderAbove, stringSuffix, stringSuffixAbove, dirData, dirTempFiles, dirTempSingleFiles, dirTempSingleFilesAbove, fExtension, fExtensionAbove, G,  groupList, groupGens, i;
+	
+	# 1. Initialise degree, levels, and group position.
+	deg:=arg[1];
+	initialLev:=arg[2];
+	groupPosition:=[];
+	for i in [3..Length(arg)] do
+		groupPosition[i-2]:=arg[i];
+	od;
+	groupPositionAbove:=ShallowCopy(groupPosition);
+	Remove(groupPositionAbove,Length(groupPosition));
+	lev:=initialLev+Length(groupPosition);
+	
+	# 2. Initialise strings that refer to file and variable names, and initialise first two directories.
+	stringPrefix:=Concatenation("temp_",String(deg),"_",String(initialLev));
+	stringFolder:=Concatenation("temp_",String(deg),"_",String(lev));
+	stringFolderAbove:=Concatenation("temp_",String(deg),"_",String(lev-1));
+	stringSuffix:=Concatenation("_",JoinStringsWithSeparator(List(groupPosition,String),"_"));
+	stringSuffixAbove:=Concatenation("_",JoinStringsWithSeparator(List(groupPositionAbove,String),"_"));
+	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
+	dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
+	
+	# 3. Determine the group, G, to extend.
+	# 3.1. Case 1: The group can be called directly from the file "sr_deg_initialLev.grp" using SRGroup(deg,initialLev,groupPosition[1]), if the file exists.
+	if Length(groupPosition)=1 and IsExistingFile(Filename(dirData[1],Concatenation("sr_",String(deg),"_",String(initialLev),".grp"))) then
+		# 3.1.1. Check whether the group position is within the range of groups available, and if so, initialise G.
+		if groupPosition[1]>=1 and groupPosition[1]<=Length(SRGroup(deg,lev-1)) then
+			G:=Group(SRGroup(deg,initialLev,groupPosition[1])[1]);
+		else
+			Print("Group location does not exist (group number). Please choose a group in the correct range (1<=num<=",Length(SRGroup(deg,lev-1)),")");
+			return;
+		fi;
+	# 3.2. Case 2: The group must be called from an individual extension file "temp_deg_initialLev_arg[3]_arg[4]_..._arg[Length(arg)-1]_proj.grp".
+	else
+		# 3.2.1. Check whether directory to individual extension file exists, and if so, initialise the directory and filename (named as in Step 3.2).
+		if IsDirectoryPath(Filename(dirTempFiles[1],Concatenation(stringFolderAbove,"/"))) then
+			dirTempSingleFilesAbove:=DirectoriesPackageLibrary("SRGroups", Concatenation("data/temp_files/",stringFolderAbove,"/"));
+			fExtensionAbove:=Filename(dirTempSingleFilesAbove[1],Concatenation(stringPrefix,stringSuffixAbove,"_proj.grp"));
+			# 3.2.1.1. Check whether file exists (named as in Step 3.2), and if so, read the file and initialise G (then unbind residual variable).
+			if IsExistingFile(fExtensionAbove) then
+				Read(fExtensionAbove);
+				G:=Group(EvalString(Concatenation(stringPrefix,stringSuffixAbove,"_proj"))[groupPosition[Length(groupPosition)]]);
+				MakeReadWriteGlobal(Concatenation(stringPrefix,stringSuffixAbove,"_proj"));
+				UnbindGlobal(Concatenation(stringPrefix,stringSuffixAbove,"_proj"));
+			else
+				Print("Group location does not exist (missing file).");
+				return;
+			fi;
+		else
+			Print("Group location does not exist (missing directory).");
+			return;
+		fi;
+	fi;
+	
+	# 4. Check whether directory to new file already exists (it will exist in the case other groups on the same level have already been extended).
+	# If it doesn't exist, create the directory and then initialise its corresponding variable name.
+	if not IsDirectoryPath(Filename(dirTempFiles[1],Concatenation(stringFolder,"/"))) then
+		CreateDir(Filename(dirTempFiles[1],Concatenation(stringFolder,"/")));
+	fi;
+	dirTempSingleFiles:=DirectoriesPackageLibrary("SRGroups", Concatenation("data/temp_files/",stringFolder,"/"));
+	
+	
+	# 5. Initialise new filename variable.
+	# 5.1. Case 1: If the file already exists, the group has already been extended.
+	fExtension:=Filename(dirTempSingleFiles[1],Concatenation(stringPrefix,stringSuffix,"_proj.grp"));
+	if IsExistingFile(fExtension) then
+		Print("Already extended group ",groupPosition[1],".");
+		return;
+	# 5.2. Case 2: If the file does not exist, extend the group and print/append to new file.
+	else
+		groupList:=ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection(deg,lev,G);
+		PrintTo(fExtension,Concatenation("BindGlobal(\"",stringPrefix,stringSuffix,"_proj\",\n["));
+		groupGens:=[];
+		for i in [1..Length(groupList)] do
+			groupGens[i]:=GeneratorsOfGroup(groupList[i]);
+			if i=Length(groupList) then
+				AppendTo(fExtension,Concatenation("\n\t",String(groupGens[i]),"\n]);"));
+			else
+				AppendTo(fExtension,Concatenation("\n\t",String(groupGens[i]),","));
+			fi;
+		od;
+	fi;
+	
+	return;
+end);
+
+# Input:: deg: degree of tree (int > 1), lev: level of tree (int > 0)
+# Output:: The combined file "temp_deg_lev.grp" containing all extended groups on level lev-1 (for use with the SRGroupFile function)
+InstallGlobalFunction(CombineSRFiles,function(deg,lev)
+	local stringFolder, stringFolderAbove, dirTempFiles, dirTempSingleFiles, fExtension, fExtensions, i;
+	
+	# 1. Initialise strings that refer to file and variable names, and initialise directory to contain file "temp_deg_lev.grp" (pkg/SRGroups/data/temp_files/).
+	stringFolderAbove:=Concatenation("temp_",String(deg),"_",String(lev-1));
+	stringFolder:=Concatenation("temp_",String(deg),"_",String(lev));
+	dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
+	
+	# 2. Check if directory to individual files (temp_files/temp_deg_lev) exists. 
+	# 2.1. Case 1: If it does exist, begin combining files.
+	if IsDirectoryPath(Filename(dirTempFiles[1],Concatenation(stringFolder,"/"))) then
+		# 2.1.1. Initialise directory containing "temp_deg_lev-1_i.grp" files.
+		dirTempSingleFiles:=DirectoriesPackageLibrary("SRGroups", Concatenation("data/temp_files/",stringFolder,"/"));
+		# 2.1.2. For each file containing an individual group's extensions, fExtension ("temp_deg_lev-1_i.grp"), print the file contents to the new file, fExtensions ("temp_deg_lev.grp"). 
+		fExtensions:=Filename(dirTempFiles[1],Concatenation(stringFolder,".grp"));
+		for i in [1..Length(SRGroup(deg,lev-1))] do
+			fExtension:=Filename(dirTempSingleFiles[1],Concatenation(stringFolderAbove,"_",String(i),"_proj.grp"));
+			# 2.1.2.1. Case 1: File exists, so print/append to new file.
+			if IsExistingFile(fExtension) then
+				if i=1 then
+					PrintTo(fExtensions,StringFile(fExtension));
+				else
+					AppendTo(fExtensions,"\n\n",StringFile(fExtension));
+				fi;
+			# 2.1.2.2. Case 2: File does not exist, meaning the new file should not be completed, so break the loop and delete the new file.
+			else
+				Print("The groups are incomplete (no file found). Please continue from group ",i,".");
+				RemoveFile(fExtensions);
+				break;
+			fi;
+		od;
+		# 2.1.3. Remove residual files and directory if all of the group extensions were appended to the new file.
+		if IsExistingFile(fExtensions) then
+			for i in [1..Length(SRGroup(deg,lev-1))] do
+				fExtension:=Filename(dirTempSingleFiles[1],Concatenation(stringFolderAbove,"_",String(i),"_proj.grp"));
+				RemoveFile(fExtension);
+			od;
+			RemoveDir(Filename(dirTempFiles[1],Concatenation(stringFolder,"/")));
+		fi;
+	# 2.2. Case 2: If directory does not exist, then no files can be combined - return.
+	else
+		Print("The groups are incomplete (no directory found). Please continue from group 1.");
+	fi;
+	
+	return;
+end);
+
+# Input:: deg: degree of tree (int > 1), lev: level of tree (int > initialLev > 1), initialLev: highest level of tree where the file "sr_k_n.grp" exists (int > 1), prevPosList: list containing previous positions, p2, of all individual group extension files ("temp_deg_initialLev_p1_p2_..._proj.grp") obtained from the function SRGroupFile (therefore also containing their new positions), unsortedList: list containing the number and order of groups which have p2 as their fifth entry of the correspondoing file name (so if groups are missing, this gap can be detected and skipped)
+# Output:: the updated ordering of the individual group extension files aligned with the reordering from running the function SRGroupFile
+InstallGlobalFunction(ReorderSRFiles,function(deg,lev,initialLev,prevPosList,unsortedList)
+	local stringPrefixInitial, stringPrefixFinal, stringSuffixInitial, stringSuffixFinal, stringInitialList, stringFinal, stringFolder, dirTempSingleFiles, dirTempSingleFilesContents, fExtensionInitial, fExtensionFinal, groupPosition, groupGens, groupCount, groupCountBelow, groupCountBelowSpecific, unsortedListBranches, groupCountBelowStart, posFile, i;
+	
+	# 1. Initialise string prefixes that refer to file and variable names, and string for the folder containing the individual group extension files.
+	stringPrefixInitial:=Concatenation("temp_",String(deg),"_",String(initialLev));
+	stringPrefixFinal:=Concatenation("temp_",String(deg),"_",String(initialLev+1));
+	stringFolder:=Concatenation("temp_",String(deg),"_",String(lev));
+	
+	# 2. Initialise directory containing individual group extension files and list the directory's contents excluding the "current directory", ., and "directory above", .., commands.
+	dirTempSingleFiles:=DirectoriesPackageLibrary("SRGroups", Concatenation("data/temp_files/",stringFolder,"/"));
+	dirTempSingleFilesContents:=DirectoryContents(dirTempSingleFiles[1]);
+	Remove(dirTempSingleFilesContents,Position(dirTempSingleFilesContents,"."));
+	Remove(dirTempSingleFilesContents,Position(dirTempSingleFilesContents,".."));
+	
+	# 3. Evaluate the number of groups with the same fourth entry using unsortedList (i.e. p1 in "temp_deg_initialLev_p1_p2_..._proj.grp") and store numbering in the list variable unsortedListBranches. These counts must be completed in the unsorted order (the order that they are currently in) to ensure that equating files (to check if any are missing) is done correctly.
+	unsortedListBranches:=[];
+	groupCountBelow:=1;
+	for groupCount in [1..Length(unsortedList)] do
+		for groupCountBelowSpecific in [1..unsortedList[groupCount]] do
+			# 3.1. The variable groupCountBelowStart is important to establish the first group's position that is in "./SRGroups/data/temp_files/temp_deg_lev/".
+			if EvalString(SplitString(dirTempSingleFilesContents[1],"_")[4])=groupCount and EvalString(SplitString(dirTempSingleFilesContents[1],"_")[5])=groupCountBelowSpecific then
+				groupCountBelowStart:=groupCountBelow;
+			fi;
+			unsortedListBranches[groupCountBelow]:=groupCountBelowSpecific;
+			groupCountBelow:=groupCountBelow+1; # groupCountBelow is the same as groupCountBelowSpecific, except it never resets
+		od;
+	od;
+	
+	# 4. Update formatting of each file in "./SRGroups/data/temp_files/temp_deg_lev/". Before the while loop, just initialise required variables. 
+	posFile:=1;
+	groupPosition:=[];
+	groupCountBelow:=groupCountBelowStart;
+	while groupCountBelow<=Length(prevPosList) and posFile<=Length(dirTempSingleFilesContents) do
+		# 4.1. Case 1: The filename contains the old formatting (i.e. starts with "temp_deg_initialLev") and the fifth entry in the filename aligns with the branch position from unsortedListBranches. The second check is completed to ensure that no gaps in the files are overlooked (i.e. since some groups may have been extended while others may have not).
+		if StartsWith(dirTempSingleFilesContents[posFile],stringPrefixInitial) and EvalString(SplitString(dirTempSingleFilesContents[posFile],"_")[5])=unsortedListBranches[groupCountBelow] then
+			# 4.1.1. Create new strings for the updated file name. Start by splitting the old file name string into its indexed positions, then replace the fifth entry of the old string with the fourth entry of the new string.
+			stringInitialList:=SplitString(dirTempSingleFilesContents[posFile],"_");
+			for i in [5..Length(stringInitialList)] do
+				if  i=5 then
+					groupPosition[i-4]:=Position(prevPosList,groupCountBelow);
+				elif i<>Length(stringInitialList) then
+					groupPosition[i-4]:=EvalString(stringInitialList[i]);
+				fi;
+			od;
+			stringSuffixFinal:=Concatenation("_",JoinStringsWithSeparator(List(groupPosition,String),"_"));
+			stringFinal:=Concatenation(stringPrefixFinal,stringSuffixFinal,"_proj.grp");
+			# 4.1.2. Initialise old and new filenames. Print old file information to new file, except replace the global variable name with the updated name.
+			fExtensionFinal:=Filename(dirTempSingleFiles[1],stringFinal);
+			fExtensionInitial:=Filename(dirTempSingleFiles[1],dirTempSingleFilesContents[posFile]);
+			Read(fExtensionInitial);
+			PrintTo(fExtensionFinal,Concatenation("BindGlobal(\"",SplitString(stringFinal,".")[1],"\",\n["));
+			groupGens:=EvalString(SplitString(dirTempSingleFilesContents[posFile],".")[1]);
+			for i in [1..Length(groupGens)] do
+				if i=Length(groupGens) then
+					AppendTo(fExtensionFinal,Concatenation("\n\t",String(groupGens[i]),"\n]);"));
+				else
+					AppendTo(fExtensionFinal,Concatenation("\n\t",String(groupGens[i]),","));
+				fi;
+			od;
+			# 4.1.3. Unbind residual variables and remove old file.
+			MakeReadWriteGlobal(SplitString(dirTempSingleFilesContents[posFile],".")[1]);
+			UnbindGlobal(SplitString(dirTempSingleFilesContents[posFile],".")[1]);
+			RemoveFile(fExtensionInitial);
+			posFile:=posFile+1;
+		# 4.2. Case 2: The file name contains the new formatting. Since the DirectoryContents function creates a list in alphanumeric order, the newly formatted files will all appear after those with the old formatting. Hence, if a newly formatted file is found, all files would have been formatted and so the loop can break.
+		elif StartsWith(dirTempSingleFilesContents[posFile],stringPrefixFinal) then
+			break;
+		# 4.3. Case 3: The file will have the old formatting but a new branch position has been reached in the folder's contents. Keep iterating groupCountBelow until the branch positions align.
+		else
+			while EvalString(SplitString(dirTempSingleFilesContents[posFile],"_")[5])<>unsortedListBranches[groupCountBelow] do
+				groupCountBelow:=groupCountBelow+1;
+			od;
+		fi;
+	od;
+
+	return;
+end);
+
+# Input:: arg[1]: degree of tree (int > 1), arg[2]: highest level of tree where the file "sr_k_n.grp" exists (int > 1), (arg[3],arg[4],...): sequence of group numbers to extend from
+# Output:: the number of extensions of the chosen group (or, if Length(arg)=2, the total number of extensions for that level if the combined file "temp_deg_lev.grp" is available)
+InstallGlobalFunction(NumberExtensionsUnformatted,function(arg)
+	local deg, initialLev, groupPosition, lev, stringPrefix, stringSuffix, stringFolder, dirTempFiles, dirTempSingleFiles, fExtension, fExtensions, numExtensions, i;
+	
+	# 1. Initialise degree, levels, and group position. A specific case needs to be made when Length(arg)=2.
+	deg:=arg[1];
+	initialLev:=arg[2];
+	groupPosition:=[];
+	if Length(arg)>2 then
+		for i in [3..Length(arg)] do
+			groupPosition[i-2]:=arg[i];
+		od;
+		lev:=initialLev+Length(groupPosition);
+	else
+		lev:=initialLev+1;
+	fi;
+	
+	# 2. Initialise strings that refer to file and variable names, string for the folder containing the individual group extension files, and directory containing temporary files.
+	stringPrefix:=Concatenation("temp_",String(deg),"_",String(initialLev));
+	stringSuffix:=Concatenation("_",JoinStringsWithSeparator(List(groupPosition,String),"_"));
+	stringFolder:=Concatenation("temp_",String(deg),"_",String(lev));
+	dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
+	
+	# 3. Protocol for calculating the number of extensions from a single or all groups.
+	# 3.1. Case 1: The directory to files containing individual group extensions exists and a group position has been defined (by (arg[3],arg[4],...))
+	if IsDirectoryPath(Filename(dirTempFiles[1],Concatenation(stringFolder,"/"))) and Length(arg)>2 then
+		# Initialise directory and file containing target group information, then count the number of groups contained in that file.
+		dirTempSingleFiles:=DirectoriesPackageLibrary("SRGroups", Concatenation("data/temp_files/",stringFolder,"/"));
+		fExtension:=Filename(dirTempSingleFiles[1],Concatenation(stringPrefix,stringSuffix,"_proj.grp"));
+		if IsExistingFile(fExtension) then
+			Read(fExtension);
+			numExtensions:=Length(EvalString(Concatenation(stringPrefix,stringSuffix,"_proj")));
+			MakeReadWriteGlobal(Concatenation(stringPrefix,stringSuffix,"_proj"));
+			UnbindGlobal(Concatenation(stringPrefix,stringSuffix,"_proj"));
+		else
+			Print("Group location does not exist (file missing).");
+			return;
+		fi;
+	# 3.2. Case 2: The file "temp_deg_lev.grp" exists.
+	elif IsExistingFile(Filename(dirTempFiles[1],Concatenation(stringFolder,".grp"))) then
+		fExtensions:=Filename(dirTempFiles[1],Concatenation(stringFolder,".grp"));
+		Read(fExtensions);
+		# 3.2.1. Case 2.1: Length(arg)>2, which indicates the number of extensions of a specific group number on level initialLev must be evaluated.
+		if Length(arg)>2 then
+			if IsBoundGlobal(EvalString(Concatenation(stringPrefix,stringSuffix,"_proj"))) then
+				numExtensions:=Length(EvalString(Concatenation(stringPrefix,stringSuffix,"_proj")));
+				for i in [1..Length(SRGroup(deg,initialLev))] do
+					if IsBoundGlobal(Concatenation(stringPrefix,"_",String(i),"_proj")) then
+						MakeReadWriteGlobal(Concatenation(stringPrefix,"_",String(i),"_proj"));
+						UnbindGlobal(Concatenation(stringPrefix,"_",String(i),"_proj"));
+					fi;
+				od;
+			else
+				Print("This group has not been extended yet.");
+			fi;
+		# 3.2.2. Case 2.2: Length(arg)=2, which indicates the total number of extensions from all groups on level initialLev must be evaluated (in the case all groups can be accessed).
+		elif Length(arg)=2 and IsBoundGlobal(Concatenation(stringPrefix,"_",String(Length(SRGroup(deg,initialLev))),"_proj")) then
+			numExtensions:=0;
+			for i in [1..Length(SRGroup(deg,initialLev))] do
+				numExtensions:=numExtensions+Length(EvalString(Concatenation(stringPrefix,"_",String(i),"_proj")));
+				MakeReadWriteGlobal(Concatenation(stringPrefix,"_",String(i),"_proj"));
+				UnbindGlobal(Concatenation(stringPrefix,"_",String(i),"_proj"));
+			od;
+		else
+			Print("Not all groups have been extended yet.");
+		fi;
+	# 3.3. Case 3: Some combination of the above conditions are not satisfied (see explanations in the print statements).
+	else
+		if Length(arg)>2 then
+			Print("Group location does not exist (directory missing).");
+		else
+			Print("Not enough inputs provided. At least three inputs are required.");
+		fi;
+		return;
+	fi;
+	
+	return numExtensions;
+end);
