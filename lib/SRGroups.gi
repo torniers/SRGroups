@@ -1178,7 +1178,9 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 		
 		if not projectionProtocol then
 			# 2.5.7. Append end of list containing groups.
-			AppendTo(fCumulative,"\n]);");
+			if not EndsWith(StringFile(fCumulative),"\n]);") then
+				AppendTo(fCumulative,"\n]);");
+			fi;
 			
 			# 2.6. 
 			dirTempFilesContents:=DirectoryContents(dirTempFiles[1]);
