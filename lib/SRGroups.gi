@@ -1736,7 +1736,7 @@ InstallGlobalFunction(NumberExtensionsUnformatted,function(arg)
 	stringFolder:=Concatenation("temp_",String(deg),"_",String(lev));
 	dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
 	
-	# 3. 
+	# 3. Protocol for calculating the number of extensions from a single or all groups.
 	# 3.1. Case 1: The directory to files containing individual group extensions exists and a group position has been defined (by (arg[3],arg[4],...))
 	if IsDirectoryPath(Filename(dirTempFiles[1],Concatenation(stringFolder,"/"))) and Length(arg)>2 then
 		# Initialise directory and file containing target group information, then count the number of groups contained in that file.
