@@ -1182,7 +1182,8 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 				AppendTo(fCumulative,"\n]);");
 			fi;
 			
-			# 2.6. 
+			# 2.6. Reorder all individual temporary file numbering
+			print("\nReordering individual files.");
 			dirTempFilesContents:=DirectoryContents(dirTempFiles[1]);
 			for levReorder in [1..Length(dirTempFilesContents)] do
 				stringFolder:=Concatenation("temp_",String(deg),"_",String(levReorder));
