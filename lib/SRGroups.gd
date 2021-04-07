@@ -31,3 +31,13 @@ DeclareGlobalFunction( "MaximalExtension" );
 DeclareGlobalFunction( "HasSufficientRigidAutomorphisms" );
 DeclareGlobalFunction( "RepresentativeWithSufficientRigidAutomorphisms" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection" );
+
+DeclareGlobalFunction( "FormatSRFile" );
+DeclareGlobalFunction( "SRGroupFile" );
+DeclareGlobalFunction( "HasseDiagram" );
+DeclareGlobalFunction( "ExtensionsMapping" );
+DeclareGlobalFunction( "PermutationMapping" );
+DeclareGlobalFunction( "ExtendSRGroup" );
+DeclareGlobalFunction( "CombineSRFiles" );
+DeclareGlobalFunction( "ReorderSRFiles" );
+DeclareGlobalFunction( "NumberExtensionsUnformatted" );
