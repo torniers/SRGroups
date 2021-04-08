@@ -43,3 +43,4 @@ DeclareGlobalFunction( "ExtendSRGroup" );
 DeclareGlobalFunction( "CombineSRFiles" );
 DeclareGlobalFunction( "ReorderSRFiles" );
 DeclareGlobalFunction( "NumberExtensionsUnformatted" );
+DeclareGlobalFunction( "Level" );
