@@ -1,0 +1,49 @@
+#Input::
+#Output::
+InstallGlobalFunction(PermutationMapping, function(deg, lev)
+local dirDigraphs, group, element, x, y, vertices, radius, i, list, fName, count;
+
+dirDigraphs:=DirectoriesPackageLibrary("SRGroups","Digraphs");
+
+vertices:=deg^lev;
+radius:= vertices/3;
+x:=[];
+y:=[];
+
+for group in [1..Length(SRGroup(deg,lev))] do
+	fName:=Filename(dirDigraphs[1], Concatenation("Perm_", String(deg), "_", String(lev), "_", String(group), ".dot"));
+	PrintTo(fName,"digraph G {");
+	AppendTo(fName,"node[shape=circle,fontname=helvetica]");
+	AppendTo(fName,"\n\tlayout=\"neato\"");
+	for i in [1..vertices] do
+		x[i]:=-radius*Cos((2*FLOAT.PI/vertices)*i);
+		y[i]:=radius*Sin((2*FLOAT.PI/vertices)*i);
+		AppendTo(fName,"\n\t",i,"[pos=\"",Float(x[i]),",",Float(y[i]),"!\"];");
+	od;
+	for count in [1..Length(SRGroup(deg,lev,group)[1])] do
+		element:=SRGroup(deg,lev,group)[1][count];
+		list:=ListPerm(element);
+		AppendTo(fName,"\n");
+		if not count = 1 then 
+			AppendTo(fName, "digraph G {");
+			AppendTo(fName,"node[shape=circle,fontname=helvetica]");
+			AppendTo(fName,"\n\tlayout=\"neato\"");
+			for i in [1..vertices] do
+				x[i]:=radius*Cos((2*FLOAT.PI/vertices)*i);
+				y[i]:=radius*Sin((2*FLOAT.PI/vertices)*i);
+				AppendTo(fName,"\n\t",i,"[pos=\"",Float(x[i]),",",Float(y[i]),"!\"];");
+			od;
+		fi;
+		for i in [1..Length(list)] do
+			if i=list[list[i]] and i<list[i] then
+				AppendTo(fName,"\n\t",i," -> ",list[i], " [dir=both]");
+			elif i<>list[list[i]] then
+				AppendTo(fName,"\n\t",i," -> ",list[i]);
+			fi;
+		od;
+		AppendTo(fName,"\n}");
+	od;
+od;
+end);
+
+### At the moment it is printing all of the elements from one group into the same file because I want to find a way to put all of those graphs into the one display. 

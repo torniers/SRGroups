@@ -30,8 +30,10 @@ DeclareGlobalFunction( "BelowAction" );
 DeclareGlobalFunction( "MaximalExtension" );
 DeclareGlobalFunction( "HasSufficientRigidAutomorphisms" );
 DeclareGlobalFunction( "RepresentativeWithSufficientRigidAutomorphisms" );
+DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
+DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection" );
+DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroups" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection" );
-
 DeclareGlobalFunction( "FormatSRFile" );
 DeclareGlobalFunction( "SRGroupFile" );
 DeclareGlobalFunction( "HasseDiagram" );
@@ -41,3 +43,4 @@ DeclareGlobalFunction( "ExtendSRGroup" );
 DeclareGlobalFunction( "CombineSRFiles" );
 DeclareGlobalFunction( "ReorderSRFiles" );
 DeclareGlobalFunction( "NumberExtensionsUnformatted" );
+DeclareGlobalFunction( "Level" );

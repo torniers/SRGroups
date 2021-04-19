@@ -10,6 +10,7 @@
 # arg[4]:=groups with same projection (integer; arg[3]=0 is required)
 # arg[5]:=subgroups of group (integer; arg[3])
 # arg[6]:=size (int >= degree^depth) (arg[3]=0 is required)
+# arg[7]:=smallest number of generators (int >= 1)
 # arg[7]:=position/index (integer; one of arg[3]=0 or arg[4]=0 is required)
 # arg[8]:=abelian check (boolean)
 # All arguments can be set to 0 to ignore them.
@@ -94,10 +95,10 @@ InstallGlobalFunction(SRGroup,function(arg)
 		fi;
 	fi;
 	
-	if Length(arg)>=8 and (not 8 in zeros) then
+	if Length(arg)>=9 and (not 9 in zeros) then
 		listTemp:=[];
 		for i in [1..Length(list)] do
-			if IsAbelian(Group(list[i][1]))=arg[8] then
+			if IsAbelian(Group(list[i][1]))=arg[9] then
 				Add(listTemp,list[i]);
 			fi;
 		od;
@@ -161,7 +162,7 @@ InstallGlobalFunction(SRGroup,function(arg)
 		fi;
 	fi;
 	
-	if Length(arg)>=6 and 3 in zeros and (not 6 in zeros) then
+	if Length(arg)>=6 and 3 in zeros and 7 in zeros and (not 6 in zeros) then
 		listTemp:=[];
 		for i in [1..Length(list)] do
 			if Size(Group(list[i][1]))=arg[6] then
@@ -174,18 +175,32 @@ InstallGlobalFunction(SRGroup,function(arg)
 			return G;
 		fi;
 	fi;
+	
+	if Length(arg)>=7 and 3 in zeros and 6 in zeros and (not 7 in zeros) then
+		listTemp:=[];
+		for i in [1..Length(list)] do
+			if Length(MinimalGeneratingSet(Group(list[i][1])))=arg[7] then
+				Add(listTemp,list[i]);
+			fi;
+		od;
+		list:=listTemp;
+		if last=7 then
+			G:=list;
+			return G;
+		fi;
+	fi;
 
-	if (Length(arg)>=7 and (3 in zeros or 4 in zeros) and (not 7 in zeros)) then
+	if (Length(arg)>=8 and (3 in zeros or 4 in zeros) and (not 8 in zeros)) then
 		listTemp:=[];
 		if 3 in zeros then
 			for i in [1..Length(list)] do
-				listTemp[i]:=list[i][arg[7]];
+				listTemp[i]:=list[i][arg[8]];
 			od;
 		else
-			listTemp:=list[arg[7]];
+			listTemp:=list[arg[8]];
 		fi;
 		list:=listTemp;
-		if last=7 then
+		if last=8 then
 			G:=list;
 			return G;
 		fi;
@@ -210,8 +225,12 @@ InstallGlobalFunction(AllSRGroups,function(arg)
 		Add(inputArgs,0);
 	fi;
 	
-	if IsInt(Position(arg,Depth)) then
-		Add(inputArgs,arg[Position(arg,Depth)+1]);
+	if IsInt(Position(arg,Depth)) or IsInt(Position(arg,Level)) then
+		if IsInt(Position(arg,Depth)) then
+			Add(inputArgs,arg[Position(arg,Depth)+1]);
+		elif IsInt(Position(arg,Level)) then
+			Add(inputArgs,arg[Position(arg,Level)+1]);
+		fi;
 	else
 		Add(inputArgs,0);
 	fi;
@@ -236,6 +255,12 @@ InstallGlobalFunction(AllSRGroups,function(arg)
 	
 	if IsInt(Position(arg,Size)) then
 		Add(inputArgs,arg[Position(arg,Size)+1]);
+	else
+		Add(inputArgs,0);
+	fi;
+	
+	if IsInt(Position(arg,NumberOfGenerators)) then
+		Add(inputArgs,arg[Position(arg,NumberOfGenerators)+1]);
 	else
 		Add(inputArgs,0);
 	fi;
@@ -338,4 +363,9 @@ InstallGlobalFunction(SRLevels,function(deg)
 	od;
 	StableSort(srLevels);
 	return srLevels;
+end);
+
+InstallGlobalFunction(Level,function()
+	# This function serves no purpose except to add an input to the AllSRGroups function.
+	return;
 end);

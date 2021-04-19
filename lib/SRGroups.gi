@@ -51,14 +51,10 @@ InstallGlobalFunction(BelowAction,function(k,n,aut,i)
 end);
 
 
-# Input::	k: integer at least 2, n: integer at least 1, G: a self-replicating subgroup of AutT(k,n) with sufficient rigid automorphisms
+# Input::	k: integer at least 2, n: integer at least 1, G: a self-replicating subgroup of AutT(k,n)
 # Output::	the maximal self-replicating extension of G in AutT(k,n+1)
 InstallGlobalFunction(MaximalExtension,function(k,n,G)
 	local gensMG, pr, gensG, a, pre_a, b, extn, i, prG, kerG;
-	
-	if not HasSufficientRigidAutomorphisms(k,n,G) then
-		Error("Input groups needs to have sufficient rigid automorphisms.");
-	fi;
 		
 	gensMG:=[];
 	pr:=Projection(AutT(k,n+1));
@@ -106,27 +102,109 @@ end);
 # Input::	k: integer at least 2, n: integer at least 1, G: a self-replicating subgroup of AutT(k,n)
 # Output::	a self-replicating AutT(k,n)-conjugate of G with sufficient rigid automorphisms, and the same projection to T_{k,n-1} as G if the projection of G has sufficient rigid automorphisms
 InstallGlobalFunction(RepresentativeWithSufficientRigidAutomorphisms,function(k,n,G)
-	local F, F_0, pr, conjugators, a;
+	local F, F_0, pr, a;
 
-	if n=1 or HasSufficientRigidAutomorphisms(k,n,G) then return G; fi;
+	if n=1 or HasSufficientRigidAutomorphisms(k,n,G) then
+		return G;
+	fi;
 	
 	F:=AutT(k,n);
 	F_0:=Stabilizer(F,[1..k^(n-1)],OnSets);
 	pr:=Projection(F);
-	# if the projection of G has sufficient rigid automorphisms, preserve it (cf. Horadam, (proof of) Proposition 3.9, 3.10)
-	conjugators:=F_0;
+	# if the projection of G has sufficient rigid automorphisms, preserve it
 	if HasSufficientRigidAutomorphisms(k,n-1,Image(pr,G)) then
-		conjugators:=Intersection(conjugators,Kernel(pr));
+		for a in Intersection(Kernel(pr),F_0) do
+			if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
+			if IsSelfReplicating(k,n,G^a) and HasSufficientRigidAutomorphisms(k,n,G^a) then return G^a; fi;
+		od;
+	else
+		for a in F_0 do
+			if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
+			if IsSelfReplicating(k,n,G^a) and HasSufficientRigidAutomorphisms(k,n,G^a) then return G^a; fi;
+		od;
 	fi;
-		
-	for a in conjugators do
-		if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
-		if HasSufficientRigidAutomorphisms(k,n,G^a) and IsSelfReplicating(k,n,G^a) then return G^a; fi;
-	od;
-	
-	return fail;
 end);
 
+
+# Input::	k: integer at least 2, n: integer at least 2, G: a subgroup of AutT(k,n)
+# Output::	a list of AutT(k,n)-conjugacy class representatives of maximal self-replicating subgroups of G with sufficient rigid automorphisms
+InstallGlobalFunction(ConjugacyClassRepsMaxSelfReplicatingSubgroups,function(k,n,G)
+	local F, list, H, class, new, i;
+
+	F:=AutT(k,n);
+	list:=[];
+	for class in ConjugacyClassesMaximalSubgroups(G) do
+		for H in class do
+			if IsSelfReplicating(k,n,H) then
+				new:=true;
+				for i in [Length(list),Length(list)-1..1] do
+					if IsConjugate(F,H,list[i]) then new:=false; break; fi;
+				od;
+				if new then Add(list,RepresentativeWithSufficientRigidAutomorphisms(k,n,H)); fi;
+				break;
+			fi;
+		od;
+	od;
+	return list;
+end);
+
+
+# Input::	k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
+# Output::	a list of AutT(k,n)-conjugacy class representatives of maximal self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto G
+InstallGlobalFunction(ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection,function(k,n,G)
+	local F, pr, list, class, H, new, i;
+
+	F:=AutT(k,n);
+	pr:=Projection(F);
+	list:=[];
+	for class in ConjugacyClassesMaximalSubgroups(MaximalExtension(k,n-1,G)) do
+		for H in class do
+			if not Image(pr,H)=G then continue; fi;
+			if IsSelfReplicating(k,n,H) then
+				new:=true;
+				for i in [Length(list),Length(list)-1..1] do
+					if IsConjugate(F,H,list[i]) then new:=false; break; fi;
+				od;
+				if new then Add(list,RepresentativeWithSufficientRigidAutomorphisms(k,n,H)); fi;
+				break;
+			fi;
+		od;
+	od;	
+	return list;
+end);
+
+
+# Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1)
+# Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of G with sufficient rigid automorphisms
+InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroups,function(k,n,G)
+	local F, list, listtemp, H, new, listHcheck, listH, add, I, J;
+
+	F:=AutT(k,n);
+	list:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,G));
+	listtemp:=ShallowCopy(list);
+	while not IsEmpty(listtemp) do
+		for H in listtemp do
+			new:=true;
+			if IsTrivial(MaximalSubgroupClassReps(H)) then new:=false; fi;
+			listHcheck:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,H));
+			listH:=[];
+			if new then
+				for I in listHcheck do
+					add:=true;
+					for J in list do
+						if IsConjugate(F,I,J) then add:=false; break; fi;
+					od;
+					if add then Add(listH,RepresentativeWithSufficientRigidAutomorphisms(k,n,I)); fi;
+				od;
+				Append(listtemp,listH);
+				Append(list,listH);
+			fi;
+			Remove(listtemp,Position(listtemp,H));
+		od;
+	od;
+	Add(list,G);
+	return list; 
+end);
 
 # Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
 # Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto G
@@ -164,8 +242,6 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,f
 	Apply(allGroups,H->RepresentativeWithSufficientRigidAutomorphisms(k,n,H));
 	return allGroups;
 end);
-
-#### Samuel: file creation, reordering etc. #################################################################################################################
 
 # Input:: deg: degree of the tree (integer at least 2), lev: level of the tree (integer at least 1; if lev=1, then the unformatted "sr_deg_1.grp" file must already exist) (requires "sr_deg_lev+1.grp" file to exist)
 # Output:: Formatted version of the file "sr_deg_lev.grp"
@@ -1118,7 +1194,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 					Remove(dirTempSingleFilesContents,Position(dirTempSingleFilesContents,".."));
 					for j in [1..Length(dirTempSingleFilesContents)] do
 						if StartsWith(dirTempSingleFilesContents[j],Concatenation("temp_",String(deg),"_",String(lev-1))) then
-							ReorderSRFiles(deg,levReorder,lev-1,prevPosListBelow,unsortedList);
+							ReorderSRFiles(deg,levReorder,lev-1,prevPosList,prevPosListBelow,unsortedList);
 							break;
 						fi;
 					od;
@@ -1564,27 +1640,39 @@ end);
 
 # Input:: deg: degree of tree (int > 1), lev: level of tree (int > initialLev > 1), initialLev: highest level of tree where the file "sr_k_n.grp" exists (int > 1), prevPosList: list containing previous positions, p2, of all individual group extension files ("temp_deg_initialLev_p1_p2_..._proj.grp") obtained from the function SRGroupFile (therefore also containing their new positions), unsortedList: list containing the number and order of groups which have p2 as their fifth entry of the correspondoing file name (so if groups are missing, this gap can be detected and skipped)
 # Output:: the updated ordering of the individual group extension files aligned with the reordering from running the function SRGroupFile
-InstallGlobalFunction(ReorderSRFiles,function(deg,lev,initialLev,prevPosList,unsortedList)
-	local stringPrefixInitial, stringPrefixFinal, stringSuffixInitial, stringSuffixFinal, stringInitialList, stringFinal, stringFolder, dirTempSingleFiles, dirTempSingleFilesContents, fExtensionInitial, fExtensionFinal, groupPosition, groupGens, groupCount, groupCountBelow, groupCountBelowSpecific, unsortedListBranches, groupCountBelowStart, posFile, i;
+InstallGlobalFunction(ReorderSRFiles,function(deg,lev,initialLev,prevPosListAbove,prevPosList,unsortedList)
+	local stringPrefixInitial, stringPrefixFinal, stringSuffixInitial, stringSuffixFinal, stringInitialList, stringFinal, stringFolder, dirTempSingleFiles, dirTempSingleFilesContents, fExtensionInitial, fExtensionFinal, groupPosition, groupGens, groupCount, groupCountStart, groupCountBelow, groupCountBelowSpecific, unsortedListBranches, groupCountBelowStart, posFile, posOneList, posOneListIndex, i;
 	
 	# 1. Initialise string prefixes that refer to file and variable names, and string for the folder containing the individual group extension files.
 	stringPrefixInitial:=Concatenation("temp_",String(deg),"_",String(initialLev));
 	stringPrefixFinal:=Concatenation("temp_",String(deg),"_",String(initialLev+1));
 	stringFolder:=Concatenation("temp_",String(deg),"_",String(lev));
 	
-	# 2. Initialise directory containing individual group extension files and list the directory's contents excluding the "current directory", ., and "directory above", .., commands.
+	# 2. Initialise directory containing individual group extension files and list the directory's contents excluding the "current directory", ., and "directory above", .., commands, and any filenames beginning with "temp_deg_lev+1" (since those files have already been updated from a previous run attempt).
+	
 	dirTempSingleFiles:=DirectoriesPackageLibrary("SRGroups", Concatenation("data/temp_files/",stringFolder,"/"));
 	dirTempSingleFilesContents:=DirectoryContents(dirTempSingleFiles[1]);
 	Remove(dirTempSingleFilesContents,Position(dirTempSingleFilesContents,"."));
 	Remove(dirTempSingleFilesContents,Position(dirTempSingleFilesContents,".."));
+	for posFile in [1..Length(dirTempSingleFilesContents)] do
+		if StartsWith(dirTempSingleFilesContents[posFile],stringPrefixFinal) then
+			Remove(dirTempSingleFilesContents,posFile);
+		fi;
+	od;
+	# 2.1. Sorting here is to ensure that the directory's contents are alphanumerically ordered (since the DirectoryContents function prioritises individual characters over what would be entire numbers; for example, "temp_2_3_15_1_proj.grp" would come before "temp_2_3_2_2_proj.grp" but we would like it to be the other way around and recognise that 15 is bigger than 2).
+	StableSort(dirTempSingleFilesContents);
+	for groupCountBelow in [Length(SplitString(dirTempSingleFilesContents[1],"_"))..4] do
+		SortBy(dirTempSingleFilesContents, function(elm) return EvalString(SplitString(elm,"_")[groupCountBelow]); end);
+	od;
 	
 	# 3. Evaluate the number of groups with the same fourth entry using unsortedList (i.e. p1 in "temp_deg_initialLev_p1_p2_..._proj.grp") and store numbering in the list variable unsortedListBranches. These counts must be completed in the unsorted order (the order that they are currently in) to ensure that equating files (to check if any are missing) is done correctly.
 	unsortedListBranches:=[];
 	groupCountBelow:=1;
 	for groupCount in [1..Length(unsortedList)] do
 		for groupCountBelowSpecific in [1..unsortedList[groupCount]] do
-			# 3.1. The variable groupCountBelowStart is important to establish the first group's position that is in "./SRGroups/data/temp_files/temp_deg_lev/".
+			# 3.1. The variables groupCountStart and groupCountBelowStart are important to establish the first group's position that is in "./SRGroups/data/temp_files/temp_deg_lev/".
 			if EvalString(SplitString(dirTempSingleFilesContents[1],"_")[4])=groupCount and EvalString(SplitString(dirTempSingleFilesContents[1],"_")[5])=groupCountBelowSpecific then
+				groupCountStart:=groupCount;
 				groupCountBelowStart:=groupCountBelow;
 			fi;
 			unsortedListBranches[groupCountBelow]:=groupCountBelowSpecific;
@@ -1592,13 +1680,17 @@ InstallGlobalFunction(ReorderSRFiles,function(deg,lev,initialLev,prevPosList,uns
 		od;
 	od;
 	
-	# 4. Update formatting of each file in "./SRGroups/data/temp_files/temp_deg_lev/". Before the while loop, just initialise required variables. 
+	# 4. Update formatting of each file in "./SRGroups/data/temp_files/temp_deg_lev/".
+	# Before the while loop, initialise required variables.
 	posFile:=1;
+	posOneList:=Positions(unsortedListBranches,1);
+	posOneListIndex:=Position(posOneList,groupCountBelowStart-(unsortedListBranches[groupCountBelowStart]-1));
 	groupPosition:=[];
+	groupCount:=groupCountStart;
 	groupCountBelow:=groupCountBelowStart;
-	while groupCountBelow<=Length(prevPosList) and posFile<=Length(dirTempSingleFilesContents) do
+	while posFile<=Length(dirTempSingleFilesContents) do
 		# 4.1. Case 1: The filename contains the old formatting (i.e. starts with "temp_deg_initialLev") and the fifth entry in the filename aligns with the branch position from unsortedListBranches. The second check is completed to ensure that no gaps in the files are overlooked (i.e. since some groups may have been extended while others may have not).
-		if StartsWith(dirTempSingleFilesContents[posFile],stringPrefixInitial) and EvalString(SplitString(dirTempSingleFilesContents[posFile],"_")[5])=unsortedListBranches[groupCountBelow] then
+		if StartsWith(dirTempSingleFilesContents[posFile],stringPrefixInitial) and EvalString(SplitString(dirTempSingleFilesContents[posFile],"_")[5])=unsortedListBranches[groupCountBelow] and EvalString(SplitString(dirTempSingleFilesContents[posFile],"_")[4])=groupCount then
 			# 4.1.1. Create new strings for the updated file name. Start by splitting the old file name string into its indexed positions, then replace the fifth entry of the old string with the fourth entry of the new string.
 			stringInitialList:=SplitString(dirTempSingleFilesContents[posFile],"_");
 			for i in [5..Length(stringInitialList)] do
@@ -1628,14 +1720,16 @@ InstallGlobalFunction(ReorderSRFiles,function(deg,lev,initialLev,prevPosList,uns
 			UnbindGlobal(SplitString(dirTempSingleFilesContents[posFile],".")[1]);
 			RemoveFile(fExtensionInitial);
 			posFile:=posFile+1;
-		# 4.2. Case 2: The file name contains the new formatting. Since the DirectoryContents function creates a list in alphanumeric order, the newly formatted files will all appear after those with the old formatting. Hence, if a newly formatted file is found, all files would have been formatted and so the loop can break.
-		elif StartsWith(dirTempSingleFilesContents[posFile],stringPrefixFinal) then
-			break;
-		# 4.3. Case 3: The file will have the old formatting but a new branch position has been reached in the folder's contents. Keep iterating groupCountBelow until the branch positions align.
+		# 4.2. Case 2: The file will have the old formatting but a new branch position has been reached in the folder's contents.
 		else
-			while EvalString(SplitString(dirTempSingleFilesContents[posFile],"_")[5])<>unsortedListBranches[groupCountBelow] do
-				groupCountBelow:=groupCountBelow+1;
-			od;
+			# 4.2.1. Align groupCount with the numbering in position 4 of the current filename. To align groupCountBelow, we must move to the corresponding branch in unsortedListBranches by moving to the next occurrence of 1 in this list (i.e. posOneList[posOneListIndex]).
+			if EvalString(SplitString(dirTempSingleFilesContents[posFile],"_")[4])<>groupCount then
+				posOneListIndex:=posOneListIndex+(EvalString(SplitString(dirTempSingleFilesContents[posFile],"_")[4])-groupCount);
+				groupCountBelow:=posOneList[posOneListIndex];
+				groupCount:=EvalString(SplitString(dirTempSingleFilesContents[posFile],"_")[4]);
+			fi;
+			# 4.2.2. Update groupCountBelow so the sub-branch position aligns.
+			groupCountBelow:=groupCountBelow+(EvalString(SplitString(dirTempSingleFilesContents[posFile],"_")[5])-unsortedListBranches[groupCountBelow]);
 		fi;
 	od;
 
@@ -1721,18 +1815,3 @@ InstallGlobalFunction(NumberExtensionsUnformatted,function(arg)
 	
 	return numExtensions;
 end);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
