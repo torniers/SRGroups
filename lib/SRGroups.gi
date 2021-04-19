@@ -51,10 +51,14 @@ InstallGlobalFunction(BelowAction,function(k,n,aut,i)
 end);
 
 
-# Input::	k: integer at least 2, n: integer at least 1, G: a self-replicating subgroup of AutT(k,n)
+# Input::	k: integer at least 2, n: integer at least 1, G: a self-replicating subgroup of AutT(k,n) with sufficient rigid automorphisms
 # Output::	the maximal self-replicating extension of G in AutT(k,n+1)
 InstallGlobalFunction(MaximalExtension,function(k,n,G)
 	local gensMG, pr, gensG, a, pre_a, b, extn, i, prG, kerG;
+	
+	if not HasSufficientRigidAutomorphisms(k,n,G) then
+		Error("Input groups needs to have sufficient rigid automorphisms.");
+	fi;
 		
 	gensMG:=[];
 	pr:=Projection(AutT(k,n+1));
@@ -102,109 +106,27 @@ end);
 # Input::	k: integer at least 2, n: integer at least 1, G: a self-replicating subgroup of AutT(k,n)
 # Output::	a self-replicating AutT(k,n)-conjugate of G with sufficient rigid automorphisms, and the same projection to T_{k,n-1} as G if the projection of G has sufficient rigid automorphisms
 InstallGlobalFunction(RepresentativeWithSufficientRigidAutomorphisms,function(k,n,G)
-	local F, F_0, pr, a;
+	local F, F_0, pr, conjugators, a;
 
-	if n=1 or HasSufficientRigidAutomorphisms(k,n,G) then
-		return G;
-	fi;
+	if n=1 or HasSufficientRigidAutomorphisms(k,n,G) then return G; fi;
 	
 	F:=AutT(k,n);
 	F_0:=Stabilizer(F,[1..k^(n-1)],OnSets);
 	pr:=Projection(F);
-	# if the projection of G has sufficient rigid automorphisms, preserve it
+	# if the projection of G has sufficient rigid automorphisms, preserve it (cf. Horadam, (proof of) Proposition 3.9, 3.10)
+	conjugators:=F_0;
 	if HasSufficientRigidAutomorphisms(k,n-1,Image(pr,G)) then
-		for a in Intersection(Kernel(pr),F_0) do
-			if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
-			if IsSelfReplicating(k,n,G^a) and HasSufficientRigidAutomorphisms(k,n,G^a) then return G^a; fi;
-		od;
-	else
-		for a in F_0 do
-			if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
-			if IsSelfReplicating(k,n,G^a) and HasSufficientRigidAutomorphisms(k,n,G^a) then return G^a; fi;
-		od;
+		conjugators:=Intersection(conjugators,Kernel(pr));
 	fi;
-end);
-
-
-# Input::	k: integer at least 2, n: integer at least 2, G: a subgroup of AutT(k,n)
-# Output::	a list of AutT(k,n)-conjugacy class representatives of maximal self-replicating subgroups of G with sufficient rigid automorphisms
-InstallGlobalFunction(ConjugacyClassRepsMaxSelfReplicatingSubgroups,function(k,n,G)
-	local F, list, H, class, new, i;
-
-	F:=AutT(k,n);
-	list:=[];
-	for class in ConjugacyClassesMaximalSubgroups(G) do
-		for H in class do
-			if IsSelfReplicating(k,n,H) then
-				new:=true;
-				for i in [Length(list),Length(list)-1..1] do
-					if IsConjugate(F,H,list[i]) then new:=false; break; fi;
-				od;
-				if new then Add(list,RepresentativeWithSufficientRigidAutomorphisms(k,n,H)); fi;
-				break;
-			fi;
-		od;
+		
+	for a in conjugators do
+		if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
+		if HasSufficientRigidAutomorphisms(k,n,G^a) and IsSelfReplicating(k,n,G^a) then return G^a; fi;
 	od;
-	return list;
+	
+	return fail;
 end);
 
-
-# Input::	k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
-# Output::	a list of AutT(k,n)-conjugacy class representatives of maximal self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto G
-InstallGlobalFunction(ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection,function(k,n,G)
-	local F, pr, list, class, H, new, i;
-
-	F:=AutT(k,n);
-	pr:=Projection(F);
-	list:=[];
-	for class in ConjugacyClassesMaximalSubgroups(MaximalExtension(k,n-1,G)) do
-		for H in class do
-			if not Image(pr,H)=G then continue; fi;
-			if IsSelfReplicating(k,n,H) then
-				new:=true;
-				for i in [Length(list),Length(list)-1..1] do
-					if IsConjugate(F,H,list[i]) then new:=false; break; fi;
-				od;
-				if new then Add(list,RepresentativeWithSufficientRigidAutomorphisms(k,n,H)); fi;
-				break;
-			fi;
-		od;
-	od;	
-	return list;
-end);
-
-
-# Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1)
-# Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of G with sufficient rigid automorphisms
-InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroups,function(k,n,G)
-	local F, list, listtemp, H, new, listHcheck, listH, add, I, J;
-
-	F:=AutT(k,n);
-	list:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,G));
-	listtemp:=ShallowCopy(list);
-	while not IsEmpty(listtemp) do
-		for H in listtemp do
-			new:=true;
-			if IsTrivial(MaximalSubgroupClassReps(H)) then new:=false; fi;
-			listHcheck:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,H));
-			listH:=[];
-			if new then
-				for I in listHcheck do
-					add:=true;
-					for J in list do
-						if IsConjugate(F,I,J) then add:=false; break; fi;
-					od;
-					if add then Add(listH,RepresentativeWithSufficientRigidAutomorphisms(k,n,I)); fi;
-				od;
-				Append(listtemp,listH);
-				Append(list,listH);
-			fi;
-			Remove(listtemp,Position(listtemp,H));
-		od;
-	od;
-	Add(list,G);
-	return list; 
-end);
 
 # Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
 # Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto G
