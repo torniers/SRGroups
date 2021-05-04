@@ -143,23 +143,35 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,f
 			subgroups:=ShallowCopy(MaximalSubgroups(currentGroup));
 			for i in [Length(subgroups),Length(subgroups)-1..1] do
 				if not IsSelfReplicating(k,n,subgroups[i]) or not Image(pr,subgroups[i])=G then
+					# Proposition 3.24: need not follow these branches
 					Remove(subgroups,i);
 				fi;
 			od;
 			Append(newGroups,subgroups);
 		od;
 		# RemoveConjugates(newGroups);
-		for i in [Length(newGroups),Length(newGroups)-1..2] do
+#		for i in [Length(newGroups),Length(newGroups)-1..2] do
+#			for j in [i-1,i-2..1] do
+#				if IsConjugate(F,newGroups[j],newGroups[i]) then
+#					Remove(newGroups,i);
+#					break;
+#				fi;
+#			od;
+#		od;
+		currentLayer:=newGroups;
+		Append(allGroups,newGroups);
+	od;
+	
+	# RemoveConjugates(allGroups);
+		for i in [Length(allGroups),Length(allGroups)-1..2] do
 			for j in [i-1,i-2..1] do
-				if IsConjugate(F,newGroups[j],newGroups[i]) then
-					Remove(newGroups,i);
+				if IsConjugate(F,allGroups[j],allGroups[i]) then
+					Remove(allGroups,i);
 					break;
 				fi;
 			od;
 		od;
-		currentLayer:=newGroups;
-		Append(allGroups,newGroups);
-	od;
+	
 	# representatives with sufficient rigid automorphisms
 	Apply(allGroups,H->RepresentativeWithSufficientRigidAutomorphisms(k,n,H));
 	return allGroups;
