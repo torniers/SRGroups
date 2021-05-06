@@ -167,48 +167,6 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,f
 end);
 
 
-# Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
-# Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto G
-InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroups,function(k,n)
-	local F, pr, allGroups, currentLayer, SRGroups, newGroups, newSRGroups, currentGroup, subgroups, i, j;
-
-	F:=AutT(k,n);
-	pr:=Projection(F);
-	allGroups:=[F];
-	currentLayer:=ShallowCopy(allGroups);
-	while not IsEmpty(currentLayer) do
-		SRGroups:=[];
-		newGroups:=[];
-		newSRGroups:=[];
-		for currentGroup in currentLayer do
-			subgroups:=ShallowCopy(MaximalSubgroups(currentGroup));
-			for i in [Length(subgroups),Length(subgroups)-1..1] do
-				if IsSelfReplicating(k,n,subgroups[i]) then
-					Add(newSRGroups,subgroups[i]);
-				fi;
-			od;
-			Append(newGroups,subgroups);
-			Append(SRGroups,newSRGroups);
-		od;
-		# RemoveConjugates(newGroups);
-		for i in [Length(newGroups),Length(newGroups)-1..2] do
-			for j in [i-1,i-2..1] do
-				if IsConjugate(F,newGroups[j],newGroups[i]) then
-					Remove(newGroups,i);
-					break;
-				fi;
-			od;
-		od;
-		currentLayer:=newGroups;
-		Append(allGroups,SRGroups);
-	od;	
-	# representatives with sufficient rigid automorphisms
-	Apply(allGroups,H->RepresentativeWithSufficientRigidAutomorphisms(k,n,H));
-	return allGroups;
-end);
-
-
-
 # Input:: deg: degree of the tree (integer at least 2), lev: level of the tree (integer at least 1; if lev=1, then the unformatted "sr_deg_1.grp" file must already exist) (requires "sr_deg_lev+1.grp" file to exist)
 # Output:: Formatted version of the file "sr_deg_lev.grp"
 InstallGlobalFunction(FormatSRFile, function(deg,lev)
