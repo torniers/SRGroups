@@ -190,16 +190,13 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingGroups,function(k,n)
 				fi;
 			od;
 			# replace with maximal subgroups
-			if IsEmpty(ConjugacyClassesMaximalSubgroups(Representative(class))) then
-				Remove(classes,i);
-			else
-				classes[i]:=ConjugacyClassesMaximalSubgroups(Representative(class));
-			fi;
+			classes[i]:=ConjugacyClassesMaximalSubgroups(Representative(class));
+
 		od;
-		# flatten list and pass to F-conjugacy
+		# flatten list (also removes empty lists), pass to F-conjugacy and remove duplicates
 		classes:=Flat(classes);
-		Apply(classes,class->RepresentativeClass(class)^F);
-		DuplicateFreeList(classes);
+		Apply(classes,class->Representative(class)^F);
+		classes:=DuplicateFreeList(classes);
 	od;
 	
 	return groups;
