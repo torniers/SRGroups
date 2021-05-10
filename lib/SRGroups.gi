@@ -167,6 +167,46 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,f
 end);
 
 
+
+
+
+# Input:: k: integer at least 2, n: integer at least 2
+# Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms
+InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingGroups,function(k,n)
+	local F, groups, classes, i, class, H;
+	
+	F:=AutT(k,n);
+	groups:=[F];
+	classes:=ShallowCopy(ConjugacyClassesMaximalSubgroups(F));
+	
+	while not IsEmpty(classes) do
+		for i in [Length(classes),Length(classes)-1..1] do
+			class:=classes[i];
+			# check class
+			for H in class do
+				if IsSelfReplicating(k,n,H) then
+					Add(groups,RepresentativeWithSufficientRigidAutomorphisms(k,n,H));
+					break;
+				fi;
+			od;
+			# replace with maximal subgroups
+			if IsEmpty(ConjugacyClassesMaximalSubgroups(Representative(class))) then
+				Remove(classes,i);
+			else
+				classes[i]:=ConjugacyClassesMaximalSubgroups(Representative(class));
+			fi;
+		od;
+		# flatten list and pass to F-conjugacy
+		classes:=Flat(classes);
+		Apply(classes,class->RepresentativeClass(class)^F);
+		DuplicateFreeList(classes);
+	od;
+	
+	return groups;
+end);
+
+
+
 # Input:: deg: degree of the tree (integer at least 2), lev: level of the tree (integer at least 1; if lev=1, then the unformatted "sr_deg_1.grp" file must already exist) (requires "sr_deg_lev+1.grp" file to exist)
 # Output:: Formatted version of the file "sr_deg_lev.grp"
 InstallGlobalFunction(FormatSRFile, function(deg,lev)
