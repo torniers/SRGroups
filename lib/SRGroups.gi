@@ -171,10 +171,25 @@ end);
 
 #######################################################################################################################################################################################################3
 
+# Input: G: a group, subgroups: a mutable list of subgroups of G
+# Output: None. Conjugates removed from subgroups.
+InstallGlobalFunction(RemoveConjugates,function(G,subgroups)
+	local i, j;
+
+	for i in [Length(subgroups),Length(subgroups)-1..2] do
+		for j in [i-1,i-2..1] do
+			if IsConjugate(G,subgroups[j],subgroups[i]) then
+				Remove(subgroups,i);
+				break;
+			fi;
+		od;
+	od; 
+end);
+
 # Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
 # Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto a conjugate of G
 InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection,function(k,n,G)
-	local F, prF, pr, H, allGroups, currentLayer, newGroups, currentGroup, subgroups, i, j;
+	local F, prF, pr, H, allGroups, i, j, currentLayer, newGroups, currentGroup, subgroups;
 
 	F:=AutT(k,n);
 	prF:=AutT(k,n-1);
@@ -185,15 +200,8 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugatePro
 			Add(allGroups,MaximalExtension(k,n-1,H));
 		fi;
 	od;
-	# RemoveConjugates(allGroups);
-	for i in [Length(allGroups),Length(allGroups)-1..2] do
-		for j in [i-1,i-2..1] do
-			if IsConjugate(F,allGroups[j],allGroups[i]) then
-				Remove(allGroups,i);
-				break;
-			fi;
-		od;
-	od;	
+	RemoveConjugates(F, allGroups);
+	
 	# search
 	currentLayer:=ShallowCopy(allGroups);
 	while not IsEmpty(currentLayer) do
@@ -208,15 +216,7 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugatePro
 			od;
 			Append(newGroups,subgroups);
 		od;
-		# RemoveConjugates(newGroups);
-		for i in [Length(newGroups),Length(newGroups)-1..2] do
-			for j in [i-1,i-2..1] do
-				if IsConjugate(F,newGroups[j],newGroups[i]) then
-					Remove(newGroups,i);
-					break;
-				fi;
-			od;
-		od;
+		RemoveConjugates(F,newGroups);
 		currentLayer:=newGroups;
 		Append(allGroups,newGroups);
 	od;	

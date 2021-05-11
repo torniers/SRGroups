@@ -31,6 +31,8 @@ DeclareGlobalFunction( "MaximalExtension" );
 DeclareGlobalFunction( "HasSufficientRigidAutomorphisms" );
 DeclareGlobalFunction( "RepresentativeWithSufficientRigidAutomorphisms" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection" );
+
+DeclareGlobalFunction( "RemoveConjugates" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingGroups" );
 
