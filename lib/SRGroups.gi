@@ -200,7 +200,7 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugatePro
 			Add(allGroups,MaximalExtension(k,n-1,H));
 		fi;
 	od;
-	RemoveConjugates(F, allGroups);
+	RemoveConjugates(F,allGroups);
 	
 	# search
 	currentLayer:=ShallowCopy(allGroups);
