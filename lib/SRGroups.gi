@@ -16,10 +16,12 @@ InstallGlobalFunction(AutT,function(k,n)
 end);
 
 
-# Input::	k: integer at least 2, n: integer at least 2, G: a subgroup of AutT(k,n)
+# Input::	k: integer at least 2, n: integer at least 1, G: a subgroup of AutT(k,n)
 # Output::	TRUE if F is self-replicating, FALSE otherwise
 InstallGlobalFunction(IsSelfReplicating,function(k,n,G)
 	local blocks, i, pr, G_0, gens;
+
+	if n=1 then return IsTransitive(G,[1..k]); fi;
 
 	# transitivity condition
 	blocks:=[];
@@ -167,7 +169,61 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,f
 end);
 
 
+#######################################################################################################################################################################################################3
 
+# Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
+# Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto a conjugate of G
+InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection,function(k,n,G)
+	local F, prF, pr, H, allGroups, currentLayer, newGroups, currentGroup, subgroups, i, j;
+
+	F:=AutT(k,n);
+	prF:=AutT(k,n-1);
+	pr:=Projection(F);
+	allGroups:=[];
+	for H in G^prF do
+		if IsSelfReplicating(k,n-1,H) and HasSufficientRigidAutomorphisms(k,n-1,H) then
+			Add(allGroups,MaximalExtension(k,n-1,H));
+		fi;
+	od;
+	# RemoveConjugates(allGroups);
+	for i in [Length(allGroups),Length(allGroups)-1..2] do
+		for j in [i-1,i-2..1] do
+			if IsConjugate(F,allGroups[j],allGroups[i]) then
+				Remove(allGroups,i);
+				break;
+			fi;
+		od;
+	od;	
+	# search
+	currentLayer:=ShallowCopy(allGroups);
+	while not IsEmpty(currentLayer) do
+		newGroups:=[];
+		for currentGroup in currentLayer do
+			subgroups:=ShallowCopy(MaximalSubgroups(currentGroup));
+			for i in [Length(subgroups),Length(subgroups)-1..1] do
+				if not IsSelfReplicating(k,n,subgroups[i]) or not IsConjugate(prF,Image(pr,subgroups[i]),G) then
+					# Proposition 3.24: need not follow these branches
+					Remove(subgroups,i);
+				fi;
+			od;
+			Append(newGroups,subgroups);
+		od;
+		# RemoveConjugates(newGroups);
+		for i in [Length(newGroups),Length(newGroups)-1..2] do
+			for j in [i-1,i-2..1] do
+				if IsConjugate(F,newGroups[j],newGroups[i]) then
+					Remove(newGroups,i);
+					break;
+				fi;
+			od;
+		od;
+		currentLayer:=newGroups;
+		Append(allGroups,newGroups);
+	od;	
+	# representatives with sufficient rigid automorphisms
+	Apply(allGroups,H->RepresentativeWithSufficientRigidAutomorphisms(k,n,H));
+	return allGroups;
+end);
 
 
 # Input:: k: integer at least 2, n: integer at least 2
@@ -201,6 +257,8 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingGroups,function(k,n)
 	
 	return groups;
 end);
+
+#######################################################################################################################################################################################################3
 
 
 

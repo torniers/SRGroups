@@ -31,6 +31,7 @@ DeclareGlobalFunction( "MaximalExtension" );
 DeclareGlobalFunction( "HasSufficientRigidAutomorphisms" );
 DeclareGlobalFunction( "RepresentativeWithSufficientRigidAutomorphisms" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection" );
+DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingGroups" );
 
 DeclareGlobalFunction( "FormatSRFile" );
