@@ -16,10 +16,12 @@ InstallGlobalFunction(AutT,function(k,n)
 end);
 
 
-# Input::	k: integer at least 2, n: integer at least 2, G: a subgroup of AutT(k,n)
+# Input::	k: integer at least 2, n: integer at least 1, G: a subgroup of AutT(k,n)
 # Output::	TRUE if F is self-replicating, FALSE otherwise
 InstallGlobalFunction(IsSelfReplicating,function(k,n,G)
 	local blocks, i, pr, G_0, gens;
+
+	if n=1 then return IsTransitive(G,[1..k]); fi;
 
 	# transitivity condition
 	blocks:=[];
@@ -143,6 +145,7 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,f
 			subgroups:=ShallowCopy(MaximalSubgroups(currentGroup));
 			for i in [Length(subgroups),Length(subgroups)-1..1] do
 				if not IsSelfReplicating(k,n,subgroups[i]) or not Image(pr,subgroups[i])=G then
+					# Proposition 3.24: need not follow these branches
 					Remove(subgroups,i);
 				fi;
 			od;
@@ -159,11 +162,105 @@ InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,f
 		od;
 		currentLayer:=newGroups;
 		Append(allGroups,newGroups);
-	od;
+	od;	
 	# representatives with sufficient rigid automorphisms
 	Apply(allGroups,H->RepresentativeWithSufficientRigidAutomorphisms(k,n,H));
 	return allGroups;
 end);
+
+
+#######################################################################################################################################################################################################3
+
+# Input: G: a group, subgroups: a mutable list of subgroups of G
+# Output: None. Conjugates removed from subgroups.
+InstallGlobalFunction(RemoveConjugates,function(G,subgroups)
+	local i, j;
+
+	for i in [Length(subgroups),Length(subgroups)-1..2] do
+		for j in [i-1,i-2..1] do
+			if IsConjugate(G,subgroups[j],subgroups[i]) then
+				Remove(subgroups,i);
+				break;
+			fi;
+		od;
+	od; 
+end);
+
+# Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
+# Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto a conjugate of G
+InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection,function(k,n,G)
+	local F, prF, pr, H, allGroups, i, j, currentLayer, newGroups, currentGroup, subgroups;
+
+	F:=AutT(k,n);
+	prF:=AutT(k,n-1);
+	pr:=Projection(F);
+	allGroups:=[];
+	for H in G^prF do
+		if IsSelfReplicating(k,n-1,H) and HasSufficientRigidAutomorphisms(k,n-1,H) then
+			Add(allGroups,MaximalExtension(k,n-1,H));
+		fi;
+	od;
+	RemoveConjugates(F,allGroups);
+	
+	# search
+	currentLayer:=ShallowCopy(allGroups);
+	while not IsEmpty(currentLayer) do
+		newGroups:=[];
+		for currentGroup in currentLayer do
+			subgroups:=ShallowCopy(MaximalSubgroups(currentGroup));
+			for i in [Length(subgroups),Length(subgroups)-1..1] do
+				if not IsSelfReplicating(k,n,subgroups[i]) or not IsConjugate(prF,Image(pr,subgroups[i]),G) then
+					# Proposition 3.24: need not follow these branches
+					Remove(subgroups,i);
+				fi;
+			od;
+			Append(newGroups,subgroups);
+		od;
+		RemoveConjugates(F,newGroups);
+		currentLayer:=newGroups;
+		Append(allGroups,newGroups);
+	od;	
+	# representatives with sufficient rigid automorphisms
+	Apply(allGroups,H->RepresentativeWithSufficientRigidAutomorphisms(k,n,H));
+	return allGroups;
+end);
+
+
+# Input:: k: integer at least 2, n: integer at least 2
+# Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms
+InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingGroups,function(k,n)
+	local F, groups, classes, i, class, H;
+	
+	F:=AutT(k,n);
+	groups:=[F];
+	classes:=ShallowCopy(ConjugacyClassesMaximalSubgroups(F));
+	
+	while not IsEmpty(classes) do
+		for i in [Length(classes),Length(classes)-1..1] do
+			class:=classes[i];
+			# check class
+			for H in class do
+				if IsSelfReplicating(k,n,H) then
+					Add(groups,RepresentativeWithSufficientRigidAutomorphisms(k,n,H));
+					break;
+				fi;
+			od;
+			# replace with maximal subgroups
+			classes[i]:=ConjugacyClassesMaximalSubgroups(Representative(class));
+
+		od;
+		# flatten list (also removes empty lists), pass to F-conjugacy and remove duplicates
+		classes:=Flat(classes);
+		Apply(classes,class->Representative(class)^F);
+		classes:=DuplicateFreeList(classes);
+	od;
+	
+	return groups;
+end);
+
+#######################################################################################################################################################################################################3
+
+
 
 # Input:: deg: degree of the tree (integer at least 2), lev: level of the tree (integer at least 1; if lev=1, then the unformatted "sr_deg_1.grp" file must already exist) (requires "sr_deg_lev+1.grp" file to exist)
 # Output:: Formatted version of the file "sr_deg_lev.grp"
