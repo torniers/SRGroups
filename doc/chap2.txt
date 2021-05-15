@@ -1,0 +1,38 @@
+  
+  [1X2 [33X[0;0YFunctionality[133X[101X
+  
+  
+  [1X2.1 [33X[0;0YExample Methods[133X[101X
+  
+  [33X[0;0YThis section will describe the example methods of SRGroups[133X
+  
+  [1X2.1-1 SRGroup[101X
+  
+  [33X[1;0Y[29X[2XSRGroup[102X( [3Xarg[103X ) [32X function[133X
+  
+  [33X[0;0YInsert documentation for your function here[133X
+  
+  [1X2.1-2 AllSRGroups[101X
+  
+  [33X[1;0Y[29X[2XAllSRGroups[102X( [3Xarg[103X ) [32X function[133X
+  
+  [1X2.1-3 CheckSRProjections[101X
+  
+  [33X[1;0Y[29X[2XCheckSRProjections[102X( [3Xarg[103X ) [32X function[133X
+  
+  [1X2.1-4 StringVariables[101X
+  
+  [33X[1;0Y[29X[2XStringVariables[102X( [3Xarg[103X ) [32X function[133X
+  
+  [1X2.1-5 UnbindVariables[101X
+  
+  [33X[1;0Y[29X[2XUnbindVariables[102X( [3Xarg[103X ) [32X function[133X
+  
+  [1X2.1-6 SRDegrees[101X
+  
+  [33X[1;0Y[29X[2XSRDegrees[102X( [3Xarg[103X ) [32X function[133X
+  
+  [1X2.1-7 SRLevels[101X
+  
+  [33X[1;0Y[29X[2XSRLevels[102X( [3Xarg[103X ) [32X function[133X
+  

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<TitlePage>
+  <Title>
+    SRGroups
+  </Title>
+  <Subtitle>
+    Self-replicating groups of regular rooted trees.
+  </Subtitle>
+  <Version>
+    0.1
+  </Version>
+  <Author>
+    Sam King<Alt Only="LaTeX"><Br/></Alt>
+<Address>
+University Drive, Callaghan NSW 2308<Br/>
+</Address>
+<Email>sam.king@newcastle.edu.au</Email>
+
+  </Author>
+  <Author>
+    Sarah Shotter<Alt Only="LaTeX"><Br/></Alt>
+<Address>
+University Drive, Callaghan NSW 2308<Br/>
+</Address>
+<Email>sarah.shotter@newcastle.edu.au</Email>
+
+  </Author>
+  <Date>
+    17 December 2020
+  </Date>
+  </TitlePage>

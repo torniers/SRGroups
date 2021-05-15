@@ -1,0 +1,20 @@
+#SIXFORMAT  GapDocGAP
+HELPBOOKINFOSIXTMP := rec(
+encoding := "UTF-8",
+bookname := "SRGroups",
+entries :=
+[ [ "Title page", ".", [ 0, 0, 0 ], 1,, "title page", "X7D2C85EC87DD46E5" ], 
+  [ "Table of Contents", ".-1", [ 0, 0, 1 ], 33,, "table of contents", "X8537FEB07AF2BEC8" ], 
+  [ "\033[1X\033[33X\033[0;-2YIntroduction\033[133X\033[101X", "1", [ 1, 0, 0 ], 1,, "introduction", 
+      "X7DFB63A97E67C0A1" ], [ "\033[1X\033[33X\033[0;-2YFunctionality\033[133X\033[101X", "2", [ 2, 0, 0 ], 1,, 
+      "functionality", "X87F1120883F5B4D0" ], [ "\033[1X\033[33X\033[0;-2YExample Methods\033[133X\033[101X", "2.1", 
+      [ 2, 1, 0 ], 4,, "example methods", "X7ED1D62579C10890" ], 
+  [ "Index", "ind", [ "Ind", 0, 0 ], 1,, "index", "X83A0356F839C696F" ], 
+  [ "\033[2XSRGroup\033[102X", "2.1-1", [ 2, 1, 1 ], 9,, "srgroup", "X79B6921585FAFD67" ], 
+  [ "\033[2XAllSRGroups\033[102X", "2.1-2", [ 2, 1, 2 ], 15,, "allsrgroups", "X845F9F227B97062C" ], 
+  [ "\033[2XCheckSRProjections\033[102X", "2.1-3", [ 2, 1, 3 ], 19,, "checksrprojections", "X7DC9A60E87E350AF" ], 
+  [ "\033[2XStringVariables\033[102X", "2.1-4", [ 2, 1, 4 ], 23,, "stringvariables", "X7E515BA882F73045" ], 
+  [ "\033[2XUnbindVariables\033[102X", "2.1-5", [ 2, 1, 5 ], 27,, "unbindvariables", "X82C5A9557EC8F8A6" ], 
+  [ "\033[2XSRDegrees\033[102X", "2.1-6", [ 2, 1, 6 ], 31,, "srdegrees", "X7BF255357B870D37" ], 
+  [ "\033[2XSRLevels\033[102X", "2.1-7", [ 2, 1, 7 ], 35,, "srlevels", "X7CDBB45386329E21" ] ]
+);
