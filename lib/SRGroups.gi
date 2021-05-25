@@ -222,6 +222,25 @@ function(G)
 end );
 
 
+#################################################################################################################
+
+
+# Input:	G: a group, subgroups: a mutable list of subgroups of G
+# Output:	None. Conjugates removed from subgroups.
+InstallGlobalFunction(RemoveConjugates,function(G,subgroups)
+	local i, j;
+
+	for i in [Length(subgroups),Length(subgroups)-1..2] do
+		for j in [i-1,i-2..1] do
+			if IsConjugate(G,subgroups[j],subgroups[i]) then
+				Remove(subgroups,i);
+				break;
+			fi;
+		od;
+	od; 
+end);
+
+
 # Input::	G: a self-replicating regular rooted tree group with sufficient rigid automorphisms
 # Output::	a list of conjugacy class representatives of self-replicating regular rooted tree groups with sufficient rigid automorphisms and parent group G
 InstallGlobalFunction( ConjugacyClassRepsSelfReplicatingGroupsWithProjection,
@@ -260,25 +279,6 @@ function(G)
 		Apply(allGroups,H->RepresentativeWithSufficientRigidAutomorphisms(H));
 		return allGroups;
 	fi;
-end);
-
-
-#######################################################################################################################################################################################################3
-
-
-# Input:	G: a group, subgroups: a mutable list of subgroups of G
-# Output:	None. Conjugates removed from subgroups.
-InstallGlobalFunction(RemoveConjugates,function(G,subgroups)
-	local i, j;
-
-	for i in [Length(subgroups),Length(subgroups)-1..2] do
-		for j in [i-1,i-2..1] do
-			if IsConjugate(G,subgroups[j],subgroups[i]) then
-				Remove(subgroups,i);
-				break;
-			fi;
-		od;
-	od; 
 end);
 
 
