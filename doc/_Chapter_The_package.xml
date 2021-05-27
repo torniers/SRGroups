@@ -78,7 +78,7 @@ to do
  
 </Returns>
  <Description>
- The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,n})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
 <P/>
  </Description>
 </ManSection>
@@ -97,7 +97,7 @@ to do
  
 </Returns>
  <Description>
- The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,n})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
 <P/>
  </Description>
 </ManSection>
@@ -116,7 +116,7 @@ to do
  
 </Returns>
  <Description>
- The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,n})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
 <P/>
  </Description>
 </ManSection>
@@ -138,7 +138,7 @@ true
  
 </Returns>
  <Description>
- The argument of this property is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
+ The argument of this property is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,n})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
 <P/>
  </Description>
 </ManSection>
@@ -171,7 +171,7 @@ true
  
 </Returns>
  <Description>
- The argument of this property is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
+ The argument of this property is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,n})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
 <P/>
  </Description>
 </ManSection>
@@ -190,7 +190,7 @@ to do
  
 </Returns>
  <Description>
- The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>).
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,n})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>).
 <P/>
  </Description>
 </ManSection>
@@ -209,7 +209,7 @@ to do
  
 </Returns>
  <Description>
- The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,n})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
 <P/>
  </Description>
 </ManSection>
@@ -228,7 +228,7 @@ to do
  
 </Returns>
  <Description>
- The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,n})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
 <P/>
  </Description>
 </ManSection>
@@ -247,7 +247,7 @@ to do
  
 </Returns>
  <Description>
- The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,n})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
 <P/>
  </Description>
 </ManSection>

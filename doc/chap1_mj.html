@@ -116,7 +116,7 @@ to do
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RegularRootedTreeGroupDegree</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: the degree <var class="Arg">k</var> of the regular rooted tree that <var class="Arg">G</var> is acting on.</p>
 
-<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,n})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
 
 
 <div class="example"><pre>
@@ -130,7 +130,7 @@ to do
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RegularRootedTreeGroupDepth</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: the depth <var class="Arg">n</var> of the regular rooted tree that <var class="Arg">G</var> is acting on.</p>
 
-<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,n})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
 
 
 <div class="example"><pre>
@@ -144,7 +144,7 @@ to do
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ParentGroup</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: the regular rooted tree group that arises from <var class="Arg">G</var> by restricting to <span class="SimpleMath">\(T_{k,n-1}\)</span>.</p>
 
-<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,n})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
 
 
 <div class="example"><pre>
@@ -161,7 +161,7 @@ true
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsSelfReplicating</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;property&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code>, if <var class="Arg">G</var> is self-replicating, and <code class="keyw">false</code> otherwise.</p>
 
-<p>The argument of this property is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
+<p>The argument of this property is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,n})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
 
 
 <div class="example"><pre>
@@ -189,7 +189,7 @@ true
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; HasSufficientRigidAutomorphisms</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;property&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code>, if <var class="Arg">G</var> has sufficient rigid automorphisms, and <code class="keyw">false</code> otherwise.</p>
 
-<p>The argument of this property is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
+<p>The argument of this property is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,n})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
 
 
 <div class="example"><pre>
@@ -203,7 +203,7 @@ to do
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RepresentativeWithSufficientRigidAutomorphisms</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: a regular rooted tree group which is conjugate to <var class="Arg">G</var> in <span class="SimpleMath">\(\mathrm{Aut}(T_{k,n})\)</span> and which has sufficient rigid automorphisms, i.e. it satisfies <code class="func">HasSufficientRigidAutomorphisms</code> (<span class="RefLink">???</span>). This returned group is <var class="Arg">G</var> itself, if <var class="Arg">G</var> already has sufficient rigid automorphisms. Furthermore, the returned group has the same parent group as <var class="Arg">G</var> if the parent group of <var class="Arg">G</var> has sufficient rigid automorphisms.</p>
 
-<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)), which is self-replicating (<code class="func">IsSelfReplicating</code> (<span class="RefLink">???</span>)).</p>
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,n})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)), which is self-replicating (<code class="func">IsSelfReplicating</code> (<span class="RefLink">???</span>)).</p>
 
 
 <div class="example"><pre>
@@ -217,7 +217,7 @@ to do
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; MaximalExtension</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: the regular rooted tree group <span class="SimpleMath">\(M(\)</span><var class="Arg">G</var><span class="SimpleMath">\()\le\mathrm{Aut}(T_{k,n})\)</span> which is the unique maximal self-replicating extension of <var class="Arg">G</var> to <span class="SimpleMath">\(T_{k,n+1}\)</span>.</p>
 
-<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)), which is self-replicating (<code class="func">IsSelfReplicating</code> (<span class="RefLink">???</span>)) and has sufficient rigid automorphisms (<code class="func">HasSufficientRigidAutomorphisms</code> (<span class="RefLink">???</span>)).</p>
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,n})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)), which is self-replicating (<code class="func">IsSelfReplicating</code> (<span class="RefLink">???</span>)) and has sufficient rigid automorphisms (<code class="func">HasSufficientRigidAutomorphisms</code> (<span class="RefLink">???</span>)).</p>
 
 
 <div class="example"><pre>
@@ -231,7 +231,7 @@ to do
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ConjugacyClassRepsSelfReplicatingGroupsWithProjection</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: a list <span class="SimpleMath">\(\mathrm{Aut}(T_{k,n+1}\)</span>-conjugacy class representatives of regular rooted tree groups which are self-replicating, have sufficient rigid automorphisms and whose parent group is <var class="Arg">G</var>.</p>
 
-<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)), which is self-replicating (<code class="func">IsSelfReplicating</code> (<span class="RefLink">???</span>)) and has sufficient rigid automorphisms (<code class="func">HasSufficientRigidAutomorphisms</code> (<span class="RefLink">???</span>)).</p>
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,n})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)), which is self-replicating (<code class="func">IsSelfReplicating</code> (<span class="RefLink">???</span>)) and has sufficient rigid automorphisms (<code class="func">HasSufficientRigidAutomorphisms</code> (<span class="RefLink">???</span>)).</p>
 
 
 <div class="example"><pre>
@@ -245,7 +245,7 @@ to do
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: a list <span class="SimpleMath">\(\mathrm{Aut}(T_{k,n+1}\)</span>-conjugacy class representatives of regular rooted tree groups which are self-replicating, have sufficient rigid automorphisms and whose parent group is conjugate to <var class="Arg">G</var>.</p>
 
-<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)), which is self-replicating (<code class="func">IsSelfReplicating</code> (<span class="RefLink">???</span>)) and has sufficient rigid automorphisms (<code class="func">HasSufficientRigidAutomorphisms</code> (<span class="RefLink">???</span>)).</p>
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,n})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)), which is self-replicating (<code class="func">IsSelfReplicating</code> (<span class="RefLink">???</span>)) and has sufficient rigid automorphisms (<code class="func">HasSufficientRigidAutomorphisms</code> (<span class="RefLink">???</span>)).</p>
 
 
 <div class="example"><pre>

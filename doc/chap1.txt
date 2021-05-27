@@ -66,7 +66,7 @@
   [6XReturns:[106X  [33X[0;10Ythe degree [3Xk[103X of the regular rooted tree that [3XG[103X is acting on.[133X
   
   [33X[0;0YThe   argument   of  this  attribute  is  a  regular  rooted  tree  group  [3XG[103X
-  [23X\le\mathrm{Aut}(T_{k,k})[123X                           ([2XIsRegularRootedTreeGroup[102X
+  [23X\le\mathrm{Aut}(T_{k,n})[123X                           ([2XIsRegularRootedTreeGroup[102X
   ([14X???IsRegularRootedTreeGroup???[114X)).[133X
   
   [4X[32X  Example  [32X[104X
@@ -79,7 +79,7 @@
   [6XReturns:[106X  [33X[0;10Ythe depth [3Xn[103X of the regular rooted tree that [3XG[103X is acting on.[133X
   
   [33X[0;0YThe   argument   of  this  attribute  is  a  regular  rooted  tree  group  [3XG[103X
-  [23X\le\mathrm{Aut}(T_{k,k})[123X                           ([2XIsRegularRootedTreeGroup[102X
+  [23X\le\mathrm{Aut}(T_{k,n})[123X                           ([2XIsRegularRootedTreeGroup[102X
   ([14X???IsRegularRootedTreeGroup???[114X)).[133X
   
   [4X[32X  Example  [32X[104X
@@ -93,7 +93,7 @@
             [23XT_{k,n-1}[123X.[133X
   
   [33X[0;0YThe   argument   of  this  attribute  is  a  regular  rooted  tree  group  [3XG[103X
-  [23X\le\mathrm{Aut}(T_{k,k})[123X                           ([2XIsRegularRootedTreeGroup[102X
+  [23X\le\mathrm{Aut}(T_{k,n})[123X                           ([2XIsRegularRootedTreeGroup[102X
   ([14X???IsRegularRootedTreeGroup???[114X)).[133X
   
   [4X[32X  Example  [32X[104X
@@ -109,7 +109,7 @@
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X, if [3XG[103X is self-replicating, and [9Xfalse[109X otherwise.[133X
   
   [33X[0;0YThe   argument   of   this  property  is  a  regular  rooted  tree  group  [3XG[103X
-  [23X\le\mathrm{Aut}(T_{k,k})[123X                           ([2XIsRegularRootedTreeGroup[102X
+  [23X\le\mathrm{Aut}(T_{k,n})[123X                           ([2XIsRegularRootedTreeGroup[102X
   ([14X???IsRegularRootedTreeGroup???[114X)).[133X
   
   [4X[32X  Example  [32X[104X
@@ -137,7 +137,7 @@
             otherwise.[133X
   
   [33X[0;0YThe   argument   of   this  property  is  a  regular  rooted  tree  group  [3XG[103X
-  [23X\le\mathrm{Aut}(T_{k,k})[123X                           ([2XIsRegularRootedTreeGroup[102X
+  [23X\le\mathrm{Aut}(T_{k,n})[123X                           ([2XIsRegularRootedTreeGroup[102X
   ([14X???IsRegularRootedTreeGroup???[114X)).[133X
   
   [4X[32X  Example  [32X[104X
@@ -156,7 +156,7 @@
             the parent group of [3XG[103X has sufficient rigid automorphisms.[133X
   
   [33X[0;0YThe   argument   of  this  attribute  is  a  regular  rooted  tree  group  [3XG[103X
-  [23X\le\mathrm{Aut}(T_{k,k})[123X                           ([2XIsRegularRootedTreeGroup[102X
+  [23X\le\mathrm{Aut}(T_{k,n})[123X                           ([2XIsRegularRootedTreeGroup[102X
   ([14X???IsRegularRootedTreeGroup???[114X)),       which      is      self-replicating
   ([2XIsSelfReplicating[102X ([14X???IsSelfReplicating???[114X)).[133X
   
@@ -172,7 +172,7 @@
             [23XT_{k,n+1}[123X.[133X
   
   [33X[0;0YThe   argument   of  this  attribute  is  a  regular  rooted  tree  group  [3XG[103X
-  [23X\le\mathrm{Aut}(T_{k,k})[123X                           ([2XIsRegularRootedTreeGroup[102X
+  [23X\le\mathrm{Aut}(T_{k,n})[123X                           ([2XIsRegularRootedTreeGroup[102X
   ([14X???IsRegularRootedTreeGroup???[114X)),       which      is      self-replicating
   ([2XIsSelfReplicating[102X   ([14X???IsSelfReplicating???[114X))  and  has  sufficient  rigid
   automorphisms                               ([2XHasSufficientRigidAutomorphisms[102X
@@ -190,7 +190,7 @@
             sufficient rigid automorphisms and whose parent group is [3XG[103X.[133X
   
   [33X[0;0YThe   argument   of  this  attribute  is  a  regular  rooted  tree  group  [3XG[103X
-  [23X\le\mathrm{Aut}(T_{k,k})[123X                           ([2XIsRegularRootedTreeGroup[102X
+  [23X\le\mathrm{Aut}(T_{k,n})[123X                           ([2XIsRegularRootedTreeGroup[102X
   ([14X???IsRegularRootedTreeGroup???[114X)),       which      is      self-replicating
   ([2XIsSelfReplicating[102X   ([14X???IsSelfReplicating???[114X))  and  has  sufficient  rigid
   automorphisms                               ([2XHasSufficientRigidAutomorphisms[102X
@@ -209,7 +209,7 @@
             to [3XG[103X.[133X
   
   [33X[0;0YThe   argument   of  this  attribute  is  a  regular  rooted  tree  group  [3XG[103X
-  [23X\le\mathrm{Aut}(T_{k,k})[123X                           ([2XIsRegularRootedTreeGroup[102X
+  [23X\le\mathrm{Aut}(T_{k,n})[123X                           ([2XIsRegularRootedTreeGroup[102X
   ([14X???IsRegularRootedTreeGroup???[114X)),       which      is      self-replicating
   ([2XIsSelfReplicating[102X   ([14X???IsSelfReplicating???[114X))  and  has  sufficient  rigid
   automorphisms                               ([2XHasSufficientRigidAutomorphisms[102X

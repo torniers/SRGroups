@@ -86,7 +86,7 @@ DeclareOperation("RegularRootedTreeGroupNC", [IsInt, IsInt, IsPermGroup]);
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
 #!
 #! @Returns
 #! the degree <A>k</A> of the regular rooted tree that <A>G</A> is acting on.
@@ -102,7 +102,7 @@ DeclareAttribute("RegularRootedTreeGroupDegree", IsRegularRootedTreeGroup);
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
 #!
 #! @Returns
 #! the depth <A>n</A> of the regular rooted tree that <A>G</A> is acting on.
@@ -118,7 +118,7 @@ DeclareAttribute("RegularRootedTreeGroupDepth", IsRegularRootedTreeGroup);
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
 #!
 #! @Returns
 #! the regular rooted tree group that arises from <A>G</A> by restricting to $T_{k,n-1}$.
@@ -137,7 +137,7 @@ DeclareAttribute("ParentGroup", IsRegularRootedTreeGroup);
 ##################################################################################################################
 
 #! @Description
-#! The argument of this property is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
+#! The argument of this property is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
 #!
 #! @Returns
 #! <K>true</K>, if <A>G</A> is self-replicating, and <K>false</K> otherwise.
@@ -167,7 +167,7 @@ DeclareProperty("IsSelfReplicating", IsRegularRootedTreeGroup);
 ##################################################################################################################
 
 #! @Description
-#! The argument of this property is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
+#! The argument of this property is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
 #!
 #! @Returns
 #! <K>true</K>, if <A>G</A> has sufficient rigid automorphisms, and <K>false</K> otherwise.
@@ -183,7 +183,7 @@ DeclareProperty("HasSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>).
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>).
 #!
 #! @Returns
 #! a regular rooted tree group which is conjugate to <A>G</A> in $\mathrm{Aut}(T_{k,n})$ and which has sufficient rigid automorphisms, i.e. it satisfies <Ref Prop="HasSufficientRigidAutomorphisms"/>. This returned group is <A>G</A> itself, if <A>G</A> already has sufficient rigid automorphisms. Furthermore, the returned group has the same parent group as <A>G</A> if the parent group of <A>G</A> has sufficient rigid automorphisms.
@@ -199,7 +199,7 @@ DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRoot
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
 #!
 #! @Returns
 #! the regular rooted tree group $M($<A>G</A>$)\le\mathrm{Aut}(T_{k,n})$ which is the unique maximal self-replicating extension of <A>G</A> to $T_{k,n+1}$.
@@ -215,7 +215,7 @@ DeclareAttribute("MaximalExtension", IsRegularRootedTreeGroup);
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
 #!
 #! @Returns
 #! a list $\mathrm{Aut}(T_{k,n+1}$-conjugacy class representatives of regular rooted tree groups which are self-replicating, have sufficient rigid automorphisms and whose parent group is <A>G</A>.
@@ -231,7 +231,7 @@ DeclareAttribute("ConjugacyClassRepsSelfReplicatingGroupsWithProjection", IsRegu
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
 #!
 #! @Returns
 #! a list $\mathrm{Aut}(T_{k,n+1}$-conjugacy class representatives of regular rooted tree groups which are self-replicating, have sufficient rigid automorphisms and whose parent group is conjugate to <A>G</A>.
