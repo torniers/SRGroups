@@ -7,6 +7,10 @@
   
   [1X1.1 [33X[0;0YFramework[133X[101X
   
+  [33X[0;0YIntroduction...   to   do.   Testing   references:  See  [2XAutT[102X  ([14X1.2-2[114X).  See
+  [2XRegularRootedTreeGroupDegree[102X  ([14X???RegularRootedTreeGroupDegree???[114X).  Why  do
+  function references work and attribute references don't?[133X
+  
   [1X1.1-1 IsRegularRootedTreeGroup[101X
   
   [33X[1;0Y[29X[2XIsRegularRootedTreeGroup[102X( [3Xarg[103X ) [32X filter[133X
@@ -15,8 +19,7 @@
   [33X[0;0YGroups  acting on regular rooted trees are stored together with their degree
   ([2XRegularRootedTreeGroupDegree[102X  ([14X???RegularRootedTreeGroupDegree???[114X)),  depth
   ([2XRegularRootedTreeGroupDepth[102X  ([14X???RegularRootedTreeGroupDepth???[114X)) and other
-  attributes    in    this    category.    See   also   [2XRegularRootedTreeGroup[102X
-  ([14X???RegularRootedTreeGroup???[114X).[133X
+  attributes in this category.[133X
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27XG:=SymmetricGroup(3);[127X[104X
@@ -33,7 +36,7 @@
   
   [33X[1;0Y[29X[2XRegularRootedTreeGroup[102X( [3Xk[103X, [3Xn[103X, [3XG[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Ythe  regular  rooted  tree  group  [23XG[123X  as an object of the category
-            [2XIsRegularRootedTreeGroup[102X  ([14X???IsRegularRootedTreeGroup???[114X),  after
+            [2XIsRegularRootedTreeGroup[102X         ([14X???IsRegularRootedTreeGroup???[114X),
             checking that [3XG[103X is indeed a subgroup of [23X\mathrm{Aut}(T_{k,n})[123X.[133X
   
   [33X[0;0YThe arguments of this method are a degree [3Xk[103X [23X\in\mathbb{N}_{\ge 2}[123X, a depth [3Xn[103X
@@ -245,7 +248,8 @@
   [33X[1;0Y[29X[2XAutT[102X( [3Xk[103X, [3Xn[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ythe    regular    rooted    tree    group    [23X\mathrm{Aut}(T_{k,n})[123X
             ([2XIsRegularRootedTreeGroup[102X  ([14X???IsRegularRootedTreeGroup???[114X))  as a
-            permutation group of the [23Xk^{n}[123X leaves of [23XT_{k,n}[123X.[133X
+            permutation  group of the [23Xk^{n}[123X leaves of [23XT_{k,n}[123X, generated as an
+            iterated wreath product.[133X
   
   [33X[0;0YThe  arguments  of  this  method  are a degree [3Xk[103X [23X\in\mathbb{N}_{\ge 2}[123X and a
   depth [3Xn[103X [23X\in\mathbb{N}[123X.[133X

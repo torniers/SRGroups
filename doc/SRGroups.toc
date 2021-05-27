@@ -2,7 +2,7 @@
 \contentsline {section}{\numberline {1.1}\textcolor {Chapter }{Framework}}{4}{section.1.1}%
 \contentsline {subsection}{\numberline {1.1.1}\textcolor {Chapter }{IsRegularRootedTreeGroup (for IsPermGroup)}}{4}{subsection.1.1.1}%
 \contentsline {subsection}{\numberline {1.1.2}\textcolor {Chapter }{RegularRootedTreeGroup (for IsInt, IsInt, IsPermGroup)}}{4}{subsection.1.1.2}%
-\contentsline {subsection}{\numberline {1.1.3}\textcolor {Chapter }{RegularRootedTreeGroupNC (for IsInt, IsInt, IsPermGroup)}}{4}{subsection.1.1.3}%
+\contentsline {subsection}{\numberline {1.1.3}\textcolor {Chapter }{RegularRootedTreeGroupNC (for IsInt, IsInt, IsPermGroup)}}{5}{subsection.1.1.3}%
 \contentsline {subsection}{\numberline {1.1.4}\textcolor {Chapter }{RegularRootedTreeGroupDegree (for IsRegularRootedTreeGroup)}}{5}{subsection.1.1.4}%
 \contentsline {subsection}{\numberline {1.1.5}\textcolor {Chapter }{RegularRootedTreeGroupDepth (for IsRegularRootedTreeGroup)}}{5}{subsection.1.1.5}%
 \contentsline {subsection}{\numberline {1.1.6}\textcolor {Chapter }{ParentGroup (for IsRegularRootedTreeGroup)}}{5}{subsection.1.1.6}%

@@ -160,7 +160,7 @@ continued...
 \logpage{[ 1, 1, 0 ]}
 \hyperdef{L}{X7B17FC3E7F9C9985}{}
 {
-  
+  Introduction... to do. Testing references: See \texttt{AutT} (\ref{AutT}). See \texttt{RegularRootedTreeGroupDegree} (\ref{RegularRootedTreeGroupDegree}). Why do function references work and attribute references don't? 
 
 \subsection{\textcolor{Chapter }{IsRegularRootedTreeGroup (for IsPermGroup)}}
 \logpage{[ 1, 1, 1 ]}\nobreak
@@ -173,9 +173,11 @@ continued...
 
 
 
- Groups acting on regular rooted trees are stored together with their degree (\texttt{RegularRootedTreeGroupDegree} (\ref{RegularRootedTreeGroupDegree})), depth (\texttt{RegularRootedTreeGroupDepth} (\ref{RegularRootedTreeGroupDepth})) and other attributes in this category. See also \texttt{RegularRootedTreeGroup} (\ref{RegularRootedTreeGroup}). 
+ Groups acting on regular rooted trees are stored together with their degree (\texttt{RegularRootedTreeGroupDegree} (\ref{RegularRootedTreeGroupDegree})), depth (\texttt{RegularRootedTreeGroupDepth} (\ref{RegularRootedTreeGroupDepth})) and other attributes in this category. 
 
  }
+
+ 
 
  
 \begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
@@ -197,13 +199,15 @@ continued...
 \label{RegularRootedTreeGroup:for IsInt, IsInt, IsPermGroup}
 }\hfill{\scriptsize (operation)}}\\
 \textbf{\indent Returns:\ }
- the regular rooted tree group $G$ as an object of the category \texttt{IsRegularRootedTreeGroup} (\ref{IsRegularRootedTreeGroup}), after checking that \mbox{\texttt{\mdseries\slshape G}} is indeed a subgroup of $\mathrm{Aut}(T_{k,n})$. 
+ the regular rooted tree group $G$ as an object of the category \texttt{IsRegularRootedTreeGroup} (\ref{IsRegularRootedTreeGroup}), checking that \mbox{\texttt{\mdseries\slshape G}} is indeed a subgroup of $\mathrm{Aut}(T_{k,n})$. 
 
 
 
  The arguments of this method are a degree \mbox{\texttt{\mdseries\slshape k}} $\in\mathbb{N}_{\ge 2}$, a depth \mbox{\texttt{\mdseries\slshape n}} $\in\mathbb{N}$ and a subgroup \mbox{\texttt{\mdseries\slshape G}} of $\mathrm{Aut}(T_{k,n})$. 
 
  }
+
+ 
 
  
 \begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
@@ -225,6 +229,8 @@ continued...
  The arguments of this method are a degree \mbox{\texttt{\mdseries\slshape k}} $\in\mathbb{N}_{\ge 2}$, a depth \mbox{\texttt{\mdseries\slshape n}} $\in\mathbb{N}$ and a subgroup \mbox{\texttt{\mdseries\slshape G}} of $\mathrm{Aut}(T_{k,n})$. 
 
  }
+
+ 
 
  
 \begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
@@ -504,7 +510,7 @@ is conjugate to \mbox{\texttt{\mdseries\slshape G}}.
 \label{AutT}
 }\hfill{\scriptsize (function)}}\\
 \textbf{\indent Returns:\ }
- the regular rooted tree group $\mathrm{Aut}(T_{k,n})$ (\texttt{IsRegularRootedTreeGroup} (\ref{IsRegularRootedTreeGroup})) as a permutation group of the $k^{n}$ leaves of $T_{k,n}$. 
+ the regular rooted tree group $\mathrm{Aut}(T_{k,n})$ (\texttt{IsRegularRootedTreeGroup} (\ref{IsRegularRootedTreeGroup})) as a permutation group of the $k^{n}$ leaves of $T_{k,n}$, generated as an iterated wreath product. 
 
 
 
@@ -597,16 +603,6 @@ is conjugate to \mbox{\texttt{\mdseries\slshape G}}.
 
 \printindex
 
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}

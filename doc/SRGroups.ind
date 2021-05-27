@@ -46,7 +46,7 @@
   \item \texttt  {RegularRootedTreeGroupDepth}
     \subitem for IsRegularRootedTreeGroup, \hyperpage{5}
   \item \texttt  {RegularRootedTreeGroupNC}
-    \subitem for IsInt, IsInt, IsPermGroup, \hyperpage{4}
+    \subitem for IsInt, IsInt, IsPermGroup, \hyperpage{5}
   \item \texttt  {RemoveConjugates}, \hyperpage{7}
   \item \texttt  {Representative}\-\texttt  {With}\-\texttt  {Sufficient}\-\texttt  {Rigid}\-\texttt  {Automorphisms}
     \subitem for IsRegularRootedTreeGroup, \hyperpage{6}

@@ -1,3 +1,4 @@
+
 #! @Title SRGroups
 
 ##################################################################################################################
@@ -30,10 +31,15 @@
 #! @Section Framework
 ##################################################################################################################
 
+#! Introduction... to do. Testing references: See <Ref Func="AutT"/>. See <Ref Attr="RegularRootedTreeGroupDegree"/>. Why do function references work and attribute references don't?
+
+##################################################################################################################
+
 #! @Description
-#! Groups acting on regular rooted trees are stored together with their degree (<Ref Attr="RegularRootedTreeGroupDegree"/>), depth (<Ref Attr="RegularRootedTreeGroupDepth"/>) and other attributes in this category. See also <Ref Oper="RegularRootedTreeGroup"/>.
+#! Groups acting on regular rooted trees are stored together with their degree (<Ref Attr="RegularRootedTreeGroupDegree"/>), depth (<Ref Attr="RegularRootedTreeGroupDepth"/>) and other attributes in this category.
 #!
 DeclareCategory("IsRegularRootedTreeGroup", IsPermGroup);
+#!
 #! @BeginExampleSession
 #! gap> G:=SymmetricGroup(3);
 #! Sym( [ 1 .. 3 ] )
@@ -56,6 +62,7 @@ DeclareCategory("IsRegularRootedTreeGroup", IsPermGroup);
 #! @Arguments k,n,G
 #!
 DeclareOperation("RegularRootedTreeGroup", [IsInt, IsInt, IsPermGroup]);
+#!
 #! @BeginExampleSession
 #! to do
 #! @EndExampleSession
@@ -71,6 +78,7 @@ DeclareOperation("RegularRootedTreeGroup", [IsInt, IsInt, IsPermGroup]);
 #! @Arguments k,n,G
 #!
 DeclareOperation("RegularRootedTreeGroupNC", [IsInt, IsInt, IsPermGroup]);
+#!
 #! @BeginExampleSession
 #! to do
 #! @EndExampleSession
@@ -175,7 +183,7 @@ DeclareProperty("HasSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Attr="IsSelfReplicating"/>).
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>).
 #!
 #! @Returns
 #! a regular rooted tree group which is conjugate to <A>G</A> in $\mathrm{Aut}(T_{k,n})$ and which has sufficient rigid automorphisms, i.e. it satisfies <Ref Prop="HasSufficientRigidAutomorphisms"/>. This returned group is <A>G</A> itself, if <A>G</A> already has sufficient rigid automorphisms. Furthermore, the returned group has the same parent group as <A>G</A> if the parent group of <A>G</A> has sufficient rigid automorphisms.
@@ -191,7 +199,7 @@ DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRoot
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Attr="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Attr="HasSufficientRigidAutomorphisms"/>).
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
 #!
 #! @Returns
 #! the regular rooted tree group $M($<A>G</A>$)\le\mathrm{Aut}(T_{k,n})$ which is the unique maximal self-replicating extension of <A>G</A> to $T_{k,n+1}$.
@@ -207,7 +215,7 @@ DeclareAttribute("MaximalExtension", IsRegularRootedTreeGroup);
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Attr="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Attr="HasSufficientRigidAutomorphisms"/>).
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
 #!
 #! @Returns
 #! a list $\mathrm{Aut}(T_{k,n+1}$-conjugacy class representatives of regular rooted tree groups which are self-replicating, have sufficient rigid automorphisms and whose parent group is <A>G</A>.
@@ -223,7 +231,7 @@ DeclareAttribute("ConjugacyClassRepsSelfReplicatingGroupsWithProjection", IsRegu
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Attr="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Attr="HasSufficientRigidAutomorphisms"/>).
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Prop="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Prop="HasSufficientRigidAutomorphisms"/>).
 #!
 #! @Returns
 #! a list $\mathrm{Aut}(T_{k,n+1}$-conjugacy class representatives of regular rooted tree groups which are self-replicating, have sufficient rigid automorphisms and whose parent group is conjugate to <A>G</A>.
@@ -270,7 +278,7 @@ DeclareGlobalFunction( "RemoveConjugates" );
 #! The arguments of this method are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
 #!
 #! @Returns
-#! the regular rooted tree group $\mathrm{Aut}(T_{k,n})$ (<Ref Filt="IsRegularRootedTreeGroup"/>) as a permutation group of the $k^{n}$ leaves of $T_{k,n}$.
+#! the regular rooted tree group $\mathrm{Aut}(T_{k,n})$ (<Ref Filt="IsRegularRootedTreeGroup"/>) as a permutation group of the $k^{n}$ leaves of $T_{k,n}$, generated as an iterated wreath product.
 #!
 #! @Arguments k,n
 #!
