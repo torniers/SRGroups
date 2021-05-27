@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<TitlePage>
+  <Title>
+    SRGroups
+  </Title>
+  <Subtitle>
+    Self-replicating groups of regular rooted trees.
+  </Subtitle>
+  <Version>
+    0.1
+  </Version>
+  <Author>
+    Sam King<Alt Only="LaTeX"><Br/></Alt>
+<Address>
+University Drive, Callaghan NSW 2308<Br/>
+</Address>
+<Email>sam.king@newcastle.edu.au</Email>
+
+  </Author>
+  <Author>
+    Sarah Shotter<Alt Only="LaTeX"><Br/></Alt>
+<Address>
+University Drive, Callaghan NSW 2308<Br/>
+</Address>
+<Email>sarah.shotter@newcastle.edu.au</Email>
+
+  </Author>
+  <Date>
+    17 December 2020
+  </Date>
+  <Abstract>
+    
+     To do.
+
+  </Abstract>
+  <Copyright>
+    
+     <Package>???</Package> is free software; you can redistribute it and/or modify it under the terms of the <URL Text="GNU General Public License">http://www.fsf.org/licenses/gpl.html</URL> as published by the Free Software     Foundation; either version 3 of the License, or (at your option) any later version.
+
+  </Copyright>
+  <Acknowledgements>
+    
+     DE210100180, FL170100032.
+
+  </Acknowledgements>
+  </TitlePage>

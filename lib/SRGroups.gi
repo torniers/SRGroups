@@ -3,9 +3,8 @@
 #
 # Implementations
 #
+##################################################################################################################
 
-# Input::	k: integer at least 2, n: integer at least 2, G: a subgroup of the automorphism group of the k-regular rooted tree of depth n
-# Output::	the regular rooted tree group G
 InstallMethod( RegularRootedTreeGroup, "for k,n,G (creator)", [IsInt, IsInt, IsPermGroup],
 function(k,n,G)
 	local rrtg_G;
@@ -25,34 +24,25 @@ function(k,n,G)
 	fi;
 end );
 
+##################################################################################################################
 
-# Input::	k: integer at least 2, n: integer at least 1
-# Output::	the automorphism group of the k-regular rooted tree of depth n
-InstallGlobalFunction( AutT,
-function(k,n)
-	local G, i;
+InstallMethod( ParentGroup, "for G", [IsRegularRootedTreeGroup],
+function(G)
+	local k, n, pr;
 	
-	if not (IsInt(k) and k>=2) then
-		Error("input argument k=",k," must be an integer greater than or equal to 2");
-	elif not (IsInt(n) and n>=1) then
-		Error("input argument n=",n," must be an integer greater than or equal to 1");
-	else
-		# iterate wreath product
-		G:=SymmetricGroup(k);
-		for i in [2..n] do G:=WreathProduct(SymmetricGroup(k),G); od;
-
-		G:=RegularRootedTreeGroup(k,n,G);
-		Setter(IsSelfReplicating)(G,true);
-		Setter(HasSufficientRigidAutomorphisms)(G,true);
-		Setter(RepresentativeWithSufficientRigidAutomorphisms)(G,G);
-
-		return G;
+	k:=RegularRootedTreeGroupDegree(G);
+	n:=RegularRootedTreeGroupDepth(G);
+	
+	if n=1 then
+		return Group(());
+	else	
+		pr:=Projection(AutT(k,n));	
+		return RegularRootedTreeGroup(k,n-1,Image(pr,G));
 	fi;
 end );
 
+##################################################################################################################
 
-# Input::	G: a regular rooted tree group
-# Output::	TRUE if G is self-replicating, FALSE otherwise
 InstallMethod( IsSelfReplicating, "for G", [IsRegularRootedTreeGroup],
 function(G)
 	local k, n, blocks, i, pr, G_0, gens;
@@ -77,52 +67,61 @@ function(G)
 	return true;
 end );
 
+##################################################################################################################
 
-# Input::	k: integer at least 2, n: integer at least 2, aut: an element of AutT(k,n), i: an integer in [1..k]
-# Output::	the restriction of aut to the subtree below the level 1 vertex i, as an element of AutT(k,n-1)
-InstallGlobalFunction( BelowAction,
-function(k,n,aut,i)
-	local aut_i, j;
-	
-	if not (IsInt(k) and k>=2) then
-		Error("input argument k=",k," must be an integer greater than or equal to 2");
-	elif not (IsInt(n) and n>=2) then
-		Error("input argument n=",n," must be an integer greater than or equal to 1");
-	elif not IsPerm(aut) then
-		Error("input argument aut=",aut," must be an automorphism of T_{k,n}");
-	elif not (IsInt(i) and i in [1..k]) then
-		Error("input argument i=",i," must be an integer in the range [1..",k,"]");
-	else	
-		# restricting to subtree below the level 1 vertex i by taking remainder mod k^(n-1)
-		aut_i:=[];	
-		for j in [1..k^(n-1)] do aut_i[j]:=((i-1)*k^(n-1)+j)^aut mod k^(n-1); od;
-		# replace 0 with k^(n-1)
-		aut_i[Position(aut_i,0)]:=k^(n-1);	
-		return PermList(aut_i);
-	fi;
-end );
-
-
-# Input::	G: a regular rooted tree group
-# Output::	the projection of G to the next lower depth
-InstallMethod( ParentGroup, "for G", [IsRegularRootedTreeGroup],
+InstallMethod( HasSufficientRigidAutomorphisms, "for G", [IsRegularRootedTreeGroup],
 function(G)
-	local k, n, pr;
+	local k, n, i;
 	
 	k:=RegularRootedTreeGroupDegree(G);
 	n:=RegularRootedTreeGroupDepth(G);
+
+	if n=1 then return true; fi;
 	
-	if n=1 then
-		return Group(());
-	else	
-		pr:=Projection(AutT(k,n));	
-		return RegularRootedTreeGroup(k,n-1,Image(pr,G));
+	for i in [2..k] do
+		# rigid automorphisms moving 1 to i?
+		if RepresentativeAction(G,[1..k^(n-1)],[1+(i-1)*k^(n-1)..i*k^(n-1)],OnTuples)=fail then
+			return false;
+		fi;	
+	od;	
+	return true;
+end);
+
+##################################################################################################################
+
+InstallMethod( RepresentativeWithSufficientRigidAutomorphisms, "for G", [IsRegularRootedTreeGroup],
+function(G)
+	local k, n, F, F_0, pr, conjugators, a, H;
+	
+	if not IsSelfReplicating(G) then
+		Error("input group G=",G," must be self-replicating");
+	else		
+		k:=RegularRootedTreeGroupDegree(G);
+		n:=RegularRootedTreeGroupDepth(G);
+
+		if n=1 or HasSufficientRigidAutomorphisms(G) then return G; fi;
+		
+		F:=AutT(k,n);
+		F_0:=Stabilizer(F,[1..k^(n-1)],OnSets);
+		pr:=Projection(F);
+		# if the projection of G has sufficient rigid automorphisms, preserve it (cf. Horadam: (proof of) Proposition 3.9, 3.10)
+		conjugators:=F_0;
+		if HasSufficientRigidAutomorphisms(ParentGroup(G)) then
+			conjugators:=Intersection(conjugators,Kernel(pr));
+		fi;
+			
+		for a in conjugators do
+			if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
+			H:=RegularRootedTreeGroup(k,n,G^a);
+			if HasSufficientRigidAutomorphisms(H) and IsSelfReplicating(H) then return H; fi;
+		od;
+		
+		return fail;
 	fi;
 end );
 
+##################################################################################################################
 
-# Input::	G: a self-replicating regular rooted tree group with sufficient rigid automorphisms
-# Output::	the maximal self-replicating extension M(G) of G to the next depth
 InstallMethod( MaximalExtension, "for G", [IsRegularRootedTreeGroup],
 function(G)
 	local k, n, gensMG, pr, gensG, a, pre_a, b, extn, i, prG, kerG, MG;
@@ -166,84 +165,9 @@ function(G)
 	fi;
 end);
 
-
-# Input::	G: a regular rooted tree group
-# Output::	TRUE if G has sufficient rigid automorphisms, FALSE otherwise
-InstallMethod( HasSufficientRigidAutomorphisms, "for G", [IsRegularRootedTreeGroup],
-function(G)
-	local k, n, i;
-	
-	k:=RegularRootedTreeGroupDegree(G);
-	n:=RegularRootedTreeGroupDepth(G);
-
-	if n=1 then return true; fi;
-	
-	for i in [2..k] do
-		# rigid automorphisms moving 1 to i?
-		if RepresentativeAction(G,[1..k^(n-1)],[1+(i-1)*k^(n-1)..i*k^(n-1)],OnTuples)=fail then
-			return false;
-		fi;	
-	od;	
-	return true;
-end);
-
-
-# Input::	G: a self-replicating regular rooted tree group
-# Output::	a self-replicating AutT(k,n)-conjugate of G with sufficient rigid automorphisms, and the same parent group as G if the parent group of G has sufficient rigid automorphisms
-InstallMethod( RepresentativeWithSufficientRigidAutomorphisms, "for G", [IsRegularRootedTreeGroup],
-function(G)
-	local k, n, F, F_0, pr, conjugators, a, H;
-	
-	if not IsSelfReplicating(G) then
-		Error("input group G=",G," must be self-replicating");
-	else		
-		k:=RegularRootedTreeGroupDegree(G);
-		n:=RegularRootedTreeGroupDepth(G);
-
-		if n=1 or HasSufficientRigidAutomorphisms(G) then return G; fi;
-		
-		F:=AutT(k,n);
-		F_0:=Stabilizer(F,[1..k^(n-1)],OnSets);
-		pr:=Projection(F);
-		# if the projection of G has sufficient rigid automorphisms, preserve it (cf. Horadam: (proof of) Proposition 3.9, 3.10)
-		conjugators:=F_0;
-		if HasSufficientRigidAutomorphisms(ParentGroup(G)) then
-			conjugators:=Intersection(conjugators,Kernel(pr));
-		fi;
-			
-		for a in conjugators do
-			if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
-			H:=RegularRootedTreeGroup(k,n,G^a);
-			if HasSufficientRigidAutomorphisms(H) and IsSelfReplicating(H) then return H; fi;
-		od;
-		
-		return fail;
-	fi;
-end );
-
-
 #################################################################################################################
 
-
-# Input:	G: a group, subgroups: a mutable list of subgroups of G
-# Output:	None. Conjugates removed from subgroups.
-InstallGlobalFunction(RemoveConjugates,function(G,subgroups)
-	local i, j;
-
-	for i in [Length(subgroups),Length(subgroups)-1..2] do
-		for j in [i-1,i-2..1] do
-			if IsConjugate(G,subgroups[j],subgroups[i]) then
-				Remove(subgroups,i);
-				break;
-			fi;
-		od;
-	od; 
-end);
-
-
-# Input::	G: a self-replicating regular rooted tree group with sufficient rigid automorphisms
-# Output::	a list of conjugacy class representatives of self-replicating regular rooted tree groups with sufficient rigid automorphisms and parent group G
-InstallGlobalFunction( ConjugacyClassRepsSelfReplicatingGroupsWithProjection,
+InstallMethod( ConjugacyClassRepsSelfReplicatingGroupsWithProjection, "for G", [IsRegularRootedTreeGroup],
 function(G)
 	local k, n, F, pr, allGroups, currentLayer, newGroups, currentGroup, subgroups, i, j;
 	
@@ -281,10 +205,9 @@ function(G)
 	fi;
 end);
 
+##################################################################################################################
 
-# Input::	G: a self-replicating regular rooted tree group with sufficient rigid automorphisms
-# Output::	a list of conjugacy class representatives of self-replicating regular rooted tree groups with sufficient rigid automorphisms and parent group conjugate to G
-InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection,
+InstallMethod( ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection, "for G", [IsRegularRootedTreeGroup],
 function(G)
 	local k, n, F, prF, pr, H, allGroups, i, j, currentLayer, newGroups, currentGroup, subgroups;
 	
@@ -331,3 +254,67 @@ function(G)
 		return allGroups;
 	fi;
 end);
+
+##################################################################################################################
+##################################################################################################################
+
+InstallGlobalFunction(RemoveConjugates,function(G,subgroups)
+	local i, j;
+
+	for i in [Length(subgroups),Length(subgroups)-1..2] do
+		for j in [i-1,i-2..1] do
+			if IsConjugate(G,subgroups[j],subgroups[i]) then
+				Remove(subgroups,i);
+				break;
+			fi;
+		od;
+	od; 
+end);
+
+##################################################################################################################
+
+InstallGlobalFunction( AutT,
+function(k,n)
+	local G, i;
+	
+	if not (IsInt(k) and k>=2) then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
+	elif not (IsInt(n) and n>=1) then
+		Error("input argument n=",n," must be an integer greater than or equal to 1");
+	else
+		# iterate wreath product
+		G:=SymmetricGroup(k);
+		for i in [2..n] do G:=WreathProduct(SymmetricGroup(k),G); od;
+
+		G:=RegularRootedTreeGroup(k,n,G);
+		Setter(IsSelfReplicating)(G,true);
+		Setter(HasSufficientRigidAutomorphisms)(G,true);
+		Setter(RepresentativeWithSufficientRigidAutomorphisms)(G,G);
+
+		return G;
+	fi;
+end );
+
+##################################################################################################################
+
+InstallGlobalFunction( BelowAction,
+function(k,n,aut,i)
+	local aut_i, j;
+	
+	if not (IsInt(k) and k>=2) then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
+	elif not (IsInt(n) and n>=2) then
+		Error("input argument n=",n," must be an integer greater than or equal to 1");
+	elif not IsPerm(aut) then
+		Error("input argument aut=",aut," must be an automorphism of T_{k,n}");
+	elif not (IsInt(i) and i in [1..k]) then
+		Error("input argument i=",i," must be an integer in the range [1..",k,"]");
+	else	
+		# restricting to subtree below the level 1 vertex i by taking remainder mod k^(n-1)
+		aut_i:=[];	
+		for j in [1..k^(n-1)] do aut_i[j]:=((i-1)*k^(n-1)+j)^aut mod k^(n-1); od;
+		# replace 0 with k^(n-1)
+		aut_i[Position(aut_i,0)]:=k^(n-1);	
+		return PermList(aut_i);
+	fi;
+end );

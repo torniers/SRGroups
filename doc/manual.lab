@@ -1,0 +1,27 @@
+\GAPDocLabFile{srgroups}
+\makelabel{srgroups:Title page}{}{X7D2C85EC87DD46E5}
+\makelabel{srgroups:Abstract}{}{X7AA6C5737B711C89}
+\makelabel{srgroups:Copyright}{}{X81488B807F2A1CF1}
+\makelabel{srgroups:Acknowledgements}{}{X82A988D47DFAFCFA}
+\makelabel{srgroups:Table of Contents}{}{X8537FEB07AF2BEC8}
+\makelabel{srgroups:The package}{1}{X79DE59997FDCF767}
+\makelabel{srgroups:Framework}{1.1}{X7B17FC3E7F9C9985}
+\makelabel{srgroups:Auxiliary methods}{1.2}{X84EE59EB82D1AB79}
+\makelabel{srgroups:The library}{2}{X7E20D66B81464B38}
+\makelabel{srgroups:Methods}{2.1}{X8606FDCE878850EF}
+\makelabel{srgroups:Index}{Ind}{X83A0356F839C696F}
+\makelabel{srgroups:IsRegularRootedTreeGroup for ispermgroup}{1.1.1}{X81F8437A7C2E5C87}
+\makelabel{srgroups:RegularRootedTreeGroup for isint, isint, ispermgroup}{1.1.2}{X7F279D957D29554A}
+\makelabel{srgroups:RegularRootedTreeGroupDegree for isregularrootedtreegroup}{1.1.3}{X81620BBB8303B641}
+\makelabel{srgroups:RegularRootedTreeGroupDepth for isregularrootedtreegroup}{1.1.4}{X7DA9D61678810B77}
+\makelabel{srgroups:ParentGroup for isregularrootedtreegroup}{1.1.5}{X7943CE9B7AB931AC}
+\makelabel{srgroups:IsSelfReplicating for isregularrootedtreegroup}{1.1.6}{X854CB0D683905369}
+\makelabel{srgroups:HasSufficientRigidAutomorphisms for isregularrootedtreegroup}{1.1.7}{X84DDFFAE8701C3F8}
+\makelabel{srgroups:RepresentativeWithSufficientRigidAutomorphisms for isregularrootedtreegroup}{1.1.8}{X7D06D7AF7B938F4A}
+\makelabel{srgroups:MaximalExtension for isregularrootedtreegroup}{1.1.9}{X7D9FB6D5854A17BE}
+\makelabel{srgroups:ConjugacyClassRepsSelfReplicatingGroupsWithProjection for isregularrootedtreegroup}{1.1.10}{X876FC3387B6E7183}
+\makelabel{srgroups:ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection for isregularrootedtreegroup}{1.1.11}{X7D7A396F7F9DF4D8}
+\makelabel{srgroups:RemoveConjugates}{1.2.1}{X795ACCF4858A8ED2}
+\makelabel{srgroups:AutT}{1.2.2}{X843B26BC8517173F}
+\makelabel{srgroups:BelowAction}{1.2.3}{X7EE8301C7EC8654B}
+\makelabel{srgroups:bar for isobject}{2.1.1}{X7E429C927AD46053}

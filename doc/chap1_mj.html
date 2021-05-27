@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<title>GAP (SRGroups) - Chapter 1: The package</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap1"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap0_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap2_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap1.html">[MathJax off]</a></p>
+<p><a id="X79DE59997FDCF767" name="X79DE59997FDCF767"></a></p>
+<div class="ChapSects"><a href="chap1_mj.html#X79DE59997FDCF767">1 <span class="Heading">The package</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1_mj.html#X7B17FC3E7F9C9985">1.1 <span class="Heading">Framework</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1_mj.html#X81F8437A7C2E5C87">1.1-1 IsRegularRootedTreeGroup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1_mj.html#X7F279D957D29554A">1.1-2 RegularRootedTreeGroup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1_mj.html#X81620BBB8303B641">1.1-3 RegularRootedTreeGroupDegree</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1_mj.html#X7DA9D61678810B77">1.1-4 RegularRootedTreeGroupDepth</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1_mj.html#X7943CE9B7AB931AC">1.1-5 ParentGroup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1_mj.html#X854CB0D683905369">1.1-6 IsSelfReplicating</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1_mj.html#X84DDFFAE8701C3F8">1.1-7 HasSufficientRigidAutomorphisms</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1_mj.html#X7D06D7AF7B938F4A">1.1-8 RepresentativeWithSufficientRigidAutomorphisms</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1_mj.html#X7D9FB6D5854A17BE">1.1-9 MaximalExtension</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1_mj.html#X876FC3387B6E7183">1.1-10 ConjugacyClassRepsSelfReplicatingGroupsWithProjection</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1_mj.html#X7D7A396F7F9DF4D8">1.1-11 ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1_mj.html#X84EE59EB82D1AB79">1.2 <span class="Heading">Auxiliary methods</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1_mj.html#X795ACCF4858A8ED2">1.2-1 RemoveConjugates</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1_mj.html#X843B26BC8517173F">1.2-2 AutT</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1_mj.html#X7EE8301C7EC8654B">1.2-3 BelowAction</a></span>
+</div></div>
+</div>
+
+<h3>1 <span class="Heading">The package</span></h3>
+
+<p>??? is a package which does some interesting and cool things. To be continued...</p>
+
+<p><a id="X7B17FC3E7F9C9985" name="X7B17FC3E7F9C9985"></a></p>
+
+<h4>1.1 <span class="Heading">Framework</span></h4>
+
+<p><a id="X81F8437A7C2E5C87" name="X81F8437A7C2E5C87"></a></p>
+
+<h5>1.1-1 IsRegularRootedTreeGroup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsRegularRootedTreeGroup</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;filter&nbsp;)</td></tr></table></div>
+<p>Returns: <code class="code">true</code> or <code class="code">false</code></p>
+
+<p>Groups acting on regular rooted trees are stored together with their degree (<code class="func">RegularRootedTreeGroupDegree</code> (<span class="RefLink">???</span>)), depth (<code class="func">RegularRootedTreeGroupDepth</code> (<span class="RefLink">???</span>)) and other attributes in this category. See also <code class="func">RegularRootedTreeGroup</code> (<span class="RefLink">???</span>). See also <code class="func">AutT</code> (<a href="chap1_mj.html#X843B26BC8517173F"><span class="RefLink">1.2-2</span></a>).</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=SymmetricGroup(3);</span>
+Sym( [ 1 .. 3 ] )
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsRegularRootedTreeGroup(G);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H:=RegularRootedTreeGroup(3,1,SymmetricGroup(3));</span>
+Sym( [ 1 .. 3 ] )
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsRegularRootedTreeGroup(H);</span>
+true
+</pre></div>
+
+<p><a id="X7F279D957D29554A" name="X7F279D957D29554A"></a></p>
+
+<h5>1.1-2 RegularRootedTreeGroup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RegularRootedTreeGroup</code>( <var class="Arg">k</var>, <var class="Arg">n</var>, <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: the regular rooted tree group <span class="SimpleMath">\(G\)</span> as an object of the category <code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>).</p>
+
+<p>The arguments of this method are a degree <var class="Arg">k</var> <span class="SimpleMath">\(\in\mathbb{N}_{\ge 2}\)</span>, a depth <var class="Arg">n</var> <span class="SimpleMath">\(\in\mathbb{N}\)</span> and a subgroup <var class="Arg">G</var> of <span class="SimpleMath">\(\mathrm{Aut}(T_{k,n})\)</span>.</p>
+
+
+<div class="example"><pre>
+to do
+</pre></div>
+
+<p><a id="X81620BBB8303B641" name="X81620BBB8303B641"></a></p>
+
+<h5>1.1-3 RegularRootedTreeGroupDegree</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RegularRootedTreeGroupDegree</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: the degree <var class="Arg">k</var> of the regular rooted tree that <var class="Arg">G</var> is acting on.</p>
+
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
+
+
+<div class="example"><pre>
+to do
+</pre></div>
+
+<p><a id="X7DA9D61678810B77" name="X7DA9D61678810B77"></a></p>
+
+<h5>1.1-4 RegularRootedTreeGroupDepth</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RegularRootedTreeGroupDepth</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: the depth <var class="Arg">n</var> of the regular rooted tree that <var class="Arg">G</var> is acting on.</p>
+
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
+
+
+<div class="example"><pre>
+to do
+</pre></div>
+
+<p><a id="X7943CE9B7AB931AC" name="X7943CE9B7AB931AC"></a></p>
+
+<h5>1.1-5 ParentGroup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ParentGroup</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: the regular rooted tree group that arises from <var class="Arg">G</var> by restricting to <span class="SimpleMath">\(T_{k,n-1}\)</span>.</p>
+
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=AutT(2,4);</span>
+&lt;permutation group of size 32768 with 15 generators&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ParentGroup(G)=AutT(2,3);</span>
+true
+</pre></div>
+
+<p><a id="X854CB0D683905369" name="X854CB0D683905369"></a></p>
+
+<h5>1.1-6 IsSelfReplicating</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsSelfReplicating</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;property&nbsp;)</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code>, if <var class="Arg">G</var> is self-replicating, and <code class="keyw">false</code> otherwise.</p>
+
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=AutT(2,2);</span>
+Group([ (1,2), (3,4), (1,3)(2,4) ])
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">subgroups:=AllSubgroups(G);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Apply(subgroups,H-&gt;RegularRootedTreeGroup(2,2,H));</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">for H in subgroups do Print(IsSelfReplicating(H),"\n"); od;</span>
+false
+false
+false
+false
+false
+false
+false
+true
+true
+true
+</pre></div>
+
+<p><a id="X84DDFFAE8701C3F8" name="X84DDFFAE8701C3F8"></a></p>
+
+<h5>1.1-7 HasSufficientRigidAutomorphisms</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; HasSufficientRigidAutomorphisms</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;property&nbsp;)</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code>, if <var class="Arg">G</var> has sufficient rigid automorphisms, and <code class="keyw">false</code> otherwise.</p>
+
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)).</p>
+
+
+<div class="example"><pre>
+to do
+</pre></div>
+
+<p><a id="X7D06D7AF7B938F4A" name="X7D06D7AF7B938F4A"></a></p>
+
+<h5>1.1-8 RepresentativeWithSufficientRigidAutomorphisms</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RepresentativeWithSufficientRigidAutomorphisms</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: a regular rooted tree group which is conjugate to <var class="Arg">G</var> in <span class="SimpleMath">\(\mathrm{Aut}(T_{k,n})\)</span> and which has sufficient rigid automorphisms, i.e. it satisfies <code class="func">HasSufficientRigidAutomorphisms</code> (<span class="RefLink">???</span>). This returned group is <var class="Arg">G</var> itself, if <var class="Arg">G</var> already has sufficient rigid automorphisms. Furthermore, the returned group has the same parent group as <var class="Arg">G</var> if the parent group of <var class="Arg">G</var> has sufficient rigid automorphisms.</p>
+
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)), which is self-replicating (<code class="func">IsSelfReplicating</code> (<span class="RefLink">???</span>)).</p>
+
+
+<div class="example"><pre>
+to do
+</pre></div>
+
+<p><a id="X7D9FB6D5854A17BE" name="X7D9FB6D5854A17BE"></a></p>
+
+<h5>1.1-9 MaximalExtension</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; MaximalExtension</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: the regular rooted tree group <span class="SimpleMath">\(M(\)</span><var class="Arg">G</var><span class="SimpleMath">\()\le\mathrm{Aut}(T_{k,n})\)</span> which is the unique maximal self-replicating extension of <var class="Arg">G</var> to <span class="SimpleMath">\(T_{k,n+1}\)</span>.</p>
+
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)), which is self-replicating (<code class="func">IsSelfReplicating</code> (<span class="RefLink">???</span>)) and has sufficient rigid automorphisms (<code class="func">HasSufficientRigidAutomorphisms</code> (<span class="RefLink">???</span>)).</p>
+
+
+<div class="example"><pre>
+to do
+</pre></div>
+
+<p><a id="X876FC3387B6E7183" name="X876FC3387B6E7183"></a></p>
+
+<h5>1.1-10 ConjugacyClassRepsSelfReplicatingGroupsWithProjection</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ConjugacyClassRepsSelfReplicatingGroupsWithProjection</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: a list <span class="SimpleMath">\(\mathrm{Aut}(T_{k,n+1}\)</span>-conjugacy class representatives of regular rooted tree groups which are self-replicating, have sufficient rigid automorphisms and whose parent group is <var class="Arg">G</var>.</p>
+
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)), which is self-replicating (<code class="func">IsSelfReplicating</code> (<span class="RefLink">???</span>)) and has sufficient rigid automorphisms (<code class="func">HasSufficientRigidAutomorphisms</code> (<span class="RefLink">???</span>)).</p>
+
+
+<div class="example"><pre>
+to do
+</pre></div>
+
+<p><a id="X7D7A396F7F9DF4D8" name="X7D7A396F7F9DF4D8"></a></p>
+
+<h5>1.1-11 ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: a list <span class="SimpleMath">\(\mathrm{Aut}(T_{k,n+1}\)</span>-conjugacy class representatives of regular rooted tree groups which are self-replicating, have sufficient rigid automorphisms and whose parent group is conjugate to <var class="Arg">G</var>.</p>
+
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,k})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)), which is self-replicating (<code class="func">IsSelfReplicating</code> (<span class="RefLink">???</span>)) and has sufficient rigid automorphisms (<code class="func">HasSufficientRigidAutomorphisms</code> (<span class="RefLink">???</span>)).</p>
+
+
+<div class="example"><pre>
+to do
+</pre></div>
+
+<p><a id="X84EE59EB82D1AB79" name="X84EE59EB82D1AB79"></a></p>
+
+<h4>1.2 <span class="Heading">Auxiliary methods</span></h4>
+
+<p>This section explains the methods of this package.</p>
+
+<p><a id="X795ACCF4858A8ED2" name="X795ACCF4858A8ED2"></a></p>
+
+<h5>1.2-1 RemoveConjugates</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RemoveConjugates</code>( <var class="Arg">G</var>, <var class="Arg">subgroups</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: n/a. This method removes <var class="Arg">G</var>-conjugates from the mutable list <var class="Arg">subgroups</var>.</p>
+
+<p>The arguments of this method are a group <var class="Arg">G</var> and a mutable list <var class="Arg">subgroups</var> of subgroups of <span class="SimpleMath">\(G\)</span>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=SymmetricGroup(3);</span>
+Sym( [ 1 .. 3 ] )
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">subgroups:=[Group((1,2)),Group((2,3))];</span>
+[ Group([ (1,2) ]), Group([ (2,3) ]) ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RemoveConjugates(G,subgroups);</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">subgroups;</span>
+[ Group([ (1,2) ]) ]
+</pre></div>
+
+<p><a id="X843B26BC8517173F" name="X843B26BC8517173F"></a></p>
+
+<h5>1.2-2 AutT</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AutT</code>( <var class="Arg">k</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: the regular rooted tree group <span class="SimpleMath">\(\mathrm{Aut}(T_{k,n})\)</span> (<code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>)) as a permutation group of the <span class="SimpleMath">\(k^{n}\)</span> leaves of <span class="SimpleMath">\(T_{k,n}\)</span>.</p>
+
+<p>The arguments of this method are a degree <var class="Arg">k</var> <span class="SimpleMath">\(\in\mathbb{N}_{\ge 2}\)</span> and a depth <var class="Arg">n</var> <span class="SimpleMath">\(\in\mathbb{N}\)</span>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=AutT(2,2);</span>
+Group([ (1,2), (3,4), (1,3)(2,4) ])
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RegularRootedTreeGroupDegree(G);</span>
+2
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RegularRootedTreeGroupDepth(G);</span>
+2
+</pre></div>
+
+<p><a id="X7EE8301C7EC8654B" name="X7EE8301C7EC8654B"></a></p>
+
+<h5>1.2-3 BelowAction</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; BelowAction</code>( <var class="Arg">k</var>, <var class="Arg">n</var>, <var class="Arg">aut</var>, <var class="Arg">i</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: the regular rooted tree group <span class="SimpleMath">\(\mathrm{Aut}(T_{k,n})\)</span> as a permutation group of the <span class="SimpleMath">\(k^{n}\)</span> leaves of <span class="SimpleMath">\(T_{k,n}\)</span>.</p>
+
+<p>The arguments of this method are a degree <var class="Arg">k</var> <span class="SimpleMath">\(\in\mathbb{N}_{\ge 2}\)</span> and a depth <var class="Arg">n</var> <span class="SimpleMath">\(\in\mathbb{N}\)</span>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=AutT(2,2);</span>
+Group([ (1,2), (3,4), (1,3)(2,4) ])
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">a:=Random(G);</span>
+(1,3,2,4)
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">BelowAction(2,2,a,1);</span>
+()
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">BelowAction(2,2,a,2);</span>
+(1,2)
+</pre></div>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap0_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap2_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_The_library">
+<Heading>The library</Heading>
+
+<Section Label="Chapter_The_library_Section_Methods">
+<Heading>Methods</Heading>
+
+<ManSection>
+  <Filt Arg="arg" Name="bar" Label="for IsObject"/>
+ <Returns><C>true</C> or <C>false</C>
+</Returns>
+ <Description>
+ foo
+<P/>
+ </Description>
+</ManSection>
+
+
+</Section>
+
+
+</Chapter>
+

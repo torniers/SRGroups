@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_Introduction">
+<Heading>Introduction</Heading>
+
+ SRGroups is a package which does some interesting and cool things. To be continued...
+
+<Section Label="Chapter_Introduction_Section_Methods">
+<Heading>Methods</Heading>
+
+ This section explains the methods of this package.
+<ManSection>
+  <Func Arg="k,n" Name="AutT" />
+ <Returns> the regular rooted tree group <Math>\mathrm{Aut}(T_{k,n})</Math> as a permutation group of the <Math>k^{n}</Math> leaves of <Math>T_{k,n}</Math>.
+ 
+</Returns>
+ <Description>
+ The arguments of this method are a degree <A>k</A> <Math>\in\mathbb{N}_{\ge 2}</Math> and a depth <A>n</A> <Math>\in\mathbb{N}</Math>.
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+gap> G:=AutT(2,2);
+Group([ (1,2), (3,4), (1,3)(2,4) ])
+gap> Size(G);
+8
+]]></Example>
+
+
+</Section>
+
+
+</Chapter>
+

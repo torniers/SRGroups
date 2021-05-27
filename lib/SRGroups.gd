@@ -1,4 +1,4 @@
-#! @Title SRGroups: Self-replicating groups of regular rooted trees.
+#! @Title SRGroups
 
 ##################################################################################################################
 #! @Abstract
@@ -18,42 +18,259 @@
 
 #! DE210100180, FL170100032.
 
-####################################################################################################################
-####################################################################################################################
-#! @Chapter Introduction
-####################################################################################################################
-####################################################################################################################
+##################################################################################################################
+##################################################################################################################
+#! @Chapter The package
+##################################################################################################################
+##################################################################################################################
 
-#! SRGroups is a package which does some interesting and cool things. To be continued...
+#! ??? is a package which does some interesting and cool things. To be continued...
 
-####################################################################################################################
-#! @Chapter Framework
-####################################################################################################################
+##################################################################################################################
+#! @Section Framework
+##################################################################################################################
 
-# a new "category" for the groups acting on regular rooted trees that we study, based on the category of permutation groups
+#! @Description
+#! Groups acting on regular rooted trees are stored together with their degree (<Ref Attr="RegularRootedTreeGroupDegree"/>), depth (<Ref Attr="RegularRootedTreeGroupDepth"/>) and other attributes in this category. See also <Ref Oper="RegularRootedTreeGroup"/>.
+#!
 DeclareCategory("IsRegularRootedTreeGroup", IsPermGroup);
+#! @BeginExampleSession
+#! gap> G:=SymmetricGroup(3);
+#! Sym( [ 1 .. 3 ] )
+#! gap> IsRegularRootedTreeGroup(G);
+#! false
+#! gap> H:=RegularRootedTreeGroup(3,1,SymmetricGroup(3));
+#! Sym( [ 1 .. 3 ] )
+#! gap> IsRegularRootedTreeGroup(H);
+#! true
+#! @EndExampleSession
 
-# a creator function asking for depth, degree, and the permutation group
+##################################################################################################################
+
+#! @Description
+#! The arguments of this method are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$, a depth <A>n</A> $\in\mathbb{N}$ and a subgroup <A>G</A> of $\mathrm{Aut}(T_{k,n})$.
+#!
+#! @Returns
+#! the regular rooted tree group $G$ as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>.
+#!
+#! @Arguments k,n,G
+#!
 DeclareOperation("RegularRootedTreeGroup", [IsInt, IsInt, IsPermGroup]);
+#! @BeginExampleSession
+#! to do
+#! @EndExampleSession
 
-# degree and depth are attributes of groups of this type
+##################################################################################################################
+
+#! @Description
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
+#!
+#! @Returns
+#! the degree <A>k</A> of the regular rooted tree that <A>G</A> is acting on.
+#!
+#! @Arguments G
+#!
 DeclareAttribute("RegularRootedTreeGroupDegree", IsRegularRootedTreeGroup);
+#!
+#! @BeginExampleSession
+#! to do
+#! @EndExampleSession
+
+##################################################################################################################
+
+#! @Description
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
+#!
+#! @Returns
+#! the depth <A>n</A> of the regular rooted tree that <A>G</A> is acting on.
+#!
+#! @Arguments G
+#!
 DeclareAttribute("RegularRootedTreeGroupDepth", IsRegularRootedTreeGroup);
+#!
+#! @BeginExampleSession
+#! to do
+#! @EndExampleSession
 
-# being self-replicating and having sufficient rigid automorphisms are properties (i.e. boolean attributes)
-DeclareProperty("IsSelfReplicating", IsRegularRootedTreeGroup);
-DeclareProperty("HasSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
+##################################################################################################################
 
-# parent group (projection), maximal extension and representative with sufficient rigid automorphisms also become attributes
+#! @Description
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
+#!
+#! @Returns
+#! the regular rooted tree group that arises from <A>G</A> by restricting to $T_{k,n-1}$.
+#!
+#! @Arguments G
+#!
 DeclareAttribute("ParentGroup", IsRegularRootedTreeGroup);
-DeclareAttribute("MaximalExtension", IsRegularRootedTreeGroup);
-DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
+#!
+#! @BeginExampleSession
+#! gap> G:=AutT(2,4);
+#! <permutation group of size 32768 with 15 generators>
+#! gap> ParentGroup(G)=AutT(2,3);
+#! true
+#! @EndExampleSession
 
-####################################################################################################################
-#! @Chapter Methods
-####################################################################################################################
+##################################################################################################################
+
+#! @Description
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
+#!
+#! @Returns
+#! <K>true</K>, if <A>G</A> is self-replicating, and <K>false</K> otherwise.
+#!
+#! @Arguments G
+#!
+DeclareProperty("IsSelfReplicating", IsRegularRootedTreeGroup);
+#!
+#! @BeginExampleSession
+#! gap> G:=AutT(2,2);
+#! Group([ (1,2), (3,4), (1,3)(2,4) ])
+#! gap> subgroups:=AllSubgroups(G);;
+#! gap> Apply(subgroups,H->RegularRootedTreeGroup(2,2,H));
+#! gap> for H in subgroups do Print(IsSelfReplicating(H),"\n"); od;
+#! false
+#! false
+#! false
+#! false
+#! false
+#! false
+#! false
+#! true
+#! true
+#! true
+#! @EndExampleSession
+
+##################################################################################################################
+
+#! @Description
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
+#!
+#! @Returns
+#! <K>true</K>, if <A>G</A> has sufficient rigid automorphisms, and <K>false</K> otherwise.
+#!
+#! @Arguments G
+#!
+DeclareProperty("HasSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
+#!
+#! @BeginExampleSession
+#! to do
+#! @EndExampleSession
+
+##################################################################################################################
+
+#! @Description
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Attr="IsSelfReplicating"/>).
+#!
+#! @Returns
+#! a regular rooted tree group which is conjugate to <A>G</A> in $\mathrm{Aut}(T_{k,n})$ and which has sufficient rigid automorphisms, i.e. it satisfies <Ref Prop="HasSufficientRigidAutomorphisms"/>. This returned group is <A>G</A> itself, if <A>G</A> already has sufficient rigid automorphisms. Furthermore, the returned group has the same parent group as <A>G</A> if the parent group of <A>G</A> has sufficient rigid automorphisms.
+#!
+#! @Arguments G
+#!
+DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
+#!
+#! @BeginExampleSession
+#! to do
+#! @EndExampleSession
+
+##################################################################################################################
+
+#! @Description
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Attr="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Attr="HasSufficientRigidAutomorphisms"/>).
+#!
+#! @Returns
+#! the regular rooted tree group $M($<A>G</A>$)\le\mathrm{Aut}(T_{k,n})$ which is the unique maximal self-replicating extension of <A>G</A> to $T_{k,n+1}$.
+#!
+#! @Arguments G
+#!
+DeclareAttribute("MaximalExtension", IsRegularRootedTreeGroup);
+#!
+#! @BeginExampleSession
+#! to do
+#! @EndExampleSession
+
+##################################################################################################################
+
+#! @Description
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Attr="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Attr="HasSufficientRigidAutomorphisms"/>).
+#!
+#! @Returns
+#! a list $\mathrm{Aut}(T_{k,n+1}$-conjugacy class representatives of regular rooted tree groups which are self-replicating, have sufficient rigid automorphisms and whose parent group is <A>G</A>.
+#!
+#! @Arguments G
+#!
+DeclareAttribute("ConjugacyClassRepsSelfReplicatingGroupsWithProjection", IsRegularRootedTreeGroup);
+#!
+#! @BeginExampleSession
+#! to do
+#! @EndExampleSession
+
+##################################################################################################################
+
+#! @Description
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Attr="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Attr="HasSufficientRigidAutomorphisms"/>).
+#!
+#! @Returns
+#! a list $\mathrm{Aut}(T_{k,n+1}$-conjugacy class representatives of regular rooted tree groups which are self-replicating, have sufficient rigid automorphisms and whose parent group is conjugate to <A>G</A>.
+#!
+#! @Arguments G
+#!
+DeclareAttribute("ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection", IsRegularRootedTreeGroup);
+#!
+#! @BeginExampleSession
+#! to do
+#! @EndExampleSession
+
+##################################################################################################################
+#! @Section Auxiliary methods
+##################################################################################################################
 
 #! This section explains the methods of this package.
+
+##################################################################################################################
+
+#! @Description
+#! The arguments of this method are a group <A>G</A> and a mutable list <A>subgroups</A> of subgroups of $G$.
+#!
+#! @Returns
+#! n/a. This method removes <A>G</A>-conjugates from the mutable list <A>subgroups</A>.
+#!
+#! @Arguments G,subgroups
+#!
+DeclareGlobalFunction( "RemoveConjugates" );
+#!
+#! @BeginExampleSession
+#! gap> G:=SymmetricGroup(3);
+#! Sym( [ 1 .. 3 ] )
+#! gap> subgroups:=[Group((1,2)),Group((2,3))];
+#! [ Group([ (1,2) ]), Group([ (2,3) ]) ]
+#! gap> RemoveConjugates(G,subgroups);
+#! gap> subgroups;
+#! [ Group([ (1,2) ]) ]
+#! @EndExampleSession
+
+##################################################################################################################
+
+#! @Description
+#! The arguments of this method are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
+#!
+#! @Returns
+#! the regular rooted tree group $\mathrm{Aut}(T_{k,n})$ (<Ref Filt="IsRegularRootedTreeGroup"/>) as a permutation group of the $k^{n}$ leaves of $T_{k,n}$.
+#!
+#! @Arguments k,n
+#!
+DeclareGlobalFunction( "AutT" );
+#!
+#! @BeginExampleSession
+#! gap> G:=AutT(2,2);
+#! Group([ (1,2), (3,4), (1,3)(2,4) ])
+#! gap> RegularRootedTreeGroupDegree(G);
+#! 2
+#! gap> RegularRootedTreeGroupDepth(G);
+#! 2
+#! @EndExampleSession
+
+##################################################################################################################
 
 #! @Description
 #! The arguments of this method are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
@@ -61,24 +278,20 @@ DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRoot
 #! @Returns
 #! the regular rooted tree group $\mathrm{Aut}(T_{k,n})$ as a permutation group of the $k^{n}$ leaves of $T_{k,n}$.
 #!
-#! @Arguments k,n
-DeclareGlobalFunction( "AutT" );
+#! @Arguments k,n,aut,i
 #!
+DeclareGlobalFunction( "BelowAction" );
 #! @BeginExampleSession
 #! gap> G:=AutT(2,2);
 #! Group([ (1,2), (3,4), (1,3)(2,4) ])
-#! gap> Size(G);
-#! 8
+#! gap> a:=Random(G);
+#! (1,3,2,4)
+#! gap> BelowAction(2,2,a,1);
+#! ()
+#! gap> BelowAction(2,2,a,2);
+#! (1,2)
 #! @EndExampleSession
 
-# DeclareGlobalFunction( "IsSelfReplicating" );
+##################################################################################################################
 
-DeclareGlobalFunction( "BelowAction" );
-
-# DeclareGlobalFunction( "MaximalExtension" );
-# DeclareGlobalFunction( "HasSufficientRigidAutomorphisms" );
-# DeclareGlobalFunction( "RepresentativeWithSufficientRigidAutomorphisms" );
-
-DeclareGlobalFunction( "RemoveConjugates" );
-DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingGroupsWithProjection" );
-DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingGoupsWithConjugateProjection" );
+#! @Chapter The library

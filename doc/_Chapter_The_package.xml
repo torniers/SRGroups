@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_The_package">
+<Heading>The package</Heading>
+
+ ??? is a package which does some interesting and cool things. To be continued...
+<Section Label="Chapter_The_package_Section_Framework">
+<Heading>Framework</Heading>
+
+<ManSection>
+  <Filt Arg="arg" Name="IsRegularRootedTreeGroup" Label="for IsPermGroup"/>
+ <Returns><C>true</C> or <C>false</C>
+</Returns>
+ <Description>
+ Groups acting on regular rooted trees are stored together with their degree (<Ref Attr="RegularRootedTreeGroupDegree"/>), depth (<Ref Attr="RegularRootedTreeGroupDepth"/>) and other attributes in this category. See also <Ref Oper="RegularRootedTreeGroup"/>. See also <Ref Func="AutT"/>.
+<P/>
+ </Description>
+</ManSection>
+
+
+<Example><![CDATA[
+gap> G:=SymmetricGroup(3);
+Sym( [ 1 .. 3 ] )
+gap> IsRegularRootedTreeGroup(G);
+false
+gap> H:=RegularRootedTreeGroup(3,1,SymmetricGroup(3));
+Sym( [ 1 .. 3 ] )
+gap> IsRegularRootedTreeGroup(H);
+true
+]]></Example>
+
+
+<ManSection>
+  <Oper Arg="k,n,G" Name="RegularRootedTreeGroup" Label="for IsInt, IsInt, IsPermGroup"/>
+ <Returns> the regular rooted tree group <Math>G</Math> as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>.
+ 
+ 
+</Returns>
+ <Description>
+ The arguments of this method are a degree <A>k</A> <Math>\in\mathbb{N}_{\ge 2}</Math>, a depth <A>n</A> <Math>\in\mathbb{N}</Math> and a subgroup <A>G</A> of <Math>\mathrm{Aut}(T_{k,n})</Math>.
+<P/>
+ </Description>
+</ManSection>
+
+
+<Example><![CDATA[
+to do
+]]></Example>
+
+
+<ManSection>
+  <Attr Arg="G" Name="RegularRootedTreeGroupDegree" Label="for IsRegularRootedTreeGroup"/>
+ <Returns> the degree <A>k</A> of the regular rooted tree that <A>G</A> is acting on.
+ 
+ 
+</Returns>
+ <Description>
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+to do
+]]></Example>
+
+
+<ManSection>
+  <Attr Arg="G" Name="RegularRootedTreeGroupDepth" Label="for IsRegularRootedTreeGroup"/>
+ <Returns> the depth <A>n</A> of the regular rooted tree that <A>G</A> is acting on.
+ 
+ 
+</Returns>
+ <Description>
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+to do
+]]></Example>
+
+
+<ManSection>
+  <Attr Arg="G" Name="ParentGroup" Label="for IsRegularRootedTreeGroup"/>
+ <Returns> the regular rooted tree group that arises from <A>G</A> by restricting to <Math>T_{k,n-1}</Math>.
+ 
+ 
+</Returns>
+ <Description>
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+gap> G:=AutT(2,4);
+<permutation group of size 32768 with 15 generators>
+gap> ParentGroup(G)=AutT(2,3);
+true
+]]></Example>
+
+
+<ManSection>
+  <Prop Arg="G" Name="IsSelfReplicating" Label="for IsRegularRootedTreeGroup"/>
+ <Returns> <K>true</K>, if <A>G</A> is self-replicating, and <K>false</K> otherwise.
+ 
+ 
+</Returns>
+ <Description>
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+gap> G:=AutT(2,2);
+Group([ (1,2), (3,4), (1,3)(2,4) ])
+gap> subgroups:=AllSubgroups(G);;
+gap> Apply(subgroups,H->RegularRootedTreeGroup(2,2,H));
+gap> for H in subgroups do Print(IsSelfReplicating(H),"\n"); od;
+false
+false
+false
+false
+false
+false
+false
+true
+true
+true
+]]></Example>
+
+
+<ManSection>
+  <Prop Arg="G" Name="HasSufficientRigidAutomorphisms" Label="for IsRegularRootedTreeGroup"/>
+ <Returns> <K>true</K>, if <A>G</A> has sufficient rigid automorphisms, and <K>false</K> otherwise.
+ 
+ 
+</Returns>
+ <Description>
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+to do
+]]></Example>
+
+
+<ManSection>
+  <Attr Arg="G" Name="RepresentativeWithSufficientRigidAutomorphisms" Label="for IsRegularRootedTreeGroup"/>
+ <Returns> a regular rooted tree group which is conjugate to <A>G</A> in <Math>\mathrm{Aut}(T_{k,n})</Math> and which has sufficient rigid automorphisms, i.e. it satisfies <Ref Prop="HasSufficientRigidAutomorphisms"/>. This returned group is <A>G</A> itself, if <A>G</A> already has sufficient rigid automorphisms. Furthermore, the returned group has the same parent group as <A>G</A> if the parent group of <A>G</A> has sufficient rigid automorphisms.
+ 
+ 
+</Returns>
+ <Description>
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Attr="IsSelfReplicating"/>).
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+to do
+]]></Example>
+
+
+<ManSection>
+  <Attr Arg="G" Name="MaximalExtension" Label="for IsRegularRootedTreeGroup"/>
+ <Returns> the regular rooted tree group <Math>M(</Math><A>G</A><Math>)\le\mathrm{Aut}(T_{k,n})</Math> which is the unique maximal self-replicating extension of <A>G</A> to <Math>T_{k,n+1}</Math>.
+ 
+ 
+</Returns>
+ <Description>
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Attr="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Attr="HasSufficientRigidAutomorphisms"/>).
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+to do
+]]></Example>
+
+
+<ManSection>
+  <Attr Arg="G" Name="ConjugacyClassRepsSelfReplicatingGroupsWithProjection" Label="for IsRegularRootedTreeGroup"/>
+ <Returns> a list <Math>\mathrm{Aut}(T_{k,n+1}</Math>-conjugacy class representatives of regular rooted tree groups which are self-replicating, have sufficient rigid automorphisms and whose parent group is <A>G</A>.
+ 
+ 
+</Returns>
+ <Description>
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Attr="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Attr="HasSufficientRigidAutomorphisms"/>).
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+to do
+]]></Example>
+
+
+<ManSection>
+  <Attr Arg="G" Name="ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection" Label="for IsRegularRootedTreeGroup"/>
+ <Returns> a list <Math>\mathrm{Aut}(T_{k,n+1}</Math>-conjugacy class representatives of regular rooted tree groups which are self-replicating, have sufficient rigid automorphisms and whose parent group is conjugate to <A>G</A>.
+ 
+ 
+</Returns>
+ <Description>
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>), which is self-replicating (<Ref Attr="IsSelfReplicating"/>) and has sufficient rigid automorphisms (<Ref Attr="HasSufficientRigidAutomorphisms"/>).
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+to do
+]]></Example>
+
+
+</Section>
+
+
+<Section Label="Chapter_The_package_Section_Auxiliary_methods">
+<Heading>Auxiliary methods</Heading>
+
+ This section explains the methods of this package.
+<ManSection>
+  <Func Arg="G,subgroups" Name="RemoveConjugates" />
+ <Returns> n/a. This method removes <A>G</A>-conjugates from the mutable list <A>subgroups</A>.
+ 
+ 
+</Returns>
+ <Description>
+ The arguments of this method are a group <A>G</A> and a mutable list <A>subgroups</A> of subgroups of <Math>G</Math>.
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+gap> G:=SymmetricGroup(3);
+Sym( [ 1 .. 3 ] )
+gap> subgroups:=[Group((1,2)),Group((2,3))];
+[ Group([ (1,2) ]), Group([ (2,3) ]) ]
+gap> RemoveConjugates(G,subgroups);
+gap> subgroups;
+[ Group([ (1,2) ]) ]
+]]></Example>
+
+
+<ManSection>
+  <Func Arg="k,n" Name="AutT" />
+ <Returns> the regular rooted tree group <Math>\mathrm{Aut}(T_{k,n})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>) as a permutation group of the <Math>k^{n}</Math> leaves of <Math>T_{k,n}</Math>.
+ 
+ 
+</Returns>
+ <Description>
+ The arguments of this method are a degree <A>k</A> <Math>\in\mathbb{N}_{\ge 2}</Math> and a depth <A>n</A> <Math>\in\mathbb{N}</Math>.
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+gap> G:=AutT(2,2);
+Group([ (1,2), (3,4), (1,3)(2,4) ])
+gap> RegularRootedTreeGroupDegree(G);
+2
+gap> RegularRootedTreeGroupDepth(G);
+2
+]]></Example>
+
+
+<ManSection>
+  <Func Arg="k,n,aut,i" Name="BelowAction" />
+ <Returns> the regular rooted tree group <Math>\mathrm{Aut}(T_{k,n})</Math> as a permutation group of the <Math>k^{n}</Math> leaves of <Math>T_{k,n}</Math>.
+ 
+ 
+</Returns>
+ <Description>
+ The arguments of this method are a degree <A>k</A> <Math>\in\mathbb{N}_{\ge 2}</Math> and a depth <A>n</A> <Math>\in\mathbb{N}</Math>.
+<P/>
+ </Description>
+</ManSection>
+
+
+<Example><![CDATA[
+gap> G:=AutT(2,2);
+Group([ (1,2), (3,4), (1,3)(2,4) ])
+gap> a:=Random(G);
+(1,3,2,4)
+gap> BelowAction(2,2,a,1);
+()
+gap> BelowAction(2,2,a,2);
+(1,2)
+]]></Example>
+
+
+</Section>
+
+
+</Chapter>
+
