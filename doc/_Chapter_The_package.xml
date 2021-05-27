@@ -13,7 +13,7 @@
  <Returns><C>true</C> or <C>false</C>
 </Returns>
  <Description>
- Groups acting on regular rooted trees are stored together with their degree (<Ref Attr="RegularRootedTreeGroupDegree"/>), depth (<Ref Attr="RegularRootedTreeGroupDepth"/>) and other attributes in this category. See also <Ref Oper="RegularRootedTreeGroup"/>. See also <Ref Func="AutT"/>.
+ Groups acting on regular rooted trees are stored together with their degree (<Ref Attr="RegularRootedTreeGroupDegree"/>), depth (<Ref Attr="RegularRootedTreeGroupDepth"/>) and other attributes in this category. See also <Ref Oper="RegularRootedTreeGroup"/>.
 <P/>
  </Description>
 </ManSection>
@@ -33,7 +33,25 @@ true
 
 <ManSection>
   <Oper Arg="k,n,G" Name="RegularRootedTreeGroup" Label="for IsInt, IsInt, IsPermGroup"/>
- <Returns> the regular rooted tree group <Math>G</Math> as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>.
+ <Returns> the regular rooted tree group <Math>G</Math> as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>, after checking that <A>G</A> is indeed a subgroup of <Math>\mathrm{Aut}(T_{k,n})</Math>.
+ 
+ 
+</Returns>
+ <Description>
+ The arguments of this method are a degree <A>k</A> <Math>\in\mathbb{N}_{\ge 2}</Math>, a depth <A>n</A> <Math>\in\mathbb{N}</Math> and a subgroup <A>G</A> of <Math>\mathrm{Aut}(T_{k,n})</Math>.
+<P/>
+ </Description>
+</ManSection>
+
+
+<Example><![CDATA[
+to do
+]]></Example>
+
+
+<ManSection>
+  <Oper Arg="k,n,G" Name="RegularRootedTreeGroupNC" Label="for IsInt, IsInt, IsPermGroup"/>
+ <Returns> the regular rooted tree group <Math>G</Math> as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>, without checking that <A>G</A> is indeed a subgroup of <Math>\mathrm{Aut}(T_{k,n})</Math>.
  
  
 </Returns>
@@ -116,7 +134,7 @@ true
  
 </Returns>
  <Description>
- The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
+ The argument of this property is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
 <P/>
  </Description>
 </ManSection>
@@ -149,7 +167,7 @@ true
  
 </Returns>
  <Description>
- The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
+ The argument of this property is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,k})</Math> (<Ref Filt="IsRegularRootedTreeGroup"/>).
 <P/>
  </Description>
 </ManSection>
@@ -251,7 +269,7 @@ to do
  
 </Returns>
  <Description>
- The arguments of this method are a group <A>G</A> and a mutable list <A>subgroups</A> of subgroups of <Math>G</Math>.
+ The arguments of this method are a group <A>G</A> and a mutable list <A>subgroups</A> of subgroups of <A>G</A>.
 <P/>
  </Description>
 </ManSection>
@@ -295,12 +313,12 @@ gap> RegularRootedTreeGroupDepth(G);
 
 <ManSection>
   <Func Arg="k,n,aut,i" Name="BelowAction" />
- <Returns> the regular rooted tree group <Math>\mathrm{Aut}(T_{k,n})</Math> as a permutation group of the <Math>k^{n}</Math> leaves of <Math>T_{k,n}</Math>.
+ <Returns> the automorphism of <Math>\mathrm{Aut}(T_{k,n})</Math> that arises from <A>aut</A> by restricting to the subtree below the <A>i</A>-th vertex at depth <Math>1</Math>.
  
  
 </Returns>
  <Description>
- The arguments of this method are a degree <A>k</A> <Math>\in\mathbb{N}_{\ge 2}</Math> and a depth <A>n</A> <Math>\in\mathbb{N}</Math>.
+ The arguments of this method are a degree <A>k</A> <Math>\in\mathbb{N}_{\ge 2}</Math>, a depth <A>n</A> <Math>\in\mathbb{N_{ge 2}}</Math>, an automorphism <A>aut</A> <Math>\in\mathrm{Aut}(T_{k,n})</Math> and an index <A>i</A> <Math>\in</Math><C>[1..k]</C>.
 <P/>
  </Description>
 </ManSection>

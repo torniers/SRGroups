@@ -173,7 +173,7 @@ continued...
 
 
 
- Groups acting on regular rooted trees are stored together with their degree (\texttt{RegularRootedTreeGroupDegree} (\ref{RegularRootedTreeGroupDegree})), depth (\texttt{RegularRootedTreeGroupDepth} (\ref{RegularRootedTreeGroupDepth})) and other attributes in this category. See also \texttt{RegularRootedTreeGroup} (\ref{RegularRootedTreeGroup}). See also \texttt{AutT} (\ref{AutT}). 
+ Groups acting on regular rooted trees are stored together with their degree (\texttt{RegularRootedTreeGroupDegree} (\ref{RegularRootedTreeGroupDegree})), depth (\texttt{RegularRootedTreeGroupDepth} (\ref{RegularRootedTreeGroupDepth})) and other attributes in this category. See also \texttt{RegularRootedTreeGroup} (\ref{RegularRootedTreeGroup}). 
 
  }
 
@@ -197,7 +197,28 @@ continued...
 \label{RegularRootedTreeGroup:for IsInt, IsInt, IsPermGroup}
 }\hfill{\scriptsize (operation)}}\\
 \textbf{\indent Returns:\ }
- the regular rooted tree group $G$ as an object of the category \texttt{IsRegularRootedTreeGroup} (\ref{IsRegularRootedTreeGroup}). 
+ the regular rooted tree group $G$ as an object of the category \texttt{IsRegularRootedTreeGroup} (\ref{IsRegularRootedTreeGroup}), after checking that \mbox{\texttt{\mdseries\slshape G}} is indeed a subgroup of $\mathrm{Aut}(T_{k,n})$. 
+
+
+
+ The arguments of this method are a degree \mbox{\texttt{\mdseries\slshape k}} $\in\mathbb{N}_{\ge 2}$, a depth \mbox{\texttt{\mdseries\slshape n}} $\in\mathbb{N}$ and a subgroup \mbox{\texttt{\mdseries\slshape G}} of $\mathrm{Aut}(T_{k,n})$. 
+
+ }
+
+ 
+\begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
+  to do
+\end{Verbatim}
+ 
+
+\subsection{\textcolor{Chapter }{RegularRootedTreeGroupNC (for IsInt, IsInt, IsPermGroup)}}
+\logpage{[ 1, 1, 3 ]}\nobreak
+\hyperdef{L}{X8457DF5682E1E5E5}{}
+{\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{RegularRootedTreeGroupNC({\mdseries\slshape k, n, G})\index{RegularRootedTreeGroupNC@\texttt{RegularRootedTreeGroupNC}!for IsInt, IsInt, IsPermGroup}
+\label{RegularRootedTreeGroupNC:for IsInt, IsInt, IsPermGroup}
+}\hfill{\scriptsize (operation)}}\\
+\textbf{\indent Returns:\ }
+ the regular rooted tree group $G$ as an object of the category \texttt{IsRegularRootedTreeGroup} (\ref{IsRegularRootedTreeGroup}), without checking that \mbox{\texttt{\mdseries\slshape G}} is indeed a subgroup of $\mathrm{Aut}(T_{k,n})$. 
 
 
 
@@ -212,7 +233,7 @@ continued...
  
 
 \subsection{\textcolor{Chapter }{RegularRootedTreeGroupDegree (for IsRegularRootedTreeGroup)}}
-\logpage{[ 1, 1, 3 ]}\nobreak
+\logpage{[ 1, 1, 4 ]}\nobreak
 \hyperdef{L}{X81620BBB8303B641}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{RegularRootedTreeGroupDegree({\mdseries\slshape G})\index{RegularRootedTreeGroupDegree@\texttt{RegularRootedTreeGroupDegree}!for IsRegularRootedTreeGroup}
 \label{RegularRootedTreeGroupDegree:for IsRegularRootedTreeGroup}
@@ -235,7 +256,7 @@ continued...
  
 
 \subsection{\textcolor{Chapter }{RegularRootedTreeGroupDepth (for IsRegularRootedTreeGroup)}}
-\logpage{[ 1, 1, 4 ]}\nobreak
+\logpage{[ 1, 1, 5 ]}\nobreak
 \hyperdef{L}{X7DA9D61678810B77}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{RegularRootedTreeGroupDepth({\mdseries\slshape G})\index{RegularRootedTreeGroupDepth@\texttt{RegularRootedTreeGroupDepth}!for IsRegularRootedTreeGroup}
 \label{RegularRootedTreeGroupDepth:for IsRegularRootedTreeGroup}
@@ -258,7 +279,7 @@ continued...
  
 
 \subsection{\textcolor{Chapter }{ParentGroup (for IsRegularRootedTreeGroup)}}
-\logpage{[ 1, 1, 5 ]}\nobreak
+\logpage{[ 1, 1, 6 ]}\nobreak
 \hyperdef{L}{X7943CE9B7AB931AC}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{ParentGroup({\mdseries\slshape G})\index{ParentGroup@\texttt{ParentGroup}!for IsRegularRootedTreeGroup}
 \label{ParentGroup:for IsRegularRootedTreeGroup}
@@ -284,7 +305,7 @@ continued...
  
 
 \subsection{\textcolor{Chapter }{IsSelfReplicating (for IsRegularRootedTreeGroup)}}
-\logpage{[ 1, 1, 6 ]}\nobreak
+\logpage{[ 1, 1, 7 ]}\nobreak
 \hyperdef{L}{X854CB0D683905369}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{IsSelfReplicating({\mdseries\slshape G})\index{IsSelfReplicating@\texttt{IsSelfReplicating}!for IsRegularRootedTreeGroup}
 \label{IsSelfReplicating:for IsRegularRootedTreeGroup}
@@ -294,7 +315,7 @@ continued...
 
 
 
- The argument of this attribute is a regular rooted tree group \mbox{\texttt{\mdseries\slshape G}} $\le\mathrm{Aut}(T_{k,k})$ (\texttt{IsRegularRootedTreeGroup} (\ref{IsRegularRootedTreeGroup})). 
+ The argument of this property is a regular rooted tree group \mbox{\texttt{\mdseries\slshape G}} $\le\mathrm{Aut}(T_{k,k})$ (\texttt{IsRegularRootedTreeGroup} (\ref{IsRegularRootedTreeGroup})). 
 
  }
 
@@ -321,7 +342,7 @@ continued...
  
 
 \subsection{\textcolor{Chapter }{HasSufficientRigidAutomorphisms (for IsRegularRootedTreeGroup)}}
-\logpage{[ 1, 1, 7 ]}\nobreak
+\logpage{[ 1, 1, 8 ]}\nobreak
 \hyperdef{L}{X84DDFFAE8701C3F8}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{HasSufficientRigidAutomorphisms({\mdseries\slshape G})\index{HasSufficientRigidAutomorphisms@\texttt{HasSufficientRigidAutomorphisms}!for IsRegularRootedTreeGroup}
 \label{HasSufficientRigidAutomorphisms:for IsRegularRootedTreeGroup}
@@ -331,7 +352,7 @@ continued...
 
 
 
- The argument of this attribute is a regular rooted tree group \mbox{\texttt{\mdseries\slshape G}} $\le\mathrm{Aut}(T_{k,k})$ (\texttt{IsRegularRootedTreeGroup} (\ref{IsRegularRootedTreeGroup})). 
+ The argument of this property is a regular rooted tree group \mbox{\texttt{\mdseries\slshape G}} $\le\mathrm{Aut}(T_{k,k})$ (\texttt{IsRegularRootedTreeGroup} (\ref{IsRegularRootedTreeGroup})). 
 
  }
 
@@ -344,7 +365,7 @@ continued...
  
 
 \subsection{\textcolor{Chapter }{RepresentativeWithSufficientRigidAutomorphisms (for IsRegularRootedTreeGroup)}}
-\logpage{[ 1, 1, 8 ]}\nobreak
+\logpage{[ 1, 1, 9 ]}\nobreak
 \hyperdef{L}{X7D06D7AF7B938F4A}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{RepresentativeWithSufficientRigidAutomorphisms({\mdseries\slshape G})\index{RepresentativeWithSufficientRigidAutomorphisms@\texttt{Representative}\-\texttt{With}\-\texttt{Sufficient}\-\texttt{Rigid}\-\texttt{Automorphisms}!for IsRegularRootedTreeGroup}
 \label{RepresentativeWithSufficientRigidAutomorphisms:for IsRegularRootedTreeGroup}
@@ -368,7 +389,7 @@ has the same parent group as \mbox{\texttt{\mdseries\slshape G}} if the parent g
  
 
 \subsection{\textcolor{Chapter }{MaximalExtension (for IsRegularRootedTreeGroup)}}
-\logpage{[ 1, 1, 9 ]}\nobreak
+\logpage{[ 1, 1, 10 ]}\nobreak
 \hyperdef{L}{X7D9FB6D5854A17BE}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{MaximalExtension({\mdseries\slshape G})\index{MaximalExtension@\texttt{MaximalExtension}!for IsRegularRootedTreeGroup}
 \label{MaximalExtension:for IsRegularRootedTreeGroup}
@@ -391,7 +412,7 @@ has the same parent group as \mbox{\texttt{\mdseries\slshape G}} if the parent g
  
 
 \subsection{\textcolor{Chapter }{ConjugacyClassRepsSelfReplicatingGroupsWithProjection (for IsRegularRootedTreeGroup)}}
-\logpage{[ 1, 1, 10 ]}\nobreak
+\logpage{[ 1, 1, 11 ]}\nobreak
 \hyperdef{L}{X876FC3387B6E7183}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{ConjugacyClassRepsSelfReplicatingGroupsWithProjection({\mdseries\slshape G})\index{ConjugacyClassRepsSelfReplicatingGroupsWithProjection@\texttt{Conjugacy}\-\texttt{Class}\-\texttt{Reps}\-\texttt{Self}\-\texttt{Replicating}\-\texttt{Groups}\-\texttt{With}\-\texttt{Projection}!for IsRegularRootedTreeGroup}
 \label{ConjugacyClassRepsSelfReplicatingGroupsWithProjection:for IsRegularRootedTreeGroup}
@@ -416,7 +437,7 @@ is \mbox{\texttt{\mdseries\slshape G}}.
  
 
 \subsection{\textcolor{Chapter }{ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection (for IsRegularRootedTreeGroup)}}
-\logpage{[ 1, 1, 11 ]}\nobreak
+\logpage{[ 1, 1, 12 ]}\nobreak
 \hyperdef{L}{X7D7A396F7F9DF4D8}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection({\mdseries\slshape G})\index{ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection@\texttt{Conjugacy}\-\texttt{Class}\-\texttt{Reps}\-\texttt{Self}\-\texttt{Replicating}\-\texttt{Groups}\-\texttt{With}\-\texttt{Conjugate}\-\texttt{Projection}!for IsRegularRootedTreeGroup}
 \label{ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection:for IsRegularRootedTreeGroup}
@@ -458,7 +479,7 @@ is conjugate to \mbox{\texttt{\mdseries\slshape G}}.
 
 
 
- The arguments of this method are a group \mbox{\texttt{\mdseries\slshape G}} and a mutable list \mbox{\texttt{\mdseries\slshape subgroups}} of subgroups of $G$. 
+ The arguments of this method are a group \mbox{\texttt{\mdseries\slshape G}} and a mutable list \mbox{\texttt{\mdseries\slshape subgroups}} of subgroups of \mbox{\texttt{\mdseries\slshape G}}. 
 
  }
 
@@ -511,11 +532,11 @@ is conjugate to \mbox{\texttt{\mdseries\slshape G}}.
 \label{BelowAction}
 }\hfill{\scriptsize (function)}}\\
 \textbf{\indent Returns:\ }
- the regular rooted tree group $\mathrm{Aut}(T_{k,n})$ as a permutation group of the $k^{n}$ leaves of $T_{k,n}$. 
+ the automorphism of $\mathrm{Aut}(T_{k,n})$ that arises from \mbox{\texttt{\mdseries\slshape aut}} by restricting to the subtree below the \mbox{\texttt{\mdseries\slshape i}}-th vertex at depth $1$. 
 
 
 
- The arguments of this method are a degree \mbox{\texttt{\mdseries\slshape k}} $\in\mathbb{N}_{\ge 2}$ and a depth \mbox{\texttt{\mdseries\slshape n}} $\in\mathbb{N}$. 
+ The arguments of this method are a degree \mbox{\texttt{\mdseries\slshape k}} $\in\mathbb{N}_{\ge 2}$, a depth \mbox{\texttt{\mdseries\slshape n}} $\in\mathbb{N_{ge 2}}$, an automorphism \mbox{\texttt{\mdseries\slshape aut}} $\in\mathrm{Aut}(T_{k,n})$ and an index \mbox{\texttt{\mdseries\slshape i}} $\in$\texttt{[1..k]}. 
 
  }
 
@@ -576,6 +597,9 @@ is conjugate to \mbox{\texttt{\mdseries\slshape G}}.
 
 \printindex
 
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}

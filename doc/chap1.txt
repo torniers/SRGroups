@@ -16,7 +16,7 @@
   ([2XRegularRootedTreeGroupDegree[102X  ([14X???RegularRootedTreeGroupDegree???[114X)),  depth
   ([2XRegularRootedTreeGroupDepth[102X  ([14X???RegularRootedTreeGroupDepth???[114X)) and other
   attributes    in    this    category.    See   also   [2XRegularRootedTreeGroup[102X
-  ([14X???RegularRootedTreeGroup???[114X). See also [2XAutT[102X ([14X1.2-2[114X).[133X
+  ([14X???RegularRootedTreeGroup???[114X).[133X
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27XG:=SymmetricGroup(3);[127X[104X
@@ -33,7 +33,8 @@
   
   [33X[1;0Y[29X[2XRegularRootedTreeGroup[102X( [3Xk[103X, [3Xn[103X, [3XG[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Ythe  regular  rooted  tree  group  [23XG[123X  as an object of the category
-            [2XIsRegularRootedTreeGroup[102X ([14X???IsRegularRootedTreeGroup???[114X).[133X
+            [2XIsRegularRootedTreeGroup[102X  ([14X???IsRegularRootedTreeGroup???[114X),  after
+            checking that [3XG[103X is indeed a subgroup of [23X\mathrm{Aut}(T_{k,n})[123X.[133X
   
   [33X[0;0YThe arguments of this method are a degree [3Xk[103X [23X\in\mathbb{N}_{\ge 2}[123X, a depth [3Xn[103X
   [23X\in\mathbb{N}[123X and a subgroup [3XG[103X of [23X\mathrm{Aut}(T_{k,n})[123X.[133X
@@ -42,7 +43,21 @@
     [4X[28Xto do[128X[104X
   [4X[32X[104X
   
-  [1X1.1-3 RegularRootedTreeGroupDegree[101X
+  [1X1.1-3 RegularRootedTreeGroupNC[101X
+  
+  [33X[1;0Y[29X[2XRegularRootedTreeGroupNC[102X( [3Xk[103X, [3Xn[103X, [3XG[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ythe  regular  rooted  tree  group  [23XG[123X  as an object of the category
+            [2XIsRegularRootedTreeGroup[102X ([14X???IsRegularRootedTreeGroup???[114X), without
+            checking that [3XG[103X is indeed a subgroup of [23X\mathrm{Aut}(T_{k,n})[123X.[133X
+  
+  [33X[0;0YThe arguments of this method are a degree [3Xk[103X [23X\in\mathbb{N}_{\ge 2}[123X, a depth [3Xn[103X
+  [23X\in\mathbb{N}[123X and a subgroup [3XG[103X of [23X\mathrm{Aut}(T_{k,n})[123X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28Xto do[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-4 RegularRootedTreeGroupDegree[101X
   
   [33X[1;0Y[29X[2XRegularRootedTreeGroupDegree[102X( [3XG[103X ) [32X attribute[133X
   [6XReturns:[106X  [33X[0;10Ythe degree [3Xk[103X of the regular rooted tree that [3XG[103X is acting on.[133X
@@ -55,7 +70,7 @@
     [4X[28Xto do[128X[104X
   [4X[32X[104X
   
-  [1X1.1-4 RegularRootedTreeGroupDepth[101X
+  [1X1.1-5 RegularRootedTreeGroupDepth[101X
   
   [33X[1;0Y[29X[2XRegularRootedTreeGroupDepth[102X( [3XG[103X ) [32X attribute[133X
   [6XReturns:[106X  [33X[0;10Ythe depth [3Xn[103X of the regular rooted tree that [3XG[103X is acting on.[133X
@@ -68,7 +83,7 @@
     [4X[28Xto do[128X[104X
   [4X[32X[104X
   
-  [1X1.1-5 ParentGroup[101X
+  [1X1.1-6 ParentGroup[101X
   
   [33X[1;0Y[29X[2XParentGroup[102X( [3XG[103X ) [32X attribute[133X
   [6XReturns:[106X  [33X[0;10Ythe regular rooted tree group that arises from [3XG[103X by restricting to
@@ -85,12 +100,12 @@
     [4X[28Xtrue[128X[104X
   [4X[32X[104X
   
-  [1X1.1-6 IsSelfReplicating[101X
+  [1X1.1-7 IsSelfReplicating[101X
   
   [33X[1;0Y[29X[2XIsSelfReplicating[102X( [3XG[103X ) [32X property[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X, if [3XG[103X is self-replicating, and [9Xfalse[109X otherwise.[133X
   
-  [33X[0;0YThe   argument   of  this  attribute  is  a  regular  rooted  tree  group  [3XG[103X
+  [33X[0;0YThe   argument   of   this  property  is  a  regular  rooted  tree  group  [3XG[103X
   [23X\le\mathrm{Aut}(T_{k,k})[123X                           ([2XIsRegularRootedTreeGroup[102X
   ([14X???IsRegularRootedTreeGroup???[114X)).[133X
   
@@ -112,13 +127,13 @@
     [4X[28Xtrue[128X[104X
   [4X[32X[104X
   
-  [1X1.1-7 HasSufficientRigidAutomorphisms[101X
+  [1X1.1-8 HasSufficientRigidAutomorphisms[101X
   
   [33X[1;0Y[29X[2XHasSufficientRigidAutomorphisms[102X( [3XG[103X ) [32X property[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X,   if   [3XG[103X  has  sufficient  rigid  automorphisms,  and  [9Xfalse[109X
             otherwise.[133X
   
-  [33X[0;0YThe   argument   of  this  attribute  is  a  regular  rooted  tree  group  [3XG[103X
+  [33X[0;0YThe   argument   of   this  property  is  a  regular  rooted  tree  group  [3XG[103X
   [23X\le\mathrm{Aut}(T_{k,k})[123X                           ([2XIsRegularRootedTreeGroup[102X
   ([14X???IsRegularRootedTreeGroup???[114X)).[133X
   
@@ -126,7 +141,7 @@
     [4X[28Xto do[128X[104X
   [4X[32X[104X
   
-  [1X1.1-8 RepresentativeWithSufficientRigidAutomorphisms[101X
+  [1X1.1-9 RepresentativeWithSufficientRigidAutomorphisms[101X
   
   [33X[1;0Y[29X[2XRepresentativeWithSufficientRigidAutomorphisms[102X( [3XG[103X ) [32X attribute[133X
   [6XReturns:[106X  [33X[0;10Ya   regular   rooted  tree  group  which  is  conjugate  to  [3XG[103X  in
@@ -146,7 +161,7 @@
     [4X[28Xto do[128X[104X
   [4X[32X[104X
   
-  [1X1.1-9 MaximalExtension[101X
+  [1X1.1-10 MaximalExtension[101X
   
   [33X[1;0Y[29X[2XMaximalExtension[102X( [3XG[103X ) [32X attribute[133X
   [6XReturns:[106X  [33X[0;10Ythe  regular  rooted tree group [23XM([123X[3XG[103X[23X)\le\mathrm{Aut}(T_{k,n})[123X which
@@ -164,7 +179,7 @@
     [4X[28Xto do[128X[104X
   [4X[32X[104X
   
-  [1X1.1-10 ConjugacyClassRepsSelfReplicatingGroupsWithProjection[101X
+  [1X1.1-11 ConjugacyClassRepsSelfReplicatingGroupsWithProjection[101X
   
   [33X[1;0Y[29X[2XConjugacyClassRepsSelfReplicatingGroupsWithProjection[102X( [3XG[103X ) [32X attribute[133X
   [6XReturns:[106X  [33X[0;10Ya  list  [23X\mathrm{Aut}(T_{k,n+1}[123X-conjugacy class representatives of
@@ -182,7 +197,7 @@
     [4X[28Xto do[128X[104X
   [4X[32X[104X
   
-  [1X1.1-11 ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection[101X
+  [1X1.1-12 ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection[101X
   
   [33X[1;0Y[29X[2XConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection[102X( [3XG[103X ) [32X attribute[133X
   [6XReturns:[106X  [33X[0;10Ya  list  [23X\mathrm{Aut}(T_{k,n+1}[123X-conjugacy class representatives of
@@ -213,7 +228,7 @@
             [3Xsubgroups[103X.[133X
   
   [33X[0;0YThe  arguments  of this method are a group [3XG[103X and a mutable list [3Xsubgroups[103X of
-  subgroups of [23XG[123X.[133X
+  subgroups of [3XG[103X.[133X
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27XG:=SymmetricGroup(3);[127X[104X
@@ -247,11 +262,12 @@
   [1X1.2-3 BelowAction[101X
   
   [33X[1;0Y[29X[2XBelowAction[102X( [3Xk[103X, [3Xn[103X, [3Xaut[103X, [3Xi[103X ) [32X function[133X
-  [6XReturns:[106X  [33X[0;10Ythe   regular   rooted   tree  group  [23X\mathrm{Aut}(T_{k,n})[123X  as  a
-            permutation group of the [23Xk^{n}[123X leaves of [23XT_{k,n}[123X.[133X
+  [6XReturns:[106X  [33X[0;10Ythe  automorphism of [23X\mathrm{Aut}(T_{k,n})[123X that arises from [3Xaut[103X by
+            restricting to the subtree below the [3Xi[103X-th vertex at depth [23X1[123X.[133X
   
-  [33X[0;0YThe  arguments  of  this  method  are a degree [3Xk[103X [23X\in\mathbb{N}_{\ge 2}[123X and a
-  depth [3Xn[103X [23X\in\mathbb{N}[123X.[133X
+  [33X[0;0YThe arguments of this method are a degree [3Xk[103X [23X\in\mathbb{N}_{\ge 2}[123X, a depth [3Xn[103X
+  [23X\in\mathbb{N_{ge  2}}[123X,  an  automorphism [3Xaut[103X [23X\in\mathrm{Aut}(T_{k,n})[123X and an
+  index [3Xi[103X [23X\in[123X[10X[1..k][110X.[133X
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27XG:=AutT(2,2);[127X[104X

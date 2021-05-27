@@ -13,6 +13,29 @@ function(k,n,G)
 		Error("input argument k=",k," must be an integer greater than or equal to 2");
 	elif not n>=1 then
 		Error("input argument n=",n," must be an integer greater than or equal to 1");
+	elif not IsSubgroup(AutT(k,n),G) then
+		Error("input argument G=",G," must be a subgroup of AutT(k=",k,",n=",n,")");
+	else
+		rrtg_G:=G;
+		SetFilterObj(rrtg_G,IsRegularRootedTreeGroup);
+		
+		Setter(RegularRootedTreeGroupDegree)(rrtg_G,k);
+		Setter(RegularRootedTreeGroupDepth)(rrtg_G,n);
+	
+		return rrtg_G;
+	fi;
+end );
+
+##################################################################################################################
+
+InstallMethod( RegularRootedTreeGroupNC, "for k,n,G (creator)", [IsInt, IsInt, IsPermGroup],
+function(k,n,G)
+	local rrtg_G;
+	
+	if not k>=2 then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
+	elif not n>=1 then
+		Error("input argument n=",n," must be an integer greater than or equal to 1");
 	else
 		rrtg_G:=G;
 		SetFilterObj(rrtg_G,IsRegularRootedTreeGroup);
@@ -37,7 +60,7 @@ function(G)
 		return Group(());
 	else	
 		pr:=Projection(AutT(k,n));	
-		return RegularRootedTreeGroup(k,n-1,Image(pr,G));
+		return RegularRootedTreeGroupNC(k,n-1,Image(pr,G));
 	fi;
 end );
 
@@ -112,7 +135,7 @@ function(G)
 			
 		for a in conjugators do
 			if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
-			H:=RegularRootedTreeGroup(k,n,G^a);
+			H:=RegularRootedTreeGroupNC(k,n,G^a);
 			if HasSufficientRigidAutomorphisms(H) and IsSelfReplicating(H) then return H; fi;
 		od;
 		
@@ -155,7 +178,7 @@ function(G)
 		fi;
 		Append(gensMG,ShallowCopy(GeneratorsOfGroup(kerG)));
 
-		MG:=RegularRootedTreeGroup(k,n+1,Group(gensMG));
+		MG:=RegularRootedTreeGroupNC(k,n+1,Group(gensMG));
 		# Horadam: Theorem 6.2: MG has all the desired properties
 		Setter(IsSelfReplicating)(MG,true);
 		Setter(HasSufficientRigidAutomorphisms)(MG,true);
@@ -186,7 +209,7 @@ function(G)
 			newGroups:=[];
 			for currentGroup in currentLayer do
 				subgroups:=ShallowCopy(MaximalSubgroups(currentGroup));
-				Apply(subgroups,H->RegularRootedTreeGroup(k,n+1,H));
+				Apply(subgroups,H->RegularRootedTreeGroupNC(k,n+1,H));
 				for i in [Length(subgroups),Length(subgroups)-1..1] do
 					if not IsSelfReplicating(subgroups[i]) or not ParentGroup(subgroups[i])=G then
 						# Proposition 3.24: need not follow these branches
@@ -224,7 +247,7 @@ function(G)
 
 		# consider all admissible conjugates
 		for H in G^prF do
-			H:=RegularRootedTreeGroup(k,n,H);
+			H:=RegularRootedTreeGroupNC(k,n,H);
 			if IsSelfReplicating(H) and HasSufficientRigidAutomorphisms(H) then
 				Add(allGroups,MaximalExtension(H));
 			fi;
@@ -236,7 +259,7 @@ function(G)
 			newGroups:=[];
 			for currentGroup in currentLayer do
 				subgroups:=ShallowCopy(MaximalSubgroups(currentGroup));
-				Apply(subgroups,H->RegularRootedTreeGroup(k,n+1,H));
+				Apply(subgroups,H->RegularRootedTreeGroupNC(k,n+1,H));
 				for i in [Length(subgroups),Length(subgroups)-1..1] do
 					if not IsSelfReplicating(subgroups[i]) or not IsConjugate(prF,ParentGroup(subgroups[i]),G) then
 						# Horadam: Proposition 3.24: need not follow these branches
@@ -286,7 +309,7 @@ function(k,n)
 		G:=SymmetricGroup(k);
 		for i in [2..n] do G:=WreathProduct(SymmetricGroup(k),G); od;
 
-		G:=RegularRootedTreeGroup(k,n,G);
+		G:=RegularRootedTreeGroupNC(k,n,G);
 		Setter(IsSelfReplicating)(G,true);
 		Setter(HasSufficientRigidAutomorphisms)(G,true);
 		Setter(RepresentativeWithSufficientRigidAutomorphisms)(G,G);

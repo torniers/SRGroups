@@ -1,13 +1,14 @@
 \indexentry{IsRegularRootedTreeGroup@\texttt  {IsRegularRootedTreeGroup}!for IsPermGroup|hyperpage}{4}
 \indexentry{RegularRootedTreeGroup@\texttt  {RegularRootedTreeGroup}!for IsInt, IsInt, IsPermGroup|hyperpage}{4}
-\indexentry{RegularRootedTreeGroupDegree@\texttt  {RegularRootedTreeGroupDegree}!for IsRegularRootedTreeGroup|hyperpage}{4}
+\indexentry{RegularRootedTreeGroupNC@\texttt  {RegularRootedTreeGroupNC}!for IsInt, IsInt, IsPermGroup|hyperpage}{4}
+\indexentry{RegularRootedTreeGroupDegree@\texttt  {RegularRootedTreeGroupDegree}!for IsRegularRootedTreeGroup|hyperpage}{5}
 \indexentry{RegularRootedTreeGroupDepth@\texttt  {RegularRootedTreeGroupDepth}!for IsRegularRootedTreeGroup|hyperpage}{5}
 \indexentry{ParentGroup@\texttt  {ParentGroup}!for IsRegularRootedTreeGroup|hyperpage}{5}
 \indexentry{IsSelfReplicating@\texttt  {IsSelfReplicating}!for IsRegularRootedTreeGroup|hyperpage}{5}
 \indexentry{HasSufficientRigidAutomorphisms@\texttt  {HasSufficientRigidAutomorphisms}!for IsRegularRootedTreeGroup|hyperpage}{6}
 \indexentry{RepresentativeWithSufficientRigidAutomorphisms@\texttt  {Representative}\-\texttt  {With}\-\texttt  {Sufficient}\-\texttt  {Rigid}\-\texttt  {Automorphisms}!for IsRegularRootedTreeGroup|hyperpage}{6}
 \indexentry{MaximalExtension@\texttt  {MaximalExtension}!for IsRegularRootedTreeGroup|hyperpage}{6}
-\indexentry{ConjugacyClassRepsSelfReplicatingGroupsWithProjection@\texttt  {Conjugacy}\-\texttt  {Class}\-\texttt  {Reps}\-\texttt  {Self}\-\texttt  {Replicating}\-\texttt  {Groups}\-\texttt  {With}\-\texttt  {Projection}!for IsRegularRootedTreeGroup|hyperpage}{6}
+\indexentry{ConjugacyClassRepsSelfReplicatingGroupsWithProjection@\texttt  {Conjugacy}\-\texttt  {Class}\-\texttt  {Reps}\-\texttt  {Self}\-\texttt  {Replicating}\-\texttt  {Groups}\-\texttt  {With}\-\texttt  {Projection}!for IsRegularRootedTreeGroup|hyperpage}{7}
 \indexentry{ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection@\texttt  {Conjugacy}\-\texttt  {Class}\-\texttt  {Reps}\-\texttt  {Self}\-\texttt  {Replicating}\-\texttt  {Groups}\-\texttt  {With}\-\texttt  {Conjugate}\-\texttt  {Projection}!for IsRegularRootedTreeGroup|hyperpage}{7}
 \indexentry{RemoveConjugates@\texttt  {RemoveConjugates}|hyperpage}{7}
 \indexentry{AutT@\texttt  {AutT}|hyperpage}{7}

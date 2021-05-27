@@ -51,11 +51,26 @@ DeclareCategory("IsRegularRootedTreeGroup", IsPermGroup);
 #! The arguments of this method are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$, a depth <A>n</A> $\in\mathbb{N}$ and a subgroup <A>G</A> of $\mathrm{Aut}(T_{k,n})$.
 #!
 #! @Returns
-#! the regular rooted tree group $G$ as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>.
+#! the regular rooted tree group $G$ as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>, checking that <A>G</A> is indeed a subgroup of $\mathrm{Aut}(T_{k,n})$.
 #!
 #! @Arguments k,n,G
 #!
 DeclareOperation("RegularRootedTreeGroup", [IsInt, IsInt, IsPermGroup]);
+#! @BeginExampleSession
+#! to do
+#! @EndExampleSession
+
+##################################################################################################################
+
+#! @Description
+#! The arguments of this method are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$, a depth <A>n</A> $\in\mathbb{N}$ and a subgroup <A>G</A> of $\mathrm{Aut}(T_{k,n})$.
+#!
+#! @Returns
+#! the regular rooted tree group $G$ as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>, without checking that <A>G</A> is indeed a subgroup of $\mathrm{Aut}(T_{k,n})$.
+#!
+#! @Arguments k,n,G
+#!
+DeclareOperation("RegularRootedTreeGroupNC", [IsInt, IsInt, IsPermGroup]);
 #! @BeginExampleSession
 #! to do
 #! @EndExampleSession
@@ -114,7 +129,7 @@ DeclareAttribute("ParentGroup", IsRegularRootedTreeGroup);
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
+#! The argument of this property is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
 #!
 #! @Returns
 #! <K>true</K>, if <A>G</A> is self-replicating, and <K>false</K> otherwise.
@@ -144,7 +159,7 @@ DeclareProperty("IsSelfReplicating", IsRegularRootedTreeGroup);
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
+#! The argument of this property is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,k})$ (<Ref Filt="IsRegularRootedTreeGroup"/>).
 #!
 #! @Returns
 #! <K>true</K>, if <A>G</A> has sufficient rigid automorphisms, and <K>false</K> otherwise.
@@ -230,7 +245,7 @@ DeclareAttribute("ConjugacyClassRepsSelfReplicatingGroupsWithConjugateProjection
 ##################################################################################################################
 
 #! @Description
-#! The arguments of this method are a group <A>G</A> and a mutable list <A>subgroups</A> of subgroups of $G$.
+#! The arguments of this method are a group <A>G</A> and a mutable list <A>subgroups</A> of subgroups of <A>G</A>.
 #!
 #! @Returns
 #! n/a. This method removes <A>G</A>-conjugates from the mutable list <A>subgroups</A>.
@@ -273,10 +288,10 @@ DeclareGlobalFunction( "AutT" );
 ##################################################################################################################
 
 #! @Description
-#! The arguments of this method are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
+#! The arguments of this method are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$, a depth <A>n</A> $\in\mathbb{N_{ge 2}}$, an automorphism <A>aut</A> $\in\mathrm{Aut}(T_{k,n})$ and an index <A>i</A> $\in$<C>[1..k]</C>.
 #!
 #! @Returns
-#! the regular rooted tree group $\mathrm{Aut}(T_{k,n})$ as a permutation group of the $k^{n}$ leaves of $T_{k,n}$.
+#! the automorphism of $\mathrm{Aut}(T_{k,n})$ that arises from <A>aut</A> by restricting to the subtree below the <A>i</A>-th vertex at depth $1$.
 #!
 #! @Arguments k,n,aut,i
 #!
