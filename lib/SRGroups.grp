@@ -4,6 +4,92 @@
 # Routines
 #
 
+InstallGlobalFunction(AllSRGroups,function(arg)
+	local groupList, groupNames, k, n, inputArgs, i;
+	
+	inputArgs:=[];
+
+	if IsInt(Position(arg,Degree)) then
+		Add(inputArgs,arg[Position(arg,Degree)+1]);
+		k:=arg[Position(arg,Degree)+1];
+	else
+		Add(inputArgs,0);
+	fi;
+	
+	if IsInt(Position(arg,Depth)) or IsInt(Position(arg,Level)) then
+		if IsInt(Position(arg,Depth)) then
+			Add(inputArgs,arg[Position(arg,Depth)+1]);
+			n:=arg[Position(arg,Depth)+1];
+		elif IsInt(Position(arg,Level)) then
+			Add(inputArgs,arg[Position(arg,Level)+1]);
+			n:=arg[Position(arg,Level)+1];
+		fi;
+	else
+		Add(inputArgs,0);
+	fi;
+	
+	if IsInt(Position(arg,Number)) then
+		Add(inputArgs,arg[Position(arg,Number)+1]);
+	else
+		Add(inputArgs,0);
+	fi;
+	
+	if IsInt(Position(arg,Projection)) then
+		Add(inputArgs,arg[Position(arg,Projection)+1]);
+	else
+		Add(inputArgs,0);
+	fi;
+	
+	if IsInt(Position(arg,IsSubgroup)) then
+		Add(inputArgs,arg[Position(arg,IsSubgroup)+1]);
+	else
+		Add(inputArgs,0);
+	fi;
+	
+	if IsInt(Position(arg,Size)) then
+		Add(inputArgs,arg[Position(arg,Size)+1]);
+	else
+		Add(inputArgs,0);
+	fi;
+	
+	if IsInt(Position(arg,NumberOfGenerators)) then
+		Add(inputArgs,arg[Position(arg,NumberOfGenerators)+1]);
+	else
+		Add(inputArgs,0);
+	fi;
+	
+	Add(inputArgs,1);
+	
+	if IsInt(Position(arg,IsAbelian)) then
+		Add(inputArgs,arg[Position(arg,IsAbelian)+1]);
+	else
+		Add(inputArgs,0);
+	fi;
+	
+	groupList:=CallFuncList(SRGroupsInfo,inputArgs);
+	inputArgs[Length(inputArgs)-1]:=2;
+	groupNames:=CallFuncList(SRGroupsInfo,inputArgs);
+	if IsBound(k) then
+		if IsBound(n) then
+			Apply(groupList,G->RegularRootedTreeGroup(k,n,Group(G)));
+		else
+			Apply(groupList,G->RegularRootedTreeGroup(k,EvalString(SplitString(groupNames[Position(groupList,G)],",")[2]),Group(G)));
+		fi;
+	else
+		if IsBound(n) then
+			Apply(groupList,G->RegularRootedTreeGroup( EvalString(SplitString(SplitString(groupNames[Position(groupList,G)],",")[1],"(")[2]),n,Group(G)));
+		else
+			Apply(groupList,G->RegularRootedTreeGroup( EvalString(SplitString(SplitString(groupNames[Position(groupList,G)],",")[1],"(")[2]),EvalString(SplitString(groupNames[Position(groupList,G)],",")[2]),Group(G)));
+		fi;
+	fi;
+	
+	for i in [1..Length(groupList)] do
+		SetName(groupList[i],groupNames[i]);
+	od;
+	
+	return groupList;
+end);
+
 # arg[1]:=degree (int > 1)
 # arg[2]:=depth (int > 0)
 # arg[3]:=number (int > 0)
@@ -14,7 +100,7 @@
 # arg[7]:=position/index (integer; one of arg[3]=0 or arg[4]=0 is required)
 # arg[8]:=abelian check (boolean)
 # All arguments can be set to 0 to ignore them.
-InstallGlobalFunction(SRGroup,function(arg)
+InstallGlobalFunction(SRGroupsInfo,function(arg)
 	local dir, fnam, G, list, listTemp, i, j, Gpos, last, zeros, srDegrees, srLevels;
 	
 	zeros:=Positions(arg,0);
@@ -214,7 +300,7 @@ InstallGlobalFunction(SRGroup,function(arg)
 	fi;
 end);
 
-InstallGlobalFunction(AllSRGroups,function(arg)
+InstallGlobalFunction(AllSRGroupsInfo,function(arg)
 	local inputArgs;
 
 	inputArgs:=[];
@@ -281,57 +367,57 @@ InstallGlobalFunction(AllSRGroups,function(arg)
 		Add(inputArgs,0);
 	fi;
 
-	return CallFuncList(SRGroup,inputArgs);
+	return CallFuncList(SRGroupsInfo,inputArgs);
 end);
 
-InstallGlobalFunction(CheckSRProjections,function(arg)
-	local dir, fnam, list1, list2, pr, i, G1, G2, check;
+# InstallGlobalFunction(CheckSRProjections,function(arg)
+	# local dir, fnam, list1, list2, pr, i, G1, G2, check;
 
-	check:=0;
-	list1:=SRGroup(arg[1],arg[2],0,0,1);
-	list2:=SRGroup(arg[1],arg[2],0,0,3);
-	pr:=Projection(AutT(arg[1],arg[2]));
-	for i in [1..Length(list1)] do
-		G1:=Image(pr,Group(list1[i]));
-		G2:=Group(EvalString(list2[i])[1]);
-		if not G1=G2 then
-			Print("SRGroup(",String(arg[1]),",",String(arg[2]),")[",String(i),"]\n");
-			check:=check+1;
-		fi;
-	od;
+	# check:=0;
+	# list1:=SRGroup(arg[1],arg[2],0,0,1);
+	# list2:=SRGroup(arg[1],arg[2],0,0,3);
+	# pr:=Projection(AutT(arg[1],arg[2]));
+	# for i in [1..Length(list1)] do
+		# G1:=Image(pr,Group(list1[i]));
+		# G2:=Group(EvalString(list2[i])[1]);
+		# if not G1=G2 then
+			# Print("SRGroup(",String(arg[1]),",",String(arg[2]),")[",String(i),"]\n");
+			# check:=check+1;
+		# fi;
+	# od;
 
-	if check=0 then
-		Print("All groups project correctly.");
-	else
-		Print(check," groups did not project corrrectly.");
-	fi;
+	# if check=0 then
+		# Print("All groups project correctly.");
+	# else
+		# Print(check," groups did not project corrrectly.");
+	# fi;
 
-	return;
-end);
+	# return;
+# end);
 
-InstallGlobalFunction(StringVariables, function(arg)
-	local Superstring, i;
+# InstallGlobalFunction(StringVariables, function(arg)
+	# local Superstring, i;
 
-	for i in [1..Length(arg)] do
-		if i=1 then
-			Superstring:=Concatenation("varArg",String(i),":=",String(arg[i]),";");
-		else
-			Superstring:=Concatenation(Superstring,"\nvarArg",String(i),":=",String(arg[i]),";");
-		fi;
-	od;
+	# for i in [1..Length(arg)] do
+		# if i=1 then
+			# Superstring:=Concatenation("varArg",String(i),":=",String(arg[i]),";");
+		# else
+			# Superstring:=Concatenation(Superstring,"\nvarArg",String(i),":=",String(arg[i]),";");
+		# fi;
+	# od;
 
-	return Superstring;
-end);
+	# return Superstring;
+# end);
 
-InstallGlobalFunction(UnbindVariables, function(arg)
-	local k;
+# InstallGlobalFunction(UnbindVariables, function(arg)
+	# local k;
 
-	for k in [1..Length(arg)] do
-		UnbindGlobal(arg[k]);
-	od;
+	# for k in [1..Length(arg)] do
+		# UnbindGlobal(arg[k]);
+	# od;
 	
-	return;
-end);
+	# return;
+# end);
 
 InstallGlobalFunction(SRDegrees,function()
 	local srDegrees, count, dirData, dataContents;
