@@ -40,9 +40,9 @@ DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRoot
 DeclareGlobalFunction("AllSRGroups");
 DeclareGlobalFunction( "SRGroupsInfo" );
 DeclareGlobalFunction( "AllSRGroupsInfo" );
-# DeclareGlobalFunction( "CheckSRProjections" );
-# DeclareGlobalFunction( "StringVariables" );
-# DeclareGlobalFunction( "UnbindVariables" );
+DeclareGlobalFunction( "CheckSRProjections" );
+DeclareGlobalFunction( "StringVariables" );
+DeclareGlobalFunction( "UnbindVariables" );
 DeclareGlobalFunction( "SRDegrees" );
 DeclareGlobalFunction( "SRLevels" );
 

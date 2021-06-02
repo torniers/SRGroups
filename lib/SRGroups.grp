@@ -370,54 +370,54 @@ InstallGlobalFunction(AllSRGroupsInfo,function(arg)
 	return CallFuncList(SRGroupsInfo,inputArgs);
 end);
 
-# InstallGlobalFunction(CheckSRProjections,function(arg)
-	# local dir, fnam, list1, list2, pr, i, G1, G2, check;
+InstallGlobalFunction(CheckSRProjections,function(arg)
+	local dir, fnam, list1, list2, pr, i, G1, G2, check;
 
-	# check:=0;
-	# list1:=SRGroup(arg[1],arg[2],0,0,1);
-	# list2:=SRGroup(arg[1],arg[2],0,0,3);
-	# pr:=Projection(AutT(arg[1],arg[2]));
-	# for i in [1..Length(list1)] do
-		# G1:=Image(pr,Group(list1[i]));
-		# G2:=Group(EvalString(list2[i])[1]);
-		# if not G1=G2 then
-			# Print("SRGroup(",String(arg[1]),",",String(arg[2]),")[",String(i),"]\n");
-			# check:=check+1;
-		# fi;
-	# od;
+	check:=0;
+	list1:=SRGroupsInfo(arg[1],arg[2],0,0,1);
+	list2:=SRGroupsInfo(arg[1],arg[2],0,0,3);
+	pr:=Projection(AutT(arg[1],arg[2]));
+	for i in [1..Length(list1)] do
+		G1:=Image(pr,Group(list1[i]));
+		G2:=Group(EvalString(Concatenation("SRGroupsInfo(",SplitString(list2[i],"(")[2]))[1]);
+		if not G1=G2 then
+			Print("SRGroup(",String(arg[1]),",",String(arg[2]),")[",String(i),"]\n");
+			check:=check+1;
+		fi;
+	od;
 
-	# if check=0 then
-		# Print("All groups project correctly.");
-	# else
-		# Print(check," groups did not project corrrectly.");
-	# fi;
+	if check=0 then
+		Print("All groups project correctly.");
+	else
+		Print(check," groups did not project corrrectly.");
+	fi;
 
-	# return;
-# end);
+	return;
+end);
 
-# InstallGlobalFunction(StringVariables, function(arg)
-	# local Superstring, i;
+InstallGlobalFunction(StringVariables, function(arg)
+	local Superstring, i;
 
-	# for i in [1..Length(arg)] do
-		# if i=1 then
-			# Superstring:=Concatenation("varArg",String(i),":=",String(arg[i]),";");
-		# else
-			# Superstring:=Concatenation(Superstring,"\nvarArg",String(i),":=",String(arg[i]),";");
-		# fi;
-	# od;
+	for i in [1..Length(arg)] do
+		if i=1 then
+			Superstring:=Concatenation("varArg",String(i),":=",String(arg[i]),";");
+		else
+			Superstring:=Concatenation(Superstring,"\nvarArg",String(i),":=",String(arg[i]),";");
+		fi;
+	od;
 
-	# return Superstring;
-# end);
+	return Superstring;
+end);
 
-# InstallGlobalFunction(UnbindVariables, function(arg)
-	# local k;
+InstallGlobalFunction(UnbindVariables, function(arg)
+	local k;
 
-	# for k in [1..Length(arg)] do
-		# UnbindGlobal(arg[k]);
-	# od;
+	for k in [1..Length(arg)] do
+		UnbindGlobal(arg[k]);
+	od;
 	
-	# return;
-# end);
+	return;
+end);
 
 InstallGlobalFunction(SRDegrees,function()
 	local srDegrees, count, dirData, dataContents;
