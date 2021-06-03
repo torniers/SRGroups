@@ -1364,43 +1364,59 @@ AppendTo(fName, "\n", "}");
 return;
 end);
 
-# Input::
+# Input:: 
 # Output::
 InstallGlobalFunction(ExtensionsMapping, function(deg)
 local dirData, dirDigraphs, list, levelCounter, levels, fName, numberCounter, i, j, k, abelianGroups, count;
 
+# Create directories to be used (dirData: where group information is read from, dirDigraphs: where file is written)
 dirData:= DirectoriesPackageLibrary( "SRGroups", "data" );
 dirDigraphs:= DirectoriesPackageLibrary( "SRGroups", "Digraphs" );
 
-list:=[];
-levelCounter:=1;
-levels:=[];
+# Initialise variables
+list:=[]; # List of lists containing the groups 
+levelCounter:=1; # Counter variable that stores the current level being examined
+levels:=[]; # List containing the levels of deg
 count:=1;
-abelianGroups:=[];
+abelianGroups:=[]; # List of the groups that are abelian
+
+# Loop through the number of levels of deg that currently have information stored about their extensions. 
+
 while levelCounter > 0 do
 	list[levelCounter]:=[];
 	levels[levelCounter]:=levelCounter;
+	# Check if file sr_deg_levelCounter.grp exists. 
 	if IsExistingFile(Filename(dirData[1],Concatenation("sr_", String(deg), "_", String(levelCounter), ".grp"))) then
+	# If the file sr_deg_levelcounter.grp does exist then enter the if statement. 
 		if not IsExistingFile(Filename(dirData[1],Concatenation("sr_", String(deg), "_", String(levelCounter + 1), ".grp"))) then 
 			levelCounter:=0;
+		# if the file sr_deg_(levelCounter + 1).grp does not exists then break
 			break;
 		else
+		# if the file sr_deg_(levelCounter + 1).grp exists then let numberCounter be the counter for the groups on that levelCounter. 
 			for numberCounter in [1..Length(SRGroup(deg, levelCounter))] do
+				# The extensions from the numberCounter group on level levelCounter are added to list. 
 				list[levelCounter][numberCounter]:=SRGroup(deg, levelCounter,numberCounter)[4];
+				# Check if the group numberCounter at level levelCounter is abelian.
 				if IsAbelian(Group(SRGroup(deg,levelCounter,numberCounter)[1])) then
+				# If the group is abelian then add it to the next position in the abelianGroups list. 
 					Add(abelianGroups, Concatenation("\"", "(", String(deg), ",", String(levelCounter), ",", String(numberCounter), ")", "\""));
 				fi;
 			od;
+			# Increment the counter for the level.
 			levelCounter:=levelCounter+1;
 		fi;
 	else
+	# If the file sr_deg_levelCounter.grp does not exist then break
 		break;
 	fi;
 od;
 
+#Sorting is completed. Begin the printing to the text document to display information. 
 
-
+# Establish the naming convention of the file. 
 fName:=Filename(dirDigraphs[1], Concatenation("sr_", String(deg), "_", "Extensions_Mapping.dot"));
+
 for i in [1..Length(levels)] do
 	for j in [1..Length(list[i])] do
 		if i = 1 and j=1 then
