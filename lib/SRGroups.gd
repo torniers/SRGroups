@@ -14,10 +14,6 @@
 #! This section will describe the example
 #! methods of SRGroups
 
-#! @Description
-#!   Insert documentation for your function here
-
-
 # a new "category" for the groups acting on regular rooted trees that we study, based on the category of permutation groups
 DeclareCategory("IsRegularRootedTreeGroup", IsPermGroup);
 
@@ -37,15 +33,23 @@ DeclareAttribute("ParentGroup", IsRegularRootedTreeGroup);
 DeclareAttribute("MaximalExtension", IsRegularRootedTreeGroup);
 DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
 
+# Library Functions
 DeclareGlobalFunction("AllSRGroups");
+#! @Description
+#!   Insert documentation for your function here
 DeclareGlobalFunction( "SRGroupsInfo" );
+#! @Description
+#!   Insert documentation for your function here
 DeclareGlobalFunction( "AllSRGroupsInfo" );
+#! @Description
+#!   Insert documentation for your function here
 DeclareGlobalFunction( "CheckSRProjections" );
 DeclareGlobalFunction( "StringVariables" );
 DeclareGlobalFunction( "UnbindVariables" );
 DeclareGlobalFunction( "SRDegrees" );
 DeclareGlobalFunction( "SRLevels" );
 
+# Package Functions
 DeclareGlobalFunction( "AutT" );
 DeclareGlobalFunction( "BelowAction" );
 # DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
