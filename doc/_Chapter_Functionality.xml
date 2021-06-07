@@ -12,7 +12,7 @@
  This section will describe the example
  methods of SRGroups
 <ManSection>
-  <Func Arg="arg" Name="SRGroup" />
+  <Func Arg="arg" Name="SRGroupsInfo" />
  <Description>
    Insert documentation for your function here
  </Description>
@@ -20,9 +20,9 @@
 
 
 <ManSection>
-  <Func Arg="arg" Name="AllSRGroups" />
+  <Func Arg="arg" Name="AllSRGroupsInfo" />
  <Description>
-<P/>
+   Insert documentation for your function here
  </Description>
 </ManSection>
 
@@ -30,7 +30,7 @@
 <ManSection>
   <Func Arg="arg" Name="CheckSRProjections" />
  <Description>
-<P/>
+   Insert documentation for your function here
  </Description>
 </ManSection>
 

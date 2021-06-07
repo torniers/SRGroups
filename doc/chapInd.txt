@@ -2,10 +2,10 @@
   
   [1XIndex[101X
   
-  [2XAllSRGroups[102X 2.1-2 
+  [2XAllSRGroupsInfo[102X 2.1-2 
   [2XCheckSRProjections[102X 2.1-3 
   [2XSRDegrees[102X 2.1-6 
-  [2XSRGroup[102X 2.1-1 
+  [2XSRGroupsInfo[102X 2.1-1 
   [2XSRLevels[102X 2.1-7 
   [2XStringVariables[102X 2.1-4 
   [2XUnbindVariables[102X 2.1-5 
