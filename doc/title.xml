@@ -3,7 +3,7 @@
 <!-- This is an automatically generated file. -->
 <TitlePage>
   <Title>
-    SRGroups
+    SRGroups: Self-replicating groups of regular rooted trees.
   </Title>
   <Subtitle>
     Self-replicating groups of regular rooted trees.
@@ -30,4 +30,19 @@ University Drive, Callaghan NSW 2308<Br/>
   <Date>
     17 December 2020
   </Date>
+  <Abstract>
+    
+     To do.
+
+  </Abstract>
+  <Copyright>
+    
+     <Package>SRGroups</Package> is free software; you can redistribute it and/or modify it under the terms of the <URL Text="GNU General Public License">http://www.fsf.org/licenses/gpl.html</URL> as published by the Free Software     Foundation; either version 3 of the License, or (at your option) any later version.
+
+  </Copyright>
+  <Acknowledgements>
+    
+     DE210100180, FL170100032.
+
+  </Acknowledgements>
   </TitlePage>

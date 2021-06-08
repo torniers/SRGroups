@@ -1,14 +1,22 @@
 \GAPDocLabFile{srgroups}
 \makelabel{srgroups:Title page}{}{X7D2C85EC87DD46E5}
+\makelabel{srgroups:Abstract}{}{X7AA6C5737B711C89}
+\makelabel{srgroups:Copyright}{}{X81488B807F2A1CF1}
+\makelabel{srgroups:Acknowledgements}{}{X82A988D47DFAFCFA}
 \makelabel{srgroups:Table of Contents}{}{X8537FEB07AF2BEC8}
 \makelabel{srgroups:Introduction}{1}{X7DFB63A97E67C0A1}
 \makelabel{srgroups:Functionality}{2}{X87F1120883F5B4D0}
-\makelabel{srgroups:Example Methods}{2.1}{X7ED1D62579C10890}
+\makelabel{srgroups:Methods}{2.1}{X8606FDCE878850EF}
+\makelabel{srgroups:Functions}{2.2}{X86FA580F8055B274}
 \makelabel{srgroups:Index}{Ind}{X83A0356F839C696F}
-\makelabel{srgroups:SRGroupsInfo}{2.1.1}{X7A191D0B85ABBB01}
-\makelabel{srgroups:AllSRGroupsInfo}{2.1.2}{X808A9F918166020B}
-\makelabel{srgroups:CheckSRProjections}{2.1.3}{X7DC9A60E87E350AF}
-\makelabel{srgroups:StringVariables}{2.1.4}{X7E515BA882F73045}
-\makelabel{srgroups:UnbindVariables}{2.1.5}{X82C5A9557EC8F8A6}
-\makelabel{srgroups:SRDegrees}{2.1.6}{X7BF255357B870D37}
-\makelabel{srgroups:SRLevels}{2.1.7}{X7CDBB45386329E21}
+\makelabel{srgroups:IsRegularRootedTreeGroup for ispermgroup}{2.1.1}{X81F8437A7C2E5C87}
+\makelabel{srgroups:RegularRootedTreeGroup for isint, isint, ispermgroup}{2.1.2}{X7F279D957D29554A}
+\makelabel{srgroups:AllSRGroups}{2.2.1}{X845F9F227B97062C}
+\makelabel{srgroups:SRGroupsInfo}{2.2.2}{X7A191D0B85ABBB01}
+\makelabel{srgroups:AllSRGroupsInfo}{2.2.3}{X808A9F918166020B}
+\makelabel{srgroups:CheckSRProjections}{2.2.4}{X7DC9A60E87E350AF}
+\makelabel{srgroups:StringVariables}{2.2.5}{X7E515BA882F73045}
+\makelabel{srgroups:UnbindVariables}{2.2.6}{X82C5A9557EC8F8A6}
+\makelabel{srgroups:SRDegrees}{2.2.7}{X7BF255357B870D37}
+\makelabel{srgroups:SRLevels}{2.2.8}{X7CDBB45386329E21}
+\makelabel{srgroups:AutT}{2.2.9}{X843B26BC8517173F}

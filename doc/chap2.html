@@ -22,68 +22,154 @@
 <p id="mathjaxlink" class="pcenter"><a href="chap2_mj.html">[MathJax on]</a></p>
 <p><a id="X87F1120883F5B4D0" name="X87F1120883F5B4D0"></a></p>
 <div class="ChapSects"><a href="chap2.html#X87F1120883F5B4D0">2 <span class="Heading">Functionality</span></a>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X7ED1D62579C10890">2.1 <span class="Heading">Example Methods</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X8606FDCE878850EF">2.1 <span class="Heading">Methods</span></a>
 </span>
 <div class="ContSSBlock">
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7A191D0B85ABBB01">2.1-1 SRGroupsInfo</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X808A9F918166020B">2.1-2 AllSRGroupsInfo</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7DC9A60E87E350AF">2.1-3 CheckSRProjections</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7E515BA882F73045">2.1-4 StringVariables</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X82C5A9557EC8F8A6">2.1-5 UnbindVariables</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7BF255357B870D37">2.1-6 SRDegrees</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7CDBB45386329E21">2.1-7 SRLevels</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X81F8437A7C2E5C87">2.1-1 IsRegularRootedTreeGroup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7F279D957D29554A">2.1-2 RegularRootedTreeGroup</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X86FA580F8055B274">2.2 <span class="Heading">Functions</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X845F9F227B97062C">2.2-1 AllSRGroups</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7A191D0B85ABBB01">2.2-2 SRGroupsInfo</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X808A9F918166020B">2.2-3 AllSRGroupsInfo</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7DC9A60E87E350AF">2.2-4 CheckSRProjections</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7E515BA882F73045">2.2-5 StringVariables</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X82C5A9557EC8F8A6">2.2-6 UnbindVariables</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7BF255357B870D37">2.2-7 SRDegrees</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7CDBB45386329E21">2.2-8 SRLevels</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X843B26BC8517173F">2.2-9 AutT</a></span>
 </div></div>
 </div>
 
 <h3>2 <span class="Heading">Functionality</span></h3>
 
-<p><a id="X7ED1D62579C10890" name="X7ED1D62579C10890"></a></p>
+<p><a id="X8606FDCE878850EF" name="X8606FDCE878850EF"></a></p>
 
-<h4>2.1 <span class="Heading">Example Methods</span></h4>
+<h4>2.1 <span class="Heading">Methods</span></h4>
 
-<p>This section will describe the example methods of SRGroups</p>
+<p><a id="X81F8437A7C2E5C87" name="X81F8437A7C2E5C87"></a></p>
+
+<h5>2.1-1 IsRegularRootedTreeGroup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsRegularRootedTreeGroup</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;filter&nbsp;)</td></tr></table></div>
+<p>Returns: <code class="code">true</code> or <code class="code">false</code></p>
+
+<p>Checks whether the input group is a regular-rooted tree group.</p>
+
+<p><a id="X7F279D957D29554A" name="X7F279D957D29554A"></a></p>
+
+<h5>2.1-2 RegularRootedTreeGroup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RegularRootedTreeGroup</code>( <var class="Arg">arg1</var>, <var class="Arg">arg2</var>, <var class="Arg">arg3</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Creates a regular-rooted tree group with attributes <var class="Arg">RegularRootedTreeGroupDegree</var> and <var class="Arg">RegularRootedTreeGroupDepth</var>.</p>
+
+<p><a id="X86FA580F8055B274" name="X86FA580F8055B274"></a></p>
+
+<h4>2.2 <span class="Heading">Functions</span></h4>
+
+<p><a id="X845F9F227B97062C" name="X845F9F227B97062C"></a></p>
+
+<h5>2.2-1 AllSRGroups</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AllSRGroups</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Main library search function. Has several possible input arguments such as <var class="Arg">Degree</var>, <var class="Arg">Level</var> (or <var class="Arg">Depth</var>), <var class="Arg">Number</var>, <var class="Arg">Projection</var>, <var class="Arg">Subgroup</var>, <var class="Arg">Size</var>, <var class="Arg">NumberOfGenerators</var>, and <var class="Arg">IsAbelian</var>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AllSRGroups(Degree, 2, Level, 4, IsAbelian, true);</span>
+[ SRGroup(2,4,2), SRGroup(2,4,9), SRGroup(2,4,12), SRGroup(2,4,14) ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Size(last[1]);</span>
+16
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AllSRGroups(Degree,2,Level,4,NumberOfGenerators,4);</span>
+[ SRGroup(2,4,11), SRGroup(2,4,12), SRGroup(2,4,16), SRGroup(2,4,20), SRGroup(2,4,23), SRGroup(2,4,24),
+ SRGroup(2,4,25), SRGroup(2,4,26), SRGroup(2,4,40), SRGroup(2,4,43), SRGroup(2,4,46), SRGroup(2,4,47),
+ SRGroup(2,4,50), SRGroup(2,4,66), SRGroup(2,4,70), SRGroup(2,4,71), SRGroup(2,4,72), SRGroup(2,4,73),
+ SRGroup(2,4,74), SRGroup(2,4,75), SRGroup(2,4,76), SRGroup(2,4,84), SRGroup(2,4,90), SRGroup(2,4,91),
+ SRGroup(2,4,93), SRGroup(2,4,95), SRGroup(2,4,97), SRGroup(2,4,102), SRGroup(2,4,108) ]
+</pre></div>
 
 <p><a id="X7A191D0B85ABBB01" name="X7A191D0B85ABBB01"></a></p>
 
-<h5>2.1-1 SRGroupsInfo</h5>
+<h5>2.2-2 SRGroupsInfo</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SRGroupsInfo</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Insert documentation for your function here</p>
 
 <p><a id="X808A9F918166020B" name="X808A9F918166020B"></a></p>
 
-<h5>2.1-2 AllSRGroupsInfo</h5>
+<h5>2.2-3 AllSRGroupsInfo</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AllSRGroupsInfo</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
-<p>Insert documentation for your function here</p>
+<p>Works the same as the main library search function <var class="Arg">AllSRGroups</var>, except returns useful information about the group(s) in list form: [<var class="Arg">Generators</var>, <var class="Arg">Name</var>, <var class="Arg">Parent Name</var>, <var class="Arg">Children Names</var>].</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AllSRGroupsInfo(Degree, 2, Level, 3, IsAbelian, true);</span>
+[ [ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,1)", "SRGroup(2,2,1)", [ "SRGroup(2,4,1)", "SRGroup(2,4,2)" ] ],
+[ [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,4)", "SRGroup(2,2,2)", [ "SRGroup(2,4,8)", "SRGroup(2,4,9)", "SRGroup(2,4,10)" ] ], 
+[ [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,5)", "SRGroup(2,2,2)", [ "SRGroup(2,4,11)", "SRGroup(2,4,12)", "SRGroup(2,4,13)", "SRGroup(2,4,14)", "SRGroup(2,4,15)" ] ] ]
+</pre></div>
 
 <p><a id="X7DC9A60E87E350AF" name="X7DC9A60E87E350AF"></a></p>
 
-<h5>2.1-3 CheckSRProjections</h5>
+<h5>2.2-4 CheckSRProjections</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CheckSRProjections</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
-<p>Insert documentation for your function here</p>
-
 <p><a id="X7E515BA882F73045" name="X7E515BA882F73045"></a></p>
 
-<h5>2.1-4 StringVariables</h5>
+<h5>2.2-5 StringVariables</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; StringVariables</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p><a id="X82C5A9557EC8F8A6" name="X82C5A9557EC8F8A6"></a></p>
 
-<h5>2.1-5 UnbindVariables</h5>
+<h5>2.2-6 UnbindVariables</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UnbindVariables</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p><a id="X7BF255357B870D37" name="X7BF255357B870D37"></a></p>
 
-<h5>2.1-6 SRDegrees</h5>
+<h5>2.2-7 SRDegrees</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SRDegrees</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns all of the degrees currently stored in the SRGroups library.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SRDegrees();</span>
+[ 2, 2, 2, 2, 3, 3, 3, 4, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ]
+</pre></div>
+
 <p><a id="X7CDBB45386329E21" name="X7CDBB45386329E21"></a></p>
 
-<h5>2.1-7 SRLevels</h5>
+<h5>2.2-8 SRLevels</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SRLevels</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns all of the levels currently stored in the SRGroups library for an input RegularRootedTreeGroupDegree, <var class="Arg">deg</var>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SRLevels(2);</span>
+[ 1, 2, 3, 4 ]
+</pre></div>
+
+<p><a id="X843B26BC8517173F" name="X843B26BC8517173F"></a></p>
+
+<h5>2.2-9 AutT</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AutT</code>( <var class="Arg">k</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: the regular rooted tree group <span class="Math">\mathrm{Aut}(T_{k,n})</span> as a permutation group of the <span class="Math">k^{n}</span> leaves of <span class="Math">T_{k,n}</span>.</p>
+
+<p>The arguments of this method are a degree <var class="Arg">k</var> <span class="Math">\in\mathbb{N}_{\ge 2}</span> and a depth <var class="Arg">n</var> <span class="Math">\in\mathbb{N}</span>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=AutT(2,2);</span>
+Group([ (1,2), (3,4), (1,3)(2,4) ])
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Size(G);</span>
+8
+</pre></div>
+
 
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chapInd.html">[Next Chapter]</a>&nbsp;  </div>
 
