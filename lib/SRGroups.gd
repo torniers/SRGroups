@@ -33,7 +33,6 @@
 #! @Section Methods
 # a new "category" for the groups acting on regular rooted trees that we study, based on the category of permutation groups
 DeclareCategory("IsRegularRootedTreeGroup", IsPermGroup);
-DeclareGlobalFunction("AllSRGroups");
 #! @Description
 #!   Insert documentation for your function here
 
