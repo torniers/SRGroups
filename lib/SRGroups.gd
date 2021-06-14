@@ -4,7 +4,7 @@
 #! @Abstract
 ##################################################################################################################
 
-#! <Package>SRGroups</Package> is a package for searching up self-replicating groups of regular rooted trees and performing computations on these groups. This package allows the user to generate more self-replicating groups at greater depths with its in-built functions, and is an extension of the transgrp package.
+#! <Package>SRGroups</Package> is a package for searching up self-replicating groups of regular rooted trees and performing computations on these groups. This package allows the user to generate more self-replicating groups at greater depths with its in-built functions, and is an extension of the <Package>transgrp</Package> package.
 
 ##################################################################################################################
 #! @Copyright
@@ -97,7 +97,9 @@ DeclareProperty("HasSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
 
 # parent group (projection), maximal extension and representative with sufficient rigid automorphisms also become attributes
 #! @Description
-#! The argument of this attribute is any regular rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>. Determines the image of <A>G</A> when projected onto the automorphism group of degree <A>k</A> and depth <A>n-1</A>.
+#! The argument of this attribute is any regular rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>.
+#! @Returns
+#! The image of <A>G</A> when projected onto the automorphism group of degree <A>k</A> and depth <A>n-1</A>.
 #!
 #! @Arguments G
 #!
@@ -114,7 +116,9 @@ DeclareAttribute("ParentGroup", IsRegularRootedTreeGroup);
 #! @EndExampleSession
 
 #! @Description
-#! The argument of this attribute is any regular rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>. Determines the maximal extension of <A>G</A>, <A>M(G)</A>, that is a subgroup of the automorphism group of degree <A>k</A> and depth <A>n+1</A>.
+#! The argument of this attribute is any regular rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>.
+#! @Returns
+#! The maximal extension of <A>G</A>, <A>M(G)</A>, that is a subgroup of the automorphism group of degree <A>k</A> and depth <A>n+1</A>.
 #!
 #! @Arguments G
 #!
@@ -131,7 +135,9 @@ DeclareAttribute("MaximalExtension", IsRegularRootedTreeGroup);
 #! @EndExampleSession
 
 #! @Description
-#! The argument of this attribute is any regular rooted tree group, <A>G</A>. Determines a conjugate of G with sufficient rigid automorphisms.
+#! The argument of this attribute is any regular rooted tree group, <A>G</A>. 
+#! @Returns
+#! A conjugate of <A>G</A> with sufficient rigid automorphisms.
 #!
 #! @Arguments G
 #!
@@ -142,13 +148,15 @@ DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRoot
 #! @EndExampleSession
 
 ####################################################################################################################
-#! @Section Functions
+#! @Section Library Functions
 ####################################################################################################################
 
-# Library Functions
+DeclareGlobalFunction( "SRGroupsInfo" );
 
 #! @Description
-#! Main library search function. Has several possible input arguments such as <A>Degree</A>, <A>Level</A> (or <A>Depth</A>), <A>Number</A>, <A>Projection</A>, <A>Subgroup</A>, <A>Size</A>, <A>NumberOfGenerators</A>, and <A>IsAbelian</A>.
+#! Main library search function. Has several possible input arguments such as <A>Degree</A>, <A>Level</A> (or <A>Depth</A>), <A>Number</A>, <A>Projection</A>, <A>Subgroup</A>, <A>Size</A>, <A>NumberOfGenerators</A>, and <A>IsAbelian</A>. Order of the inputs do not matter.
+#! @Returns
+#! All of the self-replicating group(s) stored as objects satisfying all of the provided input arguments.
 #! @Arguments Input1, val1, Input2, val2, ...
 DeclareGlobalFunction("AllSRGroups");
 #! @BeginExampleSession
@@ -156,7 +164,7 @@ DeclareGlobalFunction("AllSRGroups");
 #! [ SRGroup(2,4,2), SRGroup(2,4,9), SRGroup(2,4,12), SRGroup(2,4,14) ]
 #! gap> Size(last[1]);
 #! 16
-#! gap> AllSRGroups(Degree,2,Level,4,NumberOfGenerators,4);
+#! gap> AllSRGroups(Degree, 2, Level, 4, NumberOfGenerators, 4);
 #! [ SRGroup(2,4,11), SRGroup(2,4,12), SRGroup(2,4,16), SRGroup(2,4,20), SRGroup(2,4,23), SRGroup(2,4,24),
 #!  SRGroup(2,4,25), SRGroup(2,4,26), SRGroup(2,4,40), SRGroup(2,4,43), SRGroup(2,4,46), SRGroup(2,4,47),
 #!  SRGroup(2,4,50), SRGroup(2,4,66), SRGroup(2,4,70), SRGroup(2,4,71), SRGroup(2,4,72), SRGroup(2,4,73),
@@ -165,11 +173,9 @@ DeclareGlobalFunction("AllSRGroups");
 #! @EndExampleSession
 
 #! @Description
-#!   Insert documentation for your function here
-DeclareGlobalFunction( "SRGroupsInfo" );
-
-#! @Description
-#! Works the same as the main library search function <Ref func="AllSRGroups"/>, except returns useful information about the group(s) in list form: [<A>Generators</A>, <A>Name</A>, <A>Parent Name</A>, <A>Children Names</A>].
+#! Inputs work the same as the main library search function <Ref Func="AllSRGroups"/>, with one additional input: <A>Position</A>.
+#! @Returns
+#! Information about the self-replicating group(s) satisfying all of the provided input arguments in list form: [<A>Generators</A>, <A>Name</A>, <A>Parent Name</A>, <A>Children Name(s)</A>]. If the <A>Position</A> input is provided, only the corresponding index of this list is returned.
 #! @Arguments Input1, val1, Input2, val2, ...
 DeclareGlobalFunction( "AllSRGroupsInfo" );
 #! @BeginExampleSession
@@ -177,6 +183,10 @@ DeclareGlobalFunction( "AllSRGroupsInfo" );
 #! [ [ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,1)", "SRGroup(2,2,1)", [ "SRGroup(2,4,1)", "SRGroup(2,4,2)" ] ],
 #! [ [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,4)", "SRGroup(2,2,2)", [ "SRGroup(2,4,8)", "SRGroup(2,4,9)", "SRGroup(2,4,10)" ] ], 
 #! [ [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,5)", "SRGroup(2,2,2)", [ "SRGroup(2,4,11)", "SRGroup(2,4,12)", "SRGroup(2,4,13)", "SRGroup(2,4,14)", "SRGroup(2,4,15)" ] ] ]
+#! gap> AllSRGroupsInfo(Degree, 2, Level, 3, IsAbelian, true, Position, 1);
+#! [ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ],
+#!   [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ],
+#!   [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ] ]
 #! @EndExampleSession
 
 DeclareGlobalFunction( "CheckSRProjections" );
@@ -186,7 +196,7 @@ DeclareGlobalFunction( "UnbindVariables" );
 #! @Description
 #! There are no inputs to this function.
 #! @Returns
-#! All of the degrees currently stored in the SRGroups library (duplicates included).
+#! All of the degrees currently stored in the <Package>SRGroups</Package> library (duplicates included).
 #! @Arguments 
 DeclareGlobalFunction( "SRDegrees" );
 #! @BeginExampleSession
@@ -197,7 +207,7 @@ DeclareGlobalFunction( "SRDegrees" );
 #! @Description
 #! Degree of regular rooted tree, <A>k</A>.
 #! @Returns
-#! All of the levels currently stored in the SRGroups library for an input RegularRootedTreeGroupDegree, <A>deg</A>.
+#! All of the levels currently stored in the <Package>SRGroups</Package> library for an input RegularRootedTreeGroupDegree, <A>deg</A>.
 #! @Arguments k
 DeclareGlobalFunction( "SRLevels" );
 #! @BeginExampleSession
@@ -205,13 +215,15 @@ DeclareGlobalFunction( "SRLevels" );
 #! [ 1, 2, 3, 4 ]
 #! @EndExampleSession
 
-# Package Functions
+####################################################################################################################
+#! @Section Package Functions
+####################################################################################################################
 
 #! @Description
-#! The arguments of this method are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
+#! The arguments of this function are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
 #!
 #! @Returns
-#! the regular rooted tree group $\mathrm{Aut}(T_{k,n})$ as a permutation group of the $k^{n}$ leaves of $T_{k,n}$.
+#! The regular rooted tree group $\mathrm{Aut}(T_{k,n})$ as a permutation group of the $k^{n}$ leaves of $T_{k,n}$.
 #!
 #! @Arguments k,n
 DeclareGlobalFunction( "AutT" );
@@ -223,7 +235,19 @@ DeclareGlobalFunction( "AutT" );
 #! 8
 #! @EndExampleSession
 
+#! @Description
+#! The arguments of this function are a degree, <A>k</A> $\in\mathbb{N}_{\ge 2}$, a depth, <A>n</A> $\in\mathbb{N}$, an element of <F>AutT(</F><A>k</A>,<A>n</A><F>)</F>, <A>aut</A>, and a level 1 vertex, <A>i</A> $\in\{1,\cdots,k\}$.
+#!
+#! @Returns
+#! The restriction of <A>aut</A> to the subtree below the level 1 vertex <A>i</A>, as an element of <F>AutT(</F><A>k</A>,<A>n-1</A><F>)</F>.
+#!
+#! @Arguments k,n,aut,i
 DeclareGlobalFunction( "BelowAction" );
+#!
+#! @BeginExampleSession
+#! gap> BelowAction(2,2,(1,2)(3,4),2);
+#! (1,2)
+#! @EndExampleSession
 
 # DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
 # DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection" );
@@ -238,4 +262,5 @@ DeclareGlobalFunction( "BelowAction" );
 # DeclareGlobalFunction( "CombineSRFiles" );
 # DeclareGlobalFunction( "ReorderSRFiles" );
 # DeclareGlobalFunction( "NumberExtensionsUnformatted" );
+
 DeclareGlobalFunction( "Level" );

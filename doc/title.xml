@@ -32,7 +32,7 @@ University Drive, Callaghan NSW 2308<Br/>
   </Date>
   <Abstract>
     
-     To do.
+     <Package>SRGroups</Package> is a package for searching up self-replicating groups of regular rooted trees and performing computations on these groups. This package allows the user to generate more self-replicating groups at greater depths with its in-built functions, and is an extension of the <Package>transgrp</Package> package.
 
   </Abstract>
   <Copyright>
