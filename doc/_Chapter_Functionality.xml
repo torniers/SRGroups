@@ -234,7 +234,7 @@ gap> SRDegrees();
  <Returns> All of the levels currently stored in the <Package>SRGroups</Package> library for an input RegularRootedTreeGroupDegree, <A>deg</A>.
 </Returns>
  <Description>
- Degree of regular rooted tree, <A>k</A>.
+ The input to this function is the degree of the regular rooted tree, <A>k</A>.
  </Description>
 </ManSection>
 

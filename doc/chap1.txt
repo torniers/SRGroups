@@ -1,6 +1,14 @@
   
   [1X1 [33X[0;0YIntroduction[133X[101X
   
-  [33X[0;0YSRGroups  is  a  package  which does some interesting and cool things. To be
-  continued...[133X
+  [33X[0;0YLet  [23XG[123X be a subgroup of [23X\textrm{Aut}(T_{k,k})[123X with its group action, [23X\alpha[123X,
+  defined  as  [23X\alpha(g,x)=g(x)[123X,  where  [23Xg\in G[123X are the automorphisms of [23XG[123X and
+  [23Xx\in  X[123X  the  vertices  of  [23XT_{k,k}[123X.  Let  [23X\textrm{stab}_{G}(0)=\{g\in  G  :
+  \alpha(g,0)  =  0\}[123X, and [23XT_0\subset T_{k,k}[123X be the set of all vertices below
+  and    including    the    vertex    0.   Additonally,   let   [23X\varphi_0   :
+  \textrm{stab}_G(0)\rightarrow  G[123X  be  a  group homomorphism with the mapping
+  [23Xg\mapsto  g|_{T_0}[123X.  Then  [23XG[123X  is  called self-replicating if and only if the
+  following   two  conditions,  [23X\mathcal{R}_k[123X,  are  satisfied:  [23XG[123X  is  vertex
+  transitive        on        level        1       of       [23XT_{k,k}[123X,       and
+  [23X\varphi_0\left(\textrm{stab}_{G}(0)\right)=G[123X.[133X
   

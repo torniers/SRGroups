@@ -4,6 +4,7 @@
 <Chapter Label="Chapter_Introduction">
 <Heading>Introduction</Heading>
 
- SRGroups is a package which does some interesting and cool things. To be continued...
+ Let <Math>G</Math> be a subgroup of <Math>\textrm{Aut}(T_{k,k})</Math> with its group action, <Math>\alpha</Math>, defined as <Math>\alpha(g,x)=g(x)</Math>, where <Math>g\in G</Math> are the automorphisms of <Math>G</Math> and <Math>x\in X</Math> the vertices of <Math>T_{k,k}</Math>. Let <Math>\textrm{stab}_{G}(0)=\{g\in G : \alpha(g,0) = 0\}</Math>, and <Math>T_0\subset T_{k,k}</Math> be the set of all vertices below and including the vertex 0. Additonally, let <Math>\varphi_0 : \textrm{stab}_G(0)\rightarrow G</Math> be a group homomorphism with the mapping <Math>g\mapsto g|_{T_0}</Math>. Then <Math>G</Math> is called self-replicating if and only if the following two conditions, <Math>\mathcal{R}_k</Math>, are satisfied:
+ <Math>G</Math> is vertex transitive on level 1 of <Math>T_{k,k}</Math>, and <Math>\varphi_0\left(\textrm{stab}_{G}(0)\right)=G</Math>.
 </Chapter>
 

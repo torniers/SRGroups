@@ -24,7 +24,8 @@
 ####################################################################################################################
 ####################################################################################################################
 
-#! SRGroups is a package which does some interesting and cool things. To be continued...
+#! Let $G$ be a subgroup of $\textrm{Aut}(T_{k,k})$ with its group action, $\alpha$, defined as $\alpha(g,x)=g(x)$, where $g\in G$ are the automorphisms of $G$ and $x\in X$ the vertices of $T_{k,k}$. Let $\textrm{stab}_{G}(0)=\{g\in G : \alpha(g,0) = 0\}$, and $T_0\subset T_{k,k}$ be the set of all vertices below and including the vertex 0. Additonally, let $\varphi_0 : \textrm{stab}_G(0)\rightarrow G$ be a group homomorphism with the mapping $g\mapsto g|_{T_0}$. Then $G$ is called self-replicating if and only if the following two conditions, $\mathcal{R}_k$, are satisfied:
+#! $G$ is vertex transitive on level 1 of $T_{k,k}$, and $\varphi_0\left(\textrm{stab}_{G}(0)\right)=G$.
 
 ####################################################################################################################
 #! @Chapter Functionality
@@ -205,7 +206,7 @@ DeclareGlobalFunction( "SRDegrees" );
 #! @EndExampleSession
 
 #! @Description
-#! Degree of regular rooted tree, <A>k</A>.
+#! The input to this function is the degree of the regular rooted tree, <A>k</A>.
 #! @Returns
 #! All of the levels currently stored in the <Package>SRGroups</Package> library for an input RegularRootedTreeGroupDegree, <A>deg</A>.
 #! @Arguments k

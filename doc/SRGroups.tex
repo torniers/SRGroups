@@ -157,8 +157,7 @@ or (at your option) any later version. \mbox{}}\\[1cm]
 \logpage{[ 1, 0, 0 ]}
 \hyperdef{L}{X7DFB63A97E67C0A1}{}
 {
-  SRGroups is a package which does some interesting and cool things. To be
-continued... }
+  Let $G$ be a subgroup of $\textrm{Aut}(T_{k,k})$ with its group action, $\alpha$, defined as $\alpha(g,x)=g(x)$, where $g\in G$ are the automorphisms of $G$ and $x\in X$ the vertices of $T_{k,k}$. Let $\textrm{stab}_{G}(0)=\{g\in G : \alpha(g,0) = 0\}$, and $T_0\subset T_{k,k}$ be the set of all vertices below and including the vertex 0. Additonally, let $\varphi_0 : \textrm{stab}_G(0)\rightarrow G$ be a group homomorphism with the mapping $g\mapsto g|_{T_0}$. Then $G$ is called self-replicating if and only if the following two conditions, $\mathcal{R}_k$, are satisfied: $G$ is vertex transitive on level 1 of $T_{k,k}$, and $\varphi_0\left(\textrm{stab}_{G}(0)\right)=G$. }
 
    
 \chapter{\textcolor{Chapter }{Functionality}}\label{Chapter_Functionality}
@@ -459,7 +458,7 @@ input arguments in list form: [\mbox{\texttt{\mdseries\slshape Generators}}, \mb
 
 
 
- Degree of regular rooted tree, \mbox{\texttt{\mdseries\slshape k}}. }
+ The input to this function is the degree of the regular rooted tree, \mbox{\texttt{\mdseries\slshape k}}. }
 
  
 \begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
@@ -538,6 +537,12 @@ input arguments in list form: [\mbox{\texttt{\mdseries\slshape Generators}}, \mb
 
 \printindex
 
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}

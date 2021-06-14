@@ -190,7 +190,7 @@
   [6XReturns:[106X  [33X[0;10YAll  of the levels currently stored in the [5XSRGroups[105X library for an
             input RegularRootedTreeGroupDegree, [3Xdeg[103X.[133X
   
-  [33X[0;0YDegree of regular rooted tree, [3Xk[103X.[133X
+  [33X[0;0YThe input to this function is the degree of the regular rooted tree, [3Xk[103X.[133X
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27XSRLevels(2);[127X[104X
