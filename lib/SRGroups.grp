@@ -5,7 +5,7 @@
 #
 
 InstallGlobalFunction(AllSRGroups,function(arg)
-	local groupList, groupNames, k, n, inputArgs, i;
+	local groupList, groupNames, k, n, num, inputArgs, i;
 	
 	inputArgs:=[];
 
@@ -30,6 +30,7 @@ InstallGlobalFunction(AllSRGroups,function(arg)
 	
 	if IsInt(Position(arg,Number)) then
 		Add(inputArgs,arg[Position(arg,Number)+1]);
+		num:=arg[Position(arg,Number)+1];
 	else
 		Add(inputArgs,0);
 	fi;
@@ -69,23 +70,27 @@ InstallGlobalFunction(AllSRGroups,function(arg)
 	groupList:=CallFuncList(SRGroupsInfo,inputArgs);
 	inputArgs[Length(inputArgs)-1]:=2;
 	groupNames:=CallFuncList(SRGroupsInfo,inputArgs);
-	if IsBound(k) then
-		if IsBound(n) then
-			Apply(groupList,G->RegularRootedTreeGroup(k,n,Group(G)));
-		else
-			Apply(groupList,G->RegularRootedTreeGroup(k,EvalString(SplitString(groupNames[Position(groupList,G)],",")[2]),Group(G)));
-		fi;
+	if IsBound(num) then
+		groupList:=RegularRootedTreeGroup(k,n,Group(groupList));
+		SetName(groupList,groupNames);
 	else
-		if IsBound(n) then
-			Apply(groupList,G->RegularRootedTreeGroup( EvalString(SplitString(SplitString(groupNames[Position(groupList,G)],",")[1],"(")[2]),n,Group(G)));
+		if IsBound(k) then
+			if IsBound(n) then
+				Apply(groupList,G->RegularRootedTreeGroup(k,n,Group(G)));
+			else
+				Apply(groupList,G->RegularRootedTreeGroup(k,EvalString(SplitString(groupNames[Position(groupList,G)],",")[2]),Group(G)));
+			fi;
 		else
-			Apply(groupList,G->RegularRootedTreeGroup( EvalString(SplitString(SplitString(groupNames[Position(groupList,G)],",")[1],"(")[2]),EvalString(SplitString(groupNames[Position(groupList,G)],",")[2]),Group(G)));
+			if IsBound(n) then
+				Apply(groupList,G->RegularRootedTreeGroup( EvalString(SplitString(SplitString(groupNames[Position(groupList,G)],",")[1],"(")[2]),n,Group(G)));
+			else
+				Apply(groupList,G->RegularRootedTreeGroup( EvalString(SplitString(SplitString(groupNames[Position(groupList,G)],",")[1],"(")[2]),EvalString(SplitString(groupNames[Position(groupList,G)],",")[2]),Group(G)));
+			fi;
 		fi;
+		for i in [1..Length(groupList)] do
+			SetName(groupList[i],groupNames[i]);
+		od;
 	fi;
-	
-	for i in [1..Length(groupList)] do
-		SetName(groupList[i],groupNames[i]);
-	od;
 	
 	return groupList;
 end);

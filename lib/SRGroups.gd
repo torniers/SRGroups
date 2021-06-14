@@ -33,27 +33,113 @@
 #! @Section Methods
 # a new "category" for the groups acting on regular rooted trees that we study, based on the category of permutation groups
 #! @Description
-#! Checks whether the input group is a regular-rooted tree group.
+#! The argument of this category is any permutation group, <A>G</A>. Checks whether <A>G</A> is a regular-rooted tree group.
+#! @Arguments G
 DeclareCategory("IsRegularRootedTreeGroup", IsPermGroup);
 
 
+# degree and depth are attributes of groups of this type
+#! @Description
+#! The argument of this attribute is any regular-rooted tree group, <A>G</A>.
+#! @Returns
+#! The degree of <A>G</A>.
+#! @Arguments G
+DeclareAttribute("RegularRootedTreeGroupDegree", IsRegularRootedTreeGroup);
+#! @BeginExampleSession
+#! gap> RegularRootedTreeGroupDepth(AutT(2,3));
+#! 3
+#! @EndExampleSession
+
+
+#! @Description
+#! The argument of this attribute is any regular-rooted tree group, <A>G</A>.
+#! @Returns
+#! The depth of <A>G</A>.
+#! @Arguments G
+DeclareAttribute("RegularRootedTreeGroupDepth", IsRegularRootedTreeGroup);
+#! @BeginExampleSession
+#! gap> RegularRootedTreeGroupDegree(AutT(2,3));
+#! 2
+#! @EndExampleSession
+
 # a creator function asking for depth, degree, and the permutation group
 #! @Description
-#! Creates a regular-rooted tree group with attributes <A>RegularRootedTreeGroupDegree</A> and <A>RegularRootedTreeGroupDepth</A>.
+#! The arguments of this operation are a regular-rooted tree group, <A>G</A>, and its degree <A>k</A> and depth <A>n</A>.
+#! @Returns
+#! The regular rooted tree group <A>G</A> as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>, with attributes <Ref Attr="RegularRootedTreeGroupDegree"/> and <Ref Attr="RegularRootedTreeGroupDepth"/>.
+#! @Arguments k,n,G
 DeclareOperation("RegularRootedTreeGroup", [IsInt, IsInt, IsPermGroup]);
 
-# degree and depth are attributes of groups of this type
-DeclareAttribute("RegularRootedTreeGroupDegree", IsRegularRootedTreeGroup);
-DeclareAttribute("RegularRootedTreeGroupDepth", IsRegularRootedTreeGroup);
-
 # being self-replicating and having sufficient rigid automorphisms are properties (i.e. boolean attributes)
+#! @Description
+#! The argument of this property is any regular-rooted tree group, <A>G</A>. Tests whether <A>G</A> satisfies the self-replicating conditions.
+#!
+#! @Arguments G
+#!
 DeclareProperty("IsSelfReplicating", IsRegularRootedTreeGroup);
+#!
+#! @BeginExampleSession
+#! gap> IsSelfReplicating(AutT(2,3));
+#! true
+#! @EndExampleSession
+
+#! @Description
+#! The argument of this property is any regular-rooted tree group, <A>G</A>. Tests whether <A>G</A> has sufficient rigid automorphisms.
+#!
+#! @Arguments G
+#!
 DeclareProperty("HasSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
+#!
+#! @BeginExampleSession
+#! gap> HasSufficientRigidAutomorphisms(AutT(2,3));
+#! true
+#! @EndExampleSession
 
 # parent group (projection), maximal extension and representative with sufficient rigid automorphisms also become attributes
+#! @Description
+#! The argument of this attribute is any regular-rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>. Determines the image of <A>G</A> when projected onto the automorphism group of degree <A>k</A> and depth <A>n-1</A>.
+#!
+#! @Arguments G
+#!
 DeclareAttribute("ParentGroup", IsRegularRootedTreeGroup);
+#!
+#! @BeginExampleSession
+#! gap> G:=AutT(2,3); H:=AutT(2,2);
+#! Group([ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ])
+#! Group([ (1,2), (3,4), (1,3)(2,4) ])
+#! gap> ParentGroup(G);
+#! Group([ (1,2), (1,3)(2,4), (3,4) ])
+#! gap> H=last;
+#! true
+#! @EndExampleSession
+
+#! @Description
+#! The argument of this attribute is any regular-rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>. Determines the maximal extension of <A>G</A>, <A>M(G)</A>, that is a subgroup of the automorphism group of degree <A>k</A> and depth <A>n+1</A>.
+#!
+#! @Arguments G
+#!
 DeclareAttribute("MaximalExtension", IsRegularRootedTreeGroup);
+#!
+#! @BeginExampleSession
+#! gap> G:=AutT(2,3); H:=AutT(2,4);
+#! Group([ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ])
+#! <permutation group of size 32768 with 15 generators>
+#! gap> MaximalExtension(G);
+#! <permutation group with 11 generators>
+#! gap> H=last;
+#! true
+#! @EndExampleSession
+
+#! @Description
+#! The argument of this attribute is any regular-rooted tree group, <A>G</A>. Determines a conjugate of G with sufficient rigid automorphisms.
+#!
+#! @Arguments G
+#!
 DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
+#!
+#! @BeginExampleSession
+#! gap>
+#! @EndExampleSession
 
 ####################################################################################################################
 #! @Section Functions
@@ -79,7 +165,7 @@ DeclareGlobalFunction("AllSRGroups");
 #!   Insert documentation for your function here
 DeclareGlobalFunction( "SRGroupsInfo" );
 #! @Description
-#! Works the same as the main library search function <A>AllSRGroups</A>, except returns useful information about the group(s) in list form: [<A>Generators</A>, <A>Name</A>, <A>Parent Name</A>, <A>Children Names</A>].
+#! Works the same as the main library search function <Ref func="AllSRGroups"/>, except returns useful information about the group(s) in list form: [<A>Generators</A>, <A>Name</A>, <A>Parent Name</A>, <A>Children Names</A>].
 DeclareGlobalFunction( "AllSRGroupsInfo" );
 #! @BeginExampleSession
 #! gap> AllSRGroupsInfo(Degree, 2, Level, 3, IsAbelian, true);
