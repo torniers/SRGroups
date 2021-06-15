@@ -145,7 +145,7 @@ DeclareAttribute("MaximalExtension", IsRegularRootedTreeGroup);
 DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
 #!
 #! @BeginExampleSession
-#! gap>
+#! gap> 
 #! @EndExampleSession
 
 ####################################################################################################################
@@ -153,6 +153,22 @@ DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRoot
 ####################################################################################################################
 
 DeclareGlobalFunction( "SRGroupsInfo" );
+
+#! @Description
+#! The argument of this function is a degree, <A>k</A>, a depth, <A>n</A>, and a designated number of the stored self-replicating group, <A>num</A>.
+#! @Returns
+#! The <A>num</A>th self-replicating group of degree <A>k</A> and depth <A>n</A> stored in the <Package>SRGroups</Package> library.
+#!
+#! @Arguments k,n,num
+#!
+DeclareGlobalFunction( "SRGroup" );
+#!
+#! @BeginExampleSession
+#! gap> SRGroup(2,3,1);
+#! SRGroup(2,3,1)
+#! gap> Size(last);
+#! 8
+#! @EndExampleSession
 
 #! @Description
 #! Main library search function. Has several possible input arguments such as <A>Degree</A>, <A>Level</A> (or <A>Depth</A>), <A>Number</A>, <A>Projection</A>, <A>Subgroup</A>, <A>Size</A>, <A>NumberOfGenerators</A>, and <A>IsAbelian</A>. Order of the inputs do not matter.
@@ -190,7 +206,17 @@ DeclareGlobalFunction( "AllSRGroupsInfo" );
 #!   [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ] ]
 #! @EndExampleSession
 
+#! @Description
+#! The arguments of this function are a degree, <A>k</A>, and a level, <A>n</A>.
+#! @Returns
+#! Whether all of the self-replicating groups of degree <A>k</A> and level <A>n</A> project correctly to level <A>n-1</A>.
+#! @Arguments k,n
 DeclareGlobalFunction( "CheckSRProjections" );
+#! @BeginExampleSession
+#! gap> CheckSRProjections(2,4);
+#! All groups project correctly.
+#! @EndExampleSession
+
 DeclareGlobalFunction( "StringVariables" );
 DeclareGlobalFunction( "UnbindVariables" );
 
@@ -250,18 +276,17 @@ DeclareGlobalFunction( "BelowAction" );
 #! (1,2)
 #! @EndExampleSession
 
-# DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
-# DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection" );
-# DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroups" );
-# DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection" );
-# DeclareGlobalFunction( "FormatSRFile" );
-# DeclareGlobalFunction( "SRGroupFile" );
+DeclareGlobalFunction( "RemoveConjugates" );
+DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
+DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection" );
+DeclareGlobalFunction( "FormatSRFile" );
+DeclareGlobalFunction( "SRGroupFile" );
 # DeclareGlobalFunction( "HasseDiagram" );
 # DeclareGlobalFunction( "ExtensionsMapping" );
 # DeclareGlobalFunction( "PermutationMapping" );
-# DeclareGlobalFunction( "ExtendSRGroup" );
-# DeclareGlobalFunction( "CombineSRFiles" );
-# DeclareGlobalFunction( "ReorderSRFiles" );
-# DeclareGlobalFunction( "NumberExtensionsUnformatted" );
+DeclareGlobalFunction( "ExtendSRGroup" );
+DeclareGlobalFunction( "CombineSRFiles" );
+DeclareGlobalFunction( "ReorderSRFiles" );
+DeclareGlobalFunction( "NumberExtensionsUnformatted" );
 
 DeclareGlobalFunction( "Level" );

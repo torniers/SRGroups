@@ -4,6 +4,11 @@
 # Routines
 #
 
+InstallGlobalFunction(SRGroup,function(k,n,num)
+	return AllSRGroups(Degree,k,Level,n,Number,num);
+end);
+
+
 InstallGlobalFunction(AllSRGroups,function(arg)
 	local groupList, groupNames, k, n, num, inputArgs, i;
 	
