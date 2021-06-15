@@ -376,16 +376,18 @@ InstallGlobalFunction(AllSRGroupsInfo,function(arg)
 end);
 
 InstallGlobalFunction(CheckSRProjections,function(arg)
-	local dir, fnam, list1, list2, pr, i, G1, G2, check;
+	local dir, fnam, list1, list2, pr, i, G1, G2, check, aut, autAbove;
 
 	check:=0;
-	list1:=SRGroupsInfo(arg[1],arg[2],0,0,1);
-	list2:=SRGroupsInfo(arg[1],arg[2],0,0,3);
-	pr:=Projection(AutT(arg[1],arg[2]));
+	aut:=AutT(arg[1],arg[2]);
+	autAbove:=AutT(arg[1],arg[2]-1);
+	list1:=AllSRGroups(Degree,arg[1],Depth,arg[2]);
+	list2:=AllSRGroupsInfo(Degree,arg[1],Depth,arg[2],Position,3);
+	pr:=Projection(aut);
 	for i in [1..Length(list1)] do
-		G1:=Image(pr,Group(list1[i]));
+		G1:=Image(pr,list1[i]);
 		G2:=Group(EvalString(Concatenation("SRGroupsInfo(",SplitString(list2[i],"(")[2]))[1]);
-		if not G1=G2 then
+		if not (G1=G2 or IsConjugate(autAbove,G1,G2)) then
 			Print("SRGroup(",String(arg[1]),",",String(arg[2]),")[",String(i),"]\n");
 			check:=check+1;
 		fi;
