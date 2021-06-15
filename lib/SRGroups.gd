@@ -34,6 +34,8 @@ DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
 DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroups" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection" );
+DeclareGlobalFunction( "RemoveConjugates" );
+DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection" );
 DeclareGlobalFunction( "FormatSRFile" );
 DeclareGlobalFunction( "SRGroupFile" );
 DeclareGlobalFunction( "HasseDiagram" );

@@ -20,6 +20,8 @@ end);
 # Output::	TRUE if F is self-replicating, FALSE otherwise
 InstallGlobalFunction(IsSelfReplicating,function(k,n,G)
 	local blocks, i, pr, G_0, gens;
+	
+	if n=1 then return IsTransitive(G,[1..k]); fi;
 
 	# transitivity condition
 	blocks:=[];
@@ -209,38 +211,92 @@ end);
 # Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
 # Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto G
 InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,function(k,n,G)
-	local F, pr, allGroups, currentLayer, newGroups, currentGroup, subgroups, i, j;
+	local F, pr, list, listtemp, H, new, listHcheck, listH, add, I, J;
 
 	F:=AutT(k,n);
 	pr:=Projection(F);
-	allGroups:=[MaximalExtension(k,n-1,G)];
-	currentLayer:=ShallowCopy(allGroups);
-	while not IsEmpty(currentLayer) do
-		newGroups:=[];
-		for currentGroup in currentLayer do
-			subgroups:=ShallowCopy(MaximalSubgroups(currentGroup));
-			for i in [Length(subgroups),Length(subgroups)-1..1] do
-				if not IsSelfReplicating(k,n,subgroups[i]) or not Image(pr,subgroups[i])=G then
-					Remove(subgroups,i);
-				fi;
-			od;
-			Append(newGroups,subgroups);
+	list:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection(k,n,G));
+	listtemp:=ShallowCopy(list);
+	while not IsEmpty(listtemp) do
+		for H in listtemp do
+			new:=true;
+			if IsTrivial(MaximalSubgroupClassReps(H)) then new:=false; fi;
+			listHcheck:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,H));
+			listH:=[];
+			if new then
+				for I in listHcheck do
+					add:=true;
+					if not Image(pr,I)=G then continue; fi;
+					for J in list do
+						if IsConjugate(F,I,J) then add:=false; break; fi;
+					od;
+					if add then Add(listH,RepresentativeWithSufficientRigidAutomorphisms(k,n,I)); fi;
+				od;
+				Append(listtemp,listH);
+				Append(list,listH);
+			fi;
+			Remove(listtemp,Position(listtemp,H));
 		od;
-		# RemoveConjugates(newGroups);
-		for i in [Length(newGroups),Length(newGroups)-1..2] do
-			for j in [i-1,i-2..1] do
-				if IsConjugate(F,newGroups[j],newGroups[i]) then
-					Remove(newGroups,i);
-					break;
-				fi;
-			od;
-		od;
-		currentLayer:=newGroups;
-		Append(allGroups,newGroups);
 	od;
-	# representatives with sufficient rigid automorphisms
-	Apply(allGroups,H->RepresentativeWithSufficientRigidAutomorphisms(k,n,H));
-	return allGroups;
+	Add(list,MaximalExtension(k,n-1,G));
+	return list;
+end);
+
+# Input: G: a group, subgroups: a mutable list of subgroups of G
+# Output: None. Conjugates removed from subgroups.
+InstallGlobalFunction(RemoveConjugates,function(G,subgroups)
+	local i, j;
+
+	for i in [Length(subgroups),Length(subgroups)-1..2] do
+		for j in [i-1,i-2..1] do
+			if IsConjugate(G,subgroups[j],subgroups[i]) then
+				Remove(subgroups,i);
+				break;
+			fi;
+		od;
+	od; 
+end);
+
+# Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
+# Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto G
+InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection,function(k,n,G)
+	local F, prF, pr, list, listtemp, H, new, listHcheck, listH, add, I, J;
+
+	F:=AutT(k,n);
+	prF:=AutT(k,n-1);
+	pr:=Projection(F);
+	list:=[];
+	for H in G^prF do
+		if IsSelfReplicating(k,n-1,H) and HasSufficientRigidAutomorphisms(k,n-1,H) then
+			Add(list,MaximalExtension(k,n-1,H));
+		fi;
+	od;
+	RemoveConjugates(F,list);
+	
+	listtemp:=ShallowCopy(list);
+	while not IsEmpty(listtemp) do
+		for H in listtemp do
+			new:=true;
+			if IsTrivial(MaximalSubgroupClassReps(H)) then new:=false; fi;
+			listHcheck:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,H));
+			listH:=[];
+			if new then
+				for I in listHcheck do
+					add:=true;
+					if not IsConjugate(prF,Image(pr,I),G) then continue; fi;
+					for J in list do
+						if IsConjugate(F,I,J) then add:=false; break; fi;
+					od;
+					if add then Add(listH,RepresentativeWithSufficientRigidAutomorphisms(k,n,I)); fi;
+				od;
+				Append(listtemp,listH);
+				Append(list,listH);
+			fi;
+			Remove(listtemp,Position(listtemp,H));
+		od;
+	od;
+	
+	return list;
 end);
 
 # Input:: deg: degree of the tree (integer at least 2), lev: level of the tree (integer at least 1; if lev=1, then the unformatted "sr_deg_1.grp" file must already exist) (requires "sr_deg_lev+1.grp" file to exist)
