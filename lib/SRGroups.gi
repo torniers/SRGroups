@@ -546,6 +546,7 @@ InstallGlobalFunction(FormatSRFile, function(deg,lev)
 	return;
 end);
 
+
 # Input:: Any integer in the range [0,31], which denotes the degree of the regular rooted tree being organised. If the input is 0 or 1, the degree is chosen to be the lowest degree not stored.
 # Output:: The file containing all self-replicating groups of the rooted k-tree at the lowest level not stored.
 InstallGlobalFunction(SRGroupFile, function(arg)
@@ -1308,6 +1309,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 	return;
 end);
 
+
 # # Input:: deg: an integer of at least 2 representing the degree of the SRGroup that one wishes to find the HasseDiagram of, lev: and integer of at least 1, representing the level of the SRGroup on the degree deg 
 # # Output:: a plain text file stored in the form of a .dot file, which can be run through command prompt and Graphviz  
 # InstallGlobalFunction(HasseDiagram, function(deg,lev)
@@ -1443,6 +1445,7 @@ end);
 # return;
 # end);
 
+
 # # Input::
 # # Output::
 # InstallGlobalFunction(ExtensionsMapping, function(deg)
@@ -1520,6 +1523,7 @@ end);
 # AppendTo(fName, "\n", "}");
 # end);
 
+
 # #Input::
 # #Output::
 # InstallGlobalFunction(PermutationMapping, function(deg, lev)
@@ -1578,6 +1582,7 @@ end);
 ### "file1.dot file2.dot file3.dot | gvpack -array_c | neato -n2 -Tpng -o outputFile.png"
 
 ### At the moment it is printing all of the elements from one group into the same file because I want to find a way to put all of those graphs into the one display. 
+
 
 # Input:: arg[1]: degree of tree (int > 1), arg[2]: highest level of tree where the file "sr_k_n.grp" exists (int > 1), (arg[3],arg[4],...): sequence of group numbers to extend from
 # Output:: File named "temp_deg_initialLev_arg[3]_arg[4]_..._arg[Length(arg)]_proj.grp" that contains extension information of group
@@ -1668,6 +1673,7 @@ InstallGlobalFunction(ExtendSRGroup,function(arg)
 	return;
 end);
 
+
 # Input:: deg: degree of tree (int > 1), lev: level of tree (int > 0)
 # Output:: The combined file "temp_deg_lev.grp" containing all extended groups on level lev-1 (for use with the SRGroupFile function)
 InstallGlobalFunction(CombineSRFiles,function(deg,lev)
@@ -1716,6 +1722,7 @@ InstallGlobalFunction(CombineSRFiles,function(deg,lev)
 	
 	return;
 end);
+
 
 # Input:: deg: degree of tree (int > 1), lev: level of tree (int > initialLev > 1), initialLev: highest level of tree where the file "sr_k_n.grp" exists (int > 1), prevPosList: list containing previous positions, p2, of all individual group extension files ("temp_deg_initialLev_p1_p2_..._proj.grp") obtained from the function SRGroupFile (therefore also containing their new positions), unsortedList: list containing the number and order of groups which have p2 as their fifth entry of the correspondoing file name (so if groups are missing, this gap can be detected and skipped)
 # Output:: the updated ordering of the individual group extension files aligned with the reordering from running the function SRGroupFile
@@ -1815,6 +1822,7 @@ InstallGlobalFunction(ReorderSRFiles,function(deg,lev,initialLev,prevPosListAbov
 	return;
 end);
 
+
 # Input:: arg[1]: degree of tree (int > 1), arg[2]: highest level of tree where the file "sr_k_n.grp" exists (int > 1), (arg[3],arg[4],...): sequence of group numbers to extend from
 # Output:: the number of extensions of the chosen group (or, if Length(arg)=2, the total number of extensions for that level if the combined file "temp_deg_lev.grp" is available)
 InstallGlobalFunction(NumberExtensionsUnformatted,function(arg)
@@ -1839,7 +1847,7 @@ InstallGlobalFunction(NumberExtensionsUnformatted,function(arg)
 	stringFolder:=Concatenation("temp_",String(deg),"_",String(lev));
 	dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
 	
-	# 3. Protocol for calculating the number of extensions from a single or all groups.
+	# 3. Protocol for calculating the number of extensions from a single group or all groups.
 	# 3.1. Case 1: The directory to files containing individual group extensions exists and a group position has been defined (by (arg[3],arg[4],...))
 	if IsDirectoryPath(Filename(dirTempFiles[1],Concatenation(stringFolder,"/"))) and Length(arg)>2 then
 		# Initialise directory and file containing target group information, then count the number of groups contained in that file.

@@ -63,6 +63,7 @@ DeclareAttribute("RegularRootedTreeGroupDepth", IsRegularRootedTreeGroup);
 #! 2
 #! @EndExampleSession
 
+
 # a creator function asking for depth, degree, and the permutation group
 #! @Description
 #! The arguments of this operation are a regular rooted tree group, <A>G</A>, and its degree <A>k</A> and depth <A>n</A>.
@@ -70,6 +71,7 @@ DeclareAttribute("RegularRootedTreeGroupDepth", IsRegularRootedTreeGroup);
 #! The regular rooted tree group <A>G</A> as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>, with attributes <Ref Attr="RegularRootedTreeGroupDegree"/> and <Ref Attr="RegularRootedTreeGroupDepth"/>.
 #! @Arguments k,n,G
 DeclareOperation("RegularRootedTreeGroup", [IsInt, IsInt, IsPermGroup]);
+
 
 # being self-replicating and having sufficient rigid automorphisms are properties (i.e. boolean attributes)
 #! @Description
@@ -84,6 +86,7 @@ DeclareProperty("IsSelfReplicating", IsRegularRootedTreeGroup);
 #! true
 #! @EndExampleSession
 
+
 #! @Description
 #! The argument of this property is any regular rooted tree group, <A>G</A>. Tests whether <A>G</A> has sufficient rigid automorphisms.
 #!
@@ -95,6 +98,7 @@ DeclareProperty("HasSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
 #! gap> HasSufficientRigidAutomorphisms(AutT(2,3));
 #! true
 #! @EndExampleSession
+
 
 # parent group (projection), maximal extension and representative with sufficient rigid automorphisms also become attributes
 #! @Description
@@ -116,6 +120,7 @@ DeclareAttribute("ParentGroup", IsRegularRootedTreeGroup);
 #! true
 #! @EndExampleSession
 
+
 #! @Description
 #! The argument of this attribute is any regular rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>.
 #! @Returns
@@ -135,6 +140,7 @@ DeclareAttribute("MaximalExtension", IsRegularRootedTreeGroup);
 #! true
 #! @EndExampleSession
 
+
 #! @Description
 #! The argument of this attribute is any regular rooted tree group, <A>G</A>. 
 #! @Returns
@@ -148,11 +154,13 @@ DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRoot
 #! gap> 
 #! @EndExampleSession
 
+
 ####################################################################################################################
 #! @Section Library Functions
 ####################################################################################################################
 
 DeclareGlobalFunction( "SRGroupsInfo" );
+
 
 #! @Description
 #! The argument of this function is a degree, <A>k</A>, a depth, <A>n</A>, and a designated number of the stored self-replicating group, <A>num</A>.
@@ -169,6 +177,7 @@ DeclareGlobalFunction( "SRGroup" );
 #! gap> Size(last);
 #! 8
 #! @EndExampleSession
+
 
 #! @Description
 #! Main library search function. Has several possible input arguments such as <A>Degree</A>, <A>Level</A> (or <A>Depth</A>), <A>Number</A>, <A>Projection</A>, <A>Subgroup</A>, <A>Size</A>, <A>NumberOfGenerators</A>, and <A>IsAbelian</A>. Order of the inputs do not matter.
@@ -189,6 +198,7 @@ DeclareGlobalFunction("AllSRGroups");
 #!  SRGroup(2,4,93), SRGroup(2,4,95), SRGroup(2,4,97), SRGroup(2,4,102), SRGroup(2,4,108) ]
 #! @EndExampleSession
 
+
 #! @Description
 #! Inputs work the same as the main library search function <Ref Func="AllSRGroups"/>, with one additional input: <A>Position</A>.
 #! @Returns
@@ -206,6 +216,7 @@ DeclareGlobalFunction( "AllSRGroupsInfo" );
 #!   [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ] ]
 #! @EndExampleSession
 
+
 #! @Description
 #! The arguments of this function are a degree, <A>k</A>, and a level, <A>n</A>.
 #! @Returns
@@ -217,8 +228,12 @@ DeclareGlobalFunction( "CheckSRProjections" );
 #! All groups project correctly.
 #! @EndExampleSession
 
+
 DeclareGlobalFunction( "StringVariables" );
+
+
 DeclareGlobalFunction( "UnbindVariables" );
+
 
 #! @Description
 #! There are no inputs to this function.
@@ -231,6 +246,7 @@ DeclareGlobalFunction( "SRDegrees" );
 #! [ 2, 2, 2, 2, 3, 3, 3, 4, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ]
 #! @EndExampleSession
 
+
 #! @Description
 #! The input to this function is the degree of the regular rooted tree, <A>k</A>.
 #! @Returns
@@ -242,9 +258,11 @@ DeclareGlobalFunction( "SRLevels" );
 #! [ 1, 2, 3, 4 ]
 #! @EndExampleSession
 
+
 ####################################################################################################################
 #! @Section Package Functions
 ####################################################################################################################
+
 
 #! @Description
 #! The arguments of this function are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
@@ -262,6 +280,7 @@ DeclareGlobalFunction( "AutT" );
 #! 8
 #! @EndExampleSession
 
+
 #! @Description
 #! The arguments of this function are a degree, <A>k</A> $\in\mathbb{N}_{\ge 2}$, a depth, <A>n</A> $\in\mathbb{N}$, an element of <F>AutT(</F><A>k</A>,<A>n</A><F>)</F>, <A>aut</A>, and a level 1 vertex, <A>i</A> $\in\{1,\cdots,k\}$.
 #!
@@ -276,17 +295,110 @@ DeclareGlobalFunction( "BelowAction" );
 #! (1,2)
 #! @EndExampleSession
 
+
+#! @Description
+#! The arguments of this function are a group, <A>G</A>, and a list of groups, grouplist. For every group H1 in grouplist, this function removes all conjugate groups H2 such that H2\in H1^G.
+#!
+#! @Arguments G, grouplist
 DeclareGlobalFunction( "RemoveConjugates" );
+#!
+#! @BeginExampleSession
+#! gap> 
+#! @EndExampleSession
+
+
+#! @Description
+#! The argument of this function is any regular rooted tree group, <A>G</A>
+#!
+#! @Returns
+#! A list containing conjugacy class representatives of all maximal self-replicating subgroups of <A>G</A>.
+#!
+#! @Arguments G
 DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
+#!
+#! @BeginExampleSession
+#! gap> ConjugacyClassRepsMaxSelfReplicatingSubgroups(AutT(2,2));
+#! [ Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]) ]
+#! @EndExampleSession
+
+
+#! @Description
+#! The argument of this function is any regular rooted tree group, <A>G</A>
+#!
+#! @Returns
+#! A list containing conjugacy class representatives of all self-replicating subgroups of the maximal extension of <A>G</A>, <A>M(G)</A>.
+#!
+#! @Arguments G
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection" );
+#!
+#! @BeginExampleSession
+#! gap> gap> ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(2,2));
+#! [ Group([ (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2), (3,4) ]),
+#!   Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
+#!   Group([ (1,3)(2,4)(7,8), (1,5)(2,6)(3,7)(4,8), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ])
+#!     , Group([ (1,5)(2,6)(3,7,4,8), (1,3)(2,4), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
+#!   Group([ (1,3)(2,4)(7,8), (1,5,3,7)(2,6,4,8), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
+#!   Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(7,8), (5,6)(7,8), (1,4,2,3)(5,7,6,8), (1,2)(3,4)(5,6)(7,8) ]),
+#!   Group([ (3,4)(5,7,6,8), (1,5)(2,6)(3,7)(4,8), (5,6)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ]),
+#!   Group([ (3,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,3,2,4)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]),
+#!   Group([ (1,5,2,6)(3,7,4,8), (3,4)(5,7)(6,8), (1,3,2,4)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]) ]
+#! @EndExampleSession
+
+
 DeclareGlobalFunction( "FormatSRFile" );
+
+
+#! @Description
+#! The arguments of this function are a degree, <A>k</A>, or 0. If the argument is non-zero, this function creates the file containing all self-replicating groups of the regular rooted k-tree at the lowest level not stored in the <Package>SRGroups</Package> library. If the argument is 0, this function creates the file containing all self-replicating groups of the regular rooted tree at the level 1 for the lowest degree not stored in the <Package>SRGroups</Package> library. The file naming convention is "sr_k_n.grp", and they are stored in the Data folder of the <Package>SRGroups</Package> package. Level 1 groups are calculated using the <Package>transgrp</A> library. If the argument is non-zero and there is a gap between files (i.e. if "sr_k_n.grp" and "sr_k_n+2.grp" exists, but "sr_k_n+1.grp" does not exist), then this function creates the files in this gap.
+#!
+#! @Arguments k
 DeclareGlobalFunction( "SRGroupFile" );
+#!
+#! @BeginExampleSession
+#! gap> SRGroupFile(2);
+#! You have requested to make group files for degree 2.
+#! Creating level 3 file.
+#! Evaluating groups extending from:
+#! SRGroup(2,2,1)  (1/3)
+#! SRGroup(2,2,2)  (2/3)
+#! SRGroup(2,2,3)  (3/3)
+#! SRGroup(2,2,4)  (4/3)
+#! Formatting file sr_2_3.grp now.
+#! Reordering individual files.
+#! Done.
+#! gap> SRGroupFile(0);
+#! Creating degree 5 file on level 1.
+#! Done.
+#! gap> SRGroupFile(2);
+#! You have requested to make group files for degree 2.
+#! Gap found; missing file from level 2. Creating the missing file now.
+#! Creating files:
+#! sr_2_2.grp
+#! Done.
+#! @EndExampleSession
+
+
 # DeclareGlobalFunction( "HasseDiagram" );
 # DeclareGlobalFunction( "ExtensionsMapping" );
 # DeclareGlobalFunction( "PermutationMapping" );
+
+#! @Description
+#! The arguments of this function are: arg[1]: degree of tree (int > 1), <A>k</A>, arg[2]: highest level of tree where the file "sr_k_n.grp" exists (int > 1), <A>n</A>, (arg[3],arg[4],...): sequence of group numbers to extend from using the files "temp_k_n_arg[3]_arg[4]_...arg[Length(arg)-1].grp". This function creates the file of the group number arg[Length(arg)] stored in the file "temp_k_n_arg[3]_arg[4]_...arg[Length(arg)-1].grp".
+#!
+#! @Arguments arg
 DeclareGlobalFunction( "ExtendSRGroup" );
+
+#! @Description
+#! The arguments of this function are a degree, <A>k</A>, and a level, <A>n</A>, of a regular rooted tree, <A>n-1</A> is the highest level stored as the file "sr_k_n-1.grp" in the <Package>SRGroups</Package> library, and all of the files "temp_k_n-1_i_proj.grp" for every SRGroup(k,n-1,i) are stored in the Data/temp_k_n folder of the <Package>SRGroups</Package> library. This function combines each of the "temp_k_n-1_i_proj.grp" files into the complete "temp_k_n.grp" file to be used by the <Ref Func="SRGroupFile"/> function.
+#!
+#! @Arguments k,n
 DeclareGlobalFunction( "CombineSRFiles" );
+
+
 DeclareGlobalFunction( "ReorderSRFiles" );
+
+
 DeclareGlobalFunction( "NumberExtensionsUnformatted" );
+
 
 DeclareGlobalFunction( "Level" );
