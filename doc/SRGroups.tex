@@ -157,7 +157,31 @@ or (at your option) any later version. \mbox{}}\\[1cm]
 \logpage{[ 1, 0, 0 ]}
 \hyperdef{L}{X7DFB63A97E67C0A1}{}
 {
-  Let $G$ be a subgroup of $\textrm{Aut}(T_{k,k})$ with its group action, $\alpha$, defined as $\alpha(g,x)=g(x)$, where $g\in G$ are the automorphisms of $G$ and $x\in X$ the vertices of $T_{k,k}$. Let $\textrm{stab}_{G}(0)=\{g\in G : \alpha(g,0) = 0\}$, and $T_0\subset T_{k,k}$ be the set of all vertices below and including the vertex 0. Additonally, let $\varphi_0 : \textrm{stab}_G(0)\rightarrow G$ be a group homomorphism with the mapping $g\mapsto g|_{T_0}$. Then $G$ is called self-replicating if and only if the following two conditions, $\mathcal{R}_k$, are satisfied: $G$ is vertex transitive on level 1 of $T_{k,k}$, and $\varphi_0\left(\textrm{stab}_{G}(0)\right)=G$. }
+  Let $G$ be a subgroup of the regular rooted k-tree, $\textrm{Aut}(T_{k})$ with its group action, $\alpha$, defined as $\alpha(g,x)=g(x)$, where $g\in G$ are the automorphisms of $G$ and $x\in X$ the vertices of $T_{k}$. Let $\textrm{stab}_{G}(0)=\{g\in G : \alpha(g,0) = 0\}$, and $T_0\subset T_{k}$ be the set of all vertices below and including the vertex 0. Additonally, let $\varphi_0 : \textrm{stab}_G(0)\rightarrow G$ be a group homomorphism with the mapping $g\mapsto g|_{T_0}$. Then $G$ is called self-replicating if and only if the following two conditions, $\mathcal{R}_k$, are satisfied: $G$ is vertex transitive on level 1 of $T_{k}$, and $\varphi_0\left(\textrm{stab}_{G}(0)\right)=G$. 
+
+ A group $G\leq\mathrm{Aut}(T_{k})$ acting greater than level 1 is said to have sufficient rigid automorphisms if
+for each pair of vertices $u$ and $v$ on level $1$ of the tree, $T_{k,1}$, there exists an automorphism $g\in G$ such that $g(u)=v$ and $g|_u=e$, where $g$ is called $(u,v)$-rigid. For a self-replicating group $G$ on level $n$ of the tree, $T_{k,n}$, with sufficient rigid automorphisms, the maximal extension of $G$, $\mathcal{M}(G)$, is the largest self-replicating group (not necessarily with sufficient rigid
+automorphisms) on $\textrm{Aut}(T_{k,n+1})$ that projects onto $G$, defined as: 
+\[\mathcal{M}(G):= \{x\in\mathrm{Aut}(T_{k,n+1}) : \varphi_{n+1}(x)\in G and
+x|_v\in G \textrm{for all v on level 1}\}.\]
+ The self-replicating property is preserved across conjugacy. For a group $H\leq\mathrm{Aut}(T_{k,n})$ with sufficient rigid automorphisms, and a self-replicating group $G\leq\mathrm{Aut}(T_{k,n+1})$, there exists a conjugate of $G$ in $\mathrm{Aut}(T_{k,n+1})$ with sufficient rigid automorphisms. Since groups on level 1 inherently have
+sufficient rigid automorphisms, then self-replicating groups with sufficient
+rigid automorphisms can be found on all levels of the tree. 
+
+ The \textsf{SRGroups} package serves to provide a library of these self-replicating groups to
+further the ongoing studies of infinite networks and group theory. By using
+the above definitions and conditions, several GAP methods and functions have
+been built to allow computations of these groups and expand the understanding
+of their behaviour. 
+
+ First, this package acts as a library for searching currently known
+self-replicating groups for varying degrees and levels of regular rooted
+trees. This package also acts as a regular GAP package with functions that
+allow the expansion of the library and addition of attributes/properties
+relevant to self-replicating groups. Additional functions also exist in this
+package that are compatible with GraphViz, to plot diagrams of the extension
+behaviour of these self-replicating groups and their corresponding Hasse
+diagrams at different depths. }
 
    
 \chapter{\textcolor{Chapter }{Functionality}}\label{Chapter_Functionality}
@@ -360,7 +384,7 @@ or (at your option) any later version. \mbox{}}\\[1cm]
 
  
 \begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
-  gap>
+  !gapprompt@gap>| !gapinput@|
 \end{Verbatim}
  }
 
@@ -371,8 +395,32 @@ or (at your option) any later version. \mbox{}}\\[1cm]
 {
   
 
-\subsection{\textcolor{Chapter }{AllSRGroups}}
+\subsection{\textcolor{Chapter }{SRGroup}}
 \logpage{[ 2, 2, 1 ]}\nobreak
+\hyperdef{L}{X79B6921585FAFD67}{}
+{\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{SRGroup({\mdseries\slshape k, n, num})\index{SRGroup@\texttt{SRGroup}}
+\label{SRGroup}
+}\hfill{\scriptsize (function)}}\\
+\textbf{\indent Returns:\ }
+ The \mbox{\texttt{\mdseries\slshape num}}th self-replicating group of degree \mbox{\texttt{\mdseries\slshape k}} and depth \mbox{\texttt{\mdseries\slshape n}} stored in the \textsf{SRGroups} library. 
+
+
+
+ The argument of this function is a degree, \mbox{\texttt{\mdseries\slshape k}}, a depth, \mbox{\texttt{\mdseries\slshape n}}, and a designated number of the stored self-replicating group, \mbox{\texttt{\mdseries\slshape num}}. }
+
+ 
+
+ 
+\begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
+  !gapprompt@gap>| !gapinput@SRGroup(2,3,1);|
+  SRGroup(2,3,1)
+  !gapprompt@gap>| !gapinput@Size(last);|
+  8
+\end{Verbatim}
+ 
+
+\subsection{\textcolor{Chapter }{AllSRGroups}}
+\logpage{[ 2, 2, 2 ]}\nobreak
 \hyperdef{L}{X845F9F227B97062C}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{AllSRGroups({\mdseries\slshape Input1, val1, Input2, val2, ...})\index{AllSRGroups@\texttt{AllSRGroups}}
 \label{AllSRGroups}
@@ -401,7 +449,7 @@ provided input arguments.
  
 
 \subsection{\textcolor{Chapter }{AllSRGroupsInfo}}
-\logpage{[ 2, 2, 2 ]}\nobreak
+\logpage{[ 2, 2, 3 ]}\nobreak
 \hyperdef{L}{X808A9F918166020B}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{AllSRGroupsInfo({\mdseries\slshape Input1, val1, Input2, val2, ...})\index{AllSRGroupsInfo@\texttt{AllSRGroupsInfo}}
 \label{AllSRGroupsInfo}
@@ -427,8 +475,28 @@ input arguments in list form: [\mbox{\texttt{\mdseries\slshape Generators}}, \mb
 \end{Verbatim}
  
 
+\subsection{\textcolor{Chapter }{CheckSRProjections}}
+\logpage{[ 2, 2, 4 ]}\nobreak
+\hyperdef{L}{X7DC9A60E87E350AF}{}
+{\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{CheckSRProjections({\mdseries\slshape k, n})\index{CheckSRProjections@\texttt{CheckSRProjections}}
+\label{CheckSRProjections}
+}\hfill{\scriptsize (function)}}\\
+\textbf{\indent Returns:\ }
+ Whether all of the self-replicating groups of degree \mbox{\texttt{\mdseries\slshape k}} and level \mbox{\texttt{\mdseries\slshape n}} project correctly to level \mbox{\texttt{\mdseries\slshape n-1}}. 
+
+
+
+ The arguments of this function are a degree, \mbox{\texttt{\mdseries\slshape k}}, and a level, \mbox{\texttt{\mdseries\slshape n}}. }
+
+ 
+\begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
+  !gapprompt@gap>| !gapinput@CheckSRProjections(2,4);|
+  All groups project correctly.
+\end{Verbatim}
+ 
+
 \subsection{\textcolor{Chapter }{SRDegrees}}
-\logpage{[ 2, 2, 3 ]}\nobreak
+\logpage{[ 2, 2, 5 ]}\nobreak
 \hyperdef{L}{X7BF255357B870D37}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{SRDegrees({\mdseries\slshape })\index{SRDegrees@\texttt{SRDegrees}}
 \label{SRDegrees}
@@ -448,7 +516,7 @@ input arguments in list form: [\mbox{\texttt{\mdseries\slshape Generators}}, \mb
  
 
 \subsection{\textcolor{Chapter }{SRLevels}}
-\logpage{[ 2, 2, 4 ]}\nobreak
+\logpage{[ 2, 2, 6 ]}\nobreak
 \hyperdef{L}{X7CDBB45386329E21}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{SRLevels({\mdseries\slshape k})\index{SRLevels@\texttt{SRLevels}}
 \label{SRLevels}
@@ -522,6 +590,178 @@ input arguments in list form: [\mbox{\texttt{\mdseries\slshape Generators}}, \mb
   !gapprompt@gap>| !gapinput@BelowAction(2,2,(1,2)(3,4),2);|
   (1,2)
 \end{Verbatim}
+ 
+
+\subsection{\textcolor{Chapter }{RemoveConjugates}}
+\logpage{[ 2, 3, 3 ]}\nobreak
+\hyperdef{L}{X795ACCF4858A8ED2}{}
+{\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{RemoveConjugates({\mdseries\slshape G, grouplist})\index{RemoveConjugates@\texttt{RemoveConjugates}}
+\label{RemoveConjugates}
+}\hfill{\scriptsize (function)}}\\
+
+
+ The arguments of this function are a group, \mbox{\texttt{\mdseries\slshape G}}, and a list of groups, grouplist. For every group H1 in grouplist, this
+function removes all conjugate groups H2 such that H2\texttt{\symbol{92}}in
+H1\texttt{\symbol{94}}G. 
+
+ }
+
+ 
+
+ 
+\begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
+  !gapprompt@gap>| !gapinput@|
+\end{Verbatim}
+ 
+
+\subsection{\textcolor{Chapter }{ConjugacyClassRepsMaxSelfReplicatingSubgroups}}
+\logpage{[ 2, 3, 4 ]}\nobreak
+\hyperdef{L}{X873DD3E87ADDC9D9}{}
+{\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{ConjugacyClassRepsMaxSelfReplicatingSubgroups({\mdseries\slshape G})\index{ConjugacyClassRepsMaxSelfReplicatingSubgroups@\texttt{Conjugacy}\-\texttt{Class}\-\texttt{Reps}\-\texttt{Max}\-\texttt{Self}\-\texttt{Replicating}\-\texttt{Subgroups}}
+\label{ConjugacyClassRepsMaxSelfReplicatingSubgroups}
+}\hfill{\scriptsize (function)}}\\
+\textbf{\indent Returns:\ }
+ A list containing conjugacy class representatives of all maximal
+self-replicating subgroups of \mbox{\texttt{\mdseries\slshape G}}. 
+
+
+
+ The argument of this function is any regular rooted tree group, \mbox{\texttt{\mdseries\slshape G}} 
+
+ }
+
+ 
+
+ 
+\begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
+  !gapprompt@gap>| !gapinput@ConjugacyClassRepsMaxSelfReplicatingSubgroups(AutT(2,2));|
+  [ Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]) ]
+\end{Verbatim}
+ 
+
+\subsection{\textcolor{Chapter }{ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection}}
+\logpage{[ 2, 3, 5 ]}\nobreak
+\hyperdef{L}{X7A0FFE297B512886}{}
+{\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection({\mdseries\slshape G})\index{ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection@\texttt{Conjugacy}\-\texttt{Class}\-\texttt{Reps}\-\texttt{Self}\-\texttt{Replicating}\-\texttt{Subgroups}\-\texttt{With}\-\texttt{Conjugate}\-\texttt{Projection}}
+\label{ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection}
+}\hfill{\scriptsize (function)}}\\
+\textbf{\indent Returns:\ }
+ A list containing conjugacy class representatives of all self-replicating
+subgroups of the maximal extension of \mbox{\texttt{\mdseries\slshape G}}, \mbox{\texttt{\mdseries\slshape M(G)}}. 
+
+
+
+ The argument of this function is any regular rooted tree group, \mbox{\texttt{\mdseries\slshape G}} 
+
+ }
+
+ 
+
+ 
+\begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
+  !gapprompt@gap>| !gapinput@gap> ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(2,2));|
+  [ Group([ (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2), (3,4) ]),
+    Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
+    Group([ (1,3)(2,4)(7,8), (1,5)(2,6)(3,7)(4,8), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ])
+      , Group([ (1,5)(2,6)(3,7,4,8), (1,3)(2,4), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
+    Group([ (1,3)(2,4)(7,8), (1,5,3,7)(2,6,4,8), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
+    Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(7,8), (5,6)(7,8), (1,4,2,3)(5,7,6,8), (1,2)(3,4)(5,6)(7,8) ]),
+    Group([ (3,4)(5,7,6,8), (1,5)(2,6)(3,7)(4,8), (5,6)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ]),
+    Group([ (3,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,3,2,4)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]),
+    Group([ (1,5,2,6)(3,7,4,8), (3,4)(5,7)(6,8), (1,3,2,4)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]) ]
+\end{Verbatim}
+ 
+
+\subsection{\textcolor{Chapter }{SRGroupFile}}
+\logpage{[ 2, 3, 6 ]}\nobreak
+\hyperdef{L}{X78CBB505845FA80F}{}
+{\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{SRGroupFile({\mdseries\slshape k})\index{SRGroupFile@\texttt{SRGroupFile}}
+\label{SRGroupFile}
+}\hfill{\scriptsize (function)}}\\
+
+
+ The arguments of this function are a degree, \mbox{\texttt{\mdseries\slshape k}}, or \mbox{\texttt{\mdseries\slshape 0}}. If the argument is non-zero, this function creates the file containing all
+self-replicating groups of the regular rooted k-tree at the lowest level not
+stored in the \textsf{SRGroups} library. If the argument is \mbox{\texttt{\mdseries\slshape 0}}, this function creates the file containing all self-replicating groups of the
+regular rooted tree at the level 1 for the lowest degree not stored in the \textsf{SRGroups} library. The file naming convention is
+"sr{\textunderscore}k{\textunderscore}n.grp", and they are stored in the
+"data" folder of the \textsf{SRGroups} package. Level 1 groups are calculated using the \textsf{transgrp} library. If the argument is non-zero and there is a gap between files (i.e. if
+"sr{\textunderscore}k{\textunderscore}n.grp" and
+"sr{\textunderscore}k{\textunderscore}n+2.grp" exists, but
+"sr{\textunderscore}k{\textunderscore}n+1.grp" does not exist), then this
+function creates the files in this gap. 
+
+ }
+
+ 
+
+ 
+\begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
+  !gapprompt@gap>| !gapinput@SRGroupFile(2);|
+  You have requested to make group files for degree 2.
+  Creating level 3 file.
+  Evaluating groups extending from:
+  SRGroup(2,2,1)  (1/3)
+  SRGroup(2,2,2)  (2/3)
+  SRGroup(2,2,3)  (3/3)
+  SRGroup(2,2,4)  (4/3)
+  Formatting file sr_2_3.grp now.
+  Reordering individual files.
+  Done.
+  !gapprompt@gap>| !gapinput@SRGroupFile(0);|
+  Creating degree 5 file on level 1.
+  Done.
+  !gapprompt@gap>| !gapinput@SRGroupFile(2);|
+  You have requested to make group files for degree 2.
+  Gap found; missing file from level 2. Creating the missing file now.
+  Creating files:
+  sr_2_2.grp
+  Done.
+\end{Verbatim}
+ 
+
+\subsection{\textcolor{Chapter }{ExtendSRGroup}}
+\logpage{[ 2, 3, 7 ]}\nobreak
+\hyperdef{L}{X8307E6897847A11B}{}
+{\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{ExtendSRGroup({\mdseries\slshape arg})\index{ExtendSRGroup@\texttt{ExtendSRGroup}}
+\label{ExtendSRGroup}
+}\hfill{\scriptsize (function)}}\\
+
+
+ The arguments of this function are: arg[1]: degree of tree (int {\textgreater}
+1), \mbox{\texttt{\mdseries\slshape k}}, arg[2]: highest level of tree where the file
+"sr{\textunderscore}k{\textunderscore}n.grp" exists (int {\textgreater} 1), \mbox{\texttt{\mdseries\slshape n}}, (arg[3],arg[4],...): sequence of group numbers to extend from using the
+files
+"temp{\textunderscore}k{\textunderscore}n{\textunderscore}arg[3]{\textunderscore}arg[4]{\textunderscore}...arg[Length(arg)-1].grp".
+This function creates the file of the group number arg[Length(arg)] stored in
+the file
+"temp{\textunderscore}k{\textunderscore}n{\textunderscore}arg[3]{\textunderscore}arg[4]{\textunderscore}...arg[Length(arg)-1].grp",
+and saves it as
+"temp{\textunderscore}k{\textunderscore}n{\textunderscore}arg[3]{\textunderscore}arg[4]{\textunderscore}...arg[Length(arg)].grp". 
+
+ }
+
+ 
+
+\subsection{\textcolor{Chapter }{CombineSRFiles}}
+\logpage{[ 2, 3, 8 ]}\nobreak
+\hyperdef{L}{X78CB3D847AA20727}{}
+{\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{CombineSRFiles({\mdseries\slshape k, n})\index{CombineSRFiles@\texttt{CombineSRFiles}}
+\label{CombineSRFiles}
+}\hfill{\scriptsize (function)}}\\
+
+
+ The arguments of this function are a degree, \mbox{\texttt{\mdseries\slshape k}}, and a level, \mbox{\texttt{\mdseries\slshape n}}, of a regular rooted tree, \mbox{\texttt{\mdseries\slshape n-1}} is the highest level stored as the file
+"sr{\textunderscore}k{\textunderscore}n-1.grp" in the \textsf{SRGroups} library, and all of the files
+"temp{\textunderscore}k{\textunderscore}n-1{\textunderscore}i{\textunderscore}proj.grp"
+for every SRGroup(k,n-1,i) are stored in the
+"data/temp{\textunderscore}k{\textunderscore}n" folder of the \textsf{SRGroups} library. This function combines each of the
+"temp{\textunderscore}k{\textunderscore}n-1{\textunderscore}i{\textunderscore}proj.grp"
+files into the complete "temp{\textunderscore}k{\textunderscore}n.grp" file to
+be used by the \texttt{SRGroupFile} (\ref{SRGroupFile}) function. 
+
+ }
+
  }
 
  }
@@ -537,7 +777,6 @@ input arguments in list form: [\mbox{\texttt{\mdseries\slshape Generators}}, \mb
 
 \printindex
 
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}

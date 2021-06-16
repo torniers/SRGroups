@@ -69,13 +69,21 @@
       2.1-8 MaximalExtension
       2.1-9 RepresentativeWithSufficientRigidAutomorphisms
     2.2 [33X[0;0YLibrary Functions[133X
-      2.2-1 AllSRGroups
-      2.2-2 AllSRGroupsInfo
-      2.2-3 SRDegrees
-      2.2-4 SRLevels
+      2.2-1 SRGroup
+      2.2-2 AllSRGroups
+      2.2-3 AllSRGroupsInfo
+      2.2-4 CheckSRProjections
+      2.2-5 SRDegrees
+      2.2-6 SRLevels
     2.3 [33X[0;0YPackage Functions[133X
       2.3-1 AutT
       2.3-2 BelowAction
+      2.3-3 RemoveConjugates
+      2.3-4 ConjugacyClassRepsMaxSelfReplicatingSubgroups
+      2.3-5 ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection
+      2.3-6 SRGroupFile
+      2.3-7 ExtendSRGroup
+      2.3-8 CombineSRFiles
   
   
   [32X
