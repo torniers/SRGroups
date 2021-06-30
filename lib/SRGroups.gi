@@ -325,7 +325,7 @@ end);
 # Input:: deg: degree of the tree (integer at least 2), lev: level of the tree (integer at least 1; if lev=1, then the unformatted "sr_deg_1.grp" file must already exist) (requires "sr_deg_lev+1.grp" file to exist)
 # Output:: Formatted version of the file "sr_deg_lev.grp"
 InstallGlobalFunction(FormatSRFile, function(deg,lev)
-	local pr, fSingleGroup, fCumulative, numGroupsAbove, numProj, i, groupInfo, projBelow, prBelow, aboveCount, k, fNew, dirData, dirTempFiles,reEntry, reEntryCheck, fVariables, numGroups, gens, gensAbove, gensAboveTemp, currentGens, j, fGens, fGensAbove, groupNum;
+	local pr, fSingleGroup, fCumulative, numGroupsAbove, numProj, i, groupInfo, projBelow, prBelow, aboveCount, k, fNew, dirData, dirTempFiles,reEntry, reEntryCheck, fVariables, numGroups, gens, gensAbove, gensAboveTemp, currentGens, j, fGens, fGensAbove, groupNum, groupsLevel1, checkLevel1;
 
 	# 0. Create directories to be used (dirData: storage of final group files, dirTempFiles: storage of temporary files).
 	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
@@ -468,11 +468,25 @@ InstallGlobalFunction(FormatSRFile, function(deg,lev)
 	fi;
 
 	# 4. Store and print formatted group information.
+	checkLevel1:=false;
 	while j<=numGroups do
 		# 4.1. Create entries containing individual group information.
 		groupInfo[j]:=[];
 		groupInfo[j][1]:=gens[j];
-		groupInfo[j][2]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(j),")\"");
+		if lev=1 then
+			if not checkLevel1 then
+				groupsLevel1:=AllSRGroups(Degree,deg,Depth,lev);
+				checkLevel1:=true;
+			fi;
+			for k in [1..Length(groupsLevel1)] do
+				if Group(gens[j])=groupsLevel1[k] then
+					groupInfo[j][2]:=Concatenation("\"",SRGroupsInfo(deg,lev,k)[2],"\"");
+					Remove(groupsLevel1,Position(groupsLevel1,groupsLevel1[k]));
+				fi;
+			od;
+		else
+			groupInfo[j][2]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(j),")\"");
+		fi;
 		# 4.1.1. Index 3 must reflect the known groups each group on level lev projects to (using numProj[aboveCount]).
 		if lev>1 then
 			if j<=numProj[aboveCount] then
@@ -559,26 +573,11 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 
 	# 1. First check if the input argument is 0 or 1. If so, the tree level is automatically set to 1.
 	if arg[1]=0 or arg[1]=1 then
-		# 1.1. Create a list which contains the degrees already stored in the Data folder for the SRGroups package.
-		srDegrees:=SRDegrees();
 		deg:=2;
-		# 1.1.1. Set the degree=deg to be 1 higher than the highest degree stored that is consecutive with 2.
-		if not IsEmpty(srDegrees) then
-			for count in [1..Length(srDegrees)] do
-				if count=1 then
-					if not srDegrees[count]=deg then
-						break;
-					fi;
-				else
-					if not srDegrees[count]=deg then
-						deg:=deg+1;
-						if srDegrees[count]>deg then
-							break;
-						fi;
-					fi;
-				fi;
-			od;
-		fi;
+		# 1.1. Set the degree=deg to be 1 higher than the highest degree stored that is consecutive with 2.
+		while SRGroupsAvailable(deg,1) do
+			deg:=deg+1;
+		od;
 		Print("Creating degree ", deg, " file on level 1.\n");
 		
 		# 1.2. Create required filenames.
@@ -606,9 +605,8 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 		for wCount in [initialx..NrTransitiveGroups(deg)] do
 			# 1.5.1. Create entries containing individual group information.
 			groupInfo[wCount]:=[];
-			groupInfo[wCount][1]:=ShallowCopy(TRANSGrp(deg,wCount));
-			Remove(groupInfo[wCount][1],Length(groupInfo[wCount][1]));
-			groupInfo[wCount][2]:=Concatenation("\"SRGroup(",String(deg),",1,",String(wCount),")\"");
+			groupInfo[wCount][1]:=GeneratorsOfGroup(TransitiveGroup(deg,wCount));
+			groupInfo[wCount][2]:=Concatenation("\"SRGroup(",String(deg),",1,",String(wCount),") = ",ViewString(TransitiveGroup(deg,wCount)),"\"");
 			groupInfo[wCount][3]:="\"emptyset\"";
 			groupInfo[wCount][4]:="[\"the classes it extends to\"]";
 			# 1.5.2. Separately print individual group information (in correct format) to "temp_deg_1_indiv.grp".
@@ -641,6 +639,9 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 		RemoveFile(fVariables);
 		if reEntryCheck then
 			UnbindVariables("varArg1");
+		fi;
+		if SRGroupsAvailable(deg,2) then
+			FormatSRFile(deg,1);
 		fi;
 		Print("Done.");
 		
@@ -677,7 +678,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 			od;
 		fi;
 		
-		# 2.2.3. If srLevels is not emptu, then using list of currently stored levels, srLevels, check for any gaps by evaluating srLevels[count]. A gap is found when srLevels[count]=/=count.
+		# 2.2.3. If srLevels is not empty, then using list of currently stored levels, srLevels, check for any gaps by evaluating srLevels[count]. A gap is found when srLevels[count]=/=count.
 		# If no gaps are found, set the level=lev to be 1 higher than the highest level stored that is consecutive with 1.
 		# In this case, continue with the normal file creation protocol (uses ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection to generate the groups).
 		# If a gap is found, set the level=srLevels[count]-1 and continue with the alternative file creation protocol (fills the gap using projections from the file on level srLevels[count]).
@@ -693,6 +694,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 				elif count=1 and (not srLevels[count]=count) then
 					lev:=1;
 					Print("\nGap found on level 1. Creating level 1 file.");
+					break;
 				else
 					lev:=srLevels[count]-1;
 					levGap:=lev-srLevels[count-1]; # Number of levels missing
@@ -739,9 +741,8 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 			for wCount in [initialx..NrTransitiveGroups(deg)] do
 				# 2.4.2.1. Create entries containing individual group information.
 				groupInfo[wCount]:=[];
-				groupInfo[wCount][1]:=ShallowCopy(TRANSGrp(deg,wCount));
-				Remove(groupInfo[wCount][1],Length(groupInfo[wCount][1]));
-				groupInfo[wCount][2]:=Concatenation("\"SRGroup(",String(deg),",1,",String(wCount),")\"");
+				groupInfo[wCount][1]:=GeneratorsOfGroup(TransitiveGroup(deg,wCount));
+				groupInfo[wCount][2]:=Concatenation("\"SRGroup(",String(deg),",1,",String(wCount),") = ",ViewString(TransitiveGroup(deg,wCount)),"\"");
 				groupInfo[wCount][3]:="\"emptyset\"";
 				groupInfo[wCount][4]:="[\"the classes it extends to\"]";
 				# 2.4.2.2. Print all individual group information (in correct format) to "temp_deg_1_indiv.grp".
@@ -1302,6 +1303,9 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 				RemoveFile(fLevelAboveSingle);
 				RemoveFile(fLevelAboveCumulative);
 			fi;
+		fi;
+		if lev=1 and SRGroupsAvailable(deg,2) then
+			FormatSRFile(deg,1);
 		fi;
 		Print("\nDone.");
 	fi;

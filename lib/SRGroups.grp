@@ -443,6 +443,7 @@ InstallGlobalFunction(SRDegrees,function()
 			Add(srDegrees,EvalString(SplitString(dataContents[count], ".", "_")[2]));
 		fi;
 	od;
+	srDegrees:=DuplicateFreeList(srDegrees);
 	StableSort(srDegrees);
 	return srDegrees;
 end);
@@ -463,7 +464,6 @@ InstallGlobalFunction(SRLevels,function(deg)
 	return srLevels;
 end);
 
-InstallGlobalFunction(Level,function()
-	# This function serves no purpose except to add an input to the AllSRGroups function.
-	return;
+InstallGlobalFunction(SRGroupsAvailable,function(deg,lev)
+		return (lev in SRLevels(deg) and deg in SRDegrees());
 end);

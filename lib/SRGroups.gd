@@ -266,6 +266,8 @@ DeclareGlobalFunction( "SRLevels" );
 #! @EndExampleSession
 
 
+DeclareGlobalFunction( "SRGroupsAvailable" );
+
 ####################################################################################################################
 #! @Section Package Functions
 ####################################################################################################################
@@ -408,4 +410,4 @@ DeclareGlobalFunction( "ReorderSRFiles" );
 DeclareGlobalFunction( "NumberExtensionsUnformatted" );
 
 
-DeclareGlobalFunction( "Level" );
+DeclareSynonym( "Level" , "Depth" );
