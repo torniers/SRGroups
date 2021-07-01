@@ -70,30 +70,20 @@ InstallGlobalFunction(SRGroupsInfo,function(arg)
 			fi;
 		fi;
 		
-		if i<9 and (not IsInt(arg[i]) or not (arg[i]>=argMinimums[i] or arg[i]=0) or (check1 and not arg[i]<=NumberSRGroups(arg[1],arg[2])) or (check2 and not arg[i]<=NumberSRGroups(arg[1],arg[2]-1))) then
-			if check1 then 
+		if i<9 and (not IsInt(arg[i]) or not (arg[i]>=argMinimums[i] or arg[i]=0) or check1 or check2) then
+			if check1 and not (arg[i]<=NumberSRGroups(arg[1],arg[2]) or arg[i]=0) then 
 				Error("input argument ",argFunctions[i],"=arg[",i,"]=",arg[i]," must be an integer in [",argMinimums[i],"..",NumberSRGroups(arg[1],arg[2]),"] or zero");
-			elif check2 then
-				Error("input argument ",argFunctions[i],"=arg[",i,"]=",arg[i]," must be an integer in [",argMinimums[i],"..",NumberSRGroups(arg[1],arg[2]-1),"] or zero");
-			elif i=8 and not (arg[i]<=4) then
+			elif check2 and not arg[i]=0 then
+				if not arg[i]<=NumberSRGroups(arg[1],arg[2]-1) then
+					Error("input argument ",argFunctions[i],"=arg[",i,"]=",arg[i]," must be an integer in [",argMinimums[i],"..",NumberSRGroups(arg[1],arg[2]-1),"] or zero");
+				fi;
+			elif i=8 and not (arg[i]<=4 or arg[i]=0) then
 				Error("input argument ",argFunctions[i],"=arg[",i,"]=",arg[i]," must be an integer in [1..4] or zero");
-			else
+			elif not (check1 or check2 or arg[i]=0) then
 				Error("input argument ",argFunctions[i],"=arg[",i,"]=",arg[i]," must be an integer greater than or equal to ",argMinimums[i]);
 			fi;
 		elif i=9 and not (IsBool(arg[i]) or arg[i]=0) then
 			Error("input argument ",argFunctions[i],"=arg[",i,"]=",arg[i]," must be a boolean");
-		fi;
-		
-		if not (1 in zeros or 2 in zeros) then
-				if SRGroupsAvailable(arg[1],arg[2]) then
-					if (i=3 or i=5) and not (arg[i]<=NumberSRGroups(arg[1],arg[2])) then
-						Error("input argument arg[",i,"]=",arg[i]," must be an integer in [",argMinimums[i],"..",NumberSRGroups(arg[1],arg[2]),"] or zero");
-					elif i=4 and SRGroupsAvailable(arg[1],arg[2]-1) then
-						if not arg[i]<=NumberSRGroups(arg[1],arg[2]-1) then
-							Error("input argument arg[",i,"]=",arg[i]," must be an integer in [",argMinimums[i],"..",NumberSRGroups(arg[1],arg[2]-1),"] or zero");
-						fi;
-					fi;
-				fi;
 		fi;
 	od;
 

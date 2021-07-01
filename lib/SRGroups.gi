@@ -327,6 +327,12 @@ end);
 InstallGlobalFunction(FormatSRFile, function(deg,lev)
 	local pr, fSingleGroup, fCumulative, numGroupsAbove, numProj, i, groupInfo, projBelow, prBelow, aboveCount, k, fNew, dirData, dirTempFiles,reEntry, reEntryCheck, fVariables, numGroups, gens, gensAbove, gensAboveTemp, currentGens, j, fGens, fGensAbove, groupNum, groupsLevel1, checkLevel1;
 
+	if not (IsInt(deg) and deg>=2) then
+		Error("input argument deg=",deg," must be an integer greater than or equal to 2");
+	elif not (IsInt(lev) and lev>=1) then
+		Error("input argument deg=",deg," must be an integer greater than or equal to 1");
+	fi;
+	
 	# 0. Create directories to be used (dirData: storage of final group files, dirTempFiles: storage of temporary files).
 	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
 	dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
@@ -563,16 +569,20 @@ end);
 
 # Input:: Any integer in the range [0,31], which denotes the degree of the regular rooted tree being organised. If the input is 0 or 1, the degree is chosen to be the lowest degree not stored.
 # Output:: The file containing all self-replicating groups of the rooted k-tree at the lowest level not stored.
-InstallGlobalFunction(SRGroupFile, function(arg)
+InstallGlobalFunction(SRGroupFile, function(degree)
 	local count, fNew, dirData, k, prevLev, srDegrees, i, x, dataContents, list2, groupGens, deg, lev, fExtensions, groupList, entryPoint, breakPoint, fBreakPointCheck, groupInfo, unsortedLists, sortedList, prevPosLists, yCount, w, yVisited, vCount, fLevelAboveSingle, groupInfoAbove, v, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, reEntryCheck, wCount, y, z, sortedLists, unsortedList, posList, dirTempFiles, fNewAbove, breakPointCheckExist, prevPosList, prevPosListBelow, j, srLevels, incompleteLevels, m, projectionProtocol, levGap, formatAbove, dirTempFilesContents, dirTempSingleFilesContents, stringFolder, dirTempSingleFiles, levReorder;
-
+	
+	if not (IsInt(degree) and degree>=0) then
+		Error("input argument degree=",degree," must be an integer greater than or equal to zero");
+	fi;
+	
 	# 0. Create directories to be used (dirData: storage of final group files, dirTempFiles: storage of temporary files).
 	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
 	dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
 	dataContents:=DirectoryContents(dirData[1]); # Creates a list of strings with names of the files/folders stored in dirData.
 
 	# 1. First check if the input argument is 0 or 1. If so, the tree level is automatically set to 1.
-	if arg[1]=0 or arg[1]=1 then
+	if degree=0 or degree=1 then
 		deg:=2;
 		# 1.1. Set the degree=deg to be 1 higher than the highest degree stored that is consecutive with 2.
 		while SRGroupsAvailable(deg,1) do
@@ -648,7 +658,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 	# 2. Case where the input argument is in [2,31].
 	else 
 		# 2.1. Set the degree to be the input argument.
-		deg:=arg[1];
+		deg:=degree;
 		Print("You have requested to make group files for degree ", deg, ".");
 		
 		# 2.2. Finding the level to begin. If an element of list begins with "sr_arg[1]_", then store it in srLevels.
@@ -1593,6 +1603,16 @@ end);
 InstallGlobalFunction(ExtendSRGroup,function(arg)
 	local deg, lev, groupPosition, groupPositionAbove, initialLev, stringPrefix, stringFolder, stringFolderAbove, stringSuffix, stringSuffixAbove, dirData, dirTempFiles, dirTempSingleFiles, dirTempSingleFilesAbove, fExtension, fExtensionAbove, G,  groupList, groupGens, i;
 	
+	if not (IsInt(arg[1]) and arg[1]>=2) then
+		Error("input argument arg[1]=",arg[1]," must be an integer greater than or equal to 2");
+	else
+		for i in [2..Length(arg)] do
+			if not (IsInt(arg[i]) and arg[i]>=1) then
+				Error("input argument deg=",deg," must be an integer greater than or equal to 1");
+			fi;
+		od;
+	fi;
+	
 	# 1. Initialise degree, levels, and group position.
 	deg:=arg[1];
 	initialLev:=arg[2];
@@ -1682,6 +1702,12 @@ end);
 # Output:: The combined file "temp_deg_lev.grp" containing all extended groups on level lev-1 (for use with the SRGroupFile function)
 InstallGlobalFunction(CombineSRFiles,function(deg,lev)
 	local stringFolder, stringFolderAbove, dirTempFiles, dirTempSingleFiles, fExtension, fExtensions, i;
+	
+	if not (IsInt(deg) and deg>=2) then
+		Error("input argument deg=",deg," must be an integer greater than or equal to 2");
+	elif not (IsInt(lev) and lev>=1) then
+		Error("input argument deg=",deg," must be an integer greater than or equal to 1");
+	fi;
 	
 	# 1. Initialise strings that refer to file and variable names, and initialise directory to contain file "temp_deg_lev.grp" (pkg/SRGroups/data/temp_files/).
 	stringFolderAbove:=Concatenation("temp_",String(deg),"_",String(lev-1));

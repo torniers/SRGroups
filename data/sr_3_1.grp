@@ -4,15 +4,29 @@ BindGlobal("sr_3_1",
 [
 	[
 		[ (1,2,3) ],
-		"SRGroup(3,1,1) = A3",
+		"SRGroup(3,1,1)",
 		"emptyset",
-		["the classes it extends to"]
+		["SRGroup(3,2,1)",
+		"SRGroup(3,2,2)",
+		"SRGroup(3,2,3)",
+		"SRGroup(3,2,4)",
+		"SRGroup(3,2,5)"]
 	],
 
 	[
 		[ (1,2,3), (1,2) ],
-		"SRGroup(3,1,2) = S3",
+		"SRGroup(3,1,2)",
 		"emptyset",
-		["the classes it extends to"]
+		["SRGroup(3,2,6)",
+		"SRGroup(3,2,7)",
+		"SRGroup(3,2,8)",
+		"SRGroup(3,2,9)",
+		"SRGroup(3,2,10)",
+		"SRGroup(3,2,11)",
+		"SRGroup(3,2,12)",
+		"SRGroup(3,2,13)",
+		"SRGroup(3,2,14)",
+		"SRGroup(3,2,15)",
+		"SRGroup(3,2,16)"]
 	]
 ]);
