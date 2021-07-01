@@ -166,6 +166,10 @@ DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRoot
 #! @Section Library Functions
 ####################################################################################################################
 
+DeclareGlobalFunction( "GetSRData" );
+
+DeclareGlobalFunction( "NumberSRGroups" );
+
 DeclareGlobalFunction( "SRGroupsInfo" );
 
 
