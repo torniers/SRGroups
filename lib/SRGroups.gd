@@ -170,6 +170,10 @@ DeclareGlobalFunction( "GetSRData" );
 
 DeclareGlobalFunction( "NumberSRGroups" );
 
+DeclareGlobalFunction( "CheckSRGroupsInputs" );
+
+DeclareGlobalFunction( "GetSRMaximums" );
+
 DeclareGlobalFunction( "SRGroupsInfo" );
 
 

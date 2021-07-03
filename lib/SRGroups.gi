@@ -1265,8 +1265,6 @@ InstallGlobalFunction(SRGroupFile, function(degree)
 			fi;
 		fi;
 		
-
-		
 		if not projectionProtocol then
 			# 2.5.7. Append end of list containing groups.
 			if not EndsWith(StringFile(fCumulative),"\n]);") then
@@ -1608,7 +1606,7 @@ InstallGlobalFunction(ExtendSRGroup,function(arg)
 	else
 		for i in [2..Length(arg)] do
 			if not (IsInt(arg[i]) and arg[i]>=1) then
-				Error("input argument deg=",deg," must be an integer greater than or equal to 1");
+				Error("input argument arg[i]=",arg[i]," must be an integer greater than or equal to 1");
 			fi;
 		od;
 	fi;
