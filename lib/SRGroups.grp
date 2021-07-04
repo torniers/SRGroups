@@ -266,15 +266,7 @@ InstallGlobalFunction(CheckSRGroupsInputs,function(arg)
 		if cont then
 			StableSort(newDegs);
 			StableSort(newLevs);
-			if degs[1]<>0 and levs[1]<>0 then
-				return [cont,argMinimums,newDegs,newLevs];
-			elif degs[1]<>0 and levs[1]=0 then
-				return [cont,argMinimums,newDegs];
-			elif degs[1]=0 and levs[1]<>0 then
-				return [cont,argMinimums,newLevs];
-			else
-				return [cont,argMinimums];
-			fi;
+			return [cont,argMinimums,newDegs,newLevs];
 		else
 			if degs[1]<>0 and levs[1]<>0 then
 				Error("no data containing degree ",String(degs)," and level ",String(levs)," is available");
@@ -385,30 +377,14 @@ InstallGlobalFunction(SRGroupsInfo,function(arg)
 	fi;
 	
 	out:=CheckSRGroupsInputs(true,argMinimums,argFunctions,arg[1],arg[2]);
-	if out[1]=true then
-		argMinimums:=out[2];
-		if arg[1][1]<>0 and arg[2][1]<>0 then
-			if not arg[1]=out[3] then
-				arg[1]:=out[3];
-				Print("Restricting degrees to ",arg[1],"\n");
-			fi;
-			if not arg[2]=out[4] then
-				arg[2]:=out[4];
-				Print("Restricting levels to ",arg[2],"\n");
-			fi;
-		elif arg[1][1]<>0 and arg[2][1]=0 then
-			if not arg[1]=out[3] then
-				arg[1]:=out[3];
-				Print("Restricting degrees to ",arg[1],"\n");
-			fi;
-		elif arg[1][1]=0 and arg[2][1]<>0 then
-			if not arg[2]=out[3] then
-				arg[2]:=out[3];
-				Print("Restricting levels to ",arg[2],"\n");
-			fi;
-		fi;
-	else
-		Error(out[2]);
+	argMinimums:=out[2];
+	if not arg[1]=out[3] and not IsEmpty(out[3]) then
+		arg[1]:=out[3];
+		Print("Restricting degrees to ",arg[1],"\n");
+	fi;
+	if not arg[2]=out[4] and not IsEmpty(out[4]) then
+		arg[2]:=out[4];
+		Print("Restricting levels to ",arg[2],"\n");
 	fi;
 	
 	max:=CallFuncList(GetSRMaximums,arg);
@@ -468,16 +444,12 @@ InstallGlobalFunction(SRGroupsInfo,function(arg)
 	
 	if arg[9][1]<>0 then
 		listTemp:=[];
-		if arg[1][1]<>0 and arg[2][1]<>0 and arg[3][1]<>0 then
-			Error("input arguments Number and IsAbelian are not compatible when a Degree and Depth have been selected");
-		else
-			for i in [1..Length(list)] do
-				if IsAbelian(Group(list[i][1]))=arg[9][1] then
-					Add(listTemp,list[i]);
-				fi;
-			od;
-			list:=listTemp;
-		fi;
+		for i in [1..Length(list)] do
+			if IsAbelian(Group(list[i][1]))=arg[9][1] then
+				Add(listTemp,list[i]);
+			fi;
+		od;
+		list:=listTemp;
 	fi;
 	
 	if lastNonZero in [0,1,2] then
@@ -574,9 +546,6 @@ InstallGlobalFunction(SRGroupsInfo,function(arg)
 		elif Length(arg[8])=4 then
 			Apply(listTemp,H->[H[arg[8][1]],H[arg[8][2]],H[arg[8][3]],H[arg[8][4]]]);
 		fi;
-		if Length(listTemp)=1 then
-			listTemp:=listTemp[1];
-		fi;
 		list:=listTemp;
 		if lastNonZero=8 then
 			G:=list;
@@ -600,7 +569,7 @@ InstallGlobalFunction(SRGroup,function(k,n,num)
 	elif not (IsInt(num) and num>=1) then
 		Error("input argument num=",num," must be an integer greater than or equal to 1");
 	else
-		return AllSRGroups(Degree,k,Level,n,Number,num);
+		return AllSRGroups(Degree,k,Level,n,Number,num)[1];
 	fi;
 end);
 
@@ -629,7 +598,17 @@ end);
 
 InstallGlobalFunction(AllSRGroupsInfo,function(arg)
 	local inputArgs, i;
-
+	
+	if IsInt(Length(arg)/2) then
+		for i in [1..Length(arg)/2] do
+			if not (IsOperation(arg[2*i-1]) or IsFunction(arg[2*i-1]) or Level=arg[2*i-1]) then
+				Error("input argument arg[",2*i-1,"] must be a valid function or operation");
+			fi;
+		od;
+	else
+		Error("argument must be of the form (fun2,val1,fun2,val2,...)");
+	fi;
+	
 	inputArgs:=[];
 
 	if IsInt(Position(arg,Degree)) then
