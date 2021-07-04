@@ -289,31 +289,25 @@ InstallGlobalFunction(CheckSRGroupsInputs,function(arg)
 		
 		if i<9 then
 			if arg<>0 then
-				if i in [3,4,5] or not arg>=argMinimums[i] then
+				if i in [3,4,5,8] or not arg>=argMinimums[i] then
 					if i in [3,5] then
-						if degs[1]<>0 and levs[1]<>0 then
-							if arg<=max then
-								return true;
-							else
-								errorString:=Concatenation("input argument ",String(argFunctions[i]),"=",String(arg)," in arg[",String(i),"] must be an integer in [",String(argMinimums[i]),"..",String(max),"] or zero");
-							fi;
-						elif i=3 then
-							if arg<=max then
-								return true;
-							else
-								errorString:=Concatenation("input argument ",String(argFunctions[i]),"=",String(arg)," in arg[",String(i),"] must be an integer in [",String(argMinimums[i]),"..",String(max),"] or zero");
-							fi;
-						else
-							errorString:=Concatenation("input argument ",String(argFunctions[i]),"=",String(arg)," in arg[",String(i),"] must be selected with a degree and depth");
-						fi;
-					elif i=4 then
-						if arg<=max then
+						if arg>=argMinimums[i] and arg<=max then
 							return true;
 						else
 							errorString:=Concatenation("input argument ",String(argFunctions[i]),"=",String(arg)," in arg[",String(i),"] must be an integer in [",String(argMinimums[i]),"..",String(max),"] or zero");
 						fi;
-					elif i=8 and not arg<=4 then
-						errorString:=Concatenation("input argument ",String(argFunctions[i]),"=",String(arg)," in arg[",String(i),"] must be an integer in [1..4] or zero");
+					elif i=4 then
+						if arg>=argMinimums[i] and arg<=max then
+							return true;
+						else
+							errorString:=Concatenation("input argument ",String(argFunctions[i]),"=",String(arg)," in arg[",String(i),"] must be an integer in [",String(argMinimums[i]),"..",String(max),"] or zero");
+						fi;
+					elif i=8 then
+						if arg>=argMinimums[i] and arg<=4 then
+							return true;
+						else
+							errorString:=Concatenation("input argument ",String(argFunctions[i]),"=",String(arg)," in arg[",String(i),"] must be an integer in [1..4] or zero");
+						fi;
 					else
 						errorString:=Concatenation("input argument ",String(argFunctions[i]),"=",String(arg)," in arg[",String(i),"] must be an integer greater than or equal to ",String(argMinimums[i])," or zero");
 					fi;
@@ -471,7 +465,7 @@ InstallGlobalFunction(SRGroupsInfo,function(arg)
 		fi;
 	fi;
 	
-	if arg[4][1]<>0 and arg[3][1]=0 then
+	if arg[4][1]<>0 then
 		listTemp:=[];
 		for i in [1..Length(list)] do
 			if EvalString(SplitString(SplitString(SplitString(list[i][3]," = ")[1],",")[3],")")[1]) in arg[4] then
@@ -485,7 +479,7 @@ InstallGlobalFunction(SRGroupsInfo,function(arg)
 		fi;
 	fi;
 	
-	if arg[5][1]<>0 and arg[3][1]=0 and (not (arg[1][1]=0 or arg[2][1]=0)) then
+	if arg[5][1]<>0 then
 		listGroups:=[];
 		listTemp:=[];
 		for i in [1..Length(list)] do
@@ -507,7 +501,7 @@ InstallGlobalFunction(SRGroupsInfo,function(arg)
 		fi;
 	fi;
 	
-	if arg[6][1]<>0 and arg[3][1]=0 then
+	if arg[6][1]<>0 then
 		listTemp:=[];
 		for i in [1..Length(list)] do
 			if Size(Group(list[i][1])) in arg[6] then
@@ -521,7 +515,7 @@ InstallGlobalFunction(SRGroupsInfo,function(arg)
 		fi;
 	fi;
 	
-	if arg[7][1]<>0 and arg[3][1]=0  then
+	if arg[7][1]<>0 then
 		listTemp:=[];
 		for i in [1..Length(list)] do
 			if Length(MinimalGeneratingSet(Group(list[i][1]))) in arg[7] then
@@ -577,20 +571,14 @@ end);
 InstallGlobalFunction(AllSRGroups,function(arg)
 	local groupList, groupNames, i, G;
 	
-	Append(arg,[Position,1]);
 	groupList:=CallFuncList(AllSRGroupsInfo,arg);
-	arg[Length(arg)]:=2;
-	groupNames:=CallFuncList(AllSRGroupsInfo,arg);
+	groupNames:=ShallowCopy(groupList);
+	Apply(groupNames,G->G[3]);
 	
-	if IsString(groupNames) then
-		groupList:=RegularRootedTreeGroup(EvalString(SplitString(SplitString(groupNames,",")[1],"(")[2]),EvalString(SplitString(groupNames,",")[2]),Group(groupList));
-		SetName(groupList,groupNames);
-	else
-		Apply(groupList,G->RegularRootedTreeGroup( EvalString(SplitString(SplitString(groupNames[Position(groupList,G)],",")[1],"(")[2]),EvalString(SplitString(groupNames[Position(groupList,G)],",")[2]),Group(G)));
-		for i in [1..Length(groupList)] do
-			SetName(groupList[i],groupNames[i]);
-		od;
-	fi;
+	Apply(groupList,G->RegularRootedTreeGroup( EvalString(SplitString(SplitString(G[3],",")[1],"(")[2]),EvalString(SplitString(G[3],",")[2]),Group(G[1])));
+	for i in [1..Length(groupList)] do
+		SetName(groupList[i],groupNames[i]);
+	od;
 	
 	return groupList;
 end);
