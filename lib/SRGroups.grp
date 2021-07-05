@@ -1,206 +1,588 @@
 #
 # SRGroups: Self-replicating groups of regular rooted trees.
 #
-# Routines
+# Library Functions
 #
 
-# arg[1]:=degree (int > 1)
-# arg[2]:=depth (int > 0)
-# arg[3]:=number (int > 0)
-# arg[4]:=groups with same projection (integer; arg[3]=0 is required)
-# arg[5]:=subgroups of group (integer; arg[3])
-# arg[6]:=size (int >= degree^depth) (arg[3]=0 is required)
-# arg[7]:=smallest number of generators (int >= 1)
-# arg[7]:=position/index (integer; one of arg[3]=0 or arg[4]=0 is required)
-# arg[8]:=abelian check (boolean)
-# All arguments can be set to 0 to ignore them.
-InstallGlobalFunction(SRGroup,function(arg)
-	local dir, fnam, G, list, listTemp, i, j, Gpos, last, zeros, srDegrees, srLevels;
-	
-	zeros:=Positions(arg,0);
-	last:=0;
-	for i in [1..Length(arg)] do
-		if IsInt(arg[i]) and (not arg[i]=0) then
-			last:=i;
+
+InstallGlobalFunction(SRDegrees,function()
+	local srDegrees, count, dirData, dataContents;
+
+	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
+	dataContents:=DirectoryContents(dirData[1]);
+
+	srDegrees:=[];
+	for count in [1..Length(dataContents)] do
+		if StartsWith(dataContents[count],"sr_") then
+			Add(srDegrees,EvalString(SplitString(dataContents[count], ".", "_")[2]));
 		fi;
 	od;
+	srDegrees:=DuplicateFreeList(srDegrees);
+	StableSort(srDegrees);
+	return srDegrees;
+end);
 
-	dir:= DirectoriesPackageLibrary( "SRGroups", "data" );
-	if (1 in zeros and (not 2 in zeros)) then
-		srDegrees:=DuplicateFreeList(SRDegrees());
-		list:=[];
-		if not IsEmpty(srDegrees) then
-			for i in [1..Length(srDegrees)] do
-				if IsExistingFile(Filename( dir[1], Concatenation("sr_",String(srDegrees[i]),"_",String(arg[2]),".grp"))) then
-					fnam:=Filename( dir[1], Concatenation("sr_",String(srDegrees[i]),"_",String(arg[2]),".grp"));
-					Read(fnam);
-					listTemp:=EvalString(Concatenation("sr_",String(srDegrees[i]),"_",String(arg[2])));
-					Append(list,listTemp);
-					MakeReadWriteGlobal(Concatenation("sr_",String(srDegrees[i]),"_",String(arg[2])));
-					UnbindGlobal(Concatenation("sr_",String(srDegrees[i]),"_",String(arg[2])));
-				fi;
-			od;
-			if IsEmpty(list) then
-				Print("These groups are not available (yet)!");
-				return;
+
+InstallGlobalFunction(SRLevels,function(deg)
+	local srLevels, count, dirData, dataContents;
+	
+	if not (IsInt(deg) and deg>=2) then
+		Error("input argument deg=",deg," must be an integer greater than or equal to 2");
+	else
+		dirData:=DirectoriesPackageLibrary("SRGroups", "data");
+		dataContents:=DirectoryContents(dirData[1]);
+
+		srLevels:=[];
+		for count in [1..Length(dataContents)] do
+			if StartsWith(dataContents[count],Concatenation("sr_",String(deg))) then
+				Add(srLevels,EvalString(SplitString(dataContents[count], ".", "_")[3]));
 			fi;
+		od;
+		StableSort(srLevels);
+		return srLevels;
+	fi;
+end);
+
+
+InstallGlobalFunction(SRGroupsAvailable,function(deg,lev)
+		if not (IsInt(deg) and deg>=2) then
+			Error("input argument deg=",deg," must be an integer greater than or equal to 2");
+		elif not (IsInt(lev) and lev>=1) then
+			Error("input argument lev=",lev," must be an integer greater than or equal to 1");
 		else
-			Print("These groups are not available (yet)!");
-			return;
+			return (lev in SRLevels(deg) and deg in SRDegrees());
 		fi;
-	elif ((not 1 in zeros) and 2 in zeros) then
-		srLevels:=SRLevels(arg[1]);
-		list:=[];
-		if not IsEmpty(srLevels) then
-			for i in [1..Length(srLevels)] do
-				fnam:=Filename( dir[1], Concatenation("sr_",String(arg[1]),"_",String(srLevels[i]),".grp"));
-				Read(fnam);
-				listTemp:=EvalString(Concatenation("sr_",String(arg[1]),"_",String(srLevels[i])));
-				Append(list,listTemp);
-				MakeReadWriteGlobal(Concatenation("sr_",String(arg[1]),"_",String(srLevels[i])));
-				UnbindGlobal(Concatenation("sr_",String(arg[1]),"_",String(srLevels[i])));
-			od;
-		else
-			Print("These groups are not available (yet)!");
-			return;
-		fi;
-	elif (1 in zeros and 2 in zeros) then
-		srDegrees:=DuplicateFreeList(SRDegrees());
-		if IsEmpty(srDegrees) then
-			for i in [1..Length(srDegrees)] do
-				srLevels:=SRLevels(srDegrees[i]);
-				for j in [1..Length(srLevels)] do
-					fnam:=Filename( dir[1], Concatenation("sr_",String(srDegrees[i]),"_",String(srLevels[j]),".grp"));
-					Read(fnam);
-					listTemp:=EvalString(Concatenation("sr_",String(srDegrees[i]),"_",String(srLevels[j])));
-					Append(list,listTemp);
-					MakeReadWriteGlobal(Concatenation("sr_",String(srDegrees[i]),"_",String(srLevels[j])));
-					UnbindGlobal(Concatenation("sr_",String(srDegrees[i]),"_",String(srLevels[j])));
+end);
+
+
+InstallGlobalFunction(GetSRData,function(k,n)
+	local dir, fnam, listTemp;
+	
+	if not (IsInt(k) and k>=2) then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
+	elif not (IsInt(n) and n>=1) then
+		Error("input argument n=",n," must be an integer greater than or equal to 1");
+	elif not SRGroupsAvailable(k,n) then
+		Error("These groups are not available (yet)!");
+	else
+		dir:= DirectoriesPackageLibrary( "SRGroups", "data" );
+		fnam:=Filename( dir[1], Concatenation("sr_",String(k),"_",String(n),".grp"));
+		Read(fnam);
+		listTemp:=EvalString(Concatenation("sr_",String(k),"_",String(n)));
+		MakeReadWriteGlobal(Concatenation("sr_",String(k),"_",String(n)));
+		UnbindGlobal(Concatenation("sr_",String(k),"_",String(n)));
+		return listTemp;
+	fi;
+end);
+
+
+InstallGlobalFunction(NrSRGroups,function(k,n)
+	if not (IsInt(k) and k>=2) then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
+	elif not (IsInt(n) and n>=1) then
+		Error("input argument n=",n," must be an integer greater than or equal to 1");
+	elif not SRGroupsAvailable(k,n) then
+		Print("These groups are not available (yet)!");
+		return;
+	else
+		return Length(GetSRData(k,n));
+	fi;
+end);
+
+
+InstallGlobalFunction(GetSRMaximums,function(arg)
+	local deg, lev, max, maxAbove, errorString, i;
+	
+	if arg[1][1]<>0 and arg[2][1]<>0 then
+		if Length(arg)>=3 and (arg[3][1]<>0 or arg[5][1]<>0) then
+			for deg in arg[1] do
+				for lev in arg[2] do
+					if SRGroupsAvailable(deg,lev) then
+						if IsBound(max) then
+							if max<NrSRGroups(deg,lev) then max:=NrSRGroups(deg,lev); fi;
+						else
+							max:=NrSRGroups(deg,lev);
+						fi;
+					fi;
 				od;
 			od;
 		else
-			Print("These groups are not available (yet)!");
-			return;
+			max:=false;
+		fi;
+		
+		if Length(arg)>=4 and arg[4][1]<>0 then
+			for deg in arg[1] do
+				for lev in arg[2] do
+					if SRGroupsAvailable(deg,lev) and SRGroupsAvailable(deg,lev-1) then
+						if IsBound(maxAbove) then
+							if maxAbove<NrSRGroups(deg,lev-1) then maxAbove:=NrSRGroups(deg,lev-1); fi;
+						else
+							maxAbove:=NrSRGroups(deg,lev-1);
+						fi;
+					fi;
+				od;
+			od;
+			if not IsBound(maxAbove) then
+				Error("no data available containing two consecutive levels of degree ",String(arg[1])," and level ",String(arg[2])," groups");
+			fi;
+		else
+			maxAbove:=false;
+		fi;
+	elif arg[1][1]<>0 and arg[2][1]=0 then
+		if Length(arg)>=3 and (arg[3][1]<>0 or arg[5][1]<>0) then
+			for deg in arg[1] do
+				if IsBound(max) then
+					if max<NrSRGroups(deg,Maximum(SRLevels(deg))) then max:=NrSRGroups(deg,Maximum(SRLevels(deg))); fi;
+				else
+					max:=NrSRGroups(deg,Maximum(SRLevels(deg)));
+				fi;
+			od;
+		else
+			max:=false;
+		fi;
+		
+		if Length(arg)>=4 and arg[4][1]<>0 then
+			for deg in arg[1] do
+				if Length(SRLevels(deg))>=2 then
+					for i in [2..Length(SRLevels(deg))] do
+						if SRLevels(deg)[i]-1=SRLevels(deg)[i-1] then
+							if IsBound(maxAbove) then
+								if maxAbove<NrSRGroups(deg,SRLevels(deg)[i-1]) then maxAbove:=NrSRGroups(deg,SRLevels(deg)[i-1]); fi;
+							else
+								maxAbove:=NrSRGroups(deg,SRLevels(deg)[i-1]);
+							fi;
+						fi;
+					od;
+				fi;
+			od;
+			if not IsBound(maxAbove) then
+				Error("no data available containing two consecutive levels of degree ",String(arg[1]));
+			fi;
+		else
+			maxAbove:=false;
+		fi;
+	elif arg[1][1]=0 and arg[2][1]<>0 then
+		if Length(arg)>=3 and (arg[3][1]<>0 or arg[5][1]<>0) then
+			for deg in SRDegrees() do
+				for lev in arg[2] do
+					if lev in SRLevels(deg) then
+						if IsBound(max) then
+							if max<NrSRGroups(deg,lev) then max:=NrSRGroups(deg,lev); fi;
+						else
+							max:=NrSRGroups(deg,lev);
+						fi;
+					fi;
+				od;
+			od;
+		else
+			max:=false;
+		fi;
+		
+		if Length(arg)>=4 and arg[4][1]<>0 then
+			for deg in SRDegrees() do
+				for lev in arg[2] do
+					if lev in SRLevels(deg) and lev-1 in SRLevels(deg) then
+						if IsBound(maxAbove) then
+							if maxAbove<NrSRGroups(deg,lev-1) then maxAbove:=NrSRGroups(deg,lev-1); fi;
+						else
+							maxAbove:=NrSRGroups(deg,lev-1);
+						fi;
+					fi;
+				od;
+			od;
+			if not IsBound(maxAbove) then
+				Error("no data available containing level ",String(arg[1])," and level ",String(arg[1]-1)," groups");
+			fi;
+		else
+			maxAbove:=false;
 		fi;
 	else
-		if IsExistingFile(Filename( dir[1], Concatenation("sr_",String(arg[1]),"_",String(arg[2]),".grp"))) then
-			fnam:=Filename( dir[1], Concatenation("sr_",String(arg[1]),"_",String(arg[2]),".grp"));
-			Read(fnam);
-			list:=EvalString(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
-			MakeReadWriteGlobal(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
-			UnbindGlobal(Concatenation("sr_",String(arg[1]),"_",String(arg[2])));
+		if Length(arg)>=3 and (arg[3][1]<>0 or arg[5][1]<>0) then
+			max:=1;
+			for deg in SRDegrees() do
+				for lev in SRLevels(deg) do
+					if NrSRGroups(deg,lev)>max then
+						max:=NrSRGroups(deg,lev);
+					fi;
+				od;
+			od;
 		else
-			Print("These groups are not available (yet)!");
-			return;
+			max:=false;
+		fi;
+		
+		if Length(arg)>=4 and arg[4][1]<>0 then
+			maxAbove:=0;
+			for deg in SRDegrees() do
+				if Length(SRLevels(deg))>=2 then
+					for i in [2..Length(SRLevels(deg))] do
+						if SRLevels(deg)[i]-1=SRLevels(deg)[i-1] then
+							if NrSRGroups(deg,SRLevels(deg)[i-1])>maxAbove then
+								maxAbove:=NrSRGroups(deg,SRLevels(deg)[i-1]);
+							fi;
+						fi;
+					od;
+				fi;
+			od;
+			if maxAbove=0 then
+				Error("no data available containing two consecutive levels");
+			fi;
+		else
+			maxAbove:=false;
 		fi;
 	fi;
 	
-	if Length(arg)>=9 and (not 9 in zeros) then
+	return [max,maxAbove];
+end);
+
+InstallGlobalFunction(CheckSRGroupsInputs,function(arg)
+	local deg, lev, newDegs, newLevs, cont, errorString, i, j, k, argMinimums, argFunctions, degs, levs, max;
+	
+	if arg[1]=true then
+		argMinimums:=arg[2];
+		argFunctions:=arg[3];
+		degs:=arg[4];
+		levs:=arg[5];
+		for deg in degs do
+			if deg<>0 then
+				if not (IsInt(deg) and (deg>=argMinimums[1] or deg=0)) then
+					Error("input argument ",argFunctions[1],"=",deg," in arg[1] must be an integer greater than or equal to ", argMinimums[1]," or zero");
+				fi;
+			fi;
+		od;
+		
+		for lev in levs do
+			if lev<>0 then
+				if not (IsInt(lev) and (lev>=argMinimums[2] or lev=0)) then
+					if argMinimums[2]=2 then
+						Error("input argument ",argFunctions[2],"=",lev," in arg[2] must be an integer greater than or equal to ", argMinimums[2]," or zero when the ",argFunctions[5]," argument is being used");
+					else
+						Error("input argument ",argFunctions[2],"=",lev," in arg[2] must be an integer greater than or equal to ", argMinimums[2]," or zero");
+					fi;
+				fi;
+			fi;
+		od;
+		
+		cont:=false;
+		newDegs:=[];
+		newLevs:=[];
+		for deg in degs do
+			for lev in levs do
+				if deg<>0 and lev<>0 then
+					if IsBound(argMinimums[6]) then
+						if deg^lev<argMinimums[6] then argMinimums[6]:=deg^lev; fi;
+					else
+						argMinimums[6]:=deg^lev;
+					fi;
+					if SRGroupsAvailable(deg,lev) then
+						cont:=true;
+						if not deg in newDegs then Add(newDegs,deg); fi;
+						if not lev in newLevs then Add(newLevs,lev); fi;
+					fi;
+				elif deg<>0 and lev=0 then
+					if IsBound(argMinimums[6]) then
+						if deg<argMinimums[6] then argMinimums[6]:=deg; fi;
+					else
+						argMinimums[6]:=deg;
+					fi;
+					if deg in SRDegrees() then
+						Add(newDegs,deg);
+						cont:=true;
+					fi;
+				elif deg=0 and lev<>0 then
+					if not IsBound(argMinimums[6]) then argMinimums[6]:=2; fi;
+					for i in [1..Length(SRDegrees())] do
+						if lev in SRLevels(SRDegrees()[i]) then
+							Add(newLevs,lev);
+							cont:=true;
+							break;
+						fi;
+					od;
+				else
+					cont:=true;
+					argMinimums[6]:=2;
+				fi;
+			od;
+		od;
+		
+		if cont then
+			StableSort(newDegs);
+			StableSort(newLevs);
+			return [cont,argMinimums,newDegs,newLevs];
+		else
+			if degs[1]<>0 and levs[1]<>0 then
+				Error("no data containing degree ",String(degs)," and level ",String(levs)," is available");
+			elif degs[1]<>0 and levs[1]=0 then
+				Error("no data containing degree ",String(degs)," is available");
+			elif degs[1]=0 and levs[1]<>0 then
+				Error("no data containing level ",String(levs)," is available");
+			fi;
+		fi;
+	else
+		i:=arg[1];
+		argMinimums:=arg[3];
+		argFunctions:=arg[4];
+		degs:=arg[5];
+		levs:=arg[6];
+		if i in [3,4,5] then
+			max:=arg[7];
+		fi;
+		arg:=arg[2];
+		
+		if i<9 then
+			if arg<>0 then
+				if i in [3,4,5,8] or not arg>=argMinimums[i] then
+					if i in [3,5] then
+						if arg>=argMinimums[i] and arg<=max then
+							return true;
+						else
+							errorString:=Concatenation("input argument ",String(argFunctions[i]),"=",String(arg)," in arg[",String(i),"] must be an integer in [",String(argMinimums[i]),"..",String(max),"] or zero");
+						fi;
+					elif i=4 then
+						if arg>=argMinimums[i] and arg<=max then
+							return true;
+						else
+							errorString:=Concatenation("input argument ",String(argFunctions[i]),"=",String(arg)," in arg[",String(i),"] must be an integer in [",String(argMinimums[i]),"..",String(max),"] or zero");
+						fi;
+					elif i=8 then
+						if arg>=argMinimums[i] and arg<=4 then
+							return true;
+						else
+							errorString:=Concatenation("input argument ",String(argFunctions[i]),"=",String(arg)," in arg[",String(i),"] must be an integer in [1..4] or zero");
+						fi;
+					else
+						errorString:=Concatenation("input argument ",String(argFunctions[i]),"=",String(arg)," in arg[",String(i),"] must be an integer greater than or equal to ",String(argMinimums[i])," or zero");
+					fi;
+				else
+					return true;
+				fi;
+			else
+				return true;
+			fi;
+		else 
+			if not (IsBool(arg) or arg=0) then
+				errorString:=Concatenation("input argument ",String(argFunctions[i]),"=",String(arg)," in arg[",String(i),"] must be a boolean or zero");
+			else
+				return true;
+			fi;
+		fi;
+		
+		return errorString;
+	fi;
+end);
+
+InstallGlobalFunction(SRGroupsInfo,function(arg)
+	local dir, fnam, G, list, listTemp, i, j, k, lastNonZero, argFunctions, argMinimums, out, max, maxArgLength, listGroups, booleanList;
+	
+	if IsEmpty(SRDegrees()) then
+		Error("no data is available");
+	fi;
+
+	maxArgLength:=9;
+	argFunctions:=["Degree","Depth/Level","Number","Projection","IsSubgroup","Size","MinimalGeneratingSet","Position/Index","IsAbelian"];
+	lastNonZero:=0;
+	
+	for i in [1..maxArgLength] do
+		if not IsBound(arg[i]) then
+			arg[i]:=[0];
+		elif not IsList(arg[i]) then
+			arg[i]:=[arg[i]];
+		fi;
+		
+		for j in [1..Length(arg[i])-1] do
+			if not IsInt(arg[i][j]) then
+				Error("input argument ",argFunctions[i],"=",arg[i][j]," in arg[",i,"] must be a non-negative integer");
+			elif not arg[i][j]>=0 then
+				Error("input argument ",argFunctions[i],"=",arg[i][j]," in arg[",i,"] must be a non-negative integer");
+			fi;
+		od;
+		
+		if 0 in arg[i] and Length(arg[i])>1 then
+			Error("input argument ",argFunctions[i],"=",arg[i]," in arg[",i,"] cannot be zero with multiple entries");
+		fi;
+		
+		if i<9 and arg[i][1]<>0 then
+			lastNonZero:=i;
+		fi;
+	od;
+	
+	if arg[4][1]=0 then
+		argMinimums:=[2,1,1,1,1,,1,1];
+	else
+		argMinimums:=[2,2,1,1,1,,1,1];
+	fi;
+	
+	out:=CheckSRGroupsInputs(true,argMinimums,argFunctions,arg[1],arg[2]);
+	argMinimums:=out[2];
+	if arg[1]<>out[3] and not IsEmpty(out[3]) then
+		arg[1]:=ShallowCopy(out[3]);
+		Print("Restricting degrees to ",arg[1],"\n");
+	fi;
+	if arg[2]<>out[4] and not IsEmpty(out[4]) then
+		arg[2]:=ShallowCopy(out[4]);
+		Print("Restricting levels to ",arg[2],"\n");
+	fi;
+	
+	max:=CallFuncList(GetSRMaximums,arg);
+	
+	if lastNonZero>=3 then
+		for i in [3..maxArgLength] do
+			for j in [1..Length(arg[i])] do
+				if i=3 or i=5 then
+					out:=CheckSRGroupsInputs(i,arg[i][j],argMinimums,argFunctions,arg[1],arg[2],max[1]);
+				elif i=4 then
+					out:=CheckSRGroupsInputs(i,arg[i][j],argMinimums,argFunctions,arg[1],arg[2],max[2]);
+				else
+					out:=CheckSRGroupsInputs(i,arg[i][j],argMinimums,argFunctions,arg[1],arg[2]);
+				fi;
+				if IsString(out) then
+					Error(out);
+				fi;
+			od;
+		od;
+	fi;
+
+	dir:= DirectoriesPackageLibrary( "SRGroups", "data" );
+	list:=[];
+	if arg[1][1]<>0 and arg[2][1]<>0 then
+		for i in [1..Length(arg[1])] do
+			for j in [1..Length(arg[2])] do
+				if SRGroupsAvailable(arg[1][i],arg[2][j]) then
+					listTemp:=GetSRData(arg[1][i],arg[2][j]);
+					Append(list,listTemp);
+				fi;
+			od;
+		od;
+	elif arg[1][1]<>0 and arg[2][1]=0 then
+		for i in [1..Length(arg[1])] do
+			for j in [argMinimums[2]..Length(SRLevels(arg[1][i]))] do
+				listTemp:=GetSRData(arg[1][i],SRLevels(arg[1][i])[j]);
+				Append(list,listTemp);
+			od;
+		od;
+	elif arg[1][1]=0 and arg[2][1]<>0 then
+		for i in [1..Length(SRDegrees())] do
+			for j in [1..Length(arg[2])] do
+				if SRGroupsAvailable(SRDegrees()[i],arg[2][j]) then
+					listTemp:=GetSRData(SRDegrees()[i],arg[2][j]);
+					Append(list,listTemp);
+				fi;
+			od;
+		od;
+	else
+		for i in [1..Length(SRDegrees())] do
+			for j in [argMinimums[2]..Length(SRLevels(SRDegrees()[i]))] do
+				listTemp:=GetSRData(SRDegrees()[i],SRLevels(SRDegrees()[i])[j]);
+				Append(list,listTemp);
+			od;
+		od;
+	fi;
+	
+	if arg[9][1]<>0 then
 		listTemp:=[];
 		for i in [1..Length(list)] do
-			if IsAbelian(Group(list[i][1]))=arg[9] then
+			if IsAbelian(Group(list[i][1]))=arg[9][1] then
 				Add(listTemp,list[i]);
 			fi;
 		od;
 		list:=listTemp;
 	fi;
 	
-	if Length(arg)>=1 and (last=2 or last=1) then
+	if lastNonZero in [0,1,2] then
 		G:=list;
 		return G;
 	fi;
 	
-	if Length(arg)>=3 and (not 3 in zeros) then
-		if not (1 in zeros or 2 in zeros) then
-			list:=list[arg[3]];
-		else
-			Gpos:=1;
-			listTemp:=[];
-			for i in [1..Length(list)] do
-				if EndsWith(list[i][2],Concatenation(",",String(arg[3]),")")) then
-					listTemp[Gpos]:=list[i];
-					Gpos:=Gpos+1;
-				fi;
-			od;
-			list:=listTemp;
-		fi;
-		if last=3 then
-			G:=list;
-			return G;
-		fi;
-	fi;
-	
-	if (Length(arg)>=4 and 3 in zeros and (not (1 in zeros or 2 in zeros)) and (not 4 in zeros)) then
-		Gpos:=1;
+	if arg[3][1]<>0 then
 		listTemp:=[];
 		for i in [1..Length(list)] do
-			if EndsWith(list[i][3],Concatenation(",",String(arg[4]),")")) then
-				listTemp[Gpos]:=list[i];
-				Gpos:=Gpos+1;
-			fi;
-		od;
-		list:=listTemp;
-		if last=4 then
-			G:=list;
-			return G;
-		fi;
-	fi;
-	
-	if (Length(arg)>=5 and 3 in zeros and (not (1 in zeros or 2 in zeros)) and (not 5 in zeros)) then
-		Gpos:=1;
-		listTemp:=[];
-		for i in [1..Length(list)] do
-			if IsSubgroup(Group(list[arg[5]][1]),Group(list[i][1])) and (not i=arg[5]) then
-				listTemp[Gpos]:=list[i];
-				Gpos:=Gpos+1;
-			fi;
-		od;
-		list:=listTemp;
-		if last=5 then
-			G:=list;
-			return G;
-		fi;
-	fi;
-	
-	if Length(arg)>=6 and 3 in zeros and 7 in zeros and (not 6 in zeros) then
-		listTemp:=[];
-		for i in [1..Length(list)] do
-			if Size(Group(list[i][1]))=arg[6] then
+			if EvalString(SplitString(SplitString(SplitString(list[i][2]," = ")[1],",")[3],")")[1]) in arg[3] then
 				Add(listTemp,list[i]);
 			fi;
 		od;
 		list:=listTemp;
-		if last=6 then
+		if lastNonZero=3 then
 			G:=list;
 			return G;
 		fi;
 	fi;
 	
-	if Length(arg)>=7 and 3 in zeros and 6 in zeros and (not 7 in zeros) then
+	if arg[4][1]<>0 then
 		listTemp:=[];
 		for i in [1..Length(list)] do
-			if Length(MinimalGeneratingSet(Group(list[i][1])))=arg[7] then
+			if EvalString(SplitString(SplitString(SplitString(list[i][3]," = ")[1],",")[3],")")[1]) in arg[4] then
 				Add(listTemp,list[i]);
 			fi;
 		od;
 		list:=listTemp;
-		if last=7 then
+		if lastNonZero=4 then
 			G:=list;
 			return G;
 		fi;
 	fi;
-
-	if (Length(arg)>=8 and (3 in zeros or 4 in zeros) and (not 8 in zeros)) then
+	
+	if arg[5][1]<>0 then
+		listGroups:=[];
 		listTemp:=[];
-		if 3 in zeros then
-			for i in [1..Length(list)] do
-				listTemp[i]:=list[i][arg[8]];
-			od;
-		else
-			listTemp:=list[arg[8]];
+		for i in [1..Length(list)] do
+			if EvalString(SplitString(SplitString(SplitString(list[i][2]," = ")[1],",")[3],")")[1]) in arg[5] then
+				Add(listGroups,list[i]);
+			fi;
+		od;
+		for i in [1..Length(list)] do
+			booleanList:=ShallowCopy(listGroups);
+			Apply(booleanList,H->(IsSubgroup(Group(H[1]),Group(list[i][1])) and Group(H[1])<>Group(list[i][1])));
+			if true in booleanList then
+				Add(listTemp,list[i]);
+			fi;
+		od;
+		list:=listTemp;
+		if lastNonZero=5 then
+			G:=list;
+			return G;
+		fi;
+	fi;
+	
+	if arg[6][1]<>0 then
+		listTemp:=[];
+		for i in [1..Length(list)] do
+			if Size(Group(list[i][1])) in arg[6] then
+				Add(listTemp,list[i]);
+			fi;
+		od;
+		list:=listTemp;
+		if lastNonZero=6 then
+			G:=list;
+			return G;
+		fi;
+	fi;
+	
+	if arg[7][1]<>0 then
+		listTemp:=[];
+		for i in [1..Length(list)] do
+			if Length(MinimalGeneratingSet(Group(list[i][1]))) in arg[7] then
+				Add(listTemp,list[i]);
+			fi;
+		od;
+		list:=listTemp;
+		if lastNonZero=7 then
+			G:=list;
+			return G;
+		fi;
+	fi;
+	
+	if arg[8][1]<>0 then
+		listTemp:=ShallowCopy(list);
+		if Length(arg[8])=1 then
+			Apply(listTemp,H->H[arg[8][1]]);
+		elif Length(arg[8])=2 then
+			Apply(listTemp,H->[H[arg[8][1]],H[arg[8][2]]]);
+		elif Length(arg[8])=3 then
+			Apply(listTemp,H->[H[arg[8][1]],H[arg[8][2]],H[arg[8][3]]]);
+		elif Length(arg[8])=4 then
+			Apply(listTemp,H->[H[arg[8][1]],H[arg[8][2]],H[arg[8][3]],H[arg[8][4]]]);
 		fi;
 		list:=listTemp;
-		if last=8 then
+		if lastNonZero=8 then
 			G:=list;
 			return G;
 		fi;
@@ -209,14 +591,24 @@ InstallGlobalFunction(SRGroup,function(arg)
 	if IsBound(G) then
 		return G;
 	else
-		Print("No method exists!");
-		return;
+		Error("no method exists for those arguments; check if they are conflicting");
 	fi;
 end);
 
-InstallGlobalFunction(AllSRGroups,function(arg)
-	local inputArgs;
 
+InstallGlobalFunction(AllSRGroupsInfo,function(arg)
+	local inputArgs, i;
+	
+	if IsInt(Length(arg)/2) then
+		for i in [1..Length(arg)/2] do
+			if not (IsOperation(arg[2*i-1]) or IsFunction(arg[2*i-1]) or Level=arg[2*i-1]) then
+				Error("input argument arg[",2*i-1,"] must be a valid function or operation");
+			fi;
+		od;
+	else
+		Error("argument must be of the form (fun2,val1,fun2,val2,...)");
+	fi;
+	
 	inputArgs:=[];
 
 	if IsInt(Position(arg,Degree)) then
@@ -259,8 +651,8 @@ InstallGlobalFunction(AllSRGroups,function(arg)
 		Add(inputArgs,0);
 	fi;
 	
-	if IsInt(Position(arg,NumberOfGenerators)) then
-		Add(inputArgs,arg[Position(arg,NumberOfGenerators)+1]);
+	if IsInt(Position(arg,MinimalGeneratingSet)) then
+		Add(inputArgs,arg[Position(arg,MinimalGeneratingSet)+1]);
 	else
 		Add(inputArgs,0);
 	fi;
@@ -281,33 +673,77 @@ InstallGlobalFunction(AllSRGroups,function(arg)
 		Add(inputArgs,0);
 	fi;
 
-	return CallFuncList(SRGroup,inputArgs);
+	return CallFuncList(SRGroupsInfo,inputArgs);
 end);
 
-InstallGlobalFunction(CheckSRProjections,function(arg)
-	local dir, fnam, list1, list2, pr, i, G1, G2, check;
 
-	check:=0;
-	list1:=SRGroup(arg[1],arg[2],0,0,1);
-	list2:=SRGroup(arg[1],arg[2],0,0,3);
-	pr:=Projection(AutT(arg[1],arg[2]));
-	for i in [1..Length(list1)] do
-		G1:=Image(pr,Group(list1[i]));
-		G2:=Group(EvalString(list2[i])[1]);
-		if not G1=G2 then
-			Print("SRGroup(",String(arg[1]),",",String(arg[2]),")[",String(i),"]\n");
-			check:=check+1;
-		fi;
+InstallGlobalFunction(AllSRGroups,function(arg)
+	local groupList, groupNames, i, G;
+	
+	groupList:=CallFuncList(AllSRGroupsInfo,arg);
+	groupNames:=ShallowCopy(groupList);
+	Apply(groupNames,G->G[3]);
+	
+	Apply(groupList,G->RegularRootedTreeGroup( EvalString(SplitString(SplitString(G[3],",")[1],"(")[2]),EvalString(SplitString(G[3],",")[2]),Group(G[1])));
+	for i in [1..Length(groupList)] do
+		SetName(groupList[i],groupNames[i]);
 	od;
-
-	if check=0 then
-		Print("All groups project correctly.");
-	else
-		Print(check," groups did not project corrrectly.");
-	fi;
-
-	return;
+	
+	return groupList;
 end);
+
+
+InstallGlobalFunction(SRGroup,function(k,n,num)
+	if not (IsInt(k) and k>=2) then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
+	elif not (IsInt(n) and n>=1) then
+		Error("input argument n=",n," must be an integer greater than or equal to 1");
+	elif not (IsInt(num) and num>=1) then
+		Error("input argument num=",num," must be an integer greater than or equal to 1");
+	else
+		return AllSRGroups(Degree,k,Level,n,Number,num)[1];
+	fi;
+end);
+
+
+InstallGlobalFunction(CheckSRProjections,function(k,n)
+	local dir, fnam, list1, list2, pr, i, G1, G2, check, aut, autAbove;
+	
+	if not (IsInt(k) and k>=2) then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
+	elif not (IsInt(n) and n>=1) then
+		Error("input argument n=",n," must be an integer greater than or equal to 1");
+	else
+		if not SRGroupsAvailable(k,n) then
+			Print("These groups are not available (yet)!");
+			return;
+		else
+			check:=0;
+			aut:=AutT(k,n);
+			autAbove:=AutT(k,n-1);
+			list1:=AllSRGroups(Degree,k,Depth,n);
+			list2:=AllSRGroupsInfo(Degree,k,Depth,n,Position,3);
+			pr:=Projection(aut);
+			for i in [1..Length(list1)] do
+				G1:=Image(pr,list1[i]);
+				G2:=Group(EvalString(Concatenation("SRGroupsInfo(",SplitString(list2[i],"(")[2]))[1]);
+				if not (G1=G2 or IsConjugate(autAbove,G1,G2)) then
+					Print("SRGroup(",String(k),",",String(n),")[",String(i),"]\n");
+					check:=check+1;
+				fi;
+			od;
+
+			if check=0 then
+				Print("All groups project correctly.");
+			else
+				Print(check," groups did not project corrrectly.");
+			fi;
+
+			return;
+		fi;
+	fi;
+end);
+
 
 InstallGlobalFunction(StringVariables, function(arg)
 	local Superstring, i;
@@ -323,6 +759,7 @@ InstallGlobalFunction(StringVariables, function(arg)
 	return Superstring;
 end);
 
+
 InstallGlobalFunction(UnbindVariables, function(arg)
 	local k;
 
@@ -330,42 +767,5 @@ InstallGlobalFunction(UnbindVariables, function(arg)
 		UnbindGlobal(arg[k]);
 	od;
 	
-	return;
-end);
-
-InstallGlobalFunction(SRDegrees,function()
-	local srDegrees, count, dirData, dataContents;
-
-	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
-	dataContents:=DirectoryContents(dirData[1]);
-
-	srDegrees:=[];
-	for count in [1..Length(dataContents)] do
-		if StartsWith(dataContents[count],"sr_") then
-			Add(srDegrees,EvalString(SplitString(dataContents[count], ".", "_")[2]));
-		fi;
-	od;
-	StableSort(srDegrees);
-	return srDegrees;
-end);
-
-InstallGlobalFunction(SRLevels,function(deg)
-	local srLevels, count, dirData, dataContents;
-
-	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
-	dataContents:=DirectoryContents(dirData[1]);
-
-	srLevels:=[];
-	for count in [1..Length(dataContents)] do
-		if StartsWith(dataContents[count],Concatenation("sr_",String(deg))) then
-			Add(srLevels,EvalString(SplitString(dataContents[count], ".", "_")[3]));
-		fi;
-	od;
-	StableSort(srLevels);
-	return srLevels;
-end);
-
-InstallGlobalFunction(Level,function()
-	# This function serves no purpose except to add an input to the AllSRGroups function.
 	return;
 end);

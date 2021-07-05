@@ -1,241 +1,241 @@
-##This contains a list of the self-replicating groups on the rooted regular-9 tree on level 1 ##
+##This contains a list of the self-replicating groups on the rooted regular-9 tree on level 1##
 
 BindGlobal("sr_9_1",
 [
 	[
 		[ (1,2,3,4,5,6,7,8,9) ],
-		"SRGroup(9,1,1)",
+		"SRGroup(9,1,1) = C(9)=9",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,4,7)(2,5,8)(3,6,9) ],
-		"SRGroup(9,1,2)",
+		"SRGroup(9,1,2) = E(9)=3[x]3",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,3,4,5,6,7,8,9), (1,8)(2,7)(3,6)(4,5) ],
-		"SRGroup(9,1,3)",
+		"SRGroup(9,1,3) = D(9)=9:2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,2)(4,5)(7,8), (1,4,7)(2,5,8)(3,6,9) ],
-		"SRGroup(9,1,4)",
+		"SRGroup(9,1,4) = S(3)[x]3",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,4,7)(2,5,8)(3,6,9), (1,2)(3,6)(4,8)(5,7) ],
-		"SRGroup(9,1,5)",
+		"SRGroup(9,1,5) = S(3)[1/2]S(3)=3^2:2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,4,7)(2,8,5), (1,2,3,4,5,6,7,8,9) ],
-		"SRGroup(9,1,6)",
+		"SRGroup(9,1,6) = 1/3[3^3]3",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,4,7)(2,5,8)(3,6,9), (3,4,5)(6,8,7) ],
-		"SRGroup(9,1,7)",
+		"SRGroup(9,1,7) = E(9):3=[3^2]3",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,2)(4,5)(7,8), (1,4,7)(2,5,8)(3,6,9), (3,6)(4,7)(5,8) ],
-		"SRGroup(9,1,8)",
+		"SRGroup(9,1,8) = S(3)[x]S(3)=E(9):D_4",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,4,7)(2,5,8)(3,6,9), (1,8,2,4)(3,5,6,7) ],
-		"SRGroup(9,1,9)",
+		"SRGroup(9,1,9) = E(9):4",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,4,7)(2,8,5), (1,2,3,4,5,6,7,8,9), (1,8)(2,7)(3,6)(4,5) ],
-		"SRGroup(9,1,10)",
+		"SRGroup(9,1,10) = [3^2]S(3)_6",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,4,7)(2,5,8)(3,6,9), (3,4,5)(6,8,7), (1,2)(3,6)(4,8)(5,7) ],
-		"SRGroup(9,1,11)",
+		"SRGroup(9,1,11) = E(9):6=1/2[3^2:2]S(3)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (3,4,5)(6,8,7), (1,4,7)(2,5,8)(3,6,9), (3,6)(4,7)(5,8) ],
-		"SRGroup(9,1,12)",
+		"SRGroup(9,1,12) = [3^2]S(3)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,4,7)(2,5,8)(3,6,9), (3,4,5)(6,8,7), (1,2)(3,5)(6,7) ],
-		"SRGroup(9,1,13)",
+		"SRGroup(9,1,13) = E(9):D_6=[3^2:2]3=[1/2.S(3)^2]3",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,4,7)(2,5,8)(3,6,9), (1,8,2,4)(3,5,6,7), (1,6,2,3)(4,7,8,5) ],
-		"SRGroup(9,1,14)",
+		"SRGroup(9,1,14) = M(9)=E(9):Q_8",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,4,7)(2,5,8)(3,6,9), (1,6,4,5,2,3,8,7) ],
-		"SRGroup(9,1,15)",
+		"SRGroup(9,1,15) = E(9):8",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,4,7)(2,5,8)(3,6,9), (1,2)(3,5)(6,7), (1,8)(2,4)(5,7) ],
-		"SRGroup(9,1,16)",
+		"SRGroup(9,1,16) = E(9):D_8",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9), (1,4,7)(2,5,8)(3,6,9) ],
-		"SRGroup(9,1,17)",
+		"SRGroup(9,1,17) = [3^3]3=3wr3",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,4,7)(2,5,8)(3,6,9), (3,4,5)(6,8,7), (1,2)(3,6)(4,8)(5,7), (1,2)(3,5)(6,7) ],
-		"SRGroup(9,1,18)",
+		"SRGroup(9,1,18) = E(9):D_12=[3^2:2]S(3)=[1/2.S(3)^2]S(3)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,4,7)(2,5,8)(3,6,9), (1,6,4,5,2,3,8,7), (1,2)(3,5)(6,7) ],
-		"SRGroup(9,1,19)",
+		"SRGroup(9,1,19) = E(9):2D_8",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9), (1,4,7)(2,5,8)(3,6,9), (3,6)(4,7)(5,8) ],
-		"SRGroup(9,1,20)",
+		"SRGroup(9,1,20) = [3^3]S(3)=3wrS(3)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9), (1,4,7)(2,5,8)(3,6,9), (1,2)(3,6)(4,8)(5,7) ],
-		"SRGroup(9,1,21)",
+		"SRGroup(9,1,21) = 1/2.[3^3:2]S(3)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9), (1,2)(4,5)(7,8), (1,4,7)(2,5,8)(3,6,9) ],
-		"SRGroup(9,1,22)",
+		"SRGroup(9,1,22) = [3^3:2]3",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,4,7)(2,5,8)(3,6,9), (1,8,2,4)(3,5,6,7), (3,4,5)(6,8,7) ],
-		"SRGroup(9,1,23)",
+		"SRGroup(9,1,23) = E(9):2A_4",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9), (1,2)(4,5)(7,8), (1,4,7)(2,5,8)(3,6,9), (3,6)(4,7)(5,8) ],
-		"SRGroup(9,1,24)",
+		"SRGroup(9,1,24) = [3^3:2]S(3)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9), (4,5)(7,8), (1,4,7)(2,5,8)(3,6,9) ],
-		"SRGroup(9,1,25)",
+		"SRGroup(9,1,25) = [1/2.S(3)^3]3",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9)(3,4,5)(6,7,8), (1,4,7)(2,5,8)(3,6,9), (1,6,4,5,2,3,8,7), (3,4,5)(6,8,7) ],
-		"SRGroup(9,1,26)",
+		"SRGroup(9,1,26) = E(9):2S_4",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,9)(2,3)(4,5)(6,7), (1,2,4,3,6,7,5), (2,5)(3,6)(4,7)(8,9) ],
-		"SRGroup(9,1,27)",
+		"SRGroup(9,1,27) = L(9)=PSL(2,8)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9), (1,2), (1,4,7)(2,5,8)(3,6,9) ],
-		"SRGroup(9,1,28)",
+		"SRGroup(9,1,28) = [S(3)^3]3=S(3)wr3",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9), (4,5)(7,8), (1,4,7)(2,5,8)(3,6,9), (3,6)(4,7)(5,8) ],
-		"SRGroup(9,1,29)",
+		"SRGroup(9,1,29) = [1/2.S(3)^3]S(3)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9), (4,5)(7,8), (1,4,7)(2,5,8)(3,6,9), (1,2)(3,6)(4,7)(5,8) ],
-		"SRGroup(9,1,30)",
+		"SRGroup(9,1,30) = 1/2[S(3)^3]S(3)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,9), (1,2), (1,4,7)(2,5,8)(3,6,9), (3,6)(4,7)(5,8) ],
-		"SRGroup(9,1,31)",
+		"SRGroup(9,1,31) = [S(3)^3]S(3)=S(3)wrS(3)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,9)(2,3)(4,5)(6,7), (1,2,4,3,6,7,5), (2,5)(3,6)(4,7)(8,9), (2,4,6)(3,5,7) ],
-		"SRGroup(9,1,32)",
+		"SRGroup(9,1,32) = L(9):3=P|L(2,8)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
-		[ (1,8,9), (2,8,9), (3,8,9), (4,8,9), (5,8,9), (6,8,9), (7,8,9) ],
-		"SRGroup(9,1,33)",
+		[ (1,2,3,4,5,6,7,8,9), (7,8,9) ],
+		"SRGroup(9,1,33) = A9",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
-		[ (1,9), (1,2), (2,3), (3,4), (4,5), (5,6), (6,7), (7,8) ],
-		"SRGroup(9,1,34)",
+		[ (1,2,3,4,5,6,7,8,9), (1,2) ],
+		"SRGroup(9,1,34) = S9",
 		"emptyset",
 		["the classes it extends to"]
 	]

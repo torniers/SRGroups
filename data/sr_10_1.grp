@@ -1,318 +1,318 @@
-##This contains a list of the self-replicating groups on the rooted regular-10 tree on level 1 ##
+##This contains a list of the self-replicating groups on the rooted regular-10 tree on level 1##
 
 BindGlobal("sr_10_1",
 [
 	[
 		[ (1,2,3,4,5,6,7,8,9,10) ],
-		"SRGroup(10,1,1)",
+		"SRGroup(10,1,1) = C(10)=5[x]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,3,5,7,9)(2,4,6,8,10), (1,4)(2,3)(5,10)(6,9)(7,8) ],
-		"SRGroup(10,1,2)",
+		"SRGroup(10,1,2) = D(10)=5:2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,3,4,5,6,7,8,9,10), (1,8)(2,7)(3,6)(4,5)(9,10) ],
-		"SRGroup(10,1,3)",
+		"SRGroup(10,1,3) = D_10(10)=[D(5)]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,3,5,7,9)(2,4,6,8,10), (1,2,9,8)(3,6,7,4)(5,10) ],
-		"SRGroup(10,1,4)",
+		"SRGroup(10,1,4) = 1/2[F(5)]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,3,4,5,6,7,8,9,10), (1,7,9,3)(2,4,8,6) ],
-		"SRGroup(10,1,5)",
+		"SRGroup(10,1,5) = F(5)[x]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (1,6)(2,7)(3,8)(4,9)(5,10) ],
-		"SRGroup(10,1,6)",
+		"SRGroup(10,1,6) = [5^2]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,3,5,7,9)(2,4,6,8,10), (1,9)(3,4)(5,10)(6,7) ],
-		"SRGroup(10,1,7)",
+		"SRGroup(10,1,7) = A_5(10)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,7)(5,10), (1,3,5,7,9)(2,4,6,8,10) ],
-		"SRGroup(10,1,8)",
+		"SRGroup(10,1,8) = [2^4]5",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (1,9)(2,8)(3,7)(4,6), (1,6)(2,7)(3,8)(4,9)(5,10) ],
-		"SRGroup(10,1,9)",
+		"SRGroup(10,1,9) = [1/2.D(5)^2]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (1,6,9,4)(2,3,8,7)(5,10) ],
-		"SRGroup(10,1,10)",
+		"SRGroup(10,1,10) = 1/2[D(5)^2]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,3,5,7,9)(2,4,6,8,10), (2,4,10)(5,7,9), (1,6)(2,7)(3,8)(4,9)(5,10) ],
-		"SRGroup(10,1,11)",
+		"SRGroup(10,1,11) = A(5)[x]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,3,5,7,9)(2,4,6,8,10), (1,4)(2,7)(3,8)(5,10)(6,9) ],
-		"SRGroup(10,1,12)",
+		"SRGroup(10,1,12) = 1/2[S(5)]2=S_5(10a)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,3,5,7,9)(2,4,6,8,10), (1,2)(3,7)(8,9) ],
-		"SRGroup(10,1,13)",
+		"SRGroup(10,1,13) = S_5(10d)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (5,10), (1,3,5,7,9)(2,4,6,8,10) ],
-		"SRGroup(10,1,14)",
+		"SRGroup(10,1,14) = [2^5]5",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,7)(5,10), (1,3,5,7,9)(2,4,6,8,10), (1,9)(2,8)(3,7)(4,6) ],
-		"SRGroup(10,1,15)",
+		"SRGroup(10,1,15) = [2^4]D(5)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,7)(5,10), (1,3,5,7,9)(2,4,6,8,10), (1,9)(2,8)(3,7)(4,6)(5,10) ],
-		"SRGroup(10,1,16)",
+		"SRGroup(10,1,16) = 1/2[2^5]D(5)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (1,7,9,3)(2,4,8,6), (1,6)(2,7)(3,8)(4,9)(5,10) ],
-		"SRGroup(10,1,17)",
+		"SRGroup(10,1,17) = [5^2:4]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (1,7,9,3)(2,4,8,6), (1,4,3,2,9,6,7,8)(5,10) ],
-		"SRGroup(10,1,18)",
+		"SRGroup(10,1,18) = [5^2:4]2_2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (1,3,9,7)(2,4,8,6), (1,6)(2,7)(3,8)(4,9)(5,10) ],
-		"SRGroup(10,1,19)",
+		"SRGroup(10,1,19) = [5^2:4_2]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (1,3,9,7)(2,4,8,6), (1,6,9,4)(2,3,8,7)(5,10) ],
-		"SRGroup(10,1,20)",
+		"SRGroup(10,1,20) = [5^2:4_2]2_2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (2,8)(4,6), (1,6)(2,7)(3,8)(4,9)(5,10) ],
-		"SRGroup(10,1,21)",
+		"SRGroup(10,1,21) = [D(5)^2]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,3,5,7,9)(2,4,6,8,10), (2,10)(5,7), (1,6)(2,7)(3,8)(4,9)(5,10) ],
-		"SRGroup(10,1,22)",
+		"SRGroup(10,1,22) = S(5)[x]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (5,10), (1,3,5,7,9)(2,4,6,8,10), (1,9)(2,8)(3,7)(4,6) ],
-		"SRGroup(10,1,23)",
+		"SRGroup(10,1,23) = [2^5]D(5)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,7)(5,10), (1,3,5,7,9)(2,4,6,8,10), (1,7,9,3)(2,4,8,6) ],
-		"SRGroup(10,1,24)",
+		"SRGroup(10,1,24) = [2^4]F(5)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,7)(5,10), (1,3,5,7,9)(2,4,6,8,10), (1,7,9,3)(2,4,8,6)(5,10) ],
-		"SRGroup(10,1,25)",
+		"SRGroup(10,1,25) = 1/2[2^5]F(5)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,10)(3,4,5)(6,7,8), (1,3,2,6)(4,5,8,7), (1,2)(4,7)(5,8)(9,10) ],
-		"SRGroup(10,1,26)",
+		"SRGroup(10,1,26) = L(10)=PSL(2,9)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (2,8)(4,6), (1,7,9,3)(2,4,8,6), (1,6)(2,7)(3,8)(4,9)(5,10) ],
-		"SRGroup(10,1,27)",
+		"SRGroup(10,1,27) = [1/2.F(5)^2]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (2,8)(4,6), (1,6,7,2,9,4,3,8)(5,10) ],
-		"SRGroup(10,1,28)",
+		"SRGroup(10,1,28) = 1/2[F(5)^2]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (5,10), (1,3,5,7,9)(2,4,6,8,10), (1,7,9,3)(2,4,8,6) ],
-		"SRGroup(10,1,29)",
+		"SRGroup(10,1,29) = [2^5]F(5)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,10)(3,4,5)(6,7,8), (1,7,3,4,2,5,6,8), (1,2)(4,7)(5,8)(9,10) ],
-		"SRGroup(10,1,30)",
+		"SRGroup(10,1,30) = L(10):2=PGL(2,9)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,10)(3,4,5)(6,7,8), (1,3,2,6)(4,5,8,7), (1,2)(4,7)(5,8)(9,10), (1,4,2,8)(3,7,6,5) ],
-		"SRGroup(10,1,31)",
+		"SRGroup(10,1,31) = M(10)=L(10)'2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,10)(3,4,5)(6,7,8), (1,3,2,6)(4,5,8,7), (1,2)(4,7)(5,8)(9,10), (3,6)(4,7)(5,8) ],
-		"SRGroup(10,1,32)",
+		"SRGroup(10,1,32) = S_6(10)=L(10):2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (2,4,8,6), (1,6)(2,7)(3,8)(4,9)(5,10) ],
-		"SRGroup(10,1,33)",
+		"SRGroup(10,1,33) = [F(5)^2]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,7)(5,10), (1,3,5,7,9)(2,4,6,8,10), (2,4,10)(5,7,9) ],
-		"SRGroup(10,1,34)",
+		"SRGroup(10,1,34) = [2^4]A(5)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (1,2,10)(3,4,5)(6,7,8), (1,7,3,4,2,5,6,8), (1,2)(4,7)(5,8)(9,10), (3,6)(4,7)(5,8) ],
-		"SRGroup(10,1,35)",
+		"SRGroup(10,1,35) = L(10).2^2=P|L(2,9)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (5,10), (1,3,5,7,9)(2,4,6,8,10), (2,4,10)(5,7,9) ],
-		"SRGroup(10,1,36)",
+		"SRGroup(10,1,36) = [2^5]A(5)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,7)(5,10), (1,3,5,7,9)(2,4,6,8,10), (2,10)(5,7) ],
-		"SRGroup(10,1,37)",
+		"SRGroup(10,1,37) = [2^4]S(5)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,7)(5,10), (1,3,5,7,9)(2,4,6,8,10), (2,4)(5,10)(7,9) ],
-		"SRGroup(10,1,38)",
+		"SRGroup(10,1,38) = 1/2[2^5]S(5)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (5,10), (1,3,5,7,9)(2,4,6,8,10), (2,10)(5,7) ],
-		"SRGroup(10,1,39)",
+		"SRGroup(10,1,39) = [2^5]S(5)",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (2,4,10), (1,6)(2,7)(3,8)(4,9)(5,10) ],
-		"SRGroup(10,1,40)",
+		"SRGroup(10,1,40) = [A(5)^2]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (2,10)(5,7), (1,6)(2,7)(3,8)(4,9)(5,10) ],
-		"SRGroup(10,1,41)",
+		"SRGroup(10,1,41) = [1/2.S(5)^2]2=[A(5):2]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (1,6)(2,5,10,7)(3,8)(4,9) ],
-		"SRGroup(10,1,42)",
+		"SRGroup(10,1,42) = 1/2[S(5)^2]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
 		[ (2,4,6,8,10), (2,10), (1,6)(2,7)(3,8)(4,9)(5,10) ],
-		"SRGroup(10,1,43)",
+		"SRGroup(10,1,43) = [S(5)^2]2",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
-		[ (1,9,10), (2,9,10), (3,9,10), (4,9,10), (5,9,10), (6,9,10), (7,9,10), (8,9,10) ],
-		"SRGroup(10,1,44)",
+		[ (1,2,3,4,5,6,7,8,9), (8,9,10) ],
+		"SRGroup(10,1,44) = A10",
 		"emptyset",
 		["the classes it extends to"]
 	],
 
 	[
-		[ (1,10), (1,2), (2,3), (3,4), (4,5), (5,6), (6,7), (7,8), (8,9) ],
-		"SRGroup(10,1,45)",
+		[ (1,2,3,4,5,6,7,8,9,10), (1,2) ],
+		"SRGroup(10,1,45) = S10",
 		"emptyset",
 		["the classes it extends to"]
 	]

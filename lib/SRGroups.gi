@@ -1,26 +1,65 @@
 #
 # SRGroups: Self-replicating groups of regular rooted trees.
 #
-# Implementations
+# Package Functions
 #
+
+# Input::	k: integer at least 2, n: integer at least 2, G: a subgroup of the automorphism group of the k-regular rooted tree of depth n
+# Output::	the regular rooted tree group G
+InstallMethod( RegularRootedTreeGroup, "for k,n,G (creator)", [IsInt, IsInt, IsPermGroup],
+function(k,n,G)
+	local rrtg_G;
+	
+	if not k>=2 then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
+	elif not n>=1 then
+		Error("input argument n=",n," must be an integer greater than or equal to 1");
+	else
+		rrtg_G:=G;
+		SetFilterObj(rrtg_G,IsRegularRootedTreeGroup);
+		
+		Setter(RegularRootedTreeGroupDegree)(rrtg_G,k);
+		Setter(RegularRootedTreeGroupDepth)(rrtg_G,n);
+	
+		return rrtg_G;
+	fi;
+end );
+
 
 # Input::	k: integer at least 2, n: integer at least 1
 # Output::	the automorphism group of the k-regular rooted tree of depth n
-InstallGlobalFunction(AutT,function(k,n)
+InstallGlobalFunction( AutT,
+function(k,n)
 	local G, i;
 	
-	# iterate wreath product
-	G:=SymmetricGroup(k);
-	for i in [2..n] do G:=WreathProduct(SymmetricGroup(k),G); od;
-	return G;
-end);
+	if not (IsInt(k) and k>=2) then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
+	elif not (IsInt(n) and n>=1) then
+		Error("input argument n=",n," must be an integer greater than or equal to 1");
+	else
+		# iterate wreath product
+		G:=SymmetricGroup(k);
+		for i in [2..n] do G:=WreathProduct(SymmetricGroup(k),G); od;
+
+		G:=RegularRootedTreeGroup(k,n,G);
+		Setter(IsSelfReplicating)(G,true);
+		Setter(HasSufficientRigidAutomorphisms)(G,true);
+		Setter(RepresentativeWithSufficientRigidAutomorphisms)(G,G);
+
+		return G;
+	fi;
+end );
 
 
-# Input::	k: integer at least 2, n: integer at least 2, G: a subgroup of AutT(k,n)
-# Output::	TRUE if F is self-replicating, FALSE otherwise
-InstallGlobalFunction(IsSelfReplicating,function(k,n,G)
-	local blocks, i, pr, G_0, gens;
+# Input::	G: a regular rooted tree group
+# Output::	TRUE if G is self-replicating, FALSE otherwise
+InstallMethod( IsSelfReplicating, "for G", [IsRegularRootedTreeGroup],
+function(G)
+	local k, n, blocks, i, pr, G_0, gens;
 	
+	k:=RegularRootedTreeGroupDegree(G);
+	n:=RegularRootedTreeGroupDepth(G);
+
 	if n=1 then return IsTransitive(G,[1..k]); fi;
 
 	# transitivity condition
@@ -36,58 +75,106 @@ InstallGlobalFunction(IsSelfReplicating,function(k,n,G)
 	if not Image(pr,G)=Group(gens) then return false; fi;
 	# if both conditions satisfied
 	return true;
-end);
+end );
 
 
-# Input::	k: integer at least 2, n: integer at least 2, aut: an element of AutT(k,n), i: in integer in [1..k]
+# Input::	k: integer at least 2, n: integer at least 2, aut: an element of AutT(k,n), i: an integer in [1..k]
 # Output::	the restriction of aut to the subtree below the level 1 vertex i, as an element of AutT(k,n-1)
-InstallGlobalFunction(BelowAction,function(k,n,aut,i)
+InstallGlobalFunction( BelowAction,
+function(k,n,aut,i)
 	local aut_i, j;
 	
-	# restricting to subtree below the level 1 vertex i by taking remainder mod k^(n-1)
-	aut_i:=[];	
-	for j in [1..k^(n-1)] do aut_i[j]:=((i-1)*k^(n-1)+j)^aut mod k^(n-1); od;
-	# replace 0 with k^(n-1)
-	aut_i[Position(aut_i,0)]:=k^(n-1);	
-	return PermList(aut_i);
-end);
-
-
-# Input::	k: integer at least 2, n: integer at least 1, G: a self-replicating subgroup of AutT(k,n)
-# Output::	the maximal self-replicating extension of G in AutT(k,n+1)
-InstallGlobalFunction(MaximalExtension,function(k,n,G)
-	local gensMG, pr, gensG, a, pre_a, b, extn, i, prG, kerG;
-		
-	gensMG:=[];
-	pr:=Projection(AutT(k,n+1));
-	gensG:=GeneratorsOfGroup(G);	
-	# add G-section
-	for a in gensG do
-		pre_a:=PreImages(pr,a);
-		for b in pre_a do
-			extn:=true;
-			for i in [1..k] do
-				if not BelowAction(k,n+1,b,i) in G then extn:=false; break; fi;
-			od;
-			if extn then Add(gensMG,b); break; fi;
-		od;
-	od;
-	# add kernel (suffices to add below 1 as the G-section is transitive on level n)
-	if n=1 then
-		kerG:=G;
-	else
-		prG:=RestrictedMapping(Projection(AutT(k,n)),G);
-		kerG:=Kernel(prG);
+	if not (IsInt(k) and k>=2) then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
+	elif not (IsInt(n) and n>=2) then
+		Error("input argument n=",n," must be an integer greater than or equal to 1");
+	elif not IsPerm(aut) then
+		Error("input argument aut=",aut," must be an automorphism of T_{k,n}");
+	elif not (IsInt(i) and i in [1..k]) then
+		Error("input argument i=",i," must be an integer in the range [1..",k,"]");
+	else	
+		# restricting to subtree below the level 1 vertex i by taking remainder mod k^(n-1)
+		aut_i:=[];	
+		for j in [1..k^(n-1)] do aut_i[j]:=((i-1)*k^(n-1)+j)^aut mod k^(n-1); od;
+		# replace 0 with k^(n-1)
+		aut_i[Position(aut_i,0)]:=k^(n-1);	
+		return PermList(aut_i);
 	fi;
-	Append(gensMG,ShallowCopy(GeneratorsOfGroup(kerG)));
-	return Group(gensMG);
+end );
+
+
+# Input::	G: a regular rooted tree group
+# Output::	the projection of G to the next lower depth
+InstallMethod( ParentGroup, "for G", [IsRegularRootedTreeGroup],
+function(G)
+	local k, n, pr;
+	
+	k:=RegularRootedTreeGroupDegree(G);
+	n:=RegularRootedTreeGroupDepth(G);
+	
+	if n=1 then
+		return Group(());
+	else	
+		pr:=Projection(AutT(k,n));	
+		return RegularRootedTreeGroup(k,n-1,Image(pr,G));
+	fi;
+end );
+
+
+# Input::	G: a self-replicating regular rooted tree group with sufficient rigid automorphisms
+# Output::	the maximal self-replicating extension M(G) of G to the next depth
+InstallMethod( MaximalExtension, "for G", [IsRegularRootedTreeGroup],
+function(G)
+	local k, n, gensMG, pr, gensG, a, pre_a, b, extn, i, prG, kerG, MG;
+	
+	if not (IsSelfReplicating(G) and HasSufficientRigidAutomorphisms(G)) then
+		Error("Input group G=",G," must be self-replicating and have sufficient rigid automorphisms");
+	else
+		k:=RegularRootedTreeGroupDegree(G);
+		n:=RegularRootedTreeGroupDepth(G);
+		
+		gensMG:=[];
+		pr:=Projection(AutT(k,n+1));
+		gensG:=GeneratorsOfGroup(G);	
+		# add G-section
+		for a in gensG do
+			pre_a:=PreImages(pr,a);
+			for b in pre_a do
+				extn:=true;
+				for i in [1..k] do
+					if not BelowAction(k,n+1,b,i) in G then extn:=false; break; fi;
+				od;
+				if extn then Add(gensMG,b); break; fi;
+			od;
+		od;
+		# add kernel (suffices to add below 1 as the G-section is transitive on level n)
+		if n=1 then
+			kerG:=G;
+		else
+			prG:=RestrictedMapping(Projection(AutT(k,n)),G);
+			kerG:=Kernel(prG);
+		fi;
+		Append(gensMG,ShallowCopy(GeneratorsOfGroup(kerG)));
+
+		MG:=RegularRootedTreeGroup(k,n+1,Group(gensMG));
+		# Horadam: Theorem 6.2: MG has all the desired properties
+		Setter(IsSelfReplicating)(MG,true);
+		Setter(HasSufficientRigidAutomorphisms)(MG,true);
+		Setter(RepresentativeWithSufficientRigidAutomorphisms)(MG,MG);
+		
+		return MG;
+	fi;
 end);
 
 
-# Input::	k: integer at least 2, n: integer at least 1, G: a self-replicating subgroup of AutT(k,n)
+# Input::	G: a regular rooted tree group
 # Output::	TRUE if G has sufficient rigid automorphisms, FALSE otherwise
-InstallGlobalFunction(HasSufficientRigidAutomorphisms,function(k,n,G)
-	local i;
+InstallMethod( HasSufficientRigidAutomorphisms, "for G", [IsRegularRootedTreeGroup],
+function(G)
+	local k, n, i;
+	
+	k:=RegularRootedTreeGroupDegree(G);
+	n:=RegularRootedTreeGroupDepth(G);
 
 	if n=1 then return true; fi;
 	
@@ -101,146 +188,39 @@ InstallGlobalFunction(HasSufficientRigidAutomorphisms,function(k,n,G)
 end);
 
 
-# Input::	k: integer at least 2, n: integer at least 1, G: a self-replicating subgroup of AutT(k,n)
-# Output::	a self-replicating AutT(k,n)-conjugate of G with sufficient rigid automorphisms, and the same projection to T_{k,n-1} as G if the projection of G has sufficient rigid automorphisms
-InstallGlobalFunction(RepresentativeWithSufficientRigidAutomorphisms,function(k,n,G)
-	local F, F_0, pr, a;
-
-	if n=1 or HasSufficientRigidAutomorphisms(k,n,G) then
-		return G;
-	fi;
+# Input::	G: a self-replicating regular rooted tree group
+# Output::	a self-replicating AutT(k,n)-conjugate of G with sufficient rigid automorphisms, and the same parent group as G if the parent group of G has sufficient rigid automorphisms
+InstallMethod( RepresentativeWithSufficientRigidAutomorphisms, "for G", [IsRegularRootedTreeGroup],
+function(G)
+	local k, n, F, F_0, pr, conjugators, a, H;
 	
-	F:=AutT(k,n);
-	F_0:=Stabilizer(F,[1..k^(n-1)],OnSets);
-	pr:=Projection(F);
-	# if the projection of G has sufficient rigid automorphisms, preserve it
-	if HasSufficientRigidAutomorphisms(k,n-1,Image(pr,G)) then
-		for a in Intersection(Kernel(pr),F_0) do
+	if not IsSelfReplicating(G) then
+		Error("input group G=",G," must be self-replicating");
+	else		
+		k:=RegularRootedTreeGroupDegree(G);
+		n:=RegularRootedTreeGroupDepth(G);
+
+		if n=1 or HasSufficientRigidAutomorphisms(G) then return G; fi;
+		
+		F:=AutT(k,n);
+		F_0:=Stabilizer(F,[1..k^(n-1)],OnSets);
+		pr:=Projection(F);
+		# if the projection of G has sufficient rigid automorphisms, preserve it (cf. Horadam: (proof of) Proposition 3.9, 3.10)
+		conjugators:=F_0;
+		if HasSufficientRigidAutomorphisms(ParentGroup(G)) then
+			conjugators:=Intersection(conjugators,Kernel(pr));
+		fi;
+			
+		for a in conjugators do
 			if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
-			if IsSelfReplicating(k,n,G^a) and HasSufficientRigidAutomorphisms(k,n,G^a) then return G^a; fi;
+			H:=RegularRootedTreeGroup(k,n,G^a);
+			if HasSufficientRigidAutomorphisms(H) and IsSelfReplicating(H) then return H; fi;
 		od;
-	else
-		for a in F_0 do
-			if not Image(pr,a)=BelowAction(k,n,a,1) then continue; fi;
-			if IsSelfReplicating(k,n,G^a) and HasSufficientRigidAutomorphisms(k,n,G^a) then return G^a; fi;
-		od;
+		
+		return fail;
 	fi;
-end);
+end );
 
-
-# Input::	k: integer at least 2, n: integer at least 2, G: a subgroup of AutT(k,n)
-# Output::	a list of AutT(k,n)-conjugacy class representatives of maximal self-replicating subgroups of G with sufficient rigid automorphisms
-InstallGlobalFunction(ConjugacyClassRepsMaxSelfReplicatingSubgroups,function(k,n,G)
-	local F, list, H, class, new, i;
-
-	F:=AutT(k,n);
-	list:=[];
-	for class in ConjugacyClassesMaximalSubgroups(G) do
-		for H in class do
-			if IsSelfReplicating(k,n,H) then
-				new:=true;
-				for i in [Length(list),Length(list)-1..1] do
-					if IsConjugate(F,H,list[i]) then new:=false; break; fi;
-				od;
-				if new then Add(list,RepresentativeWithSufficientRigidAutomorphisms(k,n,H)); fi;
-				break;
-			fi;
-		od;
-	od;
-	return list;
-end);
-
-
-# Input::	k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
-# Output::	a list of AutT(k,n)-conjugacy class representatives of maximal self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto G
-InstallGlobalFunction(ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection,function(k,n,G)
-	local F, pr, list, class, H, new, i;
-
-	F:=AutT(k,n);
-	pr:=Projection(F);
-	list:=[];
-	for class in ConjugacyClassesMaximalSubgroups(MaximalExtension(k,n-1,G)) do
-		for H in class do
-			if not Image(pr,H)=G then continue; fi;
-			if IsSelfReplicating(k,n,H) then
-				new:=true;
-				for i in [Length(list),Length(list)-1..1] do
-					if IsConjugate(F,H,list[i]) then new:=false; break; fi;
-				od;
-				if new then Add(list,RepresentativeWithSufficientRigidAutomorphisms(k,n,H)); fi;
-				break;
-			fi;
-		od;
-	od;	
-	return list;
-end);
-
-
-# Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1)
-# Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of G with sufficient rigid automorphisms
-InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroups,function(k,n,G)
-	local F, list, listtemp, H, new, listHcheck, listH, add, I, J;
-
-	F:=AutT(k,n);
-	list:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,G));
-	listtemp:=ShallowCopy(list);
-	while not IsEmpty(listtemp) do
-		for H in listtemp do
-			new:=true;
-			if IsTrivial(MaximalSubgroupClassReps(H)) then new:=false; fi;
-			listHcheck:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,H));
-			listH:=[];
-			if new then
-				for I in listHcheck do
-					add:=true;
-					for J in list do
-						if IsConjugate(F,I,J) then add:=false; break; fi;
-					od;
-					if add then Add(listH,RepresentativeWithSufficientRigidAutomorphisms(k,n,I)); fi;
-				od;
-				Append(listtemp,listH);
-				Append(list,listH);
-			fi;
-			Remove(listtemp,Position(listtemp,H));
-		od;
-	od;
-	Add(list,G);
-	return list; 
-end);
-
-# Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
-# Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto G
-InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection,function(k,n,G)
-	local F, pr, list, listtemp, H, new, listHcheck, listH, add, I, J;
-
-	F:=AutT(k,n);
-	pr:=Projection(F);
-	list:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection(k,n,G));
-	listtemp:=ShallowCopy(list);
-	while not IsEmpty(listtemp) do
-		for H in listtemp do
-			new:=true;
-			if IsTrivial(MaximalSubgroupClassReps(H)) then new:=false; fi;
-			listHcheck:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,H));
-			listH:=[];
-			if new then
-				for I in listHcheck do
-					add:=true;
-					if not Image(pr,I)=G then continue; fi;
-					for J in list do
-						if IsConjugate(F,I,J) then add:=false; break; fi;
-					od;
-					if add then Add(listH,RepresentativeWithSufficientRigidAutomorphisms(k,n,I)); fi;
-				od;
-				Append(listtemp,listH);
-				Append(list,listH);
-			fi;
-			Remove(listtemp,Position(listtemp,H));
-		od;
-	od;
-	Add(list,MaximalExtension(k,n-1,G));
-	return list;
-end);
 
 # Input: G: a group, subgroups: a mutable list of subgroups of G
 # Output: None. Conjugates removed from subgroups.
@@ -257,53 +237,102 @@ InstallGlobalFunction(RemoveConjugates,function(G,subgroups)
 	od; 
 end);
 
-# Input:: k: integer at least 2, n: integer at least 2, G: a self-replicating subgroup of AutT(k,n-1) with sufficient rigid automorphisms
-# Output:: a list of AutT(k,n)-conjugacy class representatives of self-replicating subgroups of AutT(k,n) with sufficient rigid automorphisms that project onto G
-InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection,function(k,n,G)
-	local F, prF, pr, list, listtemp, H, new, listHcheck, listH, add, I, J;
 
-	F:=AutT(k,n);
-	prF:=AutT(k,n-1);
-	pr:=Projection(F);
-	list:=[];
-	for H in G^prF do
-		if IsSelfReplicating(k,n-1,H) and HasSufficientRigidAutomorphisms(k,n-1,H) then
-			Add(list,MaximalExtension(k,n-1,H));
-		fi;
-	od;
-	RemoveConjugates(F,list);
+# Input::	G: a self-replicating regular rooted tree group with sufficient rigid automorphisms
+# Output::	a list of AutT(k,n)-conjugacy class representatives of maximal self-replicating subgroups of G with sufficient rigid automorphisms
+InstallGlobalFunction(ConjugacyClassRepsMaxSelfReplicatingSubgroups,function(G)
+	local k, n, F, list, H, class, new, i;
 	
-	listtemp:=ShallowCopy(list);
-	while not IsEmpty(listtemp) do
-		for H in listtemp do
-			new:=true;
-			if IsTrivial(MaximalSubgroupClassReps(H)) then new:=false; fi;
-			listHcheck:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(k,n,H));
-			listH:=[];
-			if new then
-				for I in listHcheck do
-					add:=true;
-					if not IsConjugate(prF,Image(pr,I),G) then continue; fi;
-					for J in list do
-						if IsConjugate(F,I,J) then add:=false; break; fi;
+	if not (IsSelfReplicating(G) and HasSufficientRigidAutomorphisms(G)) then
+		Error("Input group G=",G," must be self-replicating and have sufficient rigid automorphisms");
+	else
+		k:=RegularRootedTreeGroupDegree(G);
+		n:=RegularRootedTreeGroupDepth(G);
+		
+		F:=AutT(k,n);
+		list:=[];
+		for class in ConjugacyClassesMaximalSubgroups(G) do
+			for H in class do
+				H:=RegularRootedTreeGroup(k,n,H);
+				if IsSelfReplicating(H) then
+					new:=true;
+					for i in [Length(list),Length(list)-1..1] do
+						if IsConjugate(F,H,list[i]) then new:=false; break; fi;
 					od;
-					if add then Add(listH,RepresentativeWithSufficientRigidAutomorphisms(k,n,I)); fi;
-				od;
-				Append(listtemp,listH);
-				Append(list,listH);
-			fi;
-			Remove(listtemp,Position(listtemp,H));
+					if new then Add(list,RepresentativeWithSufficientRigidAutomorphisms(H)); fi;
+					break;
+				fi;
+			od;
 		od;
-	od;
-	
-	return list;
+		
+		return list;
+	fi;
 end);
+
+
+# Input::	G: a self-replicating regular rooted tree group with sufficient rigid automorphisms
+# Output::	a list of conjugacy class representatives of self-replicating regular rooted tree groups with sufficient rigid automorphisms and parent group G
+InstallGlobalFunction(ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection,function(G)
+	local k, n, F, prF, pr, list, listtemp, H, new, listHcheck, listH, add, I, J;
+
+	if not (IsSelfReplicating(G) and HasSufficientRigidAutomorphisms(G)) then
+		Error("Input group G=",G," must be self-replicating and have sufficient rigid automorphisms");
+	else
+		k:=RegularRootedTreeGroupDegree(G);
+		n:=RegularRootedTreeGroupDepth(G);
+		
+		F:=AutT(k,n+1);
+		prF:=AutT(k,n);
+		pr:=Projection(F);
+		list:=[];
+		for H in G^prF do
+			H:=RegularRootedTreeGroup(k,n,H);
+			if IsSelfReplicating(H) and HasSufficientRigidAutomorphisms(H) then
+				Add(list,RegularRootedTreeGroup(k,n+1,MaximalExtension(H)));
+			fi;
+		od;
+		RemoveConjugates(F,list);
+		
+		listtemp:=ShallowCopy(list);
+		while not IsEmpty(listtemp) do
+			for H in listtemp do
+				H:=RegularRootedTreeGroup(k,n,H);
+				new:=true;
+				if IsTrivial(MaximalSubgroupClassReps(H)) then new:=false; fi;
+				listHcheck:=ShallowCopy(ConjugacyClassRepsMaxSelfReplicatingSubgroups(H));
+				listH:=[];
+				if new then
+					for I in listHcheck do
+						add:=true;
+						if not IsConjugate(prF,Image(pr,I),G) then continue; fi;
+						for J in list do
+							if IsConjugate(F,I,J) then add:=false; break; fi;
+						od;
+						if add then Add(listH,RepresentativeWithSufficientRigidAutomorphisms(I)); fi;
+					od;
+					Append(listtemp,listH);
+					Append(list,listH);
+				fi;
+				Remove(listtemp,Position(listtemp,H));
+			od;
+		od;
+		
+		return list;
+	fi;
+end);
+
 
 # Input:: deg: degree of the tree (integer at least 2), lev: level of the tree (integer at least 1; if lev=1, then the unformatted "sr_deg_1.grp" file must already exist) (requires "sr_deg_lev+1.grp" file to exist)
 # Output:: Formatted version of the file "sr_deg_lev.grp"
 InstallGlobalFunction(FormatSRFile, function(deg,lev)
-	local pr, fSingleGroup, fCumulative, numGroupsAbove, numProj, i, groupInfo, projBelow, prBelow, aboveCount, k, fNew, dirData, dirTempFiles,reEntry, reEntryCheck, fVariables, numGroups, gens, gensAbove, gensAboveTemp, currentGens, j, fGens, fGensAbove, groupNum;
+	local pr, fSingleGroup, fCumulative, numGroupsAbove, numProj, i, groupInfo, projBelow, prBelow, aboveCount, k, fNew, dirData, dirTempFiles,reEntry, reEntryCheck, fVariables, numGroups, gens, gensAbove, gensAboveTemp, currentGens, j, fGens, fGensAbove, groupNum, groupsLevel1, checkLevel1;
 
+	if not (IsInt(deg) and deg>=2) then
+		Error("input argument deg=",deg," must be an integer greater than or equal to 2");
+	elif not (IsInt(lev) and lev>=1) then
+		Error("input argument deg=",deg," must be an integer greater than or equal to 1");
+	fi;
+	
 	# 0. Create directories to be used (dirData: storage of final group files, dirTempFiles: storage of temporary files).
 	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
 	dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
@@ -351,7 +380,7 @@ InstallGlobalFunction(FormatSRFile, function(deg,lev)
 		reEntry:=false;
 		reEntryCheck:=false;
 		numProj:=[];
-		numGroups:=EvalString(SplitString(SplitString(SRGroup(deg,lev+1)[Length(SRGroup(deg,lev+1))][3],",")[3],")")[1]); # Number of groups on level lev (using file "sr_deg_lev+1.grp").
+		numGroups:=EvalString(SplitString(SplitString(SRGroupsInfo(deg,lev+1)[Length(SRGroupsInfo(deg,lev+1))][3],",")[3],")")[1]); # Number of groups on level lev (using file "sr_deg_lev+1.grp").
 		numGroupsAbove:=0;
 		aboveCount:=1;
 		j:=1;
@@ -360,7 +389,7 @@ InstallGlobalFunction(FormatSRFile, function(deg,lev)
 	# 2.2. Generate lists containing the same projections from lev+1 to lev, stored in projBelow[groupNum].
 	projBelow:=[];
 	for groupNum in [1..numGroups] do
-		projBelow[groupNum]:=SRGroup(deg,lev+1,0,groupNum);
+		projBelow[groupNum]:=SRGroupsInfo(deg,lev+1,0,groupNum);
 	od;
 
 	# 3. Gather data to store in groupInfo. This has to be separated into the case where "sr_deg_lev.grp" (unformatted) exists and when it doesn't.
@@ -374,12 +403,12 @@ InstallGlobalFunction(FormatSRFile, function(deg,lev)
 			od;
 			# 3.1.2. Calculate the number of projections from lev to lev-1 for each group (cumulatively), stored in numProj.
 			if lev>1 then
-				numGroupsAbove:=EvalString(SplitString(SplitString(SRGroup(deg,lev)[Length(SRGroup(deg,lev))][3],",")[3],")")[1]); # Number of groups on level lev-1 (using file "sr_deg_lev.grp").
+				numGroupsAbove:=EvalString(SplitString(SplitString(SRGroupsInfo(deg,lev)[Length(SRGroupsInfo(deg,lev))][3],",")[3],")")[1]); # Number of groups on level lev-1 (using file "sr_deg_lev.grp").
 				for i in [1..numGroupsAbove] do
 					if i>1 then
-						numProj[i]:=numProj[i-1]+Length(SRGroup(deg,lev,0,i));
+						numProj[i]:=numProj[i-1]+Length(SRGroupsInfo(deg,lev,0,i));
 					else
-						numProj[i]:=Length(SRGroup(deg,lev,0,i));
+						numProj[i]:=Length(SRGroupsInfo(deg,lev,0,i));
 					fi;
 				od;
 			fi;
@@ -445,11 +474,25 @@ InstallGlobalFunction(FormatSRFile, function(deg,lev)
 	fi;
 
 	# 4. Store and print formatted group information.
+	checkLevel1:=false;
 	while j<=numGroups do
 		# 4.1. Create entries containing individual group information.
 		groupInfo[j]:=[];
 		groupInfo[j][1]:=gens[j];
-		groupInfo[j][2]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(j),")\"");
+		if lev=1 then
+			if not checkLevel1 then
+				groupsLevel1:=AllSRGroups(Degree,deg,Depth,lev);
+				checkLevel1:=true;
+			fi;
+			for k in [1..Length(groupsLevel1)] do
+				if Group(gens[j])=groupsLevel1[k] then
+					groupInfo[j][2]:=Concatenation("\"",SRGroupsInfo(deg,lev,k)[2],"\"");
+					Remove(groupsLevel1,Position(groupsLevel1,groupsLevel1[k]));
+				fi;
+			od;
+		else
+			groupInfo[j][2]:=Concatenation("\"SRGroup(",String(deg),",",String(lev),",",String(j),")\"");
+		fi;
 		# 4.1.1. Index 3 must reflect the known groups each group on level lev projects to (using numProj[aboveCount]).
 		if lev>1 then
 			if j<=numProj[aboveCount] then
@@ -523,38 +566,28 @@ InstallGlobalFunction(FormatSRFile, function(deg,lev)
 	return;
 end);
 
+
 # Input:: Any integer in the range [0,31], which denotes the degree of the regular rooted tree being organised. If the input is 0 or 1, the degree is chosen to be the lowest degree not stored.
 # Output:: The file containing all self-replicating groups of the rooted k-tree at the lowest level not stored.
-InstallGlobalFunction(SRGroupFile, function(arg)
+InstallGlobalFunction(SRGroupFile, function(degree)
 	local count, fNew, dirData, k, prevLev, srDegrees, i, x, dataContents, list2, groupGens, deg, lev, fExtensions, groupList, entryPoint, breakPoint, fBreakPointCheck, groupInfo, unsortedLists, sortedList, prevPosLists, yCount, w, yVisited, vCount, fLevelAboveSingle, groupInfoAbove, v, fSingleGroup, fCumulative, fVariables, fLevelAboveCumulative, reEntry, initialz, initialx, reEntryCheck, wCount, y, z, sortedLists, unsortedList, posList, dirTempFiles, fNewAbove, breakPointCheckExist, prevPosList, prevPosListBelow, j, srLevels, incompleteLevels, m, projectionProtocol, levGap, formatAbove, dirTempFilesContents, dirTempSingleFilesContents, stringFolder, dirTempSingleFiles, levReorder;
-
+	
+	if not (IsInt(degree) and degree>=0) then
+		Error("input argument degree=",degree," must be an integer greater than or equal to zero");
+	fi;
+	
 	# 0. Create directories to be used (dirData: storage of final group files, dirTempFiles: storage of temporary files).
 	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
 	dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
 	dataContents:=DirectoryContents(dirData[1]); # Creates a list of strings with names of the files/folders stored in dirData.
 
 	# 1. First check if the input argument is 0 or 1. If so, the tree level is automatically set to 1.
-	if arg[1]=0 or arg[1]=1 then
-		# 1.1. Create a list which contains the degrees already stored in the Data folder for the SRGroups package.
-		srDegrees:=SRDegrees();
+	if degree in [0,1] then
 		deg:=2;
-		# 1.1.1. Set the degree=deg to be 1 higher than the highest degree stored that is consecutive with 2.
-		if not IsEmpty(srDegrees) then
-			for count in [1..Length(srDegrees)] do
-				if count=1 then
-					if not srDegrees[count]=deg then
-						break;
-					fi;
-				else
-					if not srDegrees[count]=deg then
-						deg:=deg+1;
-						if srDegrees[count]>deg then
-							break;
-						fi;
-					fi;
-				fi;
-			od;
-		fi;
+		# 1.1. Set the degree=deg to be 1 higher than the highest degree stored that is consecutive with 2.
+		while SRGroupsAvailable(deg,1) do
+			deg:=deg+1;
+		od;
 		Print("Creating degree ", deg, " file on level 1.\n");
 		
 		# 1.2. Create required filenames.
@@ -582,9 +615,8 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 		for wCount in [initialx..NrTransitiveGroups(deg)] do
 			# 1.5.1. Create entries containing individual group information.
 			groupInfo[wCount]:=[];
-			groupInfo[wCount][1]:=ShallowCopy(TRANSGrp(deg,wCount));
-			Remove(groupInfo[wCount][1],Length(groupInfo[wCount][1]));
-			groupInfo[wCount][2]:=Concatenation("\"SRGroup(",String(deg),",1,",String(wCount),")\"");
+			groupInfo[wCount][1]:=GeneratorsOfGroup(TransitiveGroup(deg,wCount));
+			groupInfo[wCount][2]:=Concatenation("\"SRGroup(",String(deg),",1,",String(wCount),") = ",ViewString(TransitiveGroup(deg,wCount)),"\"");
 			groupInfo[wCount][3]:="\"emptyset\"";
 			groupInfo[wCount][4]:="[\"the classes it extends to\"]";
 			# 1.5.2. Separately print individual group information (in correct format) to "temp_deg_1_indiv.grp".
@@ -618,12 +650,15 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 		if reEntryCheck then
 			UnbindVariables("varArg1");
 		fi;
+		if SRGroupsAvailable(deg,2) then
+			FormatSRFile(deg,1);
+		fi;
 		Print("Done.");
 		
 	# 2. Case where the input argument is in [2,31].
 	else 
 		# 2.1. Set the degree to be the input argument.
-		deg:=arg[1];
+		deg:=degree;
 		Print("You have requested to make group files for degree ", deg, ".");
 		
 		# 2.2. Finding the level to begin. If an element of list begins with "sr_arg[1]_", then store it in srLevels.
@@ -635,7 +670,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 		m:=1;
 		if not IsEmpty(srLevels) then
 			for count in [1..Length(srLevels)] do
-				if SRGroup(deg,srLevels[count])[1][4]=["the classes it extends to"] then
+				if SRGroupsInfo(deg,srLevels[count])[1][4]=["the classes it extends to"] then
 					if IsExistingFile(Filename(dirData[1], Concatenation("sr_", String(deg), "_", String(srLevels[count]+1), ".grp"))) then
 						incompleteLevels[m]:=srLevels[count];
 						m:=m+1;
@@ -653,7 +688,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 			od;
 		fi;
 		
-		# 2.2.3. If srLevels is not emptu, then using list of currently stored levels, srLevels, check for any gaps by evaluating srLevels[count]. A gap is found when srLevels[count]=/=count.
+		# 2.2.3. If srLevels is not empty, then using list of currently stored levels, srLevels, check for any gaps by evaluating srLevels[count]. A gap is found when srLevels[count]=/=count.
 		# If no gaps are found, set the level=lev to be 1 higher than the highest level stored that is consecutive with 1.
 		# In this case, continue with the normal file creation protocol (uses ConjugacyClassRepsMaxSelfReplicatingSubgroupsWithProjection to generate the groups).
 		# If a gap is found, set the level=srLevels[count]-1 and continue with the alternative file creation protocol (fills the gap using projections from the file on level srLevels[count]).
@@ -669,6 +704,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 				elif count=1 and (not srLevels[count]=count) then
 					lev:=1;
 					Print("\nGap found on level 1. Creating level 1 file.");
+					break;
 				else
 					lev:=srLevels[count]-1;
 					levGap:=lev-srLevels[count-1]; # Number of levels missing
@@ -715,9 +751,8 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 			for wCount in [initialx..NrTransitiveGroups(deg)] do
 				# 2.4.2.1. Create entries containing individual group information.
 				groupInfo[wCount]:=[];
-				groupInfo[wCount][1]:=ShallowCopy(TRANSGrp(deg,wCount));
-				Remove(groupInfo[wCount][1],Length(groupInfo[wCount][1]));
-				groupInfo[wCount][2]:=Concatenation("\"SRGroup(",String(deg),",1,",String(wCount),")\"");
+				groupInfo[wCount][1]:=GeneratorsOfGroup(TransitiveGroup(deg,wCount));
+				groupInfo[wCount][2]:=Concatenation("\"SRGroup(",String(deg),",1,",String(wCount),") = ",ViewString(TransitiveGroup(deg,wCount)),"\"");
 				groupInfo[wCount][3]:="\"emptyset\"";
 				groupInfo[wCount][4]:="[\"the classes it extends to\"]";
 				# 2.4.2.2. Print all individual group information (in correct format) to "temp_deg_1_indiv.grp".
@@ -780,13 +815,13 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 			if not projectionProtocol then
 				# 2.5.3.1. Normal protocol: Extend each group on level lev-1 to all conjugacy class representatives and store their generators in the file "temp_deg_lev.grp".
 				groupGens:=[];
-				if entryPoint<=Length(SRGroup(deg,lev-1)) then
+				if entryPoint<=Length(SRGroupsInfo(deg,lev-1)) then
 					Print("\nEvaluating groups extending from:");
 					if entryPoint=1 then
-						Print("\n",Concatenation("SRGroup(",String(deg),",",String(lev-1),",1)"),"  (",1,"/",Length(SRGroup(deg,lev-1)),")");
+						Print("\n",Concatenation("SRGroup(",String(deg),",",String(lev-1),",1)"),"  (",1,"/",Length(SRGroupsInfo(deg,lev-1)),")");
 					fi;
-					for i in [entryPoint..Length(SRGroup(deg,lev-1))] do
-						groupList:=ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection(deg, lev, Group(SRGroup(deg, lev-1, i)[1]));
+					for i in [entryPoint..Length(SRGroupsInfo(deg,lev-1))] do
+						groupList:=ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(SRGroup(deg, lev-1, i));
 						if i=1 then
 							AppendTo(fExtensions,Concatenation("BindGlobal(\"temp_",String(deg),"_",String(lev-1),"_",String(i),"_proj\",\n["));
 						else
@@ -800,8 +835,8 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 								AppendTo(fExtensions,Concatenation("\n\t",String(groupGens[j]),","));
 							fi;
 						od;
-						if entryPoint<>Length(SRGroup(deg,lev-1)) then
-							Print("\n",Concatenation("SRGroup(",String(deg),",",String(lev-1),",",String(i+1),")"),"  (",i+1,"/",Length(SRGroup(deg,lev-1)),")");
+						if entryPoint<>Length(SRGroupsInfo(deg,lev-1)) then
+							Print("\n",Concatenation("SRGroup(",String(deg),",",String(lev-1),",",String(i+1),")"),"  (",i+1,"/",Length(SRGroupsInfo(deg,lev-1)),")");
 						fi;
 					od;
 				fi;
@@ -818,7 +853,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 				# 2.5.3.2.1. Delete the residual temp file from FormatSRFile.
 				RemoveFile(Filename(dirTempFiles[1],Concatenation("temp_",String(deg),"_",String(lev),"_gens.grp")));
 				# 2.5.3.2.2. Check if an unformatted file exists from the newly filled gap on level=srLevels[count-1], and format this file.
-				if SRGroup(deg,lev)[1][4]=["the classes it extends to"] then
+				if SRGroupsInfo(deg,lev)[1][4]=["the classes it extends to"] then
 					Print("\nFormatting file:", Concatenation("\nsr_", String(deg), "_", String(lev), ".grp"));
 					FormatSRFile(deg,lev);
 				fi;
@@ -831,7 +866,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 				groupInfoAbove:=[]; # Level=lev-1 variable
 				# 2.5.4.1. Check if the file "sr_deg_lev-1.grp" has not already been formatted (it normally would not be).
 				# If so, the normal protocol formats both files "sr_deg_lev-1.grp" and "sr_deg_lev.grp". If not, the normal protocol only formats "sr_deg_lev.grp".
-				if SRGroup(deg,lev-1)[1][4]=["the classes it extends to"] then
+				if SRGroupsInfo(deg,lev-1)[1][4]=["the classes it extends to"] then
 					formatAbove:=true;
 					Print("\nFormatting files ",Concatenation("sr_", String(deg), "_", String(lev), ".grp")," and ", Concatenation("sr_", String(deg), "_", String(lev-1), ".grp")," now.");
 				else
@@ -872,7 +907,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 					reEntryCheck:=false;
 					# 2.5.5.2.1. Create list containing the number of extensions from each group on level 1.
 					unsortedList:=[];
-					for y in [1..Length(SRGroup(deg, lev-1))] do
+					for y in [1..Length(SRGroupsInfo(deg, lev-1))] do
 						unsortedList[y]:=Length(EvalString(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(y),"_proj")));
 					od;
 					sortedList:=[];
@@ -888,7 +923,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 				
 				# 2.5.5.3. Loop through every group on level 1 to extract extension information and format group files.
 				# A while loop has been used here since y can iterate more than once per loop due to the variable posList.
-				while y<=Length(SRGroup(deg, lev-1))do
+				while y<=Length(SRGroupsInfo(deg, lev-1)) do
 				
 					# 2.5.5.3.1. Create a list of positions from unsortedList for next lowest number of extensions. Upon re-entry, posList is already defined.
 					# For each position, store it in a list which recalls the position, then format group information for each group extending from that position.
@@ -951,7 +986,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 						# The if statement is used because upon re-entry the zCount values will dictate whether only formatting of level 2 has been completed (this is the case when wCount=/=vCount).
 						if formatAbove and (not vCount = wCount) then
 							# 2.5.5.3.4.1. Compile updated position of groups on level 1.
-							groupInfoAbove[y]:=SRGroup(deg, lev-1)[prevPosList[y]];
+							groupInfoAbove[y]:=SRGroupsInfo(deg, lev-1)[prevPosList[y]];
 							# 2.5.5.3.4.2. Index 2 of each group's information must be changed to reflect it's changed name based on the updated position.
 							groupInfoAbove[y][2]:=String(Concatenation("\"SRGroup(", String(deg), ",", String(lev-1), ",", String(y), ")\""));
 							PrintTo(fLevelAboveSingle, "\n\t", "[");
@@ -981,7 +1016,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 							fi;
 							# 2.5.5.3.4.6. If the very final group has been successfully formatted, then append the final line of fLevelAboveCumulative.
 							# Otherwise, append a new line indicating another group entry will be added.
-							if y=Length(SRGroup(deg,lev-1)) then
+							if y=Length(SRGroupsInfo(deg,lev-1)) then
 								AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),"\n]);");
 							else
 								AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),",\n");
@@ -1054,16 +1089,16 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 					reEntryCheck:=false;
 					# 2.5.6.2.1. Create a list which measures the cumulative number of branches extending from all groups on level lev-2 prior to group x.
 					yVisited:=[];
-					for x in [1..Length(SRGroup(deg,lev-2))] do
+					for x in [1..Length(SRGroupsInfo(deg,lev-2))] do
 						if x>1 then
-							yVisited[x]:=yVisited[x-1]+Length(SRGroup(deg,lev-1,0,x-1));
+							yVisited[x]:=yVisited[x-1]+Length(SRGroupsInfo(deg,lev-1,0,x-1));
 						else
 							yVisited[x]:=0;
 						fi;
 					od;
 					# 2.5.6.2.2. Create a list containing the number of extensions from each group on level lev-1.
 					unsortedList:=[];
-					for y in [1..Length(SRGroup(deg,lev-1))] do
+					for y in [1..Length(SRGroupsInfo(deg,lev-1))] do
 						unsortedList[y]:=Length(EvalString(Concatenation("temp_",String(deg),"_",String(lev-1),"_",String(y),"_proj")));
 					od;
 					unsortedLists:=[];
@@ -1081,7 +1116,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 				# 2.5.6.3. Groups on level lev-1 must be re-arranged, but can only be re-arranged if they extend from a common group.
 				# Therefore, divide the lists into lists containing lists to capture this, from which each list within the lists is sorted in the required order.
 				# x denotes group number on level lev-2, y denotes group number on level lev-1 extending from group x.
-				for x in [initialx..Length(SRGroup(deg,lev-2))] do
+				for x in [initialx..Length(SRGroupsInfo(deg,lev-2))] do
 					# 2.5.6.3.1. Upon re-entry these variables are already defined.
 					if not reEntry then
 						# 2.5.6.3.1.1. Initialise list entries within ...Lists variables.
@@ -1089,7 +1124,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 						sortedLists[x]:=[];
 						prevPosLists[x]:=[];
 						# 2.5.6.3.1.2. Divide unsortedList into unsortedLists indexed by x (i.e. the groups on level lev-2), since you can only re-arrange groups extending from a common group.
-						for y in [1..Length(SRGroup(deg,lev-1,0,x))] do
+						for y in [1..Length(SRGroupsInfo(deg,lev-1,0,x))] do
 							unsortedLists[x][y]:=unsortedList[yVisited[x]+y];
 						od;
 						y:=1;
@@ -1099,7 +1134,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 					
 					# 2.5.6.3.2 Loop through every group on level lev-1 to extract extension information and format group files.
 					# A while loop has been used here since y can iterate more than once per loop due to the variable posList.
-					while y<=Length(SRGroup(deg,lev-1,0,x)) do
+					while y<=Length(SRGroupsInfo(deg,lev-1,0,x)) do
 					
 						# 2.5.6.3.2.1. Create a list of positions=posList from unsortedList for next lowest number of extensions.
 						# Upon re-entry, posList is already defined.
@@ -1169,7 +1204,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 									groupInfoAbove[x]:=[];
 								fi;
 								# 2.5.6.3.2.2.3.2. Compile updated position of groups on level lev-1.
-								groupInfoAbove[x][y]:=SRGroup(deg,lev-1)[yVisited[x]+prevPosLists[x][y]];
+								groupInfoAbove[x][y]:=SRGroupsInfo(deg,lev-1)[yVisited[x]+prevPosLists[x][y]];
 								# 2.5.6.3.2.2.3.3. Index 2 of each group's information must be changed to reflect it's changed name based on the updated position.
 								groupInfoAbove[x][y][2]:=String(Concatenation("\"SRGroup(", String(deg), ",", String(lev-1), ",", String(yVisited[x]+y), ")\""));
 								PrintTo(fLevelAboveSingle, "\n\t", "[");
@@ -1199,7 +1234,7 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 								fi;
 								# 2.5.6.3.2.2.3.7. If the very final group has been successfully formatted, then append the final line of fLevelAboveCumulative.
 								# Otherwise, append a new line indicating another group entry will be added.
-								if yVisited[x]+y=Length(SRGroup(deg,lev-1)) then
+								if yVisited[x]+y=Length(SRGroupsInfo(deg,lev-1)) then
 									AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),"\n]);");
 								else
 									AppendTo(fLevelAboveCumulative,StringFile(fLevelAboveSingle),",\n");
@@ -1229,8 +1264,6 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 				od;
 			fi;
 		fi;
-		
-
 		
 		if not projectionProtocol then
 			# 2.5.7. Append end of list containing groups.
@@ -1279,290 +1312,280 @@ InstallGlobalFunction(SRGroupFile, function(arg)
 				RemoveFile(fLevelAboveCumulative);
 			fi;
 		fi;
+		if lev=1 and SRGroupsAvailable(deg,2) then
+			FormatSRFile(deg,1);
+		fi;
 		Print("\nDone.");
 	fi;
 	
 	return;
 end);
 
-# Input:: deg: an integer of at least 2 representing the degree of the SRGroup that one wishes to find the HasseDiagram of, lev: and integer of at least 1, representing the level of the SRGroup on the degree deg 
-# Output:: a plain text file stored in the form of a .dot file, which can be run through command prompt and Graphviz  
-InstallGlobalFunction(HasseDiagram, function(deg,lev)
-local subgroups, nodes, abelianGroups, dir, fName, i, k, j, count, antiList, counter, sizeLists, autIndex, sizeTemp;
 
-subgroups:=[];
-nodes:=[];
-abelianGroups:=[];
-sizeLists:=[];
-dir:=DirectoriesPackageLibrary("SRGroups","Digraphs");
-fName:=Filename(dir[1],Concatenation("HasseDiagram_", String(deg),"_",String(lev),".dot"));
-for i in [1..Length(SRGroup(deg,lev))] do
-	subgroups[i]:=[];
-	k:=1;
-	sizeTemp:=Size(Group(SRGroup(deg,lev,i)[1]));
-	if sizeTemp=Factorial(deg)^(((deg^lev)-1)/(deg-1)) then
-		autIndex:=i;
-	fi;
-	if IsAbelian(Group(SRGroup(deg,lev,i)[1])) then
-		Add(abelianGroups,i);
-	fi;
-	for j in [1..Length(SRGroup(deg,lev))] do
-		if i = j then
-			continue;
-		else
-			if IsSubgroup(Group(SRGroup(deg,lev,i)[1]), Group(SRGroup(deg,lev,j)[1])) then
-				subgroups[i][k]:=j;
-				k:=k+1;
-			fi;
-		fi;
-	od;
-	if not IsEmpty(subgroups[i]) then 
-		Add(nodes,i);
-	fi;
-	if IsEmpty(sizeLists) then
-		sizeLists[1]:=[];
-		Add(sizeLists[1], i);
-	else
-		for j in [1..Length(sizeLists)] do
-			if sizeTemp=Size(Group(SRGroup(deg,lev,sizeLists[j][1])[1])) then
-				Add(sizeLists[j],i);
-				break;
-			elif j=Length(sizeLists) then
-				sizeLists[j+1]:=[];
-				Add(sizeLists[j+1], i);
-			fi;
-		od;
-	fi;
-od;
+# # Input:: deg: an integer of at least 2 representing the degree of the SRGroup that one wishes to find the HasseDiagram of, lev: and integer of at least 1, representing the level of the SRGroup on the degree deg 
+# # Output:: a plain text file stored in the form of a .dot file, which can be run through command prompt and Graphviz  
+# InstallGlobalFunction(HasseDiagram, function(deg,lev)
+# local subgroups, nodes, abelianGroups, dir, fName, i, k, j, count, antiList, counter, sizeLists, autIndex, sizeTemp;
 
-for i in [1..Length(nodes)] do
-	for j in [1..Length(nodes)] do
-		if nodes[j] in subgroups[nodes[i]] then
-			subgroups[nodes[i]]:=Difference(subgroups[nodes[i]],subgroups[nodes[j]]);
-		fi;
-	od;
-	count:=1;
-	antiList:=[];
-	if i = 1 then
-		PrintTo(fName, "digraph G {");
-		AppendTo(fName, "\n\t{");
-		AppendTo(fName, "\n\tnode ", "[shape=diamond", ",", " style=bold]");
-		AppendTo(fName, "\n\t", autIndex, "[color=darkgreen]");
-		AppendTo(fName, "\n\t}");
-		AppendTo(fName, "\n\t{");
-		AppendTo(fName, "\n\tnode ", "[shape=diamond", ",", " style=filled]");
-		counter:=1;
-		for j in [1..Length(SRGroup(deg,lev))] do
-			if not j in nodes then
-				antiList[counter]:= j;
-				counter:=counter+1;
-			fi;
-		od;
-		AppendTo(fName, "\n\t");
-		for j in [1..Length(antiList)] do
-			if j < Length(antiList) then
-				AppendTo(fName, antiList[j], ", ");
-			else 
-				AppendTo(fName, antiList[j], " [fillcolor=grey]");
-			fi;
-		od;
-		AppendTo(fName, "\n\t}");
-		AppendTo(fName, "\n\t{");
-		AppendTo(fName, "\n\tnode ", "[shape=box", ",", " width=0.5", ",", " height=0.3]");
-		AppendTo(fName, "\n\t");
-		for j in [1..Length(nodes)] do
-			if j < Length(nodes) then
-				AppendTo(fName, nodes[j], ", ");
-			else
-				AppendTo(fName, nodes[j]);
-			fi;
-		od;
-		AppendTo(fName, "\n\t}");
-		AppendTo(fName, "\n\t{");
-		AppendTo(fName, "\n\tnode ", "[shape=diamond", ",", " style=filled]");
-		AppendTo(fName, "\n\t");
-		counter:=1;
-		for j in [1..Length(abelianGroups)] do
-			if j < Length(abelianGroups) then
-				AppendTo(fName, abelianGroups[j], ", ");
-			else
-				AppendTo(fName, abelianGroups[j]);
-			fi;
-		od;
-		AppendTo(fName, " [fillcolor=red]");
-		AppendTo(fName, "\n\t}");
-		AppendTo(fName, "\n", nodes[i], " -> ");
-	else
-		AppendTo(fName,"\n", nodes[i], " -> ");
-	fi;
-	for k in [1..Length(subgroups[nodes[i]])] do
-		if count > 1 then
-			AppendTo(fName,", ", subgroups[nodes[i]][k]);
-			count:=count+1;
-		else
-			AppendTo(fName,subgroups[nodes[i]][k]);
-			count:=count+1;
-		fi;
-	od;
-od;
-for j in [1..Length(sizeLists)] do
-	AppendTo(fName, "\n\t", "{rank=same;");
-	for k in [1..Length(sizeLists[j])] do
-		if k = 1 then
-			AppendTo(fName, String(sizeLists[j][k]));
-		else 
-			AppendTo(fName, ";", String(sizeLists[j][k]));
-		fi;
-	od;
-	AppendTo(fName, "}");
-od;
-AppendTo(fName, "\n", "}");
-return;
-end);
+# subgroups:=[];
+# nodes:=[];
+# abelianGroups:=[];
+# sizeLists:=[];
+# dir:=DirectoriesPackageLibrary("SRGroups","Digraphs");
+# fName:=Filename(dir[1],Concatenation("HasseDiagram_", String(deg),"_",String(lev),".dot"));
+# for i in [1..Length(SRGroup(deg,lev))] do
+	# subgroups[i]:=[];
+	# k:=1;
+	# sizeTemp:=Size(Group(SRGroup(deg,lev,i)[1]));
+	# if sizeTemp=Factorial(deg)^(((deg^lev)-1)/(deg-1)) then
+		# autIndex:=i;
+	# fi;
+	# if IsAbelian(Group(SRGroup(deg,lev,i)[1])) then
+		# Add(abelianGroups,i);
+	# fi;
+	# for j in [1..Length(SRGroup(deg,lev))] do
+		# if i = j then
+			# continue;
+		# else
+			# if IsSubgroup(Group(SRGroup(deg,lev,i)[1]), Group(SRGroup(deg,lev,j)[1])) then
+				# subgroups[i][k]:=j;
+				# k:=k+1;
+			# fi;
+		# fi;
+	# od;
+	# if not IsEmpty(subgroups[i]) then 
+		# Add(nodes,i);
+	# fi;
+	# if IsEmpty(sizeLists) then
+		# sizeLists[1]:=[];
+		# Add(sizeLists[1], i);
+	# else
+		# for j in [1..Length(sizeLists)] do
+			# if sizeTemp=Size(Group(SRGroup(deg,lev,sizeLists[j][1])[1])) then
+				# Add(sizeLists[j],i);
+				# break;
+			# elif j=Length(sizeLists) then
+				# sizeLists[j+1]:=[];
+				# Add(sizeLists[j+1], i);
+			# fi;
+		# od;
+	# fi;
+# od;
 
-# Input:: 
-# Output::
-InstallGlobalFunction(ExtensionsMapping, function(deg)
-local dirData, dirDigraphs, list, levelCounter, levels, fName, numberCounter, i, j, k, abelianGroups, count;
+# for i in [1..Length(nodes)] do
+	# for j in [1..Length(nodes)] do
+		# if nodes[j] in subgroups[nodes[i]] then
+			# subgroups[nodes[i]]:=Difference(subgroups[nodes[i]],subgroups[nodes[j]]);
+		# fi;
+	# od;
+	# count:=1;
+	# antiList:=[];
+	# if i = 1 then
+		# PrintTo(fName, "digraph G {");
+		# AppendTo(fName, "\n\t{");
+		# AppendTo(fName, "\n\tnode ", "[shape=diamond", ",", " style=bold]");
+		# AppendTo(fName, "\n\t", autIndex, "[color=darkgreen]");
+		# AppendTo(fName, "\n\t}");
+		# AppendTo(fName, "\n\t{");
+		# AppendTo(fName, "\n\tnode ", "[shape=diamond", ",", " style=filled]");
+		# counter:=1;
+		# for j in [1..Length(SRGroup(deg,lev))] do
+			# if not j in nodes then
+				# antiList[counter]:= j;
+				# counter:=counter+1;
+			# fi;
+		# od;
+		# AppendTo(fName, "\n\t");
+		# for j in [1..Length(antiList)] do
+			# if j < Length(antiList) then
+				# AppendTo(fName, antiList[j], ", ");
+			# else 
+				# AppendTo(fName, antiList[j], " [fillcolor=grey]");
+			# fi;
+		# od;
+		# AppendTo(fName, "\n\t}");
+		# AppendTo(fName, "\n\t{");
+		# AppendTo(fName, "\n\tnode ", "[shape=box", ",", " width=0.5", ",", " height=0.3]");
+		# AppendTo(fName, "\n\t");
+		# for j in [1..Length(nodes)] do
+			# if j < Length(nodes) then
+				# AppendTo(fName, nodes[j], ", ");
+			# else
+				# AppendTo(fName, nodes[j]);
+			# fi;
+		# od;
+		# AppendTo(fName, "\n\t}");
+		# AppendTo(fName, "\n\t{");
+		# AppendTo(fName, "\n\tnode ", "[shape=diamond", ",", " style=filled]");
+		# AppendTo(fName, "\n\t");
+		# counter:=1;
+		# for j in [1..Length(abelianGroups)] do
+			# if j < Length(abelianGroups) then
+				# AppendTo(fName, abelianGroups[j], ", ");
+			# else
+				# AppendTo(fName, abelianGroups[j]);
+			# fi;
+		# od;
+		# AppendTo(fName, " [fillcolor=red]");
+		# AppendTo(fName, "\n\t}");
+		# AppendTo(fName, "\n", nodes[i], " -> ");
+	# else
+		# AppendTo(fName,"\n", nodes[i], " -> ");
+	# fi;
+	# for k in [1..Length(subgroups[nodes[i]])] do
+		# if count > 1 then
+			# AppendTo(fName,", ", subgroups[nodes[i]][k]);
+			# count:=count+1;
+		# else
+			# AppendTo(fName,subgroups[nodes[i]][k]);
+			# count:=count+1;
+		# fi;
+	# od;
+# od;
+# for j in [1..Length(sizeLists)] do
+	# AppendTo(fName, "\n\t", "{rank=same;");
+	# for k in [1..Length(sizeLists[j])] do
+		# if k = 1 then
+			# AppendTo(fName, String(sizeLists[j][k]));
+		# else 
+			# AppendTo(fName, ";", String(sizeLists[j][k]));
+		# fi;
+	# od;
+	# AppendTo(fName, "}");
+# od;
+# AppendTo(fName, "\n", "}");
+# return;
+# end);
 
-# Create directories to be used (dirData: where group information is read from, dirDigraphs: where file is written)
-dirData:= DirectoriesPackageLibrary( "SRGroups", "data" );
-dirDigraphs:= DirectoriesPackageLibrary( "SRGroups", "Digraphs" );
 
-# Initialise variables
-list:=[]; # List of lists containing the groups 
-levelCounter:=1; # Counter variable that stores the current level being examined
-levels:=[]; # List containing the levels of deg
-count:=1;
-abelianGroups:=[]; # List of the groups that are abelian
+# # Input::
+# # Output::
+# InstallGlobalFunction(ExtensionsMapping, function(deg)
+# local dirData, dirDigraphs, list, levelCounter, levels, fName, numberCounter, i, j, k, abelianGroups, count;
 
-# Loop through the number of levels of deg that currently have information stored about their extensions. 
+# dirData:= DirectoriesPackageLibrary( "SRGroups", "data" );
+# dirDigraphs:= DirectoriesPackageLibrary( "SRGroups", "Digraphs" );
 
-while levelCounter > 0 do
-	list[levelCounter]:=[];
-	levels[levelCounter]:=levelCounter;
-	# Check if file sr_deg_levelCounter.grp exists. 
-	if IsExistingFile(Filename(dirData[1],Concatenation("sr_", String(deg), "_", String(levelCounter), ".grp"))) then
-	# If the file sr_deg_levelcounter.grp does exist then enter the if statement. 
-		if not IsExistingFile(Filename(dirData[1],Concatenation("sr_", String(deg), "_", String(levelCounter + 1), ".grp"))) then 
-			levelCounter:=0;
-		# if the file sr_deg_(levelCounter + 1).grp does not exists then break
-			break;
-		else
-		# if the file sr_deg_(levelCounter + 1).grp exists then let numberCounter be the counter for the groups on that levelCounter. 
-			for numberCounter in [1..Length(SRGroup(deg, levelCounter))] do
-				# The extensions from the numberCounter group on level levelCounter are added to list. 
-				list[levelCounter][numberCounter]:=SRGroup(deg, levelCounter,numberCounter)[4];
-				# Check if the group numberCounter at level levelCounter is abelian.
-				if IsAbelian(Group(SRGroup(deg,levelCounter,numberCounter)[1])) then
-				# If the group is abelian then add it to the next position in the abelianGroups list. 
-					Add(abelianGroups, Concatenation("\"", "(", String(deg), ",", String(levelCounter), ",", String(numberCounter), ")", "\""));
-				fi;
-			od;
-			# Increment the counter for the level.
-			levelCounter:=levelCounter+1;
-		fi;
-	else
-	# If the file sr_deg_levelCounter.grp does not exist then break
-		break;
-	fi;
-od;
+# list:=[];
+# levelCounter:=1;
+# levels:=[];
+# count:=1;
+# abelianGroups:=[];
+# while levelCounter > 0 do
+	# list[levelCounter]:=[];
+	# levels[levelCounter]:=levelCounter;
+	# if IsExistingFile(Filename(dirData[1],Concatenation("sr_", String(deg), "_", String(levelCounter), ".grp"))) then
+		# if not IsExistingFile(Filename(dirData[1],Concatenation("sr_", String(deg), "_", String(levelCounter + 1), ".grp"))) then 
+			# levelCounter:=0;
+			# break;
+		# else
+			# for numberCounter in [1..Length(SRGroup(deg, levelCounter))] do
+				# list[levelCounter][numberCounter]:=SRGroup(deg, levelCounter,numberCounter)[4];
+				# if IsAbelian(Group(SRGroup(deg,levelCounter,numberCounter)[1])) then
+					# Add(abelianGroups, Concatenation("\"", "(", String(deg), ",", String(levelCounter), ",", String(numberCounter), ")", "\""));
+				# fi;
+			# od;
+			# levelCounter:=levelCounter+1;
+		# fi;
+	# else
+		# break;
+	# fi;
+# od;
 
-#Sorting is completed. Begin the printing to the text document to display information. 
 
-# Establish the naming convention of the file. 
-fName:=Filename(dirDigraphs[1], Concatenation("sr_", String(deg), "_", "Extensions_Mapping.dot"));
 
-for i in [1..Length(levels)] do
-	for j in [1..Length(list[i])] do
-		if i = 1 and j=1 then
-			PrintTo(fName, "digraph G {");
-			count:=1;
-			AppendTo(fName, "\n\t{");
-			AppendTo(fName, "\n\tnode ", "[shape=diamond", ",", " style=filled]");
-			AppendTo(fName, "\n\t");
-			for count in [1..Length(abelianGroups)] do
-				if count < Length(abelianGroups) then
-					AppendTo(fName, abelianGroups[count], ", ");
-				else
-					AppendTo(fName, abelianGroups[count]);
-				fi;
-			od;
-			AppendTo(fName, " [fillcolor=red]");
-			AppendTo(fName, "\n\t}");
-			AppendTo(fName,"\n", Concatenation("\"(", String(deg), ",", String(i), ",", String(j), ")\""), " -> ");
-			for k in [1..Length(list[i][j])] do
-				if k < Length(list[i][j]) then
-					AppendTo(fName, "\"", String(SplitString(list[i][j][k], "SRGroup")[Length(SplitString(list[i][j][k], "SRGroup"))]), "\"", ", ");
-				else
-					AppendTo(fName, "\"", String(SplitString(list[i][j][k], "SRGroup")[Length(SplitString(list[i][j][k], "SRGroup"))]), "\"");
-				fi;
-			od;
-		else
-			AppendTo(fName,"\n", Concatenation("\"(", String(deg), ",", String(i), ",", String(j), ")\""), " -> ");
-			for k in [1..Length(list[i][j])] do
-				if k < Length(list[i][j]) then
-					AppendTo(fName, "\"", String(SplitString(list[i][j][k], "SRGroup")[Length(SplitString(list[i][j][k], "SRGroup"))]), "\"", ", ");
-				else
-					AppendTo(fName, "\"", String(SplitString(list[i][j][k], "SRGroup")[Length(SplitString(list[i][j][k], "SRGroup"))]), "\"");
-				fi;
-			od;
-		fi;
-	od;
-od;
-AppendTo(fName, "\n", "}");
-end);
+# fName:=Filename(dirDigraphs[1], Concatenation("sr_", String(deg), "_", "Extensions_Mapping.dot"));
+# for i in [1..Length(levels)] do
+	# for j in [1..Length(list[i])] do
+		# if i = 1 and j=1 then
+			# PrintTo(fName, "digraph G {");
+			# count:=1;
+			# AppendTo(fName, "\n\t{");
+			# AppendTo(fName, "\n\tnode ", "[shape=diamond", ",", " style=filled]");
+			# AppendTo(fName, "\n\t");
+			# for count in [1..Length(abelianGroups)] do
+				# if count < Length(abelianGroups) then
+					# AppendTo(fName, abelianGroups[count], ", ");
+				# else
+					# AppendTo(fName, abelianGroups[count]);
+				# fi;
+			# od;
+			# AppendTo(fName, " [fillcolor=red]");
+			# AppendTo(fName, "\n\t}");
+			# AppendTo(fName,"\n", Concatenation("\"(", String(deg), ",", String(i), ",", String(j), ")\""), " -> ");
+			# for k in [1..Length(list[i][j])] do
+				# if k < Length(list[i][j]) then
+					# AppendTo(fName, "\"", String(SplitString(list[i][j][k], "SRGroup")[Length(SplitString(list[i][j][k], "SRGroup"))]), "\"", ", ");
+				# else
+					# AppendTo(fName, "\"", String(SplitString(list[i][j][k], "SRGroup")[Length(SplitString(list[i][j][k], "SRGroup"))]), "\"");
+				# fi;
+			# od;
+		# else
+			# AppendTo(fName,"\n", Concatenation("\"(", String(deg), ",", String(i), ",", String(j), ")\""), " -> ");
+			# for k in [1..Length(list[i][j])] do
+				# if k < Length(list[i][j]) then
+					# AppendTo(fName, "\"", String(SplitString(list[i][j][k], "SRGroup")[Length(SplitString(list[i][j][k], "SRGroup"))]), "\"", ", ");
+				# else
+					# AppendTo(fName, "\"", String(SplitString(list[i][j][k], "SRGroup")[Length(SplitString(list[i][j][k], "SRGroup"))]), "\"");
+				# fi;
+			# od;
+		# fi;
+	# od;
+# od;
+# AppendTo(fName, "\n", "}");
+# end);
 
-#Input::
-#Output::
-InstallGlobalFunction(PermutationMapping, function(deg, lev)
-local dirPermDigraphs, group, element, x, y, leaves, radius, i, list, fName, count, groupElements;
 
-dirPermDigraphs:=DirectoriesPackageLibrary("SRGroups","PermDigraphs");
+# #Input::
+# #Output::
+# InstallGlobalFunction(PermutationMapping, function(deg, lev)
+# local dirPermDigraphs, group, element, x, y, leaves, radius, i, list, fName, count, groupElements;
 
-leaves:=deg^lev;
-radius:= leaves/3;
-x:=[];
-y:=[];
-groupElements:=[];
+# dirPermDigraphs:=DirectoriesPackageLibrary("SRGroups","PermDigraphs");
 
-for group in [1..Length(SRGroup(deg,lev))] do
-	groupElements:=Elements(Group(SRGroup(deg,lev,group)[1]));
-	fName:=Filename(dirPermDigraphs[1], Concatenation("Perm_", String(deg), "_", String(lev), "_", String(group), ".dot"));
-	PrintTo(fName,"digraph G {");
-	AppendTo(fName,"node[shape=circle,fontname=helvetica]");
-	AppendTo(fName,"\n\tlayout=\"neato\"");
-	for i in [1..leaves] do
-		x[i]:=-radius*Cos((2*FLOAT.PI/leaves)*i);
-		y[i]:=radius*Sin((2*FLOAT.PI/leaves)*i);
-		AppendTo(fName,"\n\t",i,"[pos=\"",Float(x[i]),",",Float(y[i]),"!\", label=", String(i), "];");
-	od;
-	for count in [1..Length(groupElements)] do
-		element:= groupElements[count];
-		list:=ListPerm(element);
-		AppendTo(fName,"\n");
-		if not count = 1 then 
-			AppendTo(fName, "digraph G {");
-			AppendTo(fName,"node[shape=circle,fontname=helvetica]");
-			AppendTo(fName,"\n\tlayout=\"neato\"");
-			for i in [1..leaves] do
-				x[i]:=-radius*Cos((2*FLOAT.PI/leaves)*i);
-				y[i]:=radius*Sin((2*FLOAT.PI/leaves)*i);
-				AppendTo(fName,"\n\t",i,"[pos=\"",Float(x[i]),",",Float(y[i]),"!\", label=", String(i), "];");
-				# When printing multiple graphs in one file GraphViz will rename nodes of the same name. The nodes behave as unique entities within their individual subgraph but will display the label that is common amongst all graphs. 
-			od;
-		fi;
-		for i in [1..Length(list)] do
-			if i=list[list[i]] and i<list[i] then
-				AppendTo(fName,"\n\t",i," -> ",list[i], " [dir=both]");
-			elif i<>list[list[i]] then
-				AppendTo(fName,"\n\t",i," -> ",list[i]);
-			fi;
-		od;
-		AppendTo(fName,"\n}");
-	od;
-od;
-end);
+# leaves:=deg^lev;
+# radius:= leaves/3;
+# x:=[];
+# y:=[];
+# groupElements:=[];
+
+# for group in [1..Length(SRGroup(deg,lev))] do
+	# groupElements:=Elements(Group(SRGroup(deg,lev,group)[1]));
+	# fName:=Filename(dirPermDigraphs[1], Concatenation("Perm_", String(deg), "_", String(lev), "_", String(group), ".dot"));
+	# PrintTo(fName,"digraph G {");
+	# AppendTo(fName,"node[shape=circle,fontname=helvetica]");
+	# AppendTo(fName,"\n\tlayout=\"neato\"");
+	# for i in [1..leaves] do
+		# x[i]:=-radius*Cos((2*FLOAT.PI/leaves)*i);
+		# y[i]:=radius*Sin((2*FLOAT.PI/leaves)*i);
+		# AppendTo(fName,"\n\t",i,"[pos=\"",Float(x[i]),",",Float(y[i]),"!\", label=", String(i), "];");
+	# od;
+	# for count in [1..Length(groupElements)] do
+		# element:= groupElements[count];
+		# list:=ListPerm(element);
+		# AppendTo(fName,"\n");
+		# if not count = 1 then 
+			# AppendTo(fName, "digraph G {");
+			# AppendTo(fName,"node[shape=circle,fontname=helvetica]");
+			# AppendTo(fName,"\n\tlayout=\"neato\"");
+			# for i in [1..leaves] do
+				# x[i]:=-radius*Cos((2*FLOAT.PI/leaves)*i);
+				# y[i]:=radius*Sin((2*FLOAT.PI/leaves)*i);
+				# AppendTo(fName,"\n\t",i,"[pos=\"",Float(x[i]),",",Float(y[i]),"!\", label=", String(i), "];");
+				# # When printing multiple graphs in one file GraphViz will rename nodes of the same name. The nodes behave as unique entities within their individual subgraph but will display the label that is common amongst all graphs. 
+			# od;
+		# fi;
+		# for i in [1..Length(list)] do
+			# if i=list[list[i]] and i<list[i] then
+				# AppendTo(fName,"\n\t",i," -> ",list[i], " [dir=both]");
+			# elif i<>list[list[i]] then
+				# AppendTo(fName,"\n\t",i," -> ",list[i]);
+			# fi;
+		# od;
+		# AppendTo(fName,"\n}");
+	# od;
+# od;
+# end);
 
 ### To arrange the graphs produced in multiple files in columns left to right use the command 
 ### "dot file1.dot file2.dot file3.dot | gvpack -array_r | neato -n2 -Tpng -o outputFile.png"
@@ -1572,10 +1595,21 @@ end);
 
 ### At the moment it is printing all of the elements from one group into the same file because I want to find a way to put all of those graphs into the one display. 
 
+
 # Input:: arg[1]: degree of tree (int > 1), arg[2]: highest level of tree where the file "sr_k_n.grp" exists (int > 1), (arg[3],arg[4],...): sequence of group numbers to extend from
 # Output:: File named "temp_deg_initialLev_arg[3]_arg[4]_..._arg[Length(arg)]_proj.grp" that contains extension information of group
 InstallGlobalFunction(ExtendSRGroup,function(arg)
 	local deg, lev, groupPosition, groupPositionAbove, initialLev, stringPrefix, stringFolder, stringFolderAbove, stringSuffix, stringSuffixAbove, dirData, dirTempFiles, dirTempSingleFiles, dirTempSingleFilesAbove, fExtension, fExtensionAbove, G,  groupList, groupGens, i;
+	
+	if not (IsInt(arg[1]) and arg[1]>=2) then
+		Error("input argument arg[1]=",arg[1]," must be an integer greater than or equal to 2");
+	else
+		for i in [2..Length(arg)] do
+			if not (IsInt(arg[i]) and arg[i]>=1) then
+				Error("input argument arg[i]=",arg[i]," must be an integer greater than or equal to 1");
+			fi;
+		od;
+	fi;
 	
 	# 1. Initialise degree, levels, and group position.
 	deg:=arg[1];
@@ -1601,10 +1635,10 @@ InstallGlobalFunction(ExtendSRGroup,function(arg)
 	# 3.1. Case 1: The group can be called directly from the file "sr_deg_initialLev.grp" using SRGroup(deg,initialLev,groupPosition[1]), if the file exists.
 	if Length(groupPosition)=1 and IsExistingFile(Filename(dirData[1],Concatenation("sr_",String(deg),"_",String(initialLev),".grp"))) then
 		# 3.1.1. Check whether the group position is within the range of groups available, and if so, initialise G.
-		if groupPosition[1]>=1 and groupPosition[1]<=Length(SRGroup(deg,lev-1)) then
-			G:=Group(SRGroup(deg,initialLev,groupPosition[1])[1]);
+		if groupPosition[1]>=1 and groupPosition[1]<=Length(SRGroupsInfo(deg,lev-1)) then
+			G:=SRGroup(deg,initialLev,groupPosition[1]);
 		else
-			Print("Group location does not exist (group number). Please choose a group in the correct range (1<=num<=",Length(SRGroup(deg,lev-1)),")");
+			Print("Group location does not exist (group number). Please choose a group in the correct range (1<=num<=",Length(SRGroupsInfo(deg,lev-1)),")");
 			return;
 		fi;
 	# 3.2. Case 2: The group must be called from an individual extension file "temp_deg_initialLev_arg[3]_arg[4]_..._arg[Length(arg)-1]_proj.grp".
@@ -1616,7 +1650,7 @@ InstallGlobalFunction(ExtendSRGroup,function(arg)
 			# 3.2.1.1. Check whether file exists (named as in Step 3.2), and if so, read the file and initialise G (then unbind residual variable).
 			if IsExistingFile(fExtensionAbove) then
 				Read(fExtensionAbove);
-				G:=Group(EvalString(Concatenation(stringPrefix,stringSuffixAbove,"_proj"))[groupPosition[Length(groupPosition)]]);
+				G:=RegularRootedTreeGroup(deg,lev-1,Group(EvalString(Concatenation(stringPrefix,stringSuffixAbove,"_proj"))[groupPosition[Length(groupPosition)]]));
 				MakeReadWriteGlobal(Concatenation(stringPrefix,stringSuffixAbove,"_proj"));
 				UnbindGlobal(Concatenation(stringPrefix,stringSuffixAbove,"_proj"));
 			else
@@ -1645,7 +1679,7 @@ InstallGlobalFunction(ExtendSRGroup,function(arg)
 		return;
 	# 5.2. Case 2: If the file does not exist, extend the group and print/append to new file.
 	else
-		groupList:=ConjugacyClassRepsSelfReplicatingSubgroupsWithProjection(deg,lev,G);
+		groupList:=ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(G);
 		PrintTo(fExtension,Concatenation("BindGlobal(\"",stringPrefix,stringSuffix,"_proj\",\n["));
 		groupGens:=[];
 		for i in [1..Length(groupList)] do
@@ -1661,10 +1695,17 @@ InstallGlobalFunction(ExtendSRGroup,function(arg)
 	return;
 end);
 
+
 # Input:: deg: degree of tree (int > 1), lev: level of tree (int > 0)
 # Output:: The combined file "temp_deg_lev.grp" containing all extended groups on level lev-1 (for use with the SRGroupFile function)
 InstallGlobalFunction(CombineSRFiles,function(deg,lev)
 	local stringFolder, stringFolderAbove, dirTempFiles, dirTempSingleFiles, fExtension, fExtensions, i;
+	
+	if not (IsInt(deg) and deg>=2) then
+		Error("input argument deg=",deg," must be an integer greater than or equal to 2");
+	elif not (IsInt(lev) and lev>=1) then
+		Error("input argument lev=",lev," must be an integer greater than or equal to 1");
+	fi;
 	
 	# 1. Initialise strings that refer to file and variable names, and initialise directory to contain file "temp_deg_lev.grp" (pkg/SRGroups/data/temp_files/).
 	stringFolderAbove:=Concatenation("temp_",String(deg),"_",String(lev-1));
@@ -1678,7 +1719,7 @@ InstallGlobalFunction(CombineSRFiles,function(deg,lev)
 		dirTempSingleFiles:=DirectoriesPackageLibrary("SRGroups", Concatenation("data/temp_files/",stringFolder,"/"));
 		# 2.1.2. For each file containing an individual group's extensions, fExtension ("temp_deg_lev-1_i.grp"), print the file contents to the new file, fExtensions ("temp_deg_lev.grp"). 
 		fExtensions:=Filename(dirTempFiles[1],Concatenation(stringFolder,".grp"));
-		for i in [1..Length(SRGroup(deg,lev-1))] do
+		for i in [1..Length(SRGroupsInfo(deg,lev-1))] do
 			fExtension:=Filename(dirTempSingleFiles[1],Concatenation(stringFolderAbove,"_",String(i),"_proj.grp"));
 			# 2.1.2.1. Case 1: File exists, so print/append to new file.
 			if IsExistingFile(fExtension) then
@@ -1696,7 +1737,7 @@ InstallGlobalFunction(CombineSRFiles,function(deg,lev)
 		od;
 		# 2.1.3. Remove residual files and directory if all of the group extensions were appended to the new file.
 		if IsExistingFile(fExtensions) then
-			for i in [1..Length(SRGroup(deg,lev-1))] do
+			for i in [1..Length(SRGroupsInfo(deg,lev-1))] do
 				fExtension:=Filename(dirTempSingleFiles[1],Concatenation(stringFolderAbove,"_",String(i),"_proj.grp"));
 				RemoveFile(fExtension);
 			od;
@@ -1709,6 +1750,7 @@ InstallGlobalFunction(CombineSRFiles,function(deg,lev)
 	
 	return;
 end);
+
 
 # Input:: deg: degree of tree (int > 1), lev: level of tree (int > initialLev > 1), initialLev: highest level of tree where the file "sr_k_n.grp" exists (int > 1), prevPosList: list containing previous positions, p2, of all individual group extension files ("temp_deg_initialLev_p1_p2_..._proj.grp") obtained from the function SRGroupFile (therefore also containing their new positions), unsortedList: list containing the number and order of groups which have p2 as their fifth entry of the correspondoing file name (so if groups are missing, this gap can be detected and skipped)
 # Output:: the updated ordering of the individual group extension files aligned with the reordering from running the function SRGroupFile
@@ -1808,6 +1850,7 @@ InstallGlobalFunction(ReorderSRFiles,function(deg,lev,initialLev,prevPosListAbov
 	return;
 end);
 
+
 # Input:: arg[1]: degree of tree (int > 1), arg[2]: highest level of tree where the file "sr_k_n.grp" exists (int > 1), (arg[3],arg[4],...): sequence of group numbers to extend from
 # Output:: the number of extensions of the chosen group (or, if Length(arg)=2, the total number of extensions for that level if the combined file "temp_deg_lev.grp" is available)
 InstallGlobalFunction(NumberExtensionsUnformatted,function(arg)
@@ -1832,7 +1875,7 @@ InstallGlobalFunction(NumberExtensionsUnformatted,function(arg)
 	stringFolder:=Concatenation("temp_",String(deg),"_",String(lev));
 	dirTempFiles:=DirectoriesPackageLibrary("SRGroups", "data/temp_files");
 	
-	# 3. Protocol for calculating the number of extensions from a single or all groups.
+	# 3. Protocol for calculating the number of extensions from a single group or all groups.
 	# 3.1. Case 1: The directory to files containing individual group extensions exists and a group position has been defined (by (arg[3],arg[4],...))
 	if IsDirectoryPath(Filename(dirTempFiles[1],Concatenation(stringFolder,"/"))) and Length(arg)>2 then
 		# Initialise directory and file containing target group information, then count the number of groups contained in that file.
@@ -1855,7 +1898,7 @@ InstallGlobalFunction(NumberExtensionsUnformatted,function(arg)
 		if Length(arg)>2 then
 			if IsBoundGlobal(EvalString(Concatenation(stringPrefix,stringSuffix,"_proj"))) then
 				numExtensions:=Length(EvalString(Concatenation(stringPrefix,stringSuffix,"_proj")));
-				for i in [1..Length(SRGroup(deg,initialLev))] do
+				for i in [1..Length(SRGroupsInfo(deg,initialLev))] do
 					if IsBoundGlobal(Concatenation(stringPrefix,"_",String(i),"_proj")) then
 						MakeReadWriteGlobal(Concatenation(stringPrefix,"_",String(i),"_proj"));
 						UnbindGlobal(Concatenation(stringPrefix,"_",String(i),"_proj"));
@@ -1865,9 +1908,9 @@ InstallGlobalFunction(NumberExtensionsUnformatted,function(arg)
 				Print("This group has not been extended yet.");
 			fi;
 		# 3.2.2. Case 2.2: Length(arg)=2, which indicates the total number of extensions from all groups on level initialLev must be evaluated (in the case all groups can be accessed).
-		elif Length(arg)=2 and IsBoundGlobal(Concatenation(stringPrefix,"_",String(Length(SRGroup(deg,initialLev))),"_proj")) then
+		elif Length(arg)=2 and IsBoundGlobal(Concatenation(stringPrefix,"_",String(Length(SRGroupsInfo(deg,initialLev))),"_proj")) then
 			numExtensions:=0;
-			for i in [1..Length(SRGroup(deg,initialLev))] do
+			for i in [1..Length(SRGroupsInfo(deg,initialLev))] do
 				numExtensions:=numExtensions+Length(EvalString(Concatenation(stringPrefix,"_",String(i),"_proj")));
 				MakeReadWriteGlobal(Concatenation(stringPrefix,"_",String(i),"_proj"));
 				UnbindGlobal(Concatenation(stringPrefix,"_",String(i),"_proj"));
