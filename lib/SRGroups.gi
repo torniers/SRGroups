@@ -1,7 +1,7 @@
 #
 # SRGroups: Self-replicating groups of regular rooted trees.
 #
-# Implementations
+# Package Functions
 #
 
 # Input::	k: integer at least 2, n: integer at least 2, G: a subgroup of the automorphism group of the k-regular rooted tree of depth n
@@ -582,7 +582,7 @@ InstallGlobalFunction(SRGroupFile, function(degree)
 	dataContents:=DirectoryContents(dirData[1]); # Creates a list of strings with names of the files/folders stored in dirData.
 
 	# 1. First check if the input argument is 0 or 1. If so, the tree level is automatically set to 1.
-	if degree=0 or degree=1 then
+	if degree in [0,1] then
 		deg:=2;
 		# 1.1. Set the degree=deg to be 1 higher than the highest degree stored that is consecutive with 2.
 		while SRGroupsAvailable(deg,1) do
@@ -1704,7 +1704,7 @@ InstallGlobalFunction(CombineSRFiles,function(deg,lev)
 	if not (IsInt(deg) and deg>=2) then
 		Error("input argument deg=",deg," must be an integer greater than or equal to 2");
 	elif not (IsInt(lev) and lev>=1) then
-		Error("input argument deg=",deg," must be an integer greater than or equal to 1");
+		Error("input argument lev=",lev," must be an integer greater than or equal to 1");
 	fi;
 	
 	# 1. Initialise strings that refer to file and variable names, and initialise directory to contain file "temp_deg_lev.grp" (pkg/SRGroups/data/temp_files/).

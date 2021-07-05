@@ -1,8 +1,58 @@
 #
 # SRGroups: Self-replicating groups of regular rooted trees.
 #
-# Routines
+# Library Functions
 #
+
+
+InstallGlobalFunction(SRDegrees,function()
+	local srDegrees, count, dirData, dataContents;
+
+	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
+	dataContents:=DirectoryContents(dirData[1]);
+
+	srDegrees:=[];
+	for count in [1..Length(dataContents)] do
+		if StartsWith(dataContents[count],"sr_") then
+			Add(srDegrees,EvalString(SplitString(dataContents[count], ".", "_")[2]));
+		fi;
+	od;
+	srDegrees:=DuplicateFreeList(srDegrees);
+	StableSort(srDegrees);
+	return srDegrees;
+end);
+
+
+InstallGlobalFunction(SRLevels,function(deg)
+	local srLevels, count, dirData, dataContents;
+	
+	if not (IsInt(deg) and deg>=2) then
+		Error("input argument deg=",deg," must be an integer greater than or equal to 2");
+	else
+		dirData:=DirectoriesPackageLibrary("SRGroups", "data");
+		dataContents:=DirectoryContents(dirData[1]);
+
+		srLevels:=[];
+		for count in [1..Length(dataContents)] do
+			if StartsWith(dataContents[count],Concatenation("sr_",String(deg))) then
+				Add(srLevels,EvalString(SplitString(dataContents[count], ".", "_")[3]));
+			fi;
+		od;
+		StableSort(srLevels);
+		return srLevels;
+	fi;
+end);
+
+
+InstallGlobalFunction(SRGroupsAvailable,function(deg,lev)
+		if not (IsInt(deg) and deg>=2) then
+			Error("input argument deg=",deg," must be an integer greater than or equal to 2");
+		elif not (IsInt(lev) and lev>=1) then
+			Error("input argument lev=",lev," must be an integer greater than or equal to 1");
+		else
+			return (lev in SRLevels(deg) and deg in SRDegrees());
+		fi;
+end);
 
 
 InstallGlobalFunction(GetSRData,function(k,n)
@@ -13,8 +63,7 @@ InstallGlobalFunction(GetSRData,function(k,n)
 	elif not (IsInt(n) and n>=1) then
 		Error("input argument n=",n," must be an integer greater than or equal to 1");
 	elif not SRGroupsAvailable(k,n) then
-		Print("These groups are not available (yet)!");
-		return;
+		Error("These groups are not available (yet)!");
 	else
 		dir:= DirectoriesPackageLibrary( "SRGroups", "data" );
 		fnam:=Filename( dir[1], Concatenation("sr_",String(k),"_",String(n),".grp"));
@@ -26,7 +75,8 @@ InstallGlobalFunction(GetSRData,function(k,n)
 	fi;
 end);
 
-InstallGlobalFunction(NumberSRGroups,function(k,n)
+
+InstallGlobalFunction(NrSRGroups,function(k,n)
 	if not (IsInt(k) and k>=2) then
 		Error("input argument k=",k," must be an integer greater than or equal to 2");
 	elif not (IsInt(n) and n>=1) then
@@ -39,16 +89,7 @@ InstallGlobalFunction(NumberSRGroups,function(k,n)
 	fi;
 end);
 
-# arg[1]:=degree (int > 1)
-# arg[2]:=depth (int > 0)
-# arg[3]:=number (int > 0)
-# arg[4]:=groups with same projection (integer; arg[3]=0 is required)
-# arg[5]:=subgroups of group (integer; arg[3])
-# arg[6]:=size (int >= degree^depth) (arg[3]=0 is required)
-# arg[7]:=smallest number of generators (int >= 1)
-# arg[8]:=position/index (integer; one of arg[3]=0 or arg[4]=0 is required)
-# arg[9]:=abelian check (boolean)
-# All arguments can be set to 0 to ignore them.
+
 InstallGlobalFunction(GetSRMaximums,function(arg)
 	local deg, lev, max, maxAbove, errorString, i;
 	
@@ -58,9 +99,9 @@ InstallGlobalFunction(GetSRMaximums,function(arg)
 				for lev in arg[2] do
 					if SRGroupsAvailable(deg,lev) then
 						if IsBound(max) then
-							if max<NumberSRGroups(deg,lev) then max:=NumberSRGroups(deg,lev); fi;
+							if max<NrSRGroups(deg,lev) then max:=NrSRGroups(deg,lev); fi;
 						else
-							max:=NumberSRGroups(deg,lev);
+							max:=NrSRGroups(deg,lev);
 						fi;
 					fi;
 				od;
@@ -74,9 +115,9 @@ InstallGlobalFunction(GetSRMaximums,function(arg)
 				for lev in arg[2] do
 					if SRGroupsAvailable(deg,lev) and SRGroupsAvailable(deg,lev-1) then
 						if IsBound(maxAbove) then
-							if maxAbove<NumberSRGroups(deg,lev-1) then maxAbove:=NumberSRGroups(deg,lev-1); fi;
+							if maxAbove<NrSRGroups(deg,lev-1) then maxAbove:=NrSRGroups(deg,lev-1); fi;
 						else
-							maxAbove:=NumberSRGroups(deg,lev-1);
+							maxAbove:=NrSRGroups(deg,lev-1);
 						fi;
 					fi;
 				od;
@@ -91,9 +132,9 @@ InstallGlobalFunction(GetSRMaximums,function(arg)
 		if Length(arg)>=3 and (arg[3][1]<>0 or arg[5][1]<>0) then
 			for deg in arg[1] do
 				if IsBound(max) then
-					if max<NumberSRGroups(deg,Maximum(SRLevels(deg))) then max:=NumberSRGroups(deg,Maximum(SRLevels(deg))); fi;
+					if max<NrSRGroups(deg,Maximum(SRLevels(deg))) then max:=NrSRGroups(deg,Maximum(SRLevels(deg))); fi;
 				else
-					max:=NumberSRGroups(deg,Maximum(SRLevels(deg)));
+					max:=NrSRGroups(deg,Maximum(SRLevels(deg)));
 				fi;
 			od;
 		else
@@ -106,9 +147,9 @@ InstallGlobalFunction(GetSRMaximums,function(arg)
 					for i in [2..Length(SRLevels(deg))] do
 						if SRLevels(deg)[i]-1=SRLevels(deg)[i-1] then
 							if IsBound(maxAbove) then
-								if maxAbove<NumberSRGroups(deg,SRLevels(deg)[i-1]) then maxAbove:=NumberSRGroups(deg,SRLevels(deg)[i-1]); fi;
+								if maxAbove<NrSRGroups(deg,SRLevels(deg)[i-1]) then maxAbove:=NrSRGroups(deg,SRLevels(deg)[i-1]); fi;
 							else
-								maxAbove:=NumberSRGroups(deg,SRLevels(deg)[i-1]);
+								maxAbove:=NrSRGroups(deg,SRLevels(deg)[i-1]);
 							fi;
 						fi;
 					od;
@@ -126,9 +167,9 @@ InstallGlobalFunction(GetSRMaximums,function(arg)
 				for lev in arg[2] do
 					if lev in SRLevels(deg) then
 						if IsBound(max) then
-							if max<NumberSRGroups(deg,lev) then max:=NumberSRGroups(deg,lev); fi;
+							if max<NrSRGroups(deg,lev) then max:=NrSRGroups(deg,lev); fi;
 						else
-							max:=NumberSRGroups(deg,lev);
+							max:=NrSRGroups(deg,lev);
 						fi;
 					fi;
 				od;
@@ -142,9 +183,9 @@ InstallGlobalFunction(GetSRMaximums,function(arg)
 				for lev in arg[2] do
 					if lev in SRLevels(deg) and lev-1 in SRLevels(deg) then
 						if IsBound(maxAbove) then
-							if maxAbove<NumberSRGroups(deg,lev-1) then maxAbove:=NumberSRGroups(deg,lev-1); fi;
+							if maxAbove<NrSRGroups(deg,lev-1) then maxAbove:=NrSRGroups(deg,lev-1); fi;
 						else
-							maxAbove:=NumberSRGroups(deg,lev-1);
+							maxAbove:=NrSRGroups(deg,lev-1);
 						fi;
 					fi;
 				od;
@@ -160,8 +201,8 @@ InstallGlobalFunction(GetSRMaximums,function(arg)
 			max:=1;
 			for deg in SRDegrees() do
 				for lev in SRLevels(deg) do
-					if NumberSRGroups(deg,lev)>max then
-						max:=NumberSRGroups(deg,lev);
+					if NrSRGroups(deg,lev)>max then
+						max:=NrSRGroups(deg,lev);
 					fi;
 				od;
 			od;
@@ -175,8 +216,8 @@ InstallGlobalFunction(GetSRMaximums,function(arg)
 				if Length(SRLevels(deg))>=2 then
 					for i in [2..Length(SRLevels(deg))] do
 						if SRLevels(deg)[i]-1=SRLevels(deg)[i-1] then
-							if NumberSRGroups(deg,SRLevels(deg)[i-1])>maxAbove then
-								maxAbove:=NumberSRGroups(deg,SRLevels(deg)[i-1]);
+							if NrSRGroups(deg,SRLevels(deg)[i-1])>maxAbove then
+								maxAbove:=NrSRGroups(deg,SRLevels(deg)[i-1]);
 							fi;
 						fi;
 					od;
@@ -347,7 +388,7 @@ InstallGlobalFunction(SRGroupsInfo,function(arg)
 			arg[i]:=[arg[i]];
 		fi;
 		
-		for j in [1..Length(arg[i])] do
+		for j in [1..Length(arg[i])-1] do
 			if not IsInt(arg[i][j]) then
 				Error("input argument ",argFunctions[i],"=",arg[i][j]," in arg[",i,"] must be a non-negative integer");
 			elif not arg[i][j]>=0 then
@@ -372,12 +413,12 @@ InstallGlobalFunction(SRGroupsInfo,function(arg)
 	
 	out:=CheckSRGroupsInputs(true,argMinimums,argFunctions,arg[1],arg[2]);
 	argMinimums:=out[2];
-	if not arg[1]=out[3] and not IsEmpty(out[3]) then
-		arg[1]:=out[3];
+	if arg[1]<>out[3] and not IsEmpty(out[3]) then
+		arg[1]:=ShallowCopy(out[3]);
 		Print("Restricting degrees to ",arg[1],"\n");
 	fi;
-	if not arg[2]=out[4] and not IsEmpty(out[4]) then
-		arg[2]:=out[4];
+	if arg[2]<>out[4] and not IsEmpty(out[4]) then
+		arg[2]:=ShallowCopy(out[4]);
 		Print("Restricting levels to ",arg[2],"\n");
 	fi;
 	
@@ -555,35 +596,6 @@ InstallGlobalFunction(SRGroupsInfo,function(arg)
 end);
 
 
-InstallGlobalFunction(SRGroup,function(k,n,num)
-	if not (IsInt(k) and k>=2) then
-		Error("input argument k=",k," must be an integer greater than or equal to 2");
-	elif not (IsInt(n) and n>=1) then
-		Error("input argument n=",n," must be an integer greater than or equal to 1");
-	elif not (IsInt(num) and num>=1) then
-		Error("input argument num=",num," must be an integer greater than or equal to 1");
-	else
-		return AllSRGroups(Degree,k,Level,n,Number,num)[1];
-	fi;
-end);
-
-
-InstallGlobalFunction(AllSRGroups,function(arg)
-	local groupList, groupNames, i, G;
-	
-	groupList:=CallFuncList(AllSRGroupsInfo,arg);
-	groupNames:=ShallowCopy(groupList);
-	Apply(groupNames,G->G[3]);
-	
-	Apply(groupList,G->RegularRootedTreeGroup( EvalString(SplitString(SplitString(G[3],",")[1],"(")[2]),EvalString(SplitString(G[3],",")[2]),Group(G[1])));
-	for i in [1..Length(groupList)] do
-		SetName(groupList[i],groupNames[i]);
-	od;
-	
-	return groupList;
-end);
-
-
 InstallGlobalFunction(AllSRGroupsInfo,function(arg)
 	local inputArgs, i;
 	
@@ -665,6 +677,35 @@ InstallGlobalFunction(AllSRGroupsInfo,function(arg)
 end);
 
 
+InstallGlobalFunction(AllSRGroups,function(arg)
+	local groupList, groupNames, i, G;
+	
+	groupList:=CallFuncList(AllSRGroupsInfo,arg);
+	groupNames:=ShallowCopy(groupList);
+	Apply(groupNames,G->G[3]);
+	
+	Apply(groupList,G->RegularRootedTreeGroup( EvalString(SplitString(SplitString(G[3],",")[1],"(")[2]),EvalString(SplitString(G[3],",")[2]),Group(G[1])));
+	for i in [1..Length(groupList)] do
+		SetName(groupList[i],groupNames[i]);
+	od;
+	
+	return groupList;
+end);
+
+
+InstallGlobalFunction(SRGroup,function(k,n,num)
+	if not (IsInt(k) and k>=2) then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
+	elif not (IsInt(n) and n>=1) then
+		Error("input argument n=",n," must be an integer greater than or equal to 1");
+	elif not (IsInt(num) and num>=1) then
+		Error("input argument num=",num," must be an integer greater than or equal to 1");
+	else
+		return AllSRGroups(Degree,k,Level,n,Number,num)[1];
+	fi;
+end);
+
+
 InstallGlobalFunction(CheckSRProjections,function(k,n)
 	local dir, fnam, list1, list2, pr, i, G1, G2, check, aut, autAbove;
 	
@@ -727,54 +768,4 @@ InstallGlobalFunction(UnbindVariables, function(arg)
 	od;
 	
 	return;
-end);
-
-
-InstallGlobalFunction(SRDegrees,function()
-	local srDegrees, count, dirData, dataContents;
-
-	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
-	dataContents:=DirectoryContents(dirData[1]);
-
-	srDegrees:=[];
-	for count in [1..Length(dataContents)] do
-		if StartsWith(dataContents[count],"sr_") then
-			Add(srDegrees,EvalString(SplitString(dataContents[count], ".", "_")[2]));
-		fi;
-	od;
-	srDegrees:=DuplicateFreeList(srDegrees);
-	StableSort(srDegrees);
-	return srDegrees;
-end);
-
-
-InstallGlobalFunction(SRLevels,function(deg)
-	local srLevels, count, dirData, dataContents;
-	
-	if not (IsInt(deg) and deg>=2) then
-		Error("input argument deg=",deg," must be an integer greater than or equal to 2");
-	else
-		dirData:=DirectoriesPackageLibrary("SRGroups", "data");
-		dataContents:=DirectoryContents(dirData[1]);
-
-		srLevels:=[];
-		for count in [1..Length(dataContents)] do
-			if StartsWith(dataContents[count],Concatenation("sr_",String(deg))) then
-				Add(srLevels,EvalString(SplitString(dataContents[count], ".", "_")[3]));
-			fi;
-		od;
-		StableSort(srLevels);
-		return srLevels;
-	fi;
-end);
-
-
-InstallGlobalFunction(SRGroupsAvailable,function(deg,lev)
-		if not (IsInt(deg) and deg>=2) then
-			Error("input argument deg=",deg," must be an integer greater than or equal to 2");
-		elif not (IsInt(lev) and lev>=1) then
-			Error("input argument lev=",lev," must be an integer greater than or equal to 1");
-		else
-			return (lev in SRLevels(deg) and deg in SRDegrees());
-		fi;
 end);

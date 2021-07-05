@@ -168,13 +168,45 @@ DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRoot
 
 DeclareGlobalFunction( "GetSRData" );
 
-DeclareGlobalFunction( "NumberSRGroups" );
-
 DeclareGlobalFunction( "CheckSRGroupsInputs" );
 
 DeclareGlobalFunction( "GetSRMaximums" );
 
 DeclareGlobalFunction( "SRGroupsInfo" );
+
+#! @Description
+#! The argument of this function is a degree, <A>k</A>, and a depth, <A>n</A>.
+#! @Returns
+#! Whether the self-replicating groups of degree, <A>k</A>, and depth, <A>n</A>, are available.
+#!
+#! @Arguments k,n
+#!
+DeclareGlobalFunction( "SRGroupsAvailable" );
+#!
+#! @BeginExampleSession
+#! gap> SRGroupsAvailable(2,3);
+#! true
+#! gap> SRGroupsAvailable(2,5);
+#! true
+#! gap> SRGroupsAvailable(5,2);
+#! false
+#! @EndExampleSession
+
+#! @Description
+#! The argument of this function is a degree, <A>k</A>, and a depth, <A>n</A>.
+#! @Returns
+#! The number of self-replicating groups of degree, <A>k</A>, and depth, <A>n</A>.
+#!
+#! @Arguments k,n
+#!
+DeclareGlobalFunction( "NrSRGroups" );
+#!
+#! @BeginExampleSession
+#! gap> NrSRGroups(2,3);
+#! 15
+#! gap> NrSRGroups(2,5);
+#! 2436
+#! @EndExampleSession
 
 
 #! @Description
@@ -195,38 +227,61 @@ DeclareGlobalFunction( "SRGroup" );
 
 
 #! @Description
-#! Main library search function. Has several possible input arguments such as <A>Degree</A>, <A>Level</A> (or <A>Depth</A>), <A>Number</A>, <A>Projection</A>, <A>Subgroup</A>, <A>Size</A>, <A>NumberOfGenerators</A>, and <A>IsAbelian</A>. Order of the inputs do not matter.
+#! Main library search function that acts analogously as the AllTransitiveGroups function from the <Package>transgrp</Package> library. Has several possible input arguments such as <A>Degree</A>, <A>Depth</A> (or <A>Level</A>), <A>Number</A>, <A>Projection</A>, <A>IsSubgroup</A>, <A>Size</A>, <A>NumberOfGenerators</A>, and <A>IsAbelian</A>. Order of the arguments do not matter. List inputs and singular inputs can be provided. The argument definitions are as follows:
+#! <A>Degree</A> (int > 1) := degree of tree
+#! <A>Depth</A>/<A>Level</A> (int > 0) := level of tree
+#! <A>Number</A> (int > 0) := self-replicating group number
+#! <A>Projection</A> (int > 0) := groups whose projected image are the group number on the level above
+#! <A>IsSubgroup</A> (int > 0) := groups that are a subgroup of the group number provided
+#! <A>Size</A> (int >= degree^depth or int > 1) := size of group
+#! <A>MinimalGeneratingSet</A> (int > 0) := size of the group's minimal generating set
+#! <A>IsAbelian</A> (boolean) := all groups that are abelian if true, and not abelian if false
 #! @Returns
-#! All of the self-replicating group(s) stored as objects satisfying all of the provided input arguments.
+#! A list of self-replicating groups matching the input arguments as RegularRootedTreeGroup objects.
 #! @Arguments Input1, val1, Input2, val2, ...
 DeclareGlobalFunction("AllSRGroups");
 #! @BeginExampleSession
 #! gap> AllSRGroups(Degree, 2, Level, 4, IsAbelian, true);
 #! [ SRGroup(2,4,2), SRGroup(2,4,9), SRGroup(2,4,12), SRGroup(2,4,14) ]
-#! gap> Size(last[1]);
-#! 16
-#! gap> AllSRGroups(Degree, 2, Level, 4, NumberOfGenerators, 4);
-#! [ SRGroup(2,4,11), SRGroup(2,4,12), SRGroup(2,4,16), SRGroup(2,4,20), SRGroup(2,4,23), SRGroup(2,4,24),
-#!  SRGroup(2,4,25), SRGroup(2,4,26), SRGroup(2,4,40), SRGroup(2,4,43), SRGroup(2,4,46), SRGroup(2,4,47),
-#!  SRGroup(2,4,50), SRGroup(2,4,66), SRGroup(2,4,70), SRGroup(2,4,71), SRGroup(2,4,72), SRGroup(2,4,73),
-#!  SRGroup(2,4,74), SRGroup(2,4,75), SRGroup(2,4,76), SRGroup(2,4,84), SRGroup(2,4,90), SRGroup(2,4,91),
-#!  SRGroup(2,4,93), SRGroup(2,4,95), SRGroup(2,4,97), SRGroup(2,4,102), SRGroup(2,4,108) ]
+#! gap> AllSRGroups(Degree,[2..5],Depth,[2..5],IsSubgroup,[1..5],Projection,[1..3]);
+#! Restricting degrees to [ 2, 3 ]
+#! [ SRGroup(2,1,1), SRGroup(2,1,1), SRGroup(2,2,1), SRGroup(2,3,1),
+#!   SRGroup(2,3,2), SRGroup(2,4,1), SRGroup(2,4,1), SRGroup(2,4,2),
+#!   SRGroup(2,4,2), SRGroup(2,4,2), SRGroup(3,1,1), SRGroup(3,1,1),
+#!   SRGroup(3,1,1), SRGroup(3,1,1) ]
 #! @EndExampleSession
 
 
 #! @Description
-#! Inputs work the same as the main library search function <Ref Func="AllSRGroups"/>, with one additional input: <A>Position</A>.
+#! Inputs work the same as the main library search function <Ref Func="AllSRGroups"/>, with one additional input: <A>Position</A> (or <A>Index</A>).
+#! Position/Index :=  (int in [1..4])
 #! @Returns
 #! Information about the self-replicating group(s) satisfying all of the provided input arguments in list form: [<A>Generators</A>, <A>Name</A>, <A>Parent Name</A>, <A>Children Name(s)</A>]. If the <A>Position</A> input is provided, only the corresponding index of this list is returned.
 #! @Arguments Input1, val1, Input2, val2, ...
 DeclareGlobalFunction( "AllSRGroupsInfo" );
 #! @BeginExampleSession
-#! gap> AllSRGroupsInfo(Degree, 2, Level, 3, IsAbelian, true);
-#! [ [ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,1)", "SRGroup(2,2,1)", [ "SRGroup(2,4,1)", "SRGroup(2,4,2)" ] ],
-#! [ [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,4)", "SRGroup(2,2,2)", [ "SRGroup(2,4,8)", "SRGroup(2,4,9)", "SRGroup(2,4,10)" ] ], 
-#! [ [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,5)", "SRGroup(2,2,2)", [ "SRGroup(2,4,11)", "SRGroup(2,4,12)", "SRGroup(2,4,13)", "SRGroup(2,4,14)", "SRGroup(2,4,15)" ] ] ]
-#! gap> AllSRGroupsInfo(Degree, 2, Level, 3, IsAbelian, true, Position, 1);
-#! [ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ],
+#! gap> AllSRGroupsInfo(Degree, 2, Depth, [2,3], IsAbelian, true);
+#! [ [ [ (1,2)(3,4), (1,3,2,4) ], "SRGroup(2,2,1)", "SRGroup(2,1,1)",
+#!       [ "SRGroup(2,3,1)", "SRGroup(2,3,2)" ] ],
+#!   [ [ (1,2)(3,4), (1,3)(2,4) ], "SRGroup(2,2,2)", "SRGroup(2,1,1)",
+#!       [ "SRGroup(2,3,3)", "SRGroup(2,3,4)", "SRGroup(2,3,5)",
+#!           "SRGroup(2,3,6)" ] ],
+#!   [ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]
+#!         , "SRGroup(2,3,1)", "SRGroup(2,2,1)",
+#!       [ "SRGroup(2,4,1)", "SRGroup(2,4,2)" ] ],
+#!   [
+#!       [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8),
+#!           (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,4)",
+#!       "SRGroup(2,2,2)",
+#!       [ "SRGroup(2,4,8)", "SRGroup(2,4,9)", "SRGroup(2,4,10)" ] ],
+#!   [ [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8),
+#!           (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,5)",
+#!       "SRGroup(2,2,2)",
+#!       [ "SRGroup(2,4,11)", "SRGroup(2,4,12)", "SRGroup(2,4,13)",
+#!           "SRGroup(2,4,14)", "SRGroup(2,4,15)" ] ] ]
+#! gap> AllSRGroupsInfo(Degree, 2, Level, [2,3], IsAbelian, true, Position, 1);
+#! [ [ (1,2)(3,4), (1,3,2,4) ], [ (1,2)(3,4), (1,3)(2,4) ],
+#!   [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ],
 #!   [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ],
 #!   [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ] ]
 #! @EndExampleSession
@@ -235,7 +290,7 @@ DeclareGlobalFunction( "AllSRGroupsInfo" );
 #! @Description
 #! The arguments of this function are a degree, <A>k</A>, and a level, <A>n</A>.
 #! @Returns
-#! Whether all of the self-replicating groups of degree <A>k</A> and level <A>n</A> project correctly to level <A>n-1</A>.
+#! Whether all of the self-replicating groups of degree <A>k</A> and level <A>n</A> project correctly to level <A>n-1</A>. This is mainly used after obtaining new data to check that it has been formatted correctly (see <Ref Func="SRGroupFile"/>).
 #! @Arguments k,n
 DeclareGlobalFunction( "CheckSRProjections" );
 #! @BeginExampleSession
@@ -253,12 +308,12 @@ DeclareGlobalFunction( "UnbindVariables" );
 #! @Description
 #! There are no inputs to this function.
 #! @Returns
-#! All of the degrees currently stored in the <Package>SRGroups</Package> library (duplicates included).
+#! All of the degrees currently stored in the <Package>SRGroups</Package> library.
 #! @Arguments 
 DeclareGlobalFunction( "SRDegrees" );
 #! @BeginExampleSession
 #! gap> SRDegrees();
-#! [ 2, 2, 2, 2, 3, 3, 3, 4, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ]
+#! [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]
 #! @EndExampleSession
 
 
@@ -273,8 +328,6 @@ DeclareGlobalFunction( "SRLevels" );
 #! [ 1, 2, 3, 4 ]
 #! @EndExampleSession
 
-
-DeclareGlobalFunction( "SRGroupsAvailable" );
 
 ####################################################################################################################
 #! @Section Package Functions
@@ -314,7 +367,7 @@ DeclareGlobalFunction( "BelowAction" );
 
 
 #! @Description
-#! The arguments of this function are a group, <A>G</A>, and a list of groups, grouplist. For every group H1 in grouplist, this function removes all conjugate groups H2 such that H2\in H1^G.
+#! The arguments of this function are a group, <A>G</A>, and a list of groups, grouplist. For every group H1 in grouplist, this function removes all conjugate groups $H2$ such that $H2\in H1^G$.
 #!
 #! @Arguments G, grouplist
 DeclareGlobalFunction( "RemoveConjugates" );
@@ -349,16 +402,28 @@ DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection" );
 #!
 #! @BeginExampleSession
-#! gap> gap> ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(2,2));
-#! [ Group([ (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2), (3,4) ]),
-#!   Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
-#!   Group([ (1,3)(2,4)(7,8), (1,5)(2,6)(3,7)(4,8), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ])
-#!     , Group([ (1,5)(2,6)(3,7,4,8), (1,3)(2,4), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
-#!   Group([ (1,3)(2,4)(7,8), (1,5,3,7)(2,6,4,8), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
-#!   Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(7,8), (5,6)(7,8), (1,4,2,3)(5,7,6,8), (1,2)(3,4)(5,6)(7,8) ]),
-#!   Group([ (3,4)(5,7,6,8), (1,5)(2,6)(3,7)(4,8), (5,6)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ]),
-#!   Group([ (3,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,3,2,4)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]),
-#!   Group([ (1,5,2,6)(3,7,4,8), (3,4)(5,7)(6,8), (1,3,2,4)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]) ]
+#! gap> ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(3,1));
+#! [ Group([ (1,4,7)(2,5,8)(3,6,9), (1,4)(2,5)(3,6), (1,2,3), (1,2) ]),
+#!   Group([ (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9), (2,3)
+#!       (8,9), (7,9,8), (4,6,5), (1,3,2) ]),
+#!   Group([ (2,3)(4,7)(5,9)(6,8), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9),
+#!       (2,3)(8,9), (7,9,8), (4,6,5), (1,3,2) ]),
+#!   Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),
+#!       (7,9,8), (4,6,5), (1,3,2) ]),
+#!   Group([ (1,7)(2,8)(3,9)(5,6), (1,7,4)(2,9,5)(3,8,6), (1,2,3),
+#!       (7,8,9), (4,6,5)(7,8,9) ]),
+#!   Group([ (2,3)(4,7)(5,8)(6,9), (4,6,5)(7,9,8), (1,4,7)(2,5,9)
+#!       (3,6,8), (1,2,3)(4,5,6)(7,9,8) ]),
+#!   Group([ (2,3)(4,7)(5,8)(6,9), (1,7,6,2,9,4,3,8,5), (1,2,3)
+#!       (4,6,5), (1,2,3)(4,5,6)(7,9,8) ]),
+#!   Group([ (2,3)(4,7)(5,8)(6,9), (1,6,7,3,5,8,2,4,9), (1,3,2)(4,6,5)
+#!       (7,8,9) ]),
+#!   Group([ (2,3)(4,7)(5,8)(6,9), (1,7,4)(2,9,5)(3,8,6), (1,2,3)
+#!       (4,5,6)(7,9,8) ]),
+#!   Group([ (1,4)(2,5)(3,6), (1,7,4)(2,8,5)(3,9,6), (2,3)(5,6)(8,9),
+#!       (1,2,3)(4,5,6)(7,8,9), (4,5,6)(7,9,8) ]),
+#!   Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),
+#!       (1,3,2)(4,6,5)(7,9,8) ]) ]
 #! @EndExampleSession
 
 
