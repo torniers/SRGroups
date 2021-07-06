@@ -50,3 +50,8 @@
   behaviour  of  these  self-replicating  groups and their corresponding Hasse
   diagrams at different depths.[133X
   
+  
+  [1X1.1 [33X[0;0YPurpose[133X[101X
+  
+  [33X[0;0YTo do.[133X
+  

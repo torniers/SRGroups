@@ -9,7 +9,7 @@
 SetPackageInfo( rec(
 
 PackageName := "SRGroups",
-Subtitle := "Self-replicating groups of regular rooted trees",
+Subtitle := "Self-relicating groups acting on regular rooted trees",
 Version := "0.9",
 Date := "06/07/2021", # dd/mm/yyyy format
 License := "GPL-3.0-or-later",
@@ -19,7 +19,7 @@ Persons := [
     FirstNames := "Samuel",
     LastName := "King",
     #WWWHome := TODO,
-    Email := "sam.king@newcastle.edu.au",
+    Email := "samuel.s.king@newcastle.edu.au",
     IsAuthor := true,
     IsMaintainer := true,
     PostalAddress := "University Drive, Callaghan NSW 2308",

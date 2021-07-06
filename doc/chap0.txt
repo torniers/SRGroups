@@ -1,30 +1,38 @@
   
   
-          [1X SRGroups: Self-replicating groups of regular rooted trees. [101X
+                                   [1X SRGroups [101X
   
   
-               [1X Self-replicating groups of regular rooted trees. [101X
+            [1X Self-relicating groups acting on regular rooted trees [101X
   
   
-                                      0.1
+                                      0.9
   
   
-                                17 December 2020
+                                  6 July 2021
   
   
-                                    Sam King
+                                  Samuel King
   
                                  Sarah Shotter
   
+                                Stephan Tornier
   
   
-  Sam King
-      Email:    [7Xmailto:sam.king@newcastle.edu.au[107X
+  
+  Samuel King
+      Email:    [7Xmailto:samuel.s.king@newcastle.edu.au[107X
       Address:  [33X[0;14YUniversity Drive, Callaghan NSW 2308[133X
   
   
   Sarah Shotter
       Email:    [7Xmailto:sarah.shotter@newcastle.edu.au[107X
+      Address:  [33X[0;14YUniversity Drive, Callaghan NSW 2308[133X
+  
+  
+  Stephan Tornier
+      Email:    [7Xmailto:stephan.tornier@newcastle.edu.au[107X
+      Homepage: [7Xhttps://www.newcastle.edu.au/profile/stephan-tornier[107X
       Address:  [33X[0;14YUniversity Drive, Callaghan NSW 2308[133X
   
   
@@ -57,6 +65,7 @@
   [1XContents (SRGroups)[101X
   
   1 [33X[0;0YIntroduction[133X
+    1.1 [33X[0;0YPurpose[133X
   2 [33X[0;0YFunctionality[133X
     2.1 [33X[0;0YMethods[133X
       2.1-1 IsRegularRootedTreeGroup

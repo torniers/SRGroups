@@ -1,5 +1,4 @@
-#! @Title SRGroups: Self-replicating groups of regular rooted trees.
-
+#! @Title SRGroups
 ##################################################################################################################
 #! @Abstract
 ##################################################################################################################
@@ -35,18 +34,26 @@
 #! First, this package acts as a library for searching currently known self-replicating groups for varying degrees and levels of regular rooted trees. This package also acts as a regular GAP package with functions that allow the expansion of the library and addition of attributes/properties relevant to self-replicating groups. Additional functions also exist in this package that are compatible with GraphViz, to plot diagrams of the extension behaviour of these self-replicating groups and their corresponding Hasse diagrams at different depths.
 
 ####################################################################################################################
-#! @Chapter Functionality
+#! @Section Purpose
 ####################################################################################################################
 
-#! @Section Methods
-# a new "category" for the groups acting on regular rooted trees that we study, based on the category of permutation groups
+#! Research and educational purpose. To do.
+
+####################################################################################################################
+####################################################################################################################
+#! @Chapter Preliminaries
+####################################################################################################################
+####################################################################################################################
+
+#! Introductory text. To do.
+
 #! @Description
 #! The argument of this category is any permutation group, <A>G</A>. Checks whether <A>G</A> is a regular rooted tree group.
 #! @Arguments G
 DeclareCategory("IsRegularRootedTreeGroup", IsPermGroup);
 
+####################################################################################################################
 
-# degree and depth are attributes of groups of this type
 #! @Description
 #! The argument of this attribute is any regular rooted tree group, <A>G</A>.
 #! @Returns
@@ -58,6 +65,7 @@ DeclareAttribute("RegularRootedTreeGroupDegree", IsRegularRootedTreeGroup);
 #! 3
 #! @EndExampleSession
 
+####################################################################################################################
 
 #! @Description
 #! The argument of this attribute is any regular rooted tree group, <A>G</A>.
@@ -70,8 +78,8 @@ DeclareAttribute("RegularRootedTreeGroupDepth", IsRegularRootedTreeGroup);
 #! 2
 #! @EndExampleSession
 
+####################################################################################################################
 
-# a creator function asking for depth, degree, and the permutation group
 #! @Description
 #! The arguments of this operation are a regular rooted tree group, <A>G</A>, and its degree <A>k</A> and depth <A>n</A>.
 #! @Returns
@@ -79,8 +87,69 @@ DeclareAttribute("RegularRootedTreeGroupDepth", IsRegularRootedTreeGroup);
 #! @Arguments k,n,G
 DeclareOperation("RegularRootedTreeGroup", [IsInt, IsInt, IsPermGroup]);
 
+####################################################################################################################
+#! @Section Auxiliary functions
+####################################################################################################################
 
-# being self-replicating and having sufficient rigid automorphisms are properties (i.e. boolean attributes)
+#! @Description
+#! The arguments of this function are a degree, <A>k</A> $\in\mathbb{N}_{\ge 2}$, a depth, <A>n</A> $\in\mathbb{N}$, an element of <F>AutT(</F><A>k</A>,<A>n</A><F>)</F>, <A>aut</A>, and a level 1 vertex, <A>i</A> $\in\{1,\cdots,k\}$.
+#!
+#! @Returns
+#! The restriction of <A>aut</A> to the subtree below the level 1 vertex <A>i</A>, as an element of <F>AutT(</F><A>k</A>,<A>n-1</A><F>)</F>.
+#!
+#! @Arguments k,n,aut,i
+DeclareGlobalFunction( "BelowAction" );
+#!
+#! @BeginExampleSession
+#! gap> BelowAction(2,2,(1,2)(3,4),2);
+#! (1,2)
+#! @EndExampleSession
+
+
+#! @Description
+#! The arguments of this function are a group, <A>G</A>, and a list of groups, grouplist. For every group H1 in grouplist, this function removes all conjugate groups $H2$ such that $H2\in H1^G$.
+#!
+#! @Arguments G, grouplist
+DeclareGlobalFunction( "RemoveConjugates" );
+#!
+#! @BeginExampleSession
+#! gap> 
+#! @EndExampleSession
+
+####################################################################################################################
+####################################################################################################################
+#! @Chapter Self-replicating groups
+####################################################################################################################
+####################################################################################################################
+
+#! Introductory text. To do.
+
+####################################################################################################################
+#! @Section Examples
+####################################################################################################################
+
+#! AutT, more to come.
+
+#! @Description
+#! The arguments of this function are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
+#!
+#! @Returns
+#! The regular rooted tree group $\mathrm{Aut}(T_{k,n})$ as a permutation group of the $k^{n}$ leaves of $T_{k,n}$.
+#!
+#! @Arguments k,n
+DeclareGlobalFunction( "AutT" );
+#!
+#! @BeginExampleSession
+#! gap> G:=AutT(2,2);
+#! Group([ (1,2), (3,4), (1,3)(2,4) ])
+#! gap> Size(G);
+#! 8
+#! @EndExampleSession
+
+####################################################################################################################
+#! @Section Properties and Attributes 
+####################################################################################################################
+
 #! @Description
 #! The argument of this property is any regular rooted tree group, <A>G</A>. Tests whether <A>G</A> satisfies the self-replicating conditions.
 #!
@@ -334,47 +403,10 @@ DeclareGlobalFunction( "SRLevels" );
 ####################################################################################################################
 
 
-#! @Description
-#! The arguments of this function are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
-#!
-#! @Returns
-#! The regular rooted tree group $\mathrm{Aut}(T_{k,n})$ as a permutation group of the $k^{n}$ leaves of $T_{k,n}$.
-#!
-#! @Arguments k,n
-DeclareGlobalFunction( "AutT" );
-#!
-#! @BeginExampleSession
-#! gap> G:=AutT(2,2);
-#! Group([ (1,2), (3,4), (1,3)(2,4) ])
-#! gap> Size(G);
-#! 8
-#! @EndExampleSession
 
 
-#! @Description
-#! The arguments of this function are a degree, <A>k</A> $\in\mathbb{N}_{\ge 2}$, a depth, <A>n</A> $\in\mathbb{N}$, an element of <F>AutT(</F><A>k</A>,<A>n</A><F>)</F>, <A>aut</A>, and a level 1 vertex, <A>i</A> $\in\{1,\cdots,k\}$.
-#!
-#! @Returns
-#! The restriction of <A>aut</A> to the subtree below the level 1 vertex <A>i</A>, as an element of <F>AutT(</F><A>k</A>,<A>n-1</A><F>)</F>.
-#!
-#! @Arguments k,n,aut,i
-DeclareGlobalFunction( "BelowAction" );
-#!
-#! @BeginExampleSession
-#! gap> BelowAction(2,2,(1,2)(3,4),2);
-#! (1,2)
-#! @EndExampleSession
 
 
-#! @Description
-#! The arguments of this function are a group, <A>G</A>, and a list of groups, grouplist. For every group H1 in grouplist, this function removes all conjugate groups $H2$ such that $H2\in H1^G$.
-#!
-#! @Arguments G, grouplist
-DeclareGlobalFunction( "RemoveConjugates" );
-#!
-#! @BeginExampleSession
-#! gap> 
-#! @EndExampleSession
 
 
 #! @Description

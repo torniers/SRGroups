@@ -3,20 +3,20 @@
 <!-- This is an automatically generated file. -->
 <TitlePage>
   <Title>
-    SRGroups: Self-replicating groups of regular rooted trees.
+    SRGroups
   </Title>
   <Subtitle>
-    Self-replicating groups of regular rooted trees.
+    Self-relicating groups acting on regular rooted trees
   </Subtitle>
   <Version>
-    0.1
+    0.9
   </Version>
   <Author>
-    Sam King<Alt Only="LaTeX"><Br/></Alt>
+    Samuel King<Alt Only="LaTeX"><Br/></Alt>
 <Address>
 University Drive, Callaghan NSW 2308<Br/>
 </Address>
-<Email>sam.king@newcastle.edu.au</Email>
+<Email>samuel.s.king@newcastle.edu.au</Email>
 
   </Author>
   <Author>
@@ -27,8 +27,17 @@ University Drive, Callaghan NSW 2308<Br/>
 <Email>sarah.shotter@newcastle.edu.au</Email>
 
   </Author>
+  <Author>
+    Stephan Tornier<Alt Only="LaTeX"><Br/></Alt>
+<Address>
+University Drive, Callaghan NSW 2308<Br/>
+</Address>
+<Email>stephan.tornier@newcastle.edu.au</Email>
+<Homepage>https://www.newcastle.edu.au/profile/stephan-tornier</Homepage>
+
+  </Author>
   <Date>
-    17 December 2020
+    6 July 2021
   </Date>
   <Abstract>
     
