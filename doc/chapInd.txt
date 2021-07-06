@@ -2,11 +2,11 @@
   
   [1XIndex[101X
   
-  [2XAllSRGroups[102X 2.2-2 
-  [2XAllSRGroupsInfo[102X 2.2-3 
+  [2XAllSRGroups[102X 2.2-4 
+  [2XAllSRGroupsInfo[102X 2.2-5 
   [2XAutT[102X 2.3-1 
   [2XBelowAction[102X 2.3-2 
-  [2XCheckSRProjections[102X 2.2-4 
+  [2XCheckSRProjections[102X 2.2-6 
   [2XCombineSRFiles[102X 2.3-8 
   [2XConjugacyClassRepsMaxSelfReplicatingSubgroups[102X 2.3-4 
   [2XConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection[102X 2.3-5 
@@ -15,16 +15,18 @@
   [2XIsRegularRootedTreeGroup[102X, for IsPermGroup 2.1-1 
   [2XIsSelfReplicating[102X, for IsRegularRootedTreeGroup 2.1-5 
   [2XMaximalExtension[102X, for IsRegularRootedTreeGroup 2.1-8 
+  [2XNrSRGroups[102X 2.2-2 
   [2XParentGroup[102X, for IsRegularRootedTreeGroup 2.1-7 
   [2XRegularRootedTreeGroup[102X, for IsInt, IsInt, IsPermGroup 2.1-4 
   [2XRegularRootedTreeGroupDegree[102X, for IsRegularRootedTreeGroup 2.1-2 
   [2XRegularRootedTreeGroupDepth[102X, for IsRegularRootedTreeGroup 2.1-3 
   [2XRemoveConjugates[102X 2.3-3 
   [2XRepresentativeWithSufficientRigidAutomorphisms[102X, for IsRegularRootedTreeGroup 2.1-9 
-  [2XSRDegrees[102X 2.2-5 
-  [2XSRGroup[102X 2.2-1 
+  [2XSRDegrees[102X 2.2-7 
+  [2XSRGroup[102X 2.2-3 
   [2XSRGroupFile[102X 2.3-6 
-  [2XSRLevels[102X 2.2-6 
+  [2XSRGroupsAvailable[102X 2.2-1 
+  [2XSRLevels[102X 2.2-8 
   
   
   -------------------------------------------------------

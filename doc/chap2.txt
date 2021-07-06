@@ -126,7 +126,38 @@
   
   [1X2.2 [33X[0;0YLibrary Functions[133X[101X
   
-  [1X2.2-1 SRGroup[101X
+  [1X2.2-1 SRGroupsAvailable[101X
+  
+  [33X[1;0Y[29X[2XSRGroupsAvailable[102X( [3Xk[103X, [3Xn[103X ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10YWhether  the  self-replicating  groups of degree, [3Xk[103X, and depth, [3Xn[103X,
+            are available.[133X
+  
+  [33X[0;0YThe argument of this function is a degree, [3Xk[103X, and a depth, [3Xn[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSRGroupsAvailable(2,3);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XSRGroupsAvailable(2,5);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XSRGroupsAvailable(5,2);[127X[104X
+    [4X[28Xfalse[128X[104X
+  [4X[32X[104X
+  
+  [1X2.2-2 NrSRGroups[101X
+  
+  [33X[1;0Y[29X[2XNrSRGroups[102X( [3Xk[103X, [3Xn[103X ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10YThe number of self-replicating groups of degree, [3Xk[103X, and depth, [3Xn[103X.[133X
+  
+  [33X[0;0YThe argument of this function is a degree, [3Xk[103X, and a depth, [3Xn[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XNrSRGroups(2,3);[127X[104X
+    [4X[28X15[128X[104X
+    [4X[25Xgap>[125X [27XNrSRGroups(2,5);[127X[104X
+    [4X[28X2436[128X[104X
+  [4X[32X[104X
+  
+  [1X2.2-3 SRGroup[101X
   
   [33X[1;0Y[29X[2XSRGroup[102X( [3Xk[103X, [3Xn[103X, [3Xnum[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10YThe [3Xnum[103Xth self-replicating group of degree [3Xk[103X and depth [3Xn[103X stored in
@@ -142,30 +173,38 @@
     [4X[28X8[128X[104X
   [4X[32X[104X
   
-  [1X2.2-2 AllSRGroups[101X
+  [1X2.2-4 AllSRGroups[101X
   
   [33X[1;0Y[29X[2XAllSRGroups[102X( [3XInput1[103X, [3Xval1[103X, [3XInput2[103X, [3Xval2[103X, [3X...[103X ) [32X function[133X
-  [6XReturns:[106X  [33X[0;10YAll  of the self-replicating group(s) stored as objects satisfying
-            all of the provided input arguments.[133X
+  [6XReturns:[106X  [33X[0;10YA  list of self-replicating groups matching the input arguments as
+            RegularRootedTreeGroup objects.[133X
   
-  [33X[0;0YMain  library  search function. Has several possible input arguments such as
-  [3XDegree[103X,    [3XLevel[103X   (or   [3XDepth[103X),   [3XNumber[103X,   [3XProjection[103X,   [3XSubgroup[103X,   [3XSize[103X,
-  [3XNumberOfGenerators[103X, and [3XIsAbelian[103X. Order of the inputs do not matter.[133X
+  [33X[0;0YMain    library    search    function   that   acts   analogously   as   the
+  AllTransitiveGroups function from the [5Xtransgrp[105X library. Has several possible
+  input  arguments  such  as  [3XDegree[103X,  [3XDepth[103X  (or  [3XLevel[103X), [3XNumber[103X, [3XProjection[103X,
+  [3XIsSubgroup[103X,  [3XSize[103X, [3XNumberOfGenerators[103X, and [3XIsAbelian[103X. Order of the arguments
+  do not matter. List inputs and singular inputs can be provided. The argument
+  definitions  are  as follows: [3XDegree[103X (int > 1) := degree of tree [3XDepth[103X/[3XLevel[103X
+  (int > 0) := level of tree [3XNumber[103X (int > 0) := self-replicating group number
+  [3XProjection[103X (int > 0) := groups whose projected image are the group number on
+  the  level  above  [3XIsSubgroup[103X (int > 0) := groups that are a subgroup of the
+  group number provided [3XSize[103X (int >= degree^depth or int > 1) := size of group
+  [3XMinimalGeneratingSet[103X (int > 0) := size of the group's minimal generating set
+  [3XIsAbelian[103X  (boolean) := all groups that are abelian if true, and not abelian
+  if false[133X
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27XAllSRGroups(Degree, 2, Level, 4, IsAbelian, true);[127X[104X
     [4X[28X[ SRGroup(2,4,2), SRGroup(2,4,9), SRGroup(2,4,12), SRGroup(2,4,14) ][128X[104X
-    [4X[25Xgap>[125X [27XSize(last[1]);[127X[104X
-    [4X[28X16[128X[104X
-    [4X[25Xgap>[125X [27XAllSRGroups(Degree, 2, Level, 4, NumberOfGenerators, 4);[127X[104X
-    [4X[28X[ SRGroup(2,4,11), SRGroup(2,4,12), SRGroup(2,4,16), SRGroup(2,4,20), SRGroup(2,4,23), SRGroup(2,4,24),[128X[104X
-    [4X[28X SRGroup(2,4,25), SRGroup(2,4,26), SRGroup(2,4,40), SRGroup(2,4,43), SRGroup(2,4,46), SRGroup(2,4,47),[128X[104X
-    [4X[28X SRGroup(2,4,50), SRGroup(2,4,66), SRGroup(2,4,70), SRGroup(2,4,71), SRGroup(2,4,72), SRGroup(2,4,73),[128X[104X
-    [4X[28X SRGroup(2,4,74), SRGroup(2,4,75), SRGroup(2,4,76), SRGroup(2,4,84), SRGroup(2,4,90), SRGroup(2,4,91),[128X[104X
-    [4X[28X SRGroup(2,4,93), SRGroup(2,4,95), SRGroup(2,4,97), SRGroup(2,4,102), SRGroup(2,4,108) ][128X[104X
+    [4X[25Xgap>[125X [27XAllSRGroups(Degree,[2..5],Depth,[2..5],IsSubgroup,[1..5],Projection,[1..3]);[127X[104X
+    [4X[28XRestricting degrees to [ 2, 3 ][128X[104X
+    [4X[28X[ SRGroup(2,1,1), SRGroup(2,1,1), SRGroup(2,2,1), SRGroup(2,3,1),[128X[104X
+    [4X[28X  SRGroup(2,3,2), SRGroup(2,4,1), SRGroup(2,4,1), SRGroup(2,4,2),[128X[104X
+    [4X[28X  SRGroup(2,4,2), SRGroup(2,4,2), SRGroup(3,1,1), SRGroup(3,1,1),[128X[104X
+    [4X[28X  SRGroup(3,1,1), SRGroup(3,1,1) ][128X[104X
   [4X[32X[104X
   
-  [1X2.2-3 AllSRGroupsInfo[101X
+  [1X2.2-5 AllSRGroupsInfo[101X
   
   [33X[1;0Y[29X[2XAllSRGroupsInfo[102X( [3XInput1[103X, [3Xval1[103X, [3XInput2[103X, [3Xval2[103X, [3X...[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10YInformation  about the self-replicating group(s) satisfying all of
@@ -174,24 +213,43 @@
             only the corresponding index of this list is returned.[133X
   
   [33X[0;0YInputs  work  the  same  as  the  main  library  search function [2XAllSRGroups[102X
-  ([14X2.2-2[114X), with one additional input: [3XPosition[103X.[133X
+  ([14X2.2-4[114X),  with  one additional input: [3XPosition[103X (or [3XIndex[103X). Position/Index :=
+  (int in [1..4])[133X
   
   [4X[32X  Example  [32X[104X
-    [4X[25Xgap>[125X [27XAllSRGroupsInfo(Degree, 2, Level, 3, IsAbelian, true);[127X[104X
-    [4X[28X[ [ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,1)", "SRGroup(2,2,1)", [ "SRGroup(2,4,1)", "SRGroup(2,4,2)" ] ],[128X[104X
-    [4X[28X[ [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,4)", "SRGroup(2,2,2)", [ "SRGroup(2,4,8)", "SRGroup(2,4,9)", "SRGroup(2,4,10)" ] ], [128X[104X
-    [4X[28X[ [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,5)", "SRGroup(2,2,2)", [ "SRGroup(2,4,11)", "SRGroup(2,4,12)", "SRGroup(2,4,13)", "SRGroup(2,4,14)", "SRGroup(2,4,15)" ] ] ][128X[104X
-    [4X[25Xgap>[125X [27XAllSRGroupsInfo(Degree, 2, Level, 3, IsAbelian, true, Position, 1);[127X[104X
-    [4X[28X[ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ],[128X[104X
+    [4X[25Xgap>[125X [27XAllSRGroupsInfo(Degree, 2, Depth, [2,3], IsAbelian, true);[127X[104X
+    [4X[28X[ [ [ (1,2)(3,4), (1,3,2,4) ], "SRGroup(2,2,1)", "SRGroup(2,1,1)",[128X[104X
+    [4X[28X      [ "SRGroup(2,3,1)", "SRGroup(2,3,2)" ] ],[128X[104X
+    [4X[28X  [ [ (1,2)(3,4), (1,3)(2,4) ], "SRGroup(2,2,2)", "SRGroup(2,1,1)",[128X[104X
+    [4X[28X      [ "SRGroup(2,3,3)", "SRGroup(2,3,4)", "SRGroup(2,3,5)",[128X[104X
+    [4X[28X          "SRGroup(2,3,6)" ] ],[128X[104X
+    [4X[28X  [ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ][128X[104X
+    [4X[28X        , "SRGroup(2,3,1)", "SRGroup(2,2,1)",[128X[104X
+    [4X[28X      [ "SRGroup(2,4,1)", "SRGroup(2,4,2)" ] ],[128X[104X
+    [4X[28X  [[128X[104X
+    [4X[28X      [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8),[128X[104X
+    [4X[28X          (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,4)",[128X[104X
+    [4X[28X      "SRGroup(2,2,2)",[128X[104X
+    [4X[28X      [ "SRGroup(2,4,8)", "SRGroup(2,4,9)", "SRGroup(2,4,10)" ] ],[128X[104X
+    [4X[28X  [ [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8),[128X[104X
+    [4X[28X          (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,5)",[128X[104X
+    [4X[28X      "SRGroup(2,2,2)",[128X[104X
+    [4X[28X      [ "SRGroup(2,4,11)", "SRGroup(2,4,12)", "SRGroup(2,4,13)",[128X[104X
+    [4X[28X          "SRGroup(2,4,14)", "SRGroup(2,4,15)" ] ] ][128X[104X
+    [4X[25Xgap>[125X [27XAllSRGroupsInfo(Degree, 2, Level, [2,3], IsAbelian, true, Position, 1);[127X[104X
+    [4X[28X[ [ (1,2)(3,4), (1,3,2,4) ], [ (1,2)(3,4), (1,3)(2,4) ],[128X[104X
+    [4X[28X  [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ],[128X[104X
     [4X[28X  [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ],[128X[104X
     [4X[28X  [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ] ][128X[104X
   [4X[32X[104X
   
-  [1X2.2-4 CheckSRProjections[101X
+  [1X2.2-6 CheckSRProjections[101X
   
   [33X[1;0Y[29X[2XCheckSRProjections[102X( [3Xk[103X, [3Xn[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10YWhether all of the self-replicating groups of degree [3Xk[103X and level [3Xn[103X
-            project correctly to level [3Xn-1[103X.[133X
+            project  correctly  to  level  [3Xn-1[103X.  This  is  mainly  used  after
+            obtaining  new  data to check that it has been formatted correctly
+            (see [2XSRGroupFile[102X ([14X2.3-6[114X)).[133X
   
   [33X[0;0YThe arguments of this function are a degree, [3Xk[103X, and a level, [3Xn[103X.[133X
   
@@ -200,20 +258,19 @@
     [4X[28XAll groups project correctly.[128X[104X
   [4X[32X[104X
   
-  [1X2.2-5 SRDegrees[101X
+  [1X2.2-7 SRDegrees[101X
   
   [33X[1;0Y[29X[2XSRDegrees[102X(  ) [32X function[133X
-  [6XReturns:[106X  [33X[0;10YAll  of  the  degrees  currently  stored  in  the [5XSRGroups[105X library
-            (duplicates included).[133X
+  [6XReturns:[106X  [33X[0;10YAll of the degrees currently stored in the [5XSRGroups[105X library.[133X
   
   [33X[0;0YThere are no inputs to this function.[133X
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27XSRDegrees();[127X[104X
-    [4X[28X[ 2, 2, 2, 2, 3, 3, 3, 4, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ][128X[104X
+    [4X[28X[ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ][128X[104X
   [4X[32X[104X
   
-  [1X2.2-6 SRLevels[101X
+  [1X2.2-8 SRLevels[101X
   
   [33X[1;0Y[29X[2XSRLevels[102X( [3Xk[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10YAll  of the levels currently stored in the [5XSRGroups[105X library for an
@@ -266,7 +323,7 @@
   
   [33X[0;0YThe  arguments  of  this  function  are  a  group,  [3XG[103X, and a list of groups,
   grouplist.  For  every  group  H1  in  grouplist,  this function removes all
-  conjugate groups H2 such that H2\in H1^G.[133X
+  conjugate groups [23XH2[123X such that [23XH2\in H1^G[123X.[133X
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27X[127X[104X
@@ -294,16 +351,28 @@
   [33X[0;0YThe argument of this function is any regular rooted tree group, [3XG[103X[133X
   
   [4X[32X  Example  [32X[104X
-    [4X[25Xgap>[125X [27Xgap> ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(2,2));[127X[104X
-    [4X[28X[ Group([ (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2), (3,4) ]),[128X[104X
-    [4X[28X  Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),[128X[104X
-    [4X[28X  Group([ (1,3)(2,4)(7,8), (1,5)(2,6)(3,7)(4,8), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ])[128X[104X
-    [4X[28X    , Group([ (1,5)(2,6)(3,7,4,8), (1,3)(2,4), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),[128X[104X
-    [4X[28X  Group([ (1,3)(2,4)(7,8), (1,5,3,7)(2,6,4,8), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),[128X[104X
-    [4X[28X  Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(7,8), (5,6)(7,8), (1,4,2,3)(5,7,6,8), (1,2)(3,4)(5,6)(7,8) ]),[128X[104X
-    [4X[28X  Group([ (3,4)(5,7,6,8), (1,5)(2,6)(3,7)(4,8), (5,6)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ]),[128X[104X
-    [4X[28X  Group([ (3,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,3,2,4)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]),[128X[104X
-    [4X[28X  Group([ (1,5,2,6)(3,7,4,8), (3,4)(5,7)(6,8), (1,3,2,4)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]) ][128X[104X
+    [4X[25Xgap>[125X [27XConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(3,1));[127X[104X
+    [4X[28X[ Group([ (1,4,7)(2,5,8)(3,6,9), (1,4)(2,5)(3,6), (1,2,3), (1,2) ]),[128X[104X
+    [4X[28X  Group([ (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9), (2,3)[128X[104X
+    [4X[28X      (8,9), (7,9,8), (4,6,5), (1,3,2) ]),[128X[104X
+    [4X[28X  Group([ (2,3)(4,7)(5,9)(6,8), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9),[128X[104X
+    [4X[28X      (2,3)(8,9), (7,9,8), (4,6,5), (1,3,2) ]),[128X[104X
+    [4X[28X  Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),[128X[104X
+    [4X[28X      (7,9,8), (4,6,5), (1,3,2) ]),[128X[104X
+    [4X[28X  Group([ (1,7)(2,8)(3,9)(5,6), (1,7,4)(2,9,5)(3,8,6), (1,2,3),[128X[104X
+    [4X[28X      (7,8,9), (4,6,5)(7,8,9) ]),[128X[104X
+    [4X[28X  Group([ (2,3)(4,7)(5,8)(6,9), (4,6,5)(7,9,8), (1,4,7)(2,5,9)[128X[104X
+    [4X[28X      (3,6,8), (1,2,3)(4,5,6)(7,9,8) ]),[128X[104X
+    [4X[28X  Group([ (2,3)(4,7)(5,8)(6,9), (1,7,6,2,9,4,3,8,5), (1,2,3)[128X[104X
+    [4X[28X      (4,6,5), (1,2,3)(4,5,6)(7,9,8) ]),[128X[104X
+    [4X[28X  Group([ (2,3)(4,7)(5,8)(6,9), (1,6,7,3,5,8,2,4,9), (1,3,2)(4,6,5)[128X[104X
+    [4X[28X      (7,8,9) ]),[128X[104X
+    [4X[28X  Group([ (2,3)(4,7)(5,8)(6,9), (1,7,4)(2,9,5)(3,8,6), (1,2,3)[128X[104X
+    [4X[28X      (4,5,6)(7,9,8) ]),[128X[104X
+    [4X[28X  Group([ (1,4)(2,5)(3,6), (1,7,4)(2,8,5)(3,9,6), (2,3)(5,6)(8,9),[128X[104X
+    [4X[28X      (1,2,3)(4,5,6)(7,8,9), (4,5,6)(7,9,8) ]),[128X[104X
+    [4X[28X  Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),[128X[104X
+    [4X[28X      (1,3,2)(4,6,5)(7,9,8) ]) ][128X[104X
   [4X[32X[104X
   
   [1X2.3-6 SRGroupFile[101X

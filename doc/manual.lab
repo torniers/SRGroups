@@ -19,12 +19,14 @@
 \makelabel{srgroups:ParentGroup for isregularrootedtreegroup}{2.1.7}{X7943CE9B7AB931AC}
 \makelabel{srgroups:MaximalExtension for isregularrootedtreegroup}{2.1.8}{X7D9FB6D5854A17BE}
 \makelabel{srgroups:RepresentativeWithSufficientRigidAutomorphisms for isregularrootedtreegroup}{2.1.9}{X7D06D7AF7B938F4A}
-\makelabel{srgroups:SRGroup}{2.2.1}{X79B6921585FAFD67}
-\makelabel{srgroups:AllSRGroups}{2.2.2}{X845F9F227B97062C}
-\makelabel{srgroups:AllSRGroupsInfo}{2.2.3}{X808A9F918166020B}
-\makelabel{srgroups:CheckSRProjections}{2.2.4}{X7DC9A60E87E350AF}
-\makelabel{srgroups:SRDegrees}{2.2.5}{X7BF255357B870D37}
-\makelabel{srgroups:SRLevels}{2.2.6}{X7CDBB45386329E21}
+\makelabel{srgroups:SRGroupsAvailable}{2.2.1}{X8500D0747EC1FCBF}
+\makelabel{srgroups:NrSRGroups}{2.2.2}{X81CEC3DC82CF99DE}
+\makelabel{srgroups:SRGroup}{2.2.3}{X79B6921585FAFD67}
+\makelabel{srgroups:AllSRGroups}{2.2.4}{X845F9F227B97062C}
+\makelabel{srgroups:AllSRGroupsInfo}{2.2.5}{X808A9F918166020B}
+\makelabel{srgroups:CheckSRProjections}{2.2.6}{X7DC9A60E87E350AF}
+\makelabel{srgroups:SRDegrees}{2.2.7}{X7BF255357B870D37}
+\makelabel{srgroups:SRLevels}{2.2.8}{X7CDBB45386329E21}
 \makelabel{srgroups:AutT}{2.3.1}{X843B26BC8517173F}
 \makelabel{srgroups:BelowAction}{2.3.2}{X7EE8301C7EC8654B}
 \makelabel{srgroups:RemoveConjugates}{2.3.3}{X795ACCF4858A8ED2}

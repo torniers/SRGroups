@@ -1,0 +1,31 @@
+\contentsline {chapter}{\numberline {1}\textcolor {Chapter }{Introduction}}{4}{chapter.1}%
+\contentsline {chapter}{\numberline {2}\textcolor {Chapter }{Functionality}}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}\textcolor {Chapter }{Methods}}{5}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}\textcolor {Chapter }{IsRegularRootedTreeGroup (for IsPermGroup)}}{5}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}\textcolor {Chapter }{RegularRootedTreeGroupDegree (for IsRegularRootedTreeGroup)}}{5}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}\textcolor {Chapter }{RegularRootedTreeGroupDepth (for IsRegularRootedTreeGroup)}}{5}{subsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.1.4}\textcolor {Chapter }{RegularRootedTreeGroup (for IsInt, IsInt, IsPermGroup)}}{5}{subsection.2.1.4}%
+\contentsline {subsection}{\numberline {2.1.5}\textcolor {Chapter }{IsSelfReplicating (for IsRegularRootedTreeGroup)}}{6}{subsection.2.1.5}%
+\contentsline {subsection}{\numberline {2.1.6}\textcolor {Chapter }{HasSufficientRigidAutomorphisms (for IsRegularRootedTreeGroup)}}{6}{subsection.2.1.6}%
+\contentsline {subsection}{\numberline {2.1.7}\textcolor {Chapter }{ParentGroup (for IsRegularRootedTreeGroup)}}{6}{subsection.2.1.7}%
+\contentsline {subsection}{\numberline {2.1.8}\textcolor {Chapter }{MaximalExtension (for IsRegularRootedTreeGroup)}}{6}{subsection.2.1.8}%
+\contentsline {subsection}{\numberline {2.1.9}\textcolor {Chapter }{RepresentativeWithSufficientRigidAutomorphisms (for IsRegularRootedTreeGroup)}}{7}{subsection.2.1.9}%
+\contentsline {section}{\numberline {2.2}\textcolor {Chapter }{Library Functions}}{7}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}\textcolor {Chapter }{SRGroupsAvailable}}{7}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}\textcolor {Chapter }{NrSRGroups}}{7}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}\textcolor {Chapter }{SRGroup}}{7}{subsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.4}\textcolor {Chapter }{AllSRGroups}}{8}{subsection.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.5}\textcolor {Chapter }{AllSRGroupsInfo}}{8}{subsection.2.2.5}%
+\contentsline {subsection}{\numberline {2.2.6}\textcolor {Chapter }{CheckSRProjections}}{9}{subsection.2.2.6}%
+\contentsline {subsection}{\numberline {2.2.7}\textcolor {Chapter }{SRDegrees}}{9}{subsection.2.2.7}%
+\contentsline {subsection}{\numberline {2.2.8}\textcolor {Chapter }{SRLevels}}{9}{subsection.2.2.8}%
+\contentsline {section}{\numberline {2.3}\textcolor {Chapter }{Package Functions}}{9}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}\textcolor {Chapter }{AutT}}{9}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}\textcolor {Chapter }{BelowAction}}{10}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}\textcolor {Chapter }{RemoveConjugates}}{10}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}\textcolor {Chapter }{ConjugacyClassRepsMaxSelfReplicatingSubgroups}}{10}{subsection.2.3.4}%
+\contentsline {subsection}{\numberline {2.3.5}\textcolor {Chapter }{ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection}}{10}{subsection.2.3.5}%
+\contentsline {subsection}{\numberline {2.3.6}\textcolor {Chapter }{SRGroupFile}}{11}{subsection.2.3.6}%
+\contentsline {subsection}{\numberline {2.3.7}\textcolor {Chapter }{ExtendSRGroup}}{12}{subsection.2.3.7}%
+\contentsline {subsection}{\numberline {2.3.8}\textcolor {Chapter }{CombineSRFiles}}{12}{subsection.2.3.8}%
+\contentsline {chapter}{Index}{13}{section*.5}%

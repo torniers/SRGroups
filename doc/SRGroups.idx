@@ -1,0 +1,25 @@
+\indexentry{IsRegularRootedTreeGroup@\texttt  {IsRegularRootedTreeGroup}!for IsPermGroup|hyperpage}{5}
+\indexentry{RegularRootedTreeGroupDegree@\texttt  {RegularRootedTreeGroupDegree}!for IsRegularRootedTreeGroup|hyperpage}{5}
+\indexentry{RegularRootedTreeGroupDepth@\texttt  {RegularRootedTreeGroupDepth}!for IsRegularRootedTreeGroup|hyperpage}{5}
+\indexentry{RegularRootedTreeGroup@\texttt  {RegularRootedTreeGroup}!for IsInt, IsInt, IsPermGroup|hyperpage}{5}
+\indexentry{IsSelfReplicating@\texttt  {IsSelfReplicating}!for IsRegularRootedTreeGroup|hyperpage}{6}
+\indexentry{HasSufficientRigidAutomorphisms@\texttt  {HasSufficientRigidAutomorphisms}!for IsRegularRootedTreeGroup|hyperpage}{6}
+\indexentry{ParentGroup@\texttt  {ParentGroup}!for IsRegularRootedTreeGroup|hyperpage}{6}
+\indexentry{MaximalExtension@\texttt  {MaximalExtension}!for IsRegularRootedTreeGroup|hyperpage}{6}
+\indexentry{RepresentativeWithSufficientRigidAutomorphisms@\texttt  {Representative}\-\texttt  {With}\-\texttt  {Sufficient}\-\texttt  {Rigid}\-\texttt  {Automorphisms}!for IsRegularRootedTreeGroup|hyperpage}{7}
+\indexentry{SRGroupsAvailable@\texttt  {SRGroupsAvailable}|hyperpage}{7}
+\indexentry{NrSRGroups@\texttt  {NrSRGroups}|hyperpage}{7}
+\indexentry{SRGroup@\texttt  {SRGroup}|hyperpage}{7}
+\indexentry{AllSRGroups@\texttt  {AllSRGroups}|hyperpage}{8}
+\indexentry{AllSRGroupsInfo@\texttt  {AllSRGroupsInfo}|hyperpage}{8}
+\indexentry{CheckSRProjections@\texttt  {CheckSRProjections}|hyperpage}{9}
+\indexentry{SRDegrees@\texttt  {SRDegrees}|hyperpage}{9}
+\indexentry{SRLevels@\texttt  {SRLevels}|hyperpage}{9}
+\indexentry{AutT@\texttt  {AutT}|hyperpage}{9}
+\indexentry{BelowAction@\texttt  {BelowAction}|hyperpage}{10}
+\indexentry{RemoveConjugates@\texttt  {RemoveConjugates}|hyperpage}{10}
+\indexentry{ConjugacyClassRepsMaxSelfReplicatingSubgroups@\texttt  {Conjugacy}\-\texttt  {Class}\-\texttt  {Reps}\-\texttt  {Max}\-\texttt  {Self}\-\texttt  {Replicating}\-\texttt  {Subgroups}|hyperpage}{10}
+\indexentry{ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection@\texttt  {Conjugacy}\-\texttt  {Class}\-\texttt  {Reps}\-\texttt  {Self}\-\texttt  {Replicating}\-\texttt  {Subgroups}\-\texttt  {With}\-\texttt  {Conjugate}\-\texttt  {Projection}|hyperpage}{10}
+\indexentry{SRGroupFile@\texttt  {SRGroupFile}|hyperpage}{11}
+\indexentry{ExtendSRGroup@\texttt  {ExtendSRGroup}|hyperpage}{12}
+\indexentry{CombineSRFiles@\texttt  {CombineSRFiles}|hyperpage}{12}

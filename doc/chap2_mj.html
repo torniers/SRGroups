@@ -41,12 +41,14 @@
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2_mj.html#X84F966937C2E128A">2.2 <span class="Heading">Library Functions</span></a>
 </span>
 <div class="ContSSBlock">
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X79B6921585FAFD67">2.2-1 SRGroup</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X845F9F227B97062C">2.2-2 AllSRGroups</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X808A9F918166020B">2.2-3 AllSRGroupsInfo</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7DC9A60E87E350AF">2.2-4 CheckSRProjections</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7BF255357B870D37">2.2-5 SRDegrees</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7CDBB45386329E21">2.2-6 SRLevels</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X8500D0747EC1FCBF">2.2-1 SRGroupsAvailable</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X81CEC3DC82CF99DE">2.2-2 NrSRGroups</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X79B6921585FAFD67">2.2-3 SRGroup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X845F9F227B97062C">2.2-4 AllSRGroups</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X808A9F918166020B">2.2-5 AllSRGroupsInfo</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7DC9A60E87E350AF">2.2-6 CheckSRProjections</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7BF255357B870D37">2.2-7 SRDegrees</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7CDBB45386329E21">2.2-8 SRLevels</a></span>
 </div></div>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2_mj.html#X7FF84D377C18FE95">2.3 <span class="Heading">Package Functions</span></a>
 </span>
@@ -204,9 +206,45 @@ true
 
 <h4>2.2 <span class="Heading">Library Functions</span></h4>
 
+<p><a id="X8500D0747EC1FCBF" name="X8500D0747EC1FCBF"></a></p>
+
+<h5>2.2-1 SRGroupsAvailable</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SRGroupsAvailable</code>( <var class="Arg">k</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: Whether the self-replicating groups of degree, <var class="Arg">k</var>, and depth, <var class="Arg">n</var>, are available.</p>
+
+<p>The argument of this function is a degree, <var class="Arg">k</var>, and a depth, <var class="Arg">n</var>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SRGroupsAvailable(2,3);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SRGroupsAvailable(2,5);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SRGroupsAvailable(5,2);</span>
+false
+</pre></div>
+
+<p><a id="X81CEC3DC82CF99DE" name="X81CEC3DC82CF99DE"></a></p>
+
+<h5>2.2-2 NrSRGroups</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; NrSRGroups</code>( <var class="Arg">k</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: The number of self-replicating groups of degree, <var class="Arg">k</var>, and depth, <var class="Arg">n</var>.</p>
+
+<p>The argument of this function is a degree, <var class="Arg">k</var>, and a depth, <var class="Arg">n</var>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NrSRGroups(2,3);</span>
+15
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NrSRGroups(2,5);</span>
+2436
+</pre></div>
+
 <p><a id="X79B6921585FAFD67" name="X79B6921585FAFD67"></a></p>
 
-<h5>2.2-1 SRGroup</h5>
+<h5>2.2-3 SRGroup</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SRGroup</code>( <var class="Arg">k</var>, <var class="Arg">n</var>, <var class="Arg">num</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: The <var class="Arg">num</var>th self-replicating group of degree <var class="Arg">k</var> and depth <var class="Arg">n</var> stored in the <strong class="pkg">SRGroups</strong> library.</p>
@@ -223,54 +261,68 @@ SRGroup(2,3,1)
 
 <p><a id="X845F9F227B97062C" name="X845F9F227B97062C"></a></p>
 
-<h5>2.2-2 AllSRGroups</h5>
+<h5>2.2-4 AllSRGroups</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AllSRGroups</code>( <var class="Arg">Input1</var>, <var class="Arg">val1</var>, <var class="Arg">Input2</var>, <var class="Arg">val2</var>, <var class="Arg">...</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
-<p>Returns: All of the self-replicating group(s) stored as objects satisfying all of the provided input arguments.</p>
+<p>Returns: A list of self-replicating groups matching the input arguments as RegularRootedTreeGroup objects.</p>
 
-<p>Main library search function. Has several possible input arguments such as <var class="Arg">Degree</var>, <var class="Arg">Level</var> (or <var class="Arg">Depth</var>), <var class="Arg">Number</var>, <var class="Arg">Projection</var>, <var class="Arg">Subgroup</var>, <var class="Arg">Size</var>, <var class="Arg">NumberOfGenerators</var>, and <var class="Arg">IsAbelian</var>. Order of the inputs do not matter.</p>
+<p>Main library search function that acts analogously as the AllTransitiveGroups function from the <strong class="pkg">transgrp</strong> library. Has several possible input arguments such as <var class="Arg">Degree</var>, <var class="Arg">Depth</var> (or <var class="Arg">Level</var>), <var class="Arg">Number</var>, <var class="Arg">Projection</var>, <var class="Arg">IsSubgroup</var>, <var class="Arg">Size</var>, <var class="Arg">NumberOfGenerators</var>, and <var class="Arg">IsAbelian</var>. Order of the arguments do not matter. List inputs and singular inputs can be provided. The argument definitions are as follows: <var class="Arg">Degree</var> (int &gt; 1) := degree of tree <var class="Arg">Depth</var>/<var class="Arg">Level</var> (int &gt; 0) := level of tree <var class="Arg">Number</var> (int &gt; 0) := self-replicating group number <var class="Arg">Projection</var> (int &gt; 0) := groups whose projected image are the group number on the level above <var class="Arg">IsSubgroup</var> (int &gt; 0) := groups that are a subgroup of the group number provided <var class="Arg">Size</var> (int &gt;= degree^depth or int &gt; 1) := size of group <var class="Arg">MinimalGeneratingSet</var> (int &gt; 0) := size of the group's minimal generating set <var class="Arg">IsAbelian</var> (boolean) := all groups that are abelian if true, and not abelian if false</p>
 
 
 <div class="example"><pre>
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AllSRGroups(Degree, 2, Level, 4, IsAbelian, true);</span>
 [ SRGroup(2,4,2), SRGroup(2,4,9), SRGroup(2,4,12), SRGroup(2,4,14) ]
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Size(last[1]);</span>
-16
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AllSRGroups(Degree, 2, Level, 4, NumberOfGenerators, 4);</span>
-[ SRGroup(2,4,11), SRGroup(2,4,12), SRGroup(2,4,16), SRGroup(2,4,20), SRGroup(2,4,23), SRGroup(2,4,24),
- SRGroup(2,4,25), SRGroup(2,4,26), SRGroup(2,4,40), SRGroup(2,4,43), SRGroup(2,4,46), SRGroup(2,4,47),
- SRGroup(2,4,50), SRGroup(2,4,66), SRGroup(2,4,70), SRGroup(2,4,71), SRGroup(2,4,72), SRGroup(2,4,73),
- SRGroup(2,4,74), SRGroup(2,4,75), SRGroup(2,4,76), SRGroup(2,4,84), SRGroup(2,4,90), SRGroup(2,4,91),
- SRGroup(2,4,93), SRGroup(2,4,95), SRGroup(2,4,97), SRGroup(2,4,102), SRGroup(2,4,108) ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AllSRGroups(Degree,[2..5],Depth,[2..5],IsSubgroup,[1..5],Projection,[1..3]);</span>
+Restricting degrees to [ 2, 3 ]
+[ SRGroup(2,1,1), SRGroup(2,1,1), SRGroup(2,2,1), SRGroup(2,3,1),
+  SRGroup(2,3,2), SRGroup(2,4,1), SRGroup(2,4,1), SRGroup(2,4,2),
+  SRGroup(2,4,2), SRGroup(2,4,2), SRGroup(3,1,1), SRGroup(3,1,1),
+  SRGroup(3,1,1), SRGroup(3,1,1) ]
 </pre></div>
 
 <p><a id="X808A9F918166020B" name="X808A9F918166020B"></a></p>
 
-<h5>2.2-3 AllSRGroupsInfo</h5>
+<h5>2.2-5 AllSRGroupsInfo</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AllSRGroupsInfo</code>( <var class="Arg">Input1</var>, <var class="Arg">val1</var>, <var class="Arg">Input2</var>, <var class="Arg">val2</var>, <var class="Arg">...</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: Information about the self-replicating group(s) satisfying all of the provided input arguments in list form: [<var class="Arg">Generators</var>, <var class="Arg">Name</var>, <var class="Arg">Parent Name</var>, <var class="Arg">Children Name(s)</var>]. If the <var class="Arg">Position</var> input is provided, only the corresponding index of this list is returned.</p>
 
-<p>Inputs work the same as the main library search function <code class="func">AllSRGroups</code> (<a href="chap2_mj.html#X845F9F227B97062C"><span class="RefLink">2.2-2</span></a>), with one additional input: <var class="Arg">Position</var>.</p>
+<p>Inputs work the same as the main library search function <code class="func">AllSRGroups</code> (<a href="chap2_mj.html#X845F9F227B97062C"><span class="RefLink">2.2-4</span></a>), with one additional input: <var class="Arg">Position</var> (or <var class="Arg">Index</var>). Position/Index := (int in [1..4])</p>
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AllSRGroupsInfo(Degree, 2, Level, 3, IsAbelian, true);</span>
-[ [ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,1)", "SRGroup(2,2,1)", [ "SRGroup(2,4,1)", "SRGroup(2,4,2)" ] ],
-[ [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,4)", "SRGroup(2,2,2)", [ "SRGroup(2,4,8)", "SRGroup(2,4,9)", "SRGroup(2,4,10)" ] ], 
-[ [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,5)", "SRGroup(2,2,2)", [ "SRGroup(2,4,11)", "SRGroup(2,4,12)", "SRGroup(2,4,13)", "SRGroup(2,4,14)", "SRGroup(2,4,15)" ] ] ]
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AllSRGroupsInfo(Degree, 2, Level, 3, IsAbelian, true, Position, 1);</span>
-[ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ],
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AllSRGroupsInfo(Degree, 2, Depth, [2,3], IsAbelian, true);</span>
+[ [ [ (1,2)(3,4), (1,3,2,4) ], "SRGroup(2,2,1)", "SRGroup(2,1,1)",
+      [ "SRGroup(2,3,1)", "SRGroup(2,3,2)" ] ],
+  [ [ (1,2)(3,4), (1,3)(2,4) ], "SRGroup(2,2,2)", "SRGroup(2,1,1)",
+      [ "SRGroup(2,3,3)", "SRGroup(2,3,4)", "SRGroup(2,3,5)",
+          "SRGroup(2,3,6)" ] ],
+  [ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]
+        , "SRGroup(2,3,1)", "SRGroup(2,2,1)",
+      [ "SRGroup(2,4,1)", "SRGroup(2,4,2)" ] ],
+  [
+      [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8),
+          (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,4)",
+      "SRGroup(2,2,2)",
+      [ "SRGroup(2,4,8)", "SRGroup(2,4,9)", "SRGroup(2,4,10)" ] ],
+  [ [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8),
+          (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,5)",
+      "SRGroup(2,2,2)",
+      [ "SRGroup(2,4,11)", "SRGroup(2,4,12)", "SRGroup(2,4,13)",
+          "SRGroup(2,4,14)", "SRGroup(2,4,15)" ] ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AllSRGroupsInfo(Degree, 2, Level, [2,3], IsAbelian, true, Position, 1);</span>
+[ [ (1,2)(3,4), (1,3,2,4) ], [ (1,2)(3,4), (1,3)(2,4) ],
+  [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ],
   [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ],
   [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ] ]
 </pre></div>
 
 <p><a id="X7DC9A60E87E350AF" name="X7DC9A60E87E350AF"></a></p>
 
-<h5>2.2-4 CheckSRProjections</h5>
+<h5>2.2-6 CheckSRProjections</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CheckSRProjections</code>( <var class="Arg">k</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
-<p>Returns: Whether all of the self-replicating groups of degree <var class="Arg">k</var> and level <var class="Arg">n</var> project correctly to level <var class="Arg">n-1</var>.</p>
+<p>Returns: Whether all of the self-replicating groups of degree <var class="Arg">k</var> and level <var class="Arg">n</var> project correctly to level <var class="Arg">n-1</var>. This is mainly used after obtaining new data to check that it has been formatted correctly (see <code class="func">SRGroupFile</code> (<a href="chap2_mj.html#X78CBB505845FA80F"><span class="RefLink">2.3-6</span></a>)).</p>
 
 <p>The arguments of this function are a degree, <var class="Arg">k</var>, and a level, <var class="Arg">n</var>.</p>
 
@@ -282,22 +334,22 @@ All groups project correctly.
 
 <p><a id="X7BF255357B870D37" name="X7BF255357B870D37"></a></p>
 
-<h5>2.2-5 SRDegrees</h5>
+<h5>2.2-7 SRDegrees</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SRDegrees</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
-<p>Returns: All of the degrees currently stored in the <strong class="pkg">SRGroups</strong> library (duplicates included).</p>
+<p>Returns: All of the degrees currently stored in the <strong class="pkg">SRGroups</strong> library.</p>
 
 <p>There are no inputs to this function.</p>
 
 
 <div class="example"><pre>
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SRDegrees();</span>
-[ 2, 2, 2, 2, 3, 3, 3, 4, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ]
+[ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]
 </pre></div>
 
 <p><a id="X7CDBB45386329E21" name="X7CDBB45386329E21"></a></p>
 
-<h5>2.2-6 SRLevels</h5>
+<h5>2.2-8 SRLevels</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SRLevels</code>( <var class="Arg">k</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: All of the levels currently stored in the <strong class="pkg">SRGroups</strong> library for an input RegularRootedTreeGroupDegree, <var class="Arg">deg</var>.</p>
@@ -351,7 +403,7 @@ Group([ (1,2), (3,4), (1,3)(2,4) ])
 <h5>2.3-3 RemoveConjugates</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RemoveConjugates</code>( <var class="Arg">G</var>, <var class="Arg">grouplist</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
-<p>The arguments of this function are a group, <var class="Arg">G</var>, and a list of groups, grouplist. For every group H1 in grouplist, this function removes all conjugate groups H2 such that H2\in H1^G.</p>
+<p>The arguments of this function are a group, <var class="Arg">G</var>, and a list of groups, grouplist. For every group H1 in grouplist, this function removes all conjugate groups <span class="SimpleMath">\(H2\)</span> such that <span class="SimpleMath">\(H2\in H1^G\)</span>.</p>
 
 
 <div class="example"><pre>
@@ -384,16 +436,28 @@ Group([ (1,2), (3,4), (1,3)(2,4) ])
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">gap&gt; ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(2,2));</span>
-[ Group([ (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2), (3,4) ]),
-  Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
-  Group([ (1,3)(2,4)(7,8), (1,5)(2,6)(3,7)(4,8), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ])
-    , Group([ (1,5)(2,6)(3,7,4,8), (1,3)(2,4), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
-  Group([ (1,3)(2,4)(7,8), (1,5,3,7)(2,6,4,8), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
-  Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(7,8), (5,6)(7,8), (1,4,2,3)(5,7,6,8), (1,2)(3,4)(5,6)(7,8) ]),
-  Group([ (3,4)(5,7,6,8), (1,5)(2,6)(3,7)(4,8), (5,6)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ]),
-  Group([ (3,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,3,2,4)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]),
-  Group([ (1,5,2,6)(3,7,4,8), (3,4)(5,7)(6,8), (1,3,2,4)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]) ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(3,1));</span>
+[ Group([ (1,4,7)(2,5,8)(3,6,9), (1,4)(2,5)(3,6), (1,2,3), (1,2) ]),
+  Group([ (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9), (2,3)
+      (8,9), (7,9,8), (4,6,5), (1,3,2) ]),
+  Group([ (2,3)(4,7)(5,9)(6,8), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9),
+      (2,3)(8,9), (7,9,8), (4,6,5), (1,3,2) ]),
+  Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),
+      (7,9,8), (4,6,5), (1,3,2) ]),
+  Group([ (1,7)(2,8)(3,9)(5,6), (1,7,4)(2,9,5)(3,8,6), (1,2,3),
+      (7,8,9), (4,6,5)(7,8,9) ]),
+  Group([ (2,3)(4,7)(5,8)(6,9), (4,6,5)(7,9,8), (1,4,7)(2,5,9)
+      (3,6,8), (1,2,3)(4,5,6)(7,9,8) ]),
+  Group([ (2,3)(4,7)(5,8)(6,9), (1,7,6,2,9,4,3,8,5), (1,2,3)
+      (4,6,5), (1,2,3)(4,5,6)(7,9,8) ]),
+  Group([ (2,3)(4,7)(5,8)(6,9), (1,6,7,3,5,8,2,4,9), (1,3,2)(4,6,5)
+      (7,8,9) ]),
+  Group([ (2,3)(4,7)(5,8)(6,9), (1,7,4)(2,9,5)(3,8,6), (1,2,3)
+      (4,5,6)(7,9,8) ]),
+  Group([ (1,4)(2,5)(3,6), (1,7,4)(2,8,5)(3,9,6), (2,3)(5,6)(8,9),
+      (1,2,3)(4,5,6)(7,8,9), (4,5,6)(7,9,8) ]),
+  Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),
+      (1,3,2)(4,6,5)(7,9,8) ]) ]
 </pre></div>
 
 <p><a id="X78CBB505845FA80F" name="X78CBB505845FA80F"></a></p>

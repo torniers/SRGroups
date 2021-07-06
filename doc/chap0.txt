@@ -69,12 +69,14 @@
       2.1-8 MaximalExtension
       2.1-9 RepresentativeWithSufficientRigidAutomorphisms
     2.2 [33X[0;0YLibrary Functions[133X
-      2.2-1 SRGroup
-      2.2-2 AllSRGroups
-      2.2-3 AllSRGroupsInfo
-      2.2-4 CheckSRProjections
-      2.2-5 SRDegrees
-      2.2-6 SRLevels
+      2.2-1 SRGroupsAvailable
+      2.2-2 NrSRGroups
+      2.2-3 SRGroup
+      2.2-4 AllSRGroups
+      2.2-5 AllSRGroupsInfo
+      2.2-6 CheckSRProjections
+      2.2-7 SRDegrees
+      2.2-8 SRLevels
     2.3 [33X[0;0YPackage Functions[133X
       2.3-1 AutT
       2.3-2 BelowAction

@@ -1,0 +1,70 @@
+\begin{theindex}
+
+  \item \texttt  {AllSRGroups}, \hyperpage{8}
+  \item \texttt  {AllSRGroupsInfo}, \hyperpage{8}
+  \item \texttt  {AutT}, \hyperpage{9}
+
+  \indexspace
+
+  \item \texttt  {BelowAction}, \hyperpage{10}
+
+  \indexspace
+
+  \item \texttt  {CheckSRProjections}, \hyperpage{9}
+  \item \texttt  {CombineSRFiles}, \hyperpage{12}
+  \item \texttt  {Conjugacy}\-\texttt  {Class}\-\texttt  {Reps}\-\texttt  {Max}\-\texttt  {Self}\-\texttt  {Replicating}\-\texttt  {Subgroups}, 
+		\hyperpage{10}
+  \item \texttt  {Conjugacy}\-\texttt  {Class}\-\texttt  {Reps}\-\texttt  {Self}\-\texttt  {Replicating}\-\texttt  {Subgroups}\-\texttt  {With}\-\texttt  {Conjugate}\-\texttt  {Projection}, 
+		\hyperpage{10}
+
+  \indexspace
+
+  \item \texttt  {ExtendSRGroup}, \hyperpage{12}
+
+  \indexspace
+
+  \item \texttt  {HasSufficientRigidAutomorphisms}
+    \subitem for IsRegularRootedTreeGroup, \hyperpage{6}
+
+  \indexspace
+
+  \item \texttt  {IsRegularRootedTreeGroup}
+    \subitem for IsPermGroup, \hyperpage{5}
+  \item \texttt  {IsSelfReplicating}
+    \subitem for IsRegularRootedTreeGroup, \hyperpage{6}
+
+  \indexspace
+
+  \item \texttt  {MaximalExtension}
+    \subitem for IsRegularRootedTreeGroup, \hyperpage{6}
+
+  \indexspace
+
+  \item \texttt  {NrSRGroups}, \hyperpage{7}
+
+  \indexspace
+
+  \item \texttt  {ParentGroup}
+    \subitem for IsRegularRootedTreeGroup, \hyperpage{6}
+
+  \indexspace
+
+  \item \texttt  {RegularRootedTreeGroup}
+    \subitem for IsInt, IsInt, IsPermGroup, \hyperpage{5}
+  \item \texttt  {RegularRootedTreeGroupDegree}
+    \subitem for IsRegularRootedTreeGroup, \hyperpage{5}
+  \item \texttt  {RegularRootedTreeGroupDepth}
+    \subitem for IsRegularRootedTreeGroup, \hyperpage{5}
+  \item \texttt  {RemoveConjugates}, \hyperpage{10}
+  \item \texttt  {Representative}\-\texttt  {With}\-\texttt  {Sufficient}\-\texttt  {Rigid}\-\texttt  {Automorphisms}
+    \subitem for IsRegularRootedTreeGroup, \hyperpage{7}
+
+  \indexspace
+
+  \item \texttt  {SRDegrees}, \hyperpage{9}
+  \item \texttt  {SRGroup}, \hyperpage{7}
+  \item \texttt  {SRGroupFile}, \hyperpage{11}
+  \item \texttt  {SRGroupsAvailable}, \hyperpage{7}
+  \item \texttt  {SRLevels}, \hyperpage{9}
+
+\end{theindex}

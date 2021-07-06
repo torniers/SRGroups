@@ -395,8 +395,58 @@ diagrams at different depths. }
 {
   
 
-\subsection{\textcolor{Chapter }{SRGroup}}
+\subsection{\textcolor{Chapter }{SRGroupsAvailable}}
 \logpage{[ 2, 2, 1 ]}\nobreak
+\hyperdef{L}{X8500D0747EC1FCBF}{}
+{\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{SRGroupsAvailable({\mdseries\slshape k, n})\index{SRGroupsAvailable@\texttt{SRGroupsAvailable}}
+\label{SRGroupsAvailable}
+}\hfill{\scriptsize (function)}}\\
+\textbf{\indent Returns:\ }
+ Whether the self-replicating groups of degree, \mbox{\texttt{\mdseries\slshape k}}, and depth, \mbox{\texttt{\mdseries\slshape n}}, are available. 
+
+
+
+ The argument of this function is a degree, \mbox{\texttt{\mdseries\slshape k}}, and a depth, \mbox{\texttt{\mdseries\slshape n}}. }
+
+ 
+
+ 
+\begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
+  !gapprompt@gap>| !gapinput@SRGroupsAvailable(2,3);|
+  true
+  !gapprompt@gap>| !gapinput@SRGroupsAvailable(2,5);|
+  true
+  !gapprompt@gap>| !gapinput@SRGroupsAvailable(5,2);|
+  false
+\end{Verbatim}
+ 
+
+\subsection{\textcolor{Chapter }{NrSRGroups}}
+\logpage{[ 2, 2, 2 ]}\nobreak
+\hyperdef{L}{X81CEC3DC82CF99DE}{}
+{\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{NrSRGroups({\mdseries\slshape k, n})\index{NrSRGroups@\texttt{NrSRGroups}}
+\label{NrSRGroups}
+}\hfill{\scriptsize (function)}}\\
+\textbf{\indent Returns:\ }
+ The number of self-replicating groups of degree, \mbox{\texttt{\mdseries\slshape k}}, and depth, \mbox{\texttt{\mdseries\slshape n}}. 
+
+
+
+ The argument of this function is a degree, \mbox{\texttt{\mdseries\slshape k}}, and a depth, \mbox{\texttt{\mdseries\slshape n}}. }
+
+ 
+
+ 
+\begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
+  !gapprompt@gap>| !gapinput@NrSRGroups(2,3);|
+  15
+  !gapprompt@gap>| !gapinput@NrSRGroups(2,5);|
+  2436
+\end{Verbatim}
+ 
+
+\subsection{\textcolor{Chapter }{SRGroup}}
+\logpage{[ 2, 2, 3 ]}\nobreak
 \hyperdef{L}{X79B6921585FAFD67}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{SRGroup({\mdseries\slshape k, n, num})\index{SRGroup@\texttt{SRGroup}}
 \label{SRGroup}
@@ -420,36 +470,39 @@ diagrams at different depths. }
  
 
 \subsection{\textcolor{Chapter }{AllSRGroups}}
-\logpage{[ 2, 2, 2 ]}\nobreak
+\logpage{[ 2, 2, 4 ]}\nobreak
 \hyperdef{L}{X845F9F227B97062C}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{AllSRGroups({\mdseries\slshape Input1, val1, Input2, val2, ...})\index{AllSRGroups@\texttt{AllSRGroups}}
 \label{AllSRGroups}
 }\hfill{\scriptsize (function)}}\\
 \textbf{\indent Returns:\ }
- All of the self-replicating group(s) stored as objects satisfying all of the
-provided input arguments. 
+ A list of self-replicating groups matching the input arguments as
+RegularRootedTreeGroup objects. 
 
 
 
- Main library search function. Has several possible input arguments such as \mbox{\texttt{\mdseries\slshape Degree}}, \mbox{\texttt{\mdseries\slshape Level}} (or \mbox{\texttt{\mdseries\slshape Depth}}), \mbox{\texttt{\mdseries\slshape Number}}, \mbox{\texttt{\mdseries\slshape Projection}}, \mbox{\texttt{\mdseries\slshape Subgroup}}, \mbox{\texttt{\mdseries\slshape Size}}, \mbox{\texttt{\mdseries\slshape NumberOfGenerators}}, and \mbox{\texttt{\mdseries\slshape IsAbelian}}. Order of the inputs do not matter. }
+ Main library search function that acts analogously as the AllTransitiveGroups
+function from the \textsf{transgrp} library. Has several possible input arguments such as \mbox{\texttt{\mdseries\slshape Degree}}, \mbox{\texttt{\mdseries\slshape Depth}} (or \mbox{\texttt{\mdseries\slshape Level}}), \mbox{\texttt{\mdseries\slshape Number}}, \mbox{\texttt{\mdseries\slshape Projection}}, \mbox{\texttt{\mdseries\slshape IsSubgroup}}, \mbox{\texttt{\mdseries\slshape Size}}, \mbox{\texttt{\mdseries\slshape NumberOfGenerators}}, and \mbox{\texttt{\mdseries\slshape IsAbelian}}. Order of the arguments do not matter. List inputs and singular inputs can be
+provided. The argument definitions are as follows: \mbox{\texttt{\mdseries\slshape Degree}} (int {\textgreater} 1) := degree of tree \mbox{\texttt{\mdseries\slshape Depth}}/\mbox{\texttt{\mdseries\slshape Level}} (int {\textgreater} 0) := level of tree \mbox{\texttt{\mdseries\slshape Number}} (int {\textgreater} 0) := self-replicating group number \mbox{\texttt{\mdseries\slshape Projection}} (int {\textgreater} 0) := groups whose projected image are the group number on
+the level above \mbox{\texttt{\mdseries\slshape IsSubgroup}} (int {\textgreater} 0) := groups that are a subgroup of the group number
+provided \mbox{\texttt{\mdseries\slshape Size}} (int {\textgreater}= degree\texttt{\symbol{94}}depth or int {\textgreater} 1)
+:= size of group \mbox{\texttt{\mdseries\slshape MinimalGeneratingSet}} (int {\textgreater} 0) := size of the group's minimal generating set \mbox{\texttt{\mdseries\slshape IsAbelian}} (boolean) := all groups that are abelian if true, and not abelian if false }
 
  
 \begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
   !gapprompt@gap>| !gapinput@AllSRGroups(Degree, 2, Level, 4, IsAbelian, true);|
   [ SRGroup(2,4,2), SRGroup(2,4,9), SRGroup(2,4,12), SRGroup(2,4,14) ]
-  !gapprompt@gap>| !gapinput@Size(last[1]);|
-  16
-  !gapprompt@gap>| !gapinput@AllSRGroups(Degree, 2, Level, 4, NumberOfGenerators, 4);|
-  [ SRGroup(2,4,11), SRGroup(2,4,12), SRGroup(2,4,16), SRGroup(2,4,20), SRGroup(2,4,23), SRGroup(2,4,24),
-   SRGroup(2,4,25), SRGroup(2,4,26), SRGroup(2,4,40), SRGroup(2,4,43), SRGroup(2,4,46), SRGroup(2,4,47),
-   SRGroup(2,4,50), SRGroup(2,4,66), SRGroup(2,4,70), SRGroup(2,4,71), SRGroup(2,4,72), SRGroup(2,4,73),
-   SRGroup(2,4,74), SRGroup(2,4,75), SRGroup(2,4,76), SRGroup(2,4,84), SRGroup(2,4,90), SRGroup(2,4,91),
-   SRGroup(2,4,93), SRGroup(2,4,95), SRGroup(2,4,97), SRGroup(2,4,102), SRGroup(2,4,108) ]
+  !gapprompt@gap>| !gapinput@AllSRGroups(Degree,[2..5],Depth,[2..5],IsSubgroup,[1..5],Projection,[1..3]);|
+  Restricting degrees to [ 2, 3 ]
+  [ SRGroup(2,1,1), SRGroup(2,1,1), SRGroup(2,2,1), SRGroup(2,3,1),
+    SRGroup(2,3,2), SRGroup(2,4,1), SRGroup(2,4,1), SRGroup(2,4,2),
+    SRGroup(2,4,2), SRGroup(2,4,2), SRGroup(3,1,1), SRGroup(3,1,1),
+    SRGroup(3,1,1), SRGroup(3,1,1) ]
 \end{Verbatim}
  
 
 \subsection{\textcolor{Chapter }{AllSRGroupsInfo}}
-\logpage{[ 2, 2, 3 ]}\nobreak
+\logpage{[ 2, 2, 5 ]}\nobreak
 \hyperdef{L}{X808A9F918166020B}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{AllSRGroupsInfo({\mdseries\slshape Input1, val1, Input2, val2, ...})\index{AllSRGroupsInfo@\texttt{AllSRGroupsInfo}}
 \label{AllSRGroupsInfo}
@@ -460,29 +513,46 @@ input arguments in list form: [\mbox{\texttt{\mdseries\slshape Generators}}, \mb
 
 
 
- Inputs work the same as the main library search function \texttt{AllSRGroups} (\ref{AllSRGroups}), with one additional input: \mbox{\texttt{\mdseries\slshape Position}}. }
+ Inputs work the same as the main library search function \texttt{AllSRGroups} (\ref{AllSRGroups}), with one additional input: \mbox{\texttt{\mdseries\slshape Position}} (or \mbox{\texttt{\mdseries\slshape Index}}). Position/Index := (int in [1..4]) }
 
  
 \begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
-  !gapprompt@gap>| !gapinput@AllSRGroupsInfo(Degree, 2, Level, 3, IsAbelian, true);|
-  [ [ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,1)", "SRGroup(2,2,1)", [ "SRGroup(2,4,1)", "SRGroup(2,4,2)" ] ],
-  [ [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,4)", "SRGroup(2,2,2)", [ "SRGroup(2,4,8)", "SRGroup(2,4,9)", "SRGroup(2,4,10)" ] ], 
-  [ [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,5)", "SRGroup(2,2,2)", [ "SRGroup(2,4,11)", "SRGroup(2,4,12)", "SRGroup(2,4,13)", "SRGroup(2,4,14)", "SRGroup(2,4,15)" ] ] ]
-  !gapprompt@gap>| !gapinput@AllSRGroupsInfo(Degree, 2, Level, 3, IsAbelian, true, Position, 1);|
-  [ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ],
+  !gapprompt@gap>| !gapinput@AllSRGroupsInfo(Degree, 2, Depth, [2,3], IsAbelian, true);|
+  [ [ [ (1,2)(3,4), (1,3,2,4) ], "SRGroup(2,2,1)", "SRGroup(2,1,1)",
+        [ "SRGroup(2,3,1)", "SRGroup(2,3,2)" ] ],
+    [ [ (1,2)(3,4), (1,3)(2,4) ], "SRGroup(2,2,2)", "SRGroup(2,1,1)",
+        [ "SRGroup(2,3,3)", "SRGroup(2,3,4)", "SRGroup(2,3,5)",
+            "SRGroup(2,3,6)" ] ],
+    [ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]
+          , "SRGroup(2,3,1)", "SRGroup(2,2,1)",
+        [ "SRGroup(2,4,1)", "SRGroup(2,4,2)" ] ],
+    [
+        [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8),
+            (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,4)",
+        "SRGroup(2,2,2)",
+        [ "SRGroup(2,4,8)", "SRGroup(2,4,9)", "SRGroup(2,4,10)" ] ],
+    [ [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8),
+            (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,5)",
+        "SRGroup(2,2,2)",
+        [ "SRGroup(2,4,11)", "SRGroup(2,4,12)", "SRGroup(2,4,13)",
+            "SRGroup(2,4,14)", "SRGroup(2,4,15)" ] ] ]
+  !gapprompt@gap>| !gapinput@AllSRGroupsInfo(Degree, 2, Level, [2,3], IsAbelian, true, Position, 1);|
+  [ [ (1,2)(3,4), (1,3,2,4) ], [ (1,2)(3,4), (1,3)(2,4) ],
+    [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ],
     [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ],
     [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ] ]
 \end{Verbatim}
  
 
 \subsection{\textcolor{Chapter }{CheckSRProjections}}
-\logpage{[ 2, 2, 4 ]}\nobreak
+\logpage{[ 2, 2, 6 ]}\nobreak
 \hyperdef{L}{X7DC9A60E87E350AF}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{CheckSRProjections({\mdseries\slshape k, n})\index{CheckSRProjections@\texttt{CheckSRProjections}}
 \label{CheckSRProjections}
 }\hfill{\scriptsize (function)}}\\
 \textbf{\indent Returns:\ }
- Whether all of the self-replicating groups of degree \mbox{\texttt{\mdseries\slshape k}} and level \mbox{\texttt{\mdseries\slshape n}} project correctly to level \mbox{\texttt{\mdseries\slshape n-1}}. 
+ Whether all of the self-replicating groups of degree \mbox{\texttt{\mdseries\slshape k}} and level \mbox{\texttt{\mdseries\slshape n}} project correctly to level \mbox{\texttt{\mdseries\slshape n-1}}. This is mainly used after obtaining new data to check that it has been
+formatted correctly (see \texttt{SRGroupFile} (\ref{SRGroupFile})). 
 
 
 
@@ -496,13 +566,13 @@ input arguments in list form: [\mbox{\texttt{\mdseries\slshape Generators}}, \mb
  
 
 \subsection{\textcolor{Chapter }{SRDegrees}}
-\logpage{[ 2, 2, 5 ]}\nobreak
+\logpage{[ 2, 2, 7 ]}\nobreak
 \hyperdef{L}{X7BF255357B870D37}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{SRDegrees({\mdseries\slshape })\index{SRDegrees@\texttt{SRDegrees}}
 \label{SRDegrees}
 }\hfill{\scriptsize (function)}}\\
 \textbf{\indent Returns:\ }
- All of the degrees currently stored in the \textsf{SRGroups} library (duplicates included). 
+ All of the degrees currently stored in the \textsf{SRGroups} library. 
 
 
 
@@ -511,12 +581,12 @@ input arguments in list form: [\mbox{\texttt{\mdseries\slshape Generators}}, \mb
  
 \begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
   !gapprompt@gap>| !gapinput@SRDegrees();|
-  [ 2, 2, 2, 2, 3, 3, 3, 4, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ]
+  [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]
 \end{Verbatim}
  
 
 \subsection{\textcolor{Chapter }{SRLevels}}
-\logpage{[ 2, 2, 6 ]}\nobreak
+\logpage{[ 2, 2, 8 ]}\nobreak
 \hyperdef{L}{X7CDBB45386329E21}{}
 {\noindent\textcolor{FuncColor}{$\triangleright$\enspace\texttt{SRLevels({\mdseries\slshape k})\index{SRLevels@\texttt{SRLevels}}
 \label{SRLevels}
@@ -601,8 +671,7 @@ input arguments in list form: [\mbox{\texttt{\mdseries\slshape Generators}}, \mb
 
 
  The arguments of this function are a group, \mbox{\texttt{\mdseries\slshape G}}, and a list of groups, grouplist. For every group H1 in grouplist, this
-function removes all conjugate groups H2 such that H2\texttt{\symbol{92}}in
-H1\texttt{\symbol{94}}G. 
+function removes all conjugate groups $H2$ such that $H2\in H1^G$. 
 
  }
 
@@ -659,16 +728,28 @@ subgroups of the maximal extension of \mbox{\texttt{\mdseries\slshape G}}, \mbox
 
  
 \begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
-  !gapprompt@gap>| !gapinput@gap> ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(2,2));|
-  [ Group([ (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2), (3,4) ]),
-    Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
-    Group([ (1,3)(2,4)(7,8), (1,5)(2,6)(3,7)(4,8), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ])
-      , Group([ (1,5)(2,6)(3,7,4,8), (1,3)(2,4), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
-    Group([ (1,3)(2,4)(7,8), (1,5,3,7)(2,6,4,8), (3,4)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4), (1,2)(3,4)(5,6)(7,8) ]),
-    Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(7,8), (5,6)(7,8), (1,4,2,3)(5,7,6,8), (1,2)(3,4)(5,6)(7,8) ]),
-    Group([ (3,4)(5,7,6,8), (1,5)(2,6)(3,7)(4,8), (5,6)(7,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ]),
-    Group([ (3,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,3,2,4)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]),
-    Group([ (1,5,2,6)(3,7,4,8), (3,4)(5,7)(6,8), (1,3,2,4)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]) ]
+  !gapprompt@gap>| !gapinput@ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(3,1));|
+  [ Group([ (1,4,7)(2,5,8)(3,6,9), (1,4)(2,5)(3,6), (1,2,3), (1,2) ]),
+    Group([ (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9), (2,3)
+        (8,9), (7,9,8), (4,6,5), (1,3,2) ]),
+    Group([ (2,3)(4,7)(5,9)(6,8), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9),
+        (2,3)(8,9), (7,9,8), (4,6,5), (1,3,2) ]),
+    Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),
+        (7,9,8), (4,6,5), (1,3,2) ]),
+    Group([ (1,7)(2,8)(3,9)(5,6), (1,7,4)(2,9,5)(3,8,6), (1,2,3),
+        (7,8,9), (4,6,5)(7,8,9) ]),
+    Group([ (2,3)(4,7)(5,8)(6,9), (4,6,5)(7,9,8), (1,4,7)(2,5,9)
+        (3,6,8), (1,2,3)(4,5,6)(7,9,8) ]),
+    Group([ (2,3)(4,7)(5,8)(6,9), (1,7,6,2,9,4,3,8,5), (1,2,3)
+        (4,6,5), (1,2,3)(4,5,6)(7,9,8) ]),
+    Group([ (2,3)(4,7)(5,8)(6,9), (1,6,7,3,5,8,2,4,9), (1,3,2)(4,6,5)
+        (7,8,9) ]),
+    Group([ (2,3)(4,7)(5,8)(6,9), (1,7,4)(2,9,5)(3,8,6), (1,2,3)
+        (4,5,6)(7,9,8) ]),
+    Group([ (1,4)(2,5)(3,6), (1,7,4)(2,8,5)(3,9,6), (2,3)(5,6)(8,9),
+        (1,2,3)(4,5,6)(7,8,9), (4,5,6)(7,9,8) ]),
+    Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),
+        (1,3,2)(4,6,5)(7,9,8) ]) ]
 \end{Verbatim}
  
 
@@ -777,25 +858,6 @@ be used by the \texttt{SRGroupFile} (\ref{SRGroupFile}) function.
 
 \printindex
 
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
-\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \newpage
 \immediate\write\pagenrlog{["End"], \arabic{page}];}
