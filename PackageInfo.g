@@ -1,5 +1,5 @@
 #
-# SRGroups: Self-replicating groups of regular rooted trees.
+# SRGroups: Self-replicating groups of regular rooted trees
 #
 # This file contains package meta data. For additional information on
 # the meaning and correct usage of these fields, please consult the
@@ -9,14 +9,14 @@
 SetPackageInfo( rec(
 
 PackageName := "SRGroups",
-Subtitle := "Self-replicating groups of regular rooted trees.",
-Version := "0.1",
-Date := "17/12/2020", # dd/mm/yyyy format
-License := "GPL-2.0-or-later",
+Subtitle := "Self-replicating groups of regular rooted trees",
+Version := "0.9",
+Date := "06/07/2021", # dd/mm/yyyy format
+License := "GPL-3.0-or-later",
 
 Persons := [
   rec(
-    FirstNames := "Sam",
+    FirstNames := "Samuel",
     LastName := "King",
     #WWWHome := TODO,
     Email := "sam.king@newcastle.edu.au",
@@ -31,6 +31,17 @@ Persons := [
     LastName := "Shotter",
     #WWWHome := TODO,
     Email := "sarah.shotter@newcastle.edu.au",
+    IsAuthor := true,
+    IsMaintainer := false,
+    PostalAddress := "University Drive, Callaghan NSW 2308",
+    Place := "Newcastle, Australia",
+    Institution := "The University of Newcastle",
+  ),
+  rec(
+    FirstNames := "Stephan",
+    LastName := "Tornier",
+    WWWHome := "https://www.newcastle.edu.au/profile/stephan-tornier",
+    Email := "stephan.tornier@newcastle.edu.au",
     IsAuthor := true,
     IsMaintainer := true,
     PostalAddress := "University Drive, Callaghan NSW 2308",
@@ -71,11 +82,11 @@ PackageDoc := rec(
   HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
-  LongTitle := "Self-replicating groups of regular rooted trees.",
+  LongTitle := "Self-replicating groups of regular rooted trees",
 ),
 
 Dependencies := rec(
-  GAP := ">= 4.11",
+  GAP := ">= 4.10.2",
   NeededOtherPackages := [ ],
   SuggestedOtherPackages := [ ],
   ExternalConditions := [ ],
@@ -85,7 +96,7 @@ AvailabilityTest := ReturnTrue,
 
 TestFile := "tst/testall.g",
 
-#Keywords := [ "TODO" ],
+Keywords := [ "self-replicating group", "self-similar group", "finitely constrained group", "rooted tree", "regular rooted tree", "groups acting on trees", "locally compact group", "totally disconnected" ],
 
 ));
 

@@ -1,5 +1,5 @@
 #
-# SRGroups: Self-replicating groups of regular rooted trees.
+# SRGroups: Self-replicating groups of regular rooted trees
 #
 # Package Functions
 #
