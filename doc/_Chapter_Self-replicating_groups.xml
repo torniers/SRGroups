@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_Self-replicating_groups">
+<Heading>Self-replicating groups</Heading>
+
+ Introductory text. To do.
+<Section Label="Chapter_Self-replicating_groups_Section_Properties_and_Attributes">
+<Heading>Properties and Attributes</Heading>
+
+<ManSection>
+  <Prop Arg="G" Name="IsSelfReplicating" Label="for IsRegularRootedTreeGroup"/>
+ <Returns><C>true</C> or <C>false</C>
+</Returns>
+ <Description>
+ The argument of this property is any regular rooted tree group, <A>G</A>. Tests whether <A>G</A> satisfies the self-replicating conditions.
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+gap> IsSelfReplicating(AutT(2,3));
+true
+]]></Example>
+
+
+<ManSection>
+  <Prop Arg="G" Name="HasSufficientRigidAutomorphisms" Label="for IsRegularRootedTreeGroup"/>
+ <Returns><C>true</C> or <C>false</C>
+</Returns>
+ <Description>
+ The argument of this property is any regular rooted tree group, <A>G</A>. Tests whether <A>G</A> has sufficient rigid automorphisms.
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+gap> HasSufficientRigidAutomorphisms(AutT(2,3));
+true
+]]></Example>
+
+
+<ManSection>
+  <Attr Arg="G" Name="ParentGroup" Label="for IsRegularRootedTreeGroup"/>
+ <Returns> The image of <A>G</A> when projected onto the automorphism group of degree <A>k</A> and depth <A>n-1</A>.
+ 
+ 
+</Returns>
+ <Description>
+ The argument of this attribute is any regular rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>.
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+gap> G:=AutT(2,3); H:=AutT(2,2);
+Group([ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ])
+Group([ (1,2), (3,4), (1,3)(2,4) ])
+gap> ParentGroup(G);
+Group([ (1,2), (1,3)(2,4), (3,4) ])
+gap> H=last;
+true
+]]></Example>
+
+
+<ManSection>
+  <Attr Arg="G" Name="MaximalExtension" Label="for IsRegularRootedTreeGroup"/>
+ <Returns> The maximal extension of <A>G</A>, <A>M(G)</A>, that is a subgroup of the automorphism group of degree <A>k</A> and depth <A>n+1</A>.
+ 
+ 
+</Returns>
+ <Description>
+ The argument of this attribute is any regular rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>.
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+gap> G:=AutT(2,3); H:=AutT(2,4);
+Group([ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ])
+<permutation group of size 32768 with 15 generators>
+gap> MaximalExtension(G);
+<permutation group with 11 generators>
+gap> H=last;
+true
+]]></Example>
+
+
+<ManSection>
+  <Attr Arg="G" Name="RepresentativeWithSufficientRigidAutomorphisms" Label="for IsRegularRootedTreeGroup"/>
+ <Returns> A conjugate of <A>G</A> with sufficient rigid automorphisms.
+ 
+ 
+</Returns>
+ <Description>
+ The argument of this attribute is any regular rooted tree group, <A>G</A>. 
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+gap> 
+]]></Example>
+
+
+</Section>
+
+
+<Section Label="Chapter_Self-replicating_groups_Section_Examples">
+<Heading>Examples</Heading>
+
+ AutT. More to come.
+<ManSection>
+  <Func Arg="G" Name="ConjugacyClassRepsMaxSelfReplicatingSubgroups" />
+ <Returns> A list containing conjugacy class representatives of all maximal self-replicating subgroups of <A>G</A>.
+ 
+</Returns>
+ <Description>
+ The argument of this function is any regular rooted tree group, <A>G</A>
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+gap> ConjugacyClassRepsMaxSelfReplicatingSubgroups(AutT(2,2));
+[ Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]) ]
+]]></Example>
+
+
+<ManSection>
+  <Func Arg="G" Name="ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection" />
+ <Returns> A list containing conjugacy class representatives of all self-replicating subgroups of the maximal extension of <A>G</A>, <A>M(G)</A>.
+ 
+</Returns>
+ <Description>
+ The argument of this function is any regular rooted tree group, <A>G</A>
+<P/>
+ </Description>
+</ManSection>
+
+
+<P/>
+<Example><![CDATA[
+gap> ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(3,1));
+[ Group([ (1,4,7)(2,5,8)(3,6,9), (1,4)(2,5)(3,6), (1,2,3), (1,2) ]),
+  Group([ (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9), (2,3)
+      (8,9), (7,9,8), (4,6,5), (1,3,2) ]),
+  Group([ (2,3)(4,7)(5,9)(6,8), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9),
+      (2,3)(8,9), (7,9,8), (4,6,5), (1,3,2) ]),
+  Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),
+      (7,9,8), (4,6,5), (1,3,2) ]),
+  Group([ (1,7)(2,8)(3,9)(5,6), (1,7,4)(2,9,5)(3,8,6), (1,2,3),
+      (7,8,9), (4,6,5)(7,8,9) ]),
+  Group([ (2,3)(4,7)(5,8)(6,9), (4,6,5)(7,9,8), (1,4,7)(2,5,9)
+      (3,6,8), (1,2,3)(4,5,6)(7,9,8) ]),
+  Group([ (2,3)(4,7)(5,8)(6,9), (1,7,6,2,9,4,3,8,5), (1,2,3)
+      (4,6,5), (1,2,3)(4,5,6)(7,9,8) ]),
+  Group([ (2,3)(4,7)(5,8)(6,9), (1,6,7,3,5,8,2,4,9), (1,3,2)(4,6,5)
+      (7,8,9) ]),
+  Group([ (2,3)(4,7)(5,8)(6,9), (1,7,4)(2,9,5)(3,8,6), (1,2,3)
+      (4,5,6)(7,9,8) ]),
+  Group([ (1,4)(2,5)(3,6), (1,7,4)(2,8,5)(3,9,6), (2,3)(5,6)(8,9),
+      (1,2,3)(4,5,6)(7,8,9), (4,5,6)(7,9,8) ]),
+  Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),
+      (1,3,2)(4,6,5)(7,9,8) ]) ]
+]]></Example>
+
+
+</Section>
+
+
+</Chapter>
+

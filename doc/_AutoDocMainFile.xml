@@ -2,4 +2,6 @@
 
 <!-- This is an automatically generated file. -->
 <#Include SYSTEM "_Chapter_Introduction.xml">
-<#Include SYSTEM "_Chapter_Functionality.xml">
+<#Include SYSTEM "_Chapter_Preliminaries.xml">
+<#Include SYSTEM "_Chapter_Self-replicating_groups.xml">
+<#Include SYSTEM "_Chapter_The_library.xml">

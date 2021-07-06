@@ -1,0 +1,134 @@
+  
+  [1X3 [33X[0;0YSelf-replicating groups[133X[101X
+  
+  [33X[0;0YIntroductory text. To do.[133X
+  
+  
+  [1X3.1 [33X[0;0YProperties and Attributes[133X[101X
+  
+  [1X3.1-1 IsSelfReplicating[101X
+  
+  [33X[1;0Y[29X[2XIsSelfReplicating[102X( [3XG[103X ) [32X property[133X
+  [6XReturns:[106X  [33X[0;10Y[10Xtrue[110X or [10Xfalse[110X[133X
+  
+  [33X[0;0YThe  argument  of  this  property is any regular rooted tree group, [3XG[103X. Tests
+  whether [3XG[103X satisfies the self-replicating conditions.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XIsSelfReplicating(AutT(2,3));[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X3.1-2 HasSufficientRigidAutomorphisms[101X
+  
+  [33X[1;0Y[29X[2XHasSufficientRigidAutomorphisms[102X( [3XG[103X ) [32X property[133X
+  [6XReturns:[106X  [33X[0;10Y[10Xtrue[110X or [10Xfalse[110X[133X
+  
+  [33X[0;0YThe  argument  of  this  property is any regular rooted tree group, [3XG[103X. Tests
+  whether [3XG[103X has sufficient rigid automorphisms.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XHasSufficientRigidAutomorphisms(AutT(2,3));[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X3.1-3 ParentGroup[101X
+  
+  [33X[1;0Y[29X[2XParentGroup[102X( [3XG[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10YThe  image  of  [3XG[103X  when  projected  onto the automorphism group of
+            degree [3Xk[103X and depth [3Xn-1[103X.[133X
+  
+  [33X[0;0YThe  argument  of  this  attribute  is  any regular rooted tree group, [3XG[103X, of
+  degree [3Xk[103X and depth [3Xn[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XG:=AutT(2,3); H:=AutT(2,2);[127X[104X
+    [4X[28XGroup([ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ])[128X[104X
+    [4X[28XGroup([ (1,2), (3,4), (1,3)(2,4) ])[128X[104X
+    [4X[25Xgap>[125X [27XParentGroup(G);[127X[104X
+    [4X[28XGroup([ (1,2), (1,3)(2,4), (3,4) ])[128X[104X
+    [4X[25Xgap>[125X [27XH=last;[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X3.1-4 MaximalExtension[101X
+  
+  [33X[1;0Y[29X[2XMaximalExtension[102X( [3XG[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10YThe  maximal  extension  of  [3XG[103X,  [3XM(G)[103X,  that  is a subgroup of the
+            automorphism group of degree [3Xk[103X and depth [3Xn+1[103X.[133X
+  
+  [33X[0;0YThe  argument  of  this  attribute  is  any regular rooted tree group, [3XG[103X, of
+  degree [3Xk[103X and depth [3Xn[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XG:=AutT(2,3); H:=AutT(2,4);[127X[104X
+    [4X[28XGroup([ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ])[128X[104X
+    [4X[28X<permutation group of size 32768 with 15 generators>[128X[104X
+    [4X[25Xgap>[125X [27XMaximalExtension(G);[127X[104X
+    [4X[28X<permutation group with 11 generators>[128X[104X
+    [4X[25Xgap>[125X [27XH=last;[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X3.1-5 RepresentativeWithSufficientRigidAutomorphisms[101X
+  
+  [33X[1;0Y[29X[2XRepresentativeWithSufficientRigidAutomorphisms[102X( [3XG[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10YA conjugate of [3XG[103X with sufficient rigid automorphisms.[133X
+  
+  [33X[0;0YThe argument of this attribute is any regular rooted tree group, [3XG[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27X[127X[104X
+  [4X[32X[104X
+  
+  
+  [1X3.2 [33X[0;0YExamples[133X[101X
+  
+  [33X[0;0YAutT. More to come.[133X
+  
+  [1X3.2-1 ConjugacyClassRepsMaxSelfReplicatingSubgroups[101X
+  
+  [33X[1;0Y[29X[2XConjugacyClassRepsMaxSelfReplicatingSubgroups[102X( [3XG[103X ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10YA  list  containing conjugacy class representatives of all maximal
+            self-replicating subgroups of [3XG[103X.[133X
+  
+  [33X[0;0YThe argument of this function is any regular rooted tree group, [3XG[103X[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XConjugacyClassRepsMaxSelfReplicatingSubgroups(AutT(2,2));[127X[104X
+    [4X[28X[ Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]) ][128X[104X
+  [4X[32X[104X
+  
+  [1X3.2-2 ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection[101X
+  
+  [33X[1;0Y[29X[2XConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection[102X( [3XG[103X ) [32X function[133X
+  [6XReturns:[106X  [33X[0;10YA   list   containing   conjugacy  class  representatives  of  all
+            self-replicating subgroups of the maximal extension of [3XG[103X, [3XM(G)[103X.[133X
+  
+  [33X[0;0YThe argument of this function is any regular rooted tree group, [3XG[103X[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(3,1));[127X[104X
+    [4X[28X[ Group([ (1,4,7)(2,5,8)(3,6,9), (1,4)(2,5)(3,6), (1,2,3), (1,2) ]),[128X[104X
+    [4X[28X  Group([ (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9), (2,3)[128X[104X
+    [4X[28X      (8,9), (7,9,8), (4,6,5), (1,3,2) ]),[128X[104X
+    [4X[28X  Group([ (2,3)(4,7)(5,9)(6,8), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9),[128X[104X
+    [4X[28X      (2,3)(8,9), (7,9,8), (4,6,5), (1,3,2) ]),[128X[104X
+    [4X[28X  Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),[128X[104X
+    [4X[28X      (7,9,8), (4,6,5), (1,3,2) ]),[128X[104X
+    [4X[28X  Group([ (1,7)(2,8)(3,9)(5,6), (1,7,4)(2,9,5)(3,8,6), (1,2,3),[128X[104X
+    [4X[28X      (7,8,9), (4,6,5)(7,8,9) ]),[128X[104X
+    [4X[28X  Group([ (2,3)(4,7)(5,8)(6,9), (4,6,5)(7,9,8), (1,4,7)(2,5,9)[128X[104X
+    [4X[28X      (3,6,8), (1,2,3)(4,5,6)(7,9,8) ]),[128X[104X
+    [4X[28X  Group([ (2,3)(4,7)(5,8)(6,9), (1,7,6,2,9,4,3,8,5), (1,2,3)[128X[104X
+    [4X[28X      (4,6,5), (1,2,3)(4,5,6)(7,9,8) ]),[128X[104X
+    [4X[28X  Group([ (2,3)(4,7)(5,8)(6,9), (1,6,7,3,5,8,2,4,9), (1,3,2)(4,6,5)[128X[104X
+    [4X[28X      (7,8,9) ]),[128X[104X
+    [4X[28X  Group([ (2,3)(4,7)(5,8)(6,9), (1,7,4)(2,9,5)(3,8,6), (1,2,3)[128X[104X
+    [4X[28X      (4,5,6)(7,9,8) ]),[128X[104X
+    [4X[28X  Group([ (1,4)(2,5)(3,6), (1,7,4)(2,8,5)(3,9,6), (2,3)(5,6)(8,9),[128X[104X
+    [4X[28X      (1,2,3)(4,5,6)(7,8,9), (4,5,6)(7,9,8) ]),[128X[104X
+    [4X[28X  Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),[128X[104X
+    [4X[28X      (1,3,2)(4,6,5)(7,9,8) ]) ][128X[104X
+  [4X[32X[104X
+  

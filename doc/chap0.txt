@@ -66,35 +66,40 @@
   
   1 [33X[0;0YIntroduction[133X
     1.1 [33X[0;0YPurpose[133X
-  2 [33X[0;0YFunctionality[133X
-    2.1 [33X[0;0YMethods[133X
+  2 [33X[0;0YPreliminaries[133X
+    2.1 [33X[0;0YRegular rooted tree groups[133X
       2.1-1 IsRegularRootedTreeGroup
       2.1-2 RegularRootedTreeGroupDegree
       2.1-3 RegularRootedTreeGroupDepth
       2.1-4 RegularRootedTreeGroup
-      2.1-5 IsSelfReplicating
-      2.1-6 HasSufficientRigidAutomorphisms
-      2.1-7 ParentGroup
-      2.1-8 MaximalExtension
-      2.1-9 RepresentativeWithSufficientRigidAutomorphisms
-    2.2 [33X[0;0YLibrary Functions[133X
-      2.2-1 SRGroupsAvailable
-      2.2-2 NrSRGroups
-      2.2-3 SRGroup
-      2.2-4 AllSRGroups
-      2.2-5 AllSRGroupsInfo
-      2.2-6 CheckSRProjections
-      2.2-7 SRDegrees
-      2.2-8 SRLevels
-    2.3 [33X[0;0YPackage Functions[133X
-      2.3-1 AutT
-      2.3-2 BelowAction
-      2.3-3 RemoveConjugates
-      2.3-4 ConjugacyClassRepsMaxSelfReplicatingSubgroups
-      2.3-5 ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection
-      2.3-6 SRGroupFile
-      2.3-7 ExtendSRGroup
-      2.3-8 CombineSRFiles
+      2.1-5 AutT
+    2.2 [33X[0;0YAuxiliary functions[133X
+      2.2-1 BelowAction
+      2.2-2 RemoveConjugates
+  3 [33X[0;0YSelf-replicating groups[133X
+    3.1 [33X[0;0YProperties and Attributes[133X
+      3.1-1 IsSelfReplicating
+      3.1-2 HasSufficientRigidAutomorphisms
+      3.1-3 ParentGroup
+      3.1-4 MaximalExtension
+      3.1-5 RepresentativeWithSufficientRigidAutomorphisms
+    3.2 [33X[0;0YExamples[133X
+      3.2-1 ConjugacyClassRepsMaxSelfReplicatingSubgroups
+      3.2-2 ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection
+  4 [33X[0;0YThe library[133X
+    4.1 [33X[0;0YUsing the library[133X
+      4.1-1 SRGroupsAvailable
+      4.1-2 NrSRGroups
+      4.1-3 SRGroup
+      4.1-4 AllSRGroups
+      4.1-5 AllSRGroupsInfo
+      4.1-6 CheckSRProjections
+      4.1-7 SRDegrees
+      4.1-8 SRLevels
+    4.2 [33X[0;0YExtending the library[133X
+      4.2-1 SRGroupFile
+      4.2-2 ExtendSRGroup
+      4.2-3 CombineSRFiles
   
   
   [32X

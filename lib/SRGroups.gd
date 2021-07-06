@@ -1,4 +1,5 @@
 #! @Title SRGroups
+
 ##################################################################################################################
 #! @Abstract
 ##################################################################################################################
@@ -47,6 +48,10 @@
 
 #! Introductory text. To do.
 
+####################################################################################################################
+#! @Section Regular rooted tree groups
+####################################################################################################################
+
 #! @Description
 #! The argument of this category is any permutation group, <A>G</A>. Checks whether <A>G</A> is a regular rooted tree group.
 #! @Arguments G
@@ -88,6 +93,24 @@ DeclareAttribute("RegularRootedTreeGroupDepth", IsRegularRootedTreeGroup);
 DeclareOperation("RegularRootedTreeGroup", [IsInt, IsInt, IsPermGroup]);
 
 ####################################################################################################################
+
+#! @Description
+#! The arguments of this function are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
+#!
+#! @Returns
+#! The regular rooted tree group $\mathrm{Aut}(T_{k,n})$ as a permutation group of the $k^{n}$ leaves of $T_{k,n}$.
+#!
+#! @Arguments k,n
+DeclareGlobalFunction( "AutT" );
+#!
+#! @BeginExampleSession
+#! gap> G:=AutT(2,2);
+#! Group([ (1,2), (3,4), (1,3)(2,4) ])
+#! gap> Size(G);
+#! 8
+#! @EndExampleSession
+
+####################################################################################################################
 #! @Section Auxiliary functions
 ####################################################################################################################
 
@@ -105,6 +128,7 @@ DeclareGlobalFunction( "BelowAction" );
 #! (1,2)
 #! @EndExampleSession
 
+####################################################################################################################
 
 #! @Description
 #! The arguments of this function are a group, <A>G</A>, and a list of groups, grouplist. For every group H1 in grouplist, this function removes all conjugate groups $H2$ such that $H2\in H1^G$.
@@ -125,28 +149,6 @@ DeclareGlobalFunction( "RemoveConjugates" );
 #! Introductory text. To do.
 
 ####################################################################################################################
-#! @Section Examples
-####################################################################################################################
-
-#! AutT, more to come.
-
-#! @Description
-#! The arguments of this function are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
-#!
-#! @Returns
-#! The regular rooted tree group $\mathrm{Aut}(T_{k,n})$ as a permutation group of the $k^{n}$ leaves of $T_{k,n}$.
-#!
-#! @Arguments k,n
-DeclareGlobalFunction( "AutT" );
-#!
-#! @BeginExampleSession
-#! gap> G:=AutT(2,2);
-#! Group([ (1,2), (3,4), (1,3)(2,4) ])
-#! gap> Size(G);
-#! 8
-#! @EndExampleSession
-
-####################################################################################################################
 #! @Section Properties and Attributes 
 ####################################################################################################################
 
@@ -162,6 +164,7 @@ DeclareProperty("IsSelfReplicating", IsRegularRootedTreeGroup);
 #! true
 #! @EndExampleSession
 
+####################################################################################################################
 
 #! @Description
 #! The argument of this property is any regular rooted tree group, <A>G</A>. Tests whether <A>G</A> has sufficient rigid automorphisms.
@@ -175,6 +178,7 @@ DeclareProperty("HasSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
 #! true
 #! @EndExampleSession
 
+####################################################################################################################
 
 # parent group (projection), maximal extension and representative with sufficient rigid automorphisms also become attributes
 #! @Description
@@ -196,6 +200,7 @@ DeclareAttribute("ParentGroup", IsRegularRootedTreeGroup);
 #! true
 #! @EndExampleSession
 
+####################################################################################################################
 
 #! @Description
 #! The argument of this attribute is any regular rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>.
@@ -216,6 +221,7 @@ DeclareAttribute("MaximalExtension", IsRegularRootedTreeGroup);
 #! true
 #! @EndExampleSession
 
+####################################################################################################################
 
 #! @Description
 #! The argument of this attribute is any regular rooted tree group, <A>G</A>. 
@@ -230,10 +236,75 @@ DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRoot
 #! gap> 
 #! @EndExampleSession
 
+####################################################################################################################
+#! @Section Examples
+####################################################################################################################
+
+#! AutT. More to come.
+
+#! @Description
+#! The argument of this function is any regular rooted tree group, <A>G</A>
+#!
+#! @Returns
+#! A list containing conjugacy class representatives of all maximal self-replicating subgroups of <A>G</A>.
+#!
+#! @Arguments G
+DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
+#!
+#! @BeginExampleSession
+#! gap> ConjugacyClassRepsMaxSelfReplicatingSubgroups(AutT(2,2));
+#! [ Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]) ]
+#! @EndExampleSession
 
 ####################################################################################################################
-#! @Section Library Functions
+
+#! @Description
+#! The argument of this function is any regular rooted tree group, <A>G</A>
+#!
+#! @Returns
+#! A list containing conjugacy class representatives of all self-replicating subgroups of the maximal extension of <A>G</A>, <A>M(G)</A>.
+#!
+#! @Arguments G
+DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection" );
+#!
+#! @BeginExampleSession
+#! gap> ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(3,1));
+#! [ Group([ (1,4,7)(2,5,8)(3,6,9), (1,4)(2,5)(3,6), (1,2,3), (1,2) ]),
+#!   Group([ (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9), (2,3)
+#!       (8,9), (7,9,8), (4,6,5), (1,3,2) ]),
+#!   Group([ (2,3)(4,7)(5,9)(6,8), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9),
+#!       (2,3)(8,9), (7,9,8), (4,6,5), (1,3,2) ]),
+#!   Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),
+#!       (7,9,8), (4,6,5), (1,3,2) ]),
+#!   Group([ (1,7)(2,8)(3,9)(5,6), (1,7,4)(2,9,5)(3,8,6), (1,2,3),
+#!       (7,8,9), (4,6,5)(7,8,9) ]),
+#!   Group([ (2,3)(4,7)(5,8)(6,9), (4,6,5)(7,9,8), (1,4,7)(2,5,9)
+#!       (3,6,8), (1,2,3)(4,5,6)(7,9,8) ]),
+#!   Group([ (2,3)(4,7)(5,8)(6,9), (1,7,6,2,9,4,3,8,5), (1,2,3)
+#!       (4,6,5), (1,2,3)(4,5,6)(7,9,8) ]),
+#!   Group([ (2,3)(4,7)(5,8)(6,9), (1,6,7,3,5,8,2,4,9), (1,3,2)(4,6,5)
+#!       (7,8,9) ]),
+#!   Group([ (2,3)(4,7)(5,8)(6,9), (1,7,4)(2,9,5)(3,8,6), (1,2,3)
+#!       (4,5,6)(7,9,8) ]),
+#!   Group([ (1,4)(2,5)(3,6), (1,7,4)(2,8,5)(3,9,6), (2,3)(5,6)(8,9),
+#!       (1,2,3)(4,5,6)(7,8,9), (4,5,6)(7,9,8) ]),
+#!   Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),
+#!       (1,3,2)(4,6,5)(7,9,8) ]) ]
+#! @EndExampleSession
+
 ####################################################################################################################
+####################################################################################################################
+#! @Chapter The library
+####################################################################################################################
+####################################################################################################################
+
+#! Introductory text. To do.
+
+####################################################################################################################
+#! @Section Using the library
+####################################################################################################################
+
+#! Introductory text. To do. Similarities with transitive groups library.
 
 DeclareGlobalFunction( "GetSRData" );
 
@@ -399,65 +470,8 @@ DeclareGlobalFunction( "SRLevels" );
 
 
 ####################################################################################################################
-#! @Section Package Functions
+#! @Section Extending the library
 ####################################################################################################################
-
-
-
-
-
-
-
-
-#! @Description
-#! The argument of this function is any regular rooted tree group, <A>G</A>
-#!
-#! @Returns
-#! A list containing conjugacy class representatives of all maximal self-replicating subgroups of <A>G</A>.
-#!
-#! @Arguments G
-DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
-#!
-#! @BeginExampleSession
-#! gap> ConjugacyClassRepsMaxSelfReplicatingSubgroups(AutT(2,2));
-#! [ Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]) ]
-#! @EndExampleSession
-
-
-#! @Description
-#! The argument of this function is any regular rooted tree group, <A>G</A>
-#!
-#! @Returns
-#! A list containing conjugacy class representatives of all self-replicating subgroups of the maximal extension of <A>G</A>, <A>M(G)</A>.
-#!
-#! @Arguments G
-DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection" );
-#!
-#! @BeginExampleSession
-#! gap> ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(3,1));
-#! [ Group([ (1,4,7)(2,5,8)(3,6,9), (1,4)(2,5)(3,6), (1,2,3), (1,2) ]),
-#!   Group([ (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9), (2,3)
-#!       (8,9), (7,9,8), (4,6,5), (1,3,2) ]),
-#!   Group([ (2,3)(4,7)(5,9)(6,8), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9),
-#!       (2,3)(8,9), (7,9,8), (4,6,5), (1,3,2) ]),
-#!   Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),
-#!       (7,9,8), (4,6,5), (1,3,2) ]),
-#!   Group([ (1,7)(2,8)(3,9)(5,6), (1,7,4)(2,9,5)(3,8,6), (1,2,3),
-#!       (7,8,9), (4,6,5)(7,8,9) ]),
-#!   Group([ (2,3)(4,7)(5,8)(6,9), (4,6,5)(7,9,8), (1,4,7)(2,5,9)
-#!       (3,6,8), (1,2,3)(4,5,6)(7,9,8) ]),
-#!   Group([ (2,3)(4,7)(5,8)(6,9), (1,7,6,2,9,4,3,8,5), (1,2,3)
-#!       (4,6,5), (1,2,3)(4,5,6)(7,9,8) ]),
-#!   Group([ (2,3)(4,7)(5,8)(6,9), (1,6,7,3,5,8,2,4,9), (1,3,2)(4,6,5)
-#!       (7,8,9) ]),
-#!   Group([ (2,3)(4,7)(5,8)(6,9), (1,7,4)(2,9,5)(3,8,6), (1,2,3)
-#!       (4,5,6)(7,9,8) ]),
-#!   Group([ (1,4)(2,5)(3,6), (1,7,4)(2,8,5)(3,9,6), (2,3)(5,6)(8,9),
-#!       (1,2,3)(4,5,6)(7,8,9), (4,5,6)(7,9,8) ]),
-#!   Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),
-#!       (1,3,2)(4,6,5)(7,9,8) ]) ]
-#! @EndExampleSession
-
 
 DeclareGlobalFunction( "FormatSRFile" );
 
@@ -516,3 +530,4 @@ DeclareGlobalFunction( "NumberExtensionsUnformatted" );
 
 
 DeclareSynonym( "Level" , "Depth" );
+
