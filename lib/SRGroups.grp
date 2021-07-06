@@ -371,7 +371,7 @@ InstallGlobalFunction(CheckSRGroupsInputs,function(arg)
 end);
 
 InstallGlobalFunction(SRGroupsInfo,function(arg)
-	local dir, fnam, G, list, listTemp, i, j, k, lastNonZero, argFunctions, argMinimums, out, max, maxArgLength, listGroups, booleanList;
+	local dir, fnam, G, list, listTemp, i, j, k, n, lastNonZero, argFunctions, argMinimums, out, max, maxArgLength, listGroups, booleanList;
 	
 	if IsEmpty(SRDegrees()) then
 		Error("no data is available");
@@ -529,11 +529,15 @@ InstallGlobalFunction(SRGroupsInfo,function(arg)
 			fi;
 		od;
 		for i in [1..Length(list)] do
-			booleanList:=ShallowCopy(listGroups);
-			Apply(booleanList,H->(IsSubgroup(Group(H[1]),Group(list[i][1])) and Group(H[1])<>Group(list[i][1])));
-			if true in booleanList then
-				Add(listTemp,list[i]);
-			fi;
+			k:=EvalString(SplitString(SplitString(list[i][2],",")[1],"(")[2]);
+			n:=EvalString(SplitString(list[i][2],",")[2]);
+			for j in [1..Length(listGroups)] do
+				if k=EvalString(SplitString(SplitString(listGroups[j][2],",")[1],"(")[2]) and n=EvalString(SplitString(listGroups[j][2],",")[2]) then
+					if IsSubgroupOfConjugate(AutT(k,n),Group(listGroups[j][1]),Group(list[i][1])) then
+						Add(listTemp,list[i]);
+					fi;
+				fi;
+			od;
 		od;
 		list:=listTemp;
 		if lastNonZero=5 then
@@ -639,8 +643,8 @@ InstallGlobalFunction(AllSRGroupsInfo,function(arg)
 		Add(inputArgs,0);
 	fi;
 	
-	if IsInt(Position(arg,IsSubgroup)) then
-		Add(inputArgs,arg[Position(arg,IsSubgroup)+1]);
+	if IsInt(Position(arg,IsSubgroupOfConjugate)) then
+		Add(inputArgs,arg[Position(arg,IsSubgroupOfConjugate)+1]);
 	else
 		Add(inputArgs,0);
 	fi;
@@ -682,9 +686,9 @@ InstallGlobalFunction(AllSRGroups,function(arg)
 	
 	groupList:=CallFuncList(AllSRGroupsInfo,arg);
 	groupNames:=ShallowCopy(groupList);
-	Apply(groupNames,G->G[3]);
+	Apply(groupNames,G->G[2]);
 	
-	Apply(groupList,G->RegularRootedTreeGroup( EvalString(SplitString(SplitString(G[3],",")[1],"(")[2]),EvalString(SplitString(G[3],",")[2]),Group(G[1])));
+	Apply(groupList,G->RegularRootedTreeGroup( EvalString(SplitString(SplitString(G[2],",")[1],"(")[2]),EvalString(SplitString(G[2],",")[2]),Group(G[1])));
 	for i in [1..Length(groupList)] do
 		SetName(groupList[i],groupNames[i]);
 	od;
@@ -768,4 +772,23 @@ InstallGlobalFunction(UnbindVariables, function(arg)
 	od;
 	
 	return;
+end);
+
+
+InstallGlobalFunction(IsSubgroupOfConjugate,function(pr,G,H)
+	local Hcon;
+	
+	if not IsSubgroup(pr,G) then return false; fi;
+	
+	if IsSubgroup(G,H) then
+		return true;
+	else
+		for Hcon in H^pr do
+			if IsSubgroup(G,Hcon) then
+				return true;
+			fi;
+		od;
+	fi;
+	
+	return false;
 end);

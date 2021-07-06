@@ -529,5 +529,7 @@ DeclareGlobalFunction( "ReorderSRFiles" );
 DeclareGlobalFunction( "NumberExtensionsUnformatted" );
 
 
-DeclareSynonym( "Level" , "Depth" );
+DeclareGlobalFunction( "IsSubgroupOfConjugate" );
 
+
+DeclareSynonym( "Level" , "Depth" );
