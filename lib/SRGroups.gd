@@ -18,11 +18,11 @@
 
 #! DE210100180, FL170100032.
 
-####################################################################################################################
-####################################################################################################################
+##################################################################################################################
+##################################################################################################################
 #! @Chapter Introduction
-####################################################################################################################
-####################################################################################################################
+##################################################################################################################
+##################################################################################################################
 
 #! Let $G$ be a subgroup of the regular rooted k-tree, $\textrm{Aut}(T_{k})$ with its group action, $\alpha$, defined as $\alpha(g,x)=g(x)$, where $g\in G$ are the automorphisms of $G$ and $x\in X$ the vertices of $T_{k}$. Let $\textrm{stab}_{G}(0)=\{g\in G : \alpha(g,0) = 0\}$, and $T_0\subset T_{k}$ be the set of all vertices below and including the vertex 0. Additonally, let $\varphi_0 : \textrm{stab}_G(0)\rightarrow G$ be a group homomorphism with the mapping $g\mapsto g|_{T_0}$. Then $G$ is called self-replicating if and only if the following two conditions, $\mathcal{R}_k$, are satisfied: $G$ is vertex transitive on level 1 of $T_{k}$, and $\varphi_0\left(\textrm{stab}_{G}(0)\right)=G$.
 #!
@@ -34,93 +34,87 @@
 #!
 #! First, this package acts as a library for searching currently known self-replicating groups for varying degrees and levels of regular rooted trees. This package also acts as a regular GAP package with functions that allow the expansion of the library and addition of attributes/properties relevant to self-replicating groups. Additional functions also exist in this package that are compatible with GraphViz, to plot diagrams of the extension behaviour of these self-replicating groups and their corresponding Hasse diagrams at different depths.
 
-####################################################################################################################
+##################################################################################################################
 #! @Section Purpose
-####################################################################################################################
+##################################################################################################################
 
 #! Research and educational purpose. To do.
 
-####################################################################################################################
-####################################################################################################################
+##################################################################################################################
+##################################################################################################################
 #! @Chapter Preliminaries
-####################################################################################################################
-####################################################################################################################
+##################################################################################################################
+##################################################################################################################
 
 #! Introductory text. To do.
 
-####################################################################################################################
+##################################################################################################################
 #! @Section Regular rooted tree groups
-####################################################################################################################
+##################################################################################################################
 
 #! @Description
-#! The argument of this category is any permutation group, <A>G</A>. Checks whether <A>G</A> is a regular rooted tree group.
-#! @Arguments G
+#! Groups acting on the regular rooted trees $T_{k,n}$ are stored together with their degree $k\in\mathbb{N}_{\ge 2}$ (see <Ref Attr="RegularRootedTreeGroupDegree"/>) and depth $n\in\mathbb{N}$ (see <Ref Attr="RegularRootedTreeGroupDepth"/>) as well as other attributes and properties in this category.
+#!
 DeclareCategory("IsRegularRootedTreeGroup", IsPermGroup);
 
-####################################################################################################################
+##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is any regular rooted tree group, <A>G</A>.
+#! The argument of this attribute is a regular rooted tree group <A>G</A>.
+#!
 #! @Returns
 #! The degree of <A>G</A>.
+#!
 #! @Arguments G
+#!
 DeclareAttribute("RegularRootedTreeGroupDegree", IsRegularRootedTreeGroup);
-#! @BeginExampleSession
-#! gap> RegularRootedTreeGroupDepth(AutT(2,3));
-#! 3
-#! @EndExampleSession
-
-####################################################################################################################
-
-#! @Description
-#! The argument of this attribute is any regular rooted tree group, <A>G</A>.
-#! @Returns
-#! The depth of <A>G</A>.
-#! @Arguments G
-DeclareAttribute("RegularRootedTreeGroupDepth", IsRegularRootedTreeGroup);
+#!
 #! @BeginExampleSession
 #! gap> RegularRootedTreeGroupDegree(AutT(2,3));
 #! 2
 #! @EndExampleSession
 
-####################################################################################################################
+##################################################################################################################
 
 #! @Description
-#! The arguments of this operation are a regular rooted tree group, <A>G</A>, and its degree <A>k</A> and depth <A>n</A>.
-#! @Returns
-#! The regular rooted tree group <A>G</A> as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>, with attributes <Ref Attr="RegularRootedTreeGroupDegree"/> and <Ref Attr="RegularRootedTreeGroupDepth"/>.
-#! @Arguments k,n,G
-DeclareOperation("RegularRootedTreeGroup", [IsInt, IsInt, IsPermGroup]);
-
-####################################################################################################################
-
-#! @Description
-#! The arguments of this function are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
+#! The argument of this attribute is a regular rooted tree group <A>G</A>.
 #!
 #! @Returns
-#! The regular rooted tree group $\mathrm{Aut}(T_{k,n})$ as a permutation group of the $k^{n}$ leaves of $T_{k,n}$.
+#! The depth of <A>G</A>.
 #!
-#! @Arguments k,n
-DeclareGlobalFunction( "AutT" );
+#! @Arguments G
+#!
+DeclareAttribute("RegularRootedTreeGroupDepth", IsRegularRootedTreeGroup);
 #!
 #! @BeginExampleSession
-#! gap> G:=AutT(2,2);
-#! Group([ (1,2), (3,4), (1,3)(2,4) ])
-#! gap> Size(G);
-#! 8
+#! gap> RegularRootedTreeGroupDepth(AutT(2,3));
+#! 3
 #! @EndExampleSession
 
-####################################################################################################################
-#! @Section Auxiliary functions
-####################################################################################################################
+##################################################################################################################
 
 #! @Description
-#! The arguments of this function are a degree, <A>k</A> $\in\mathbb{N}_{\ge 2}$, a depth, <A>n</A> $\in\mathbb{N}$, an element of <F>AutT(</F><A>k</A>,<A>n</A><F>)</F>, <A>aut</A>, and a level 1 vertex, <A>i</A> $\in\{1,\cdots,k\}$.
+#! The arguments of this method are a permutation group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$, its degree <A>k</A> and its depth <A>n</A>.
 #!
 #! @Returns
-#! The restriction of <A>aut</A> to the subtree below the level 1 vertex <A>i</A>, as an element of <F>AutT(</F><A>k</A>,<A>n-1</A><F>)</F>.
+#! The regular rooted tree group <A>G</A> as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>, together with its degree <A>k</A> (see <Ref Attr="RegularRootedTreeGroupDegree"/>) and its depth <A>n</A> (see <Ref Attr="RegularRootedTreeGroupDepth"/>).
+#!
+#! @Arguments k,n,G
+#!
+DeclareOperation("RegularRootedTreeGroup", [IsInt, IsInt, IsPermGroup]);
+
+##################################################################################################################
+#! @Section Auxiliary functions
+##################################################################################################################
+
+#! @Description
+#! The arguments of this function are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$, a depth <A>n</A> $\in\mathbb{N}$, an element <A>aut</A> of $\mathrm{Aut}(T_{k,n})$ (see <Ref Func="AutT"/>), and a depth 1 vertex <A>i</A> $\in\{1,\cdots,k\}$ of $T_{k,n}$.
+#!
+#! @Returns
+#! The restriction of <A>aut</A> to the subtree below the level 1 vertex <A>i</A>, as an element of $\mathrm{Aut}(T_{k,n-1})$.
 #!
 #! @Arguments k,n,aut,i
+#!
 DeclareGlobalFunction( "BelowAction" );
 #!
 #! @BeginExampleSession
@@ -128,29 +122,39 @@ DeclareGlobalFunction( "BelowAction" );
 #! (1,2)
 #! @EndExampleSession
 
-####################################################################################################################
+##################################################################################################################
 
 #! @Description
-#! The arguments of this function are a group, <A>G</A>, and a list of groups, grouplist. For every group H1 in grouplist, this function removes all conjugate groups $H2$ such that $H2\in H1^G$.
+#! The arguments of this function are a group <A>G</A> and a list <A>subgroups</A> of subgroups of <A>G</A>.
 #!
-#! @Arguments G, grouplist
+#! @Returns
+#! Removes <A>G</A>-conjugates from the list <A>subgroups</A>.
+#!
+#! @Arguments G, subgroups
+#!
 DeclareGlobalFunction( "RemoveConjugates" );
 #!
 #! @BeginExampleSession
-#! gap> 
+#! gap> G:=SymmetricGroup(3);
+#! Sym( [ 1 .. 3 ] )
+#! gap> subgroups:=[Group((1,2)),Group((2,3)),Group((1,3))];
+#! [ Group([ (1,2) ]), Group([ (2,3) ]), Group([ (1,3) ]) ]
+#! gap> RemoveConjugates(G,subgroups);
+#! gap> subgroups;
+#! [ Group([ (1,2) ]) ]
 #! @EndExampleSession
 
-####################################################################################################################
-####################################################################################################################
+##################################################################################################################
+##################################################################################################################
 #! @Chapter Self-replicating groups
-####################################################################################################################
-####################################################################################################################
+##################################################################################################################
+##################################################################################################################
 
 #! Introductory text. To do.
 
-####################################################################################################################
+##################################################################################################################
 #! @Section Properties and Attributes 
-####################################################################################################################
+##################################################################################################################
 
 #! @Description
 #! The argument of this property is any regular rooted tree group, <A>G</A>. Tests whether <A>G</A> satisfies the self-replicating conditions.
@@ -164,7 +168,7 @@ DeclareProperty("IsSelfReplicating", IsRegularRootedTreeGroup);
 #! true
 #! @EndExampleSession
 
-####################################################################################################################
+##################################################################################################################
 
 #! @Description
 #! The argument of this property is any regular rooted tree group, <A>G</A>. Tests whether <A>G</A> has sufficient rigid automorphisms.
@@ -178,7 +182,7 @@ DeclareProperty("HasSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
 #! true
 #! @EndExampleSession
 
-####################################################################################################################
+##################################################################################################################
 
 # parent group (projection), maximal extension and representative with sufficient rigid automorphisms also become attributes
 #! @Description
@@ -200,7 +204,7 @@ DeclareAttribute("ParentGroup", IsRegularRootedTreeGroup);
 #! true
 #! @EndExampleSession
 
-####################################################################################################################
+##################################################################################################################
 
 #! @Description
 #! The argument of this attribute is any regular rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>.
@@ -221,7 +225,7 @@ DeclareAttribute("MaximalExtension", IsRegularRootedTreeGroup);
 #! true
 #! @EndExampleSession
 
-####################################################################################################################
+##################################################################################################################
 
 #! @Description
 #! The argument of this attribute is any regular rooted tree group, <A>G</A>. 
@@ -236,11 +240,31 @@ DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRoot
 #! gap> 
 #! @EndExampleSession
 
-####################################################################################################################
+##################################################################################################################
 #! @Section Examples
-####################################################################################################################
+##################################################################################################################
 
-#! AutT. More to come.
+#! AutT. More to come. Grigorchuk, Hanoi, ...
+
+##################################################################################################################
+
+#! @Description
+#! The arguments of this function are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
+#!
+#! @Returns
+#! The regular rooted tree group $\mathrm{Aut}(T_{k,n})$ as a permutation group of the $k^{n}$ leaves of $T_{k,n}$.
+#!
+#! @Arguments k,n
+DeclareGlobalFunction( "AutT" );
+#!
+#! @BeginExampleSession
+#! gap> G:=AutT(2,2);
+#! Group([ (1,2), (3,4), (1,3)(2,4) ])
+#! gap> Size(G);
+#! 8
+#! @EndExampleSession
+
+##################################################################################################################
 
 #! @Description
 #! The argument of this function is any regular rooted tree group, <A>G</A>
@@ -256,7 +280,7 @@ DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
 #! [ Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]) ]
 #! @EndExampleSession
 
-####################################################################################################################
+##################################################################################################################
 
 #! @Description
 #! The argument of this function is any regular rooted tree group, <A>G</A>
@@ -292,27 +316,21 @@ DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateP
 #!       (1,3,2)(4,6,5)(7,9,8) ]) ]
 #! @EndExampleSession
 
-####################################################################################################################
-####################################################################################################################
-#! @Chapter The library
-####################################################################################################################
-####################################################################################################################
+##################################################################################################################
+##################################################################################################################
+#! @Chapter The library of self-replicating groups
+##################################################################################################################
+##################################################################################################################
 
 #! Introductory text. To do.
 
-####################################################################################################################
-#! @Section Using the library
-####################################################################################################################
+##################################################################################################################
+#! @Section Availability functions
+##################################################################################################################
 
 #! Introductory text. To do. Similarities with transitive groups library.
 
-DeclareGlobalFunction( "GetSRData" );
-
-DeclareGlobalFunction( "CheckSRGroupsInputs" );
-
-DeclareGlobalFunction( "GetSRMaximums" );
-
-DeclareGlobalFunction( "SRGroupsInfo" );
+##################################################################################################################
 
 #! @Description
 #! The argument of this function is a degree, <A>k</A>, and a depth, <A>n</A>.
@@ -324,13 +342,13 @@ DeclareGlobalFunction( "SRGroupsInfo" );
 DeclareGlobalFunction( "SRGroupsAvailable" );
 #!
 #! @BeginExampleSession
-#! gap> SRGroupsAvailable(2,3);
-#! true
 #! gap> SRGroupsAvailable(2,5);
 #! true
 #! gap> SRGroupsAvailable(5,2);
 #! false
 #! @EndExampleSession
+
+##################################################################################################################
 
 #! @Description
 #! The argument of this function is a degree, <A>k</A>, and a depth, <A>n</A>.
@@ -348,6 +366,35 @@ DeclareGlobalFunction( "NrSRGroups" );
 #! 2436
 #! @EndExampleSession
 
+##################################################################################################################
+
+#! @Description
+#! There are no inputs to this function.
+#! @Returns
+#! All of the degrees currently stored in the <Package>SRGroups</Package> library.
+#! @Arguments 
+DeclareGlobalFunction( "SRDegrees" );
+#! @BeginExampleSession
+#! gap> SRDegrees();
+#! [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]
+#! @EndExampleSession
+
+##################################################################################################################
+
+#! @Description
+#! The input to this function is the degree of the regular rooted tree, <A>k</A>.
+#! @Returns
+#! All of the levels currently stored in the <Package>SRGroups</Package> library for an input RegularRootedTreeGroupDegree, <A>deg</A>.
+#! @Arguments k
+DeclareGlobalFunction( "SRLevels" );
+#! @BeginExampleSession
+#! gap> SRLevels(2);
+#! [ 1, 2, 3, 4 ]
+#! @EndExampleSession
+
+##################################################################################################################
+#! @Section Selection functions
+##################################################################################################################
 
 #! @Description
 #! The argument of this function is a degree, <A>k</A>, a depth, <A>n</A>, and a designated number of the stored self-replicating group, <A>num</A>.
@@ -365,6 +412,9 @@ DeclareGlobalFunction( "SRGroup" );
 #! 8
 #! @EndExampleSession
 
+##################################################################################################################
+
+DeclareSynonym( "Level" , "Depth" );
 
 #! @Description
 #! Main library search function that acts analogously as the AllTransitiveGroups function from the <Package>transgrp</Package> library. Has several possible input arguments such as <A>Degree</A>, <A>Depth</A> (or <A>Level</A>), <A>Number</A>, <A>Projection</A>, <A>IsSubgroup</A>, <A>Size</A>, <A>NumberOfGenerators</A>, and <A>IsAbelian</A>. Order of the arguments do not matter. List inputs and singular inputs can be provided. The argument definitions are as follows:
@@ -391,6 +441,7 @@ DeclareGlobalFunction("AllSRGroups");
 #!   SRGroup(3,1,1), SRGroup(3,1,1) ]
 #! @EndExampleSession
 
+##################################################################################################################
 
 #! @Description
 #! Inputs work the same as the main library search function <Ref Func="AllSRGroups"/>, with one additional input: <A>Position</A> (or <A>Index</A>).
@@ -426,52 +477,22 @@ DeclareGlobalFunction( "AllSRGroupsInfo" );
 #!   [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ] ]
 #! @EndExampleSession
 
-
-#! @Description
-#! The arguments of this function are a degree, <A>k</A>, and a level, <A>n</A>.
-#! @Returns
-#! Whether all of the self-replicating groups of degree <A>k</A> and level <A>n</A> project correctly to level <A>n-1</A>. This is mainly used after obtaining new data to check that it has been formatted correctly (see <Ref Func="SRGroupFile"/>).
-#! @Arguments k,n
-DeclareGlobalFunction( "CheckSRProjections" );
-#! @BeginExampleSession
-#! gap> CheckSRProjections(2,4);
-#! All groups project correctly.
-#! @EndExampleSession
+##################################################################################################################
 
 
+# internal?
+DeclareGlobalFunction( "GetSRData" );
+DeclareGlobalFunction( "CheckSRGroupsInputs" );
+DeclareGlobalFunction( "GetSRMaximums" );
+DeclareGlobalFunction( "SRGroupsInfo" );
 DeclareGlobalFunction( "StringVariables" );
-
-
 DeclareGlobalFunction( "UnbindVariables" );
 
 
-#! @Description
-#! There are no inputs to this function.
-#! @Returns
-#! All of the degrees currently stored in the <Package>SRGroups</Package> library.
-#! @Arguments 
-DeclareGlobalFunction( "SRDegrees" );
-#! @BeginExampleSession
-#! gap> SRDegrees();
-#! [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]
-#! @EndExampleSession
 
-
-#! @Description
-#! The input to this function is the degree of the regular rooted tree, <A>k</A>.
-#! @Returns
-#! All of the levels currently stored in the <Package>SRGroups</Package> library for an input RegularRootedTreeGroupDegree, <A>deg</A>.
-#! @Arguments k
-DeclareGlobalFunction( "SRLevels" );
-#! @BeginExampleSession
-#! gap> SRLevels(2);
-#! [ 1, 2, 3, 4 ]
-#! @EndExampleSession
-
-
-####################################################################################################################
+##################################################################################################################
 #! @Section Extending the library
-####################################################################################################################
+##################################################################################################################
 
 DeclareGlobalFunction( "FormatSRFile" );
 
@@ -531,5 +552,16 @@ DeclareGlobalFunction( "NumberExtensionsUnformatted" );
 
 DeclareGlobalFunction( "IsSubgroupOfConjugate" );
 
+#! @Description
+#! The arguments of this function are a degree, <A>k</A>, and a level, <A>n</A>.
+#! @Returns
+#! Whether all of the self-replicating groups of degree <A>k</A> and level <A>n</A> project correctly to level <A>n-1</A>. This is mainly used after obtaining new data to check that it has been formatted correctly (see <Ref Func="SRGroupFile"/>).
+#! @Arguments k,n
+DeclareGlobalFunction( "CheckSRProjections" );
+#! @BeginExampleSession
+#! gap> CheckSRProjections(2,4);
+#! All groups project correctly.
+#! @EndExampleSession
 
-DeclareSynonym( "Level" , "Depth" );
+
+

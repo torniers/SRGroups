@@ -1,8 +1,8 @@
 \begin{theindex}
 
   \item \texttt  {AllSRGroups}, \hyperpage{11}
-  \item \texttt  {AllSRGroupsInfo}, \hyperpage{11}
-  \item \texttt  {AutT}, \hyperpage{6}
+  \item \texttt  {AllSRGroupsInfo}, \hyperpage{12}
+  \item \texttt  {AutT}, \hyperpage{8}
 
   \indexspace
 
@@ -10,10 +10,10 @@
 
   \indexspace
 
-  \item \texttt  {CheckSRProjections}, \hyperpage{12}
+  \item \texttt  {CheckSRProjections}, \hyperpage{14}
   \item \texttt  {CombineSRFiles}, \hyperpage{13}
   \item \texttt  {Conjugacy}\-\texttt  {Class}\-\texttt  {Reps}\-\texttt  {Max}\-\texttt  {Self}\-\texttt  {Replicating}\-\texttt  {Subgroups}, 
-		\hyperpage{8}
+		\hyperpage{9}
   \item \texttt  {Conjugacy}\-\texttt  {Class}\-\texttt  {Reps}\-\texttt  {Self}\-\texttt  {Replicating}\-\texttt  {Subgroups}\-\texttt  {With}\-\texttt  {Conjugate}\-\texttt  {Projection}, 
 		\hyperpage{9}
 
@@ -50,7 +50,7 @@
   \indexspace
 
   \item \texttt  {RegularRootedTreeGroup}
-    \subitem for IsInt, IsInt, IsPermGroup, \hyperpage{5}
+    \subitem for IsInt, IsInt, IsPermGroup, \hyperpage{6}
   \item \texttt  {RegularRootedTreeGroupDegree}
     \subitem for IsRegularRootedTreeGroup, \hyperpage{5}
   \item \texttt  {RegularRootedTreeGroupDepth}
@@ -61,10 +61,10 @@
 
   \indexspace
 
-  \item \texttt  {SRDegrees}, \hyperpage{12}
-  \item \texttt  {SRGroup}, \hyperpage{10}
-  \item \texttt  {SRGroupFile}, \hyperpage{13}
+  \item \texttt  {SRDegrees}, \hyperpage{10}
+  \item \texttt  {SRGroup}, \hyperpage{11}
+  \item \texttt  {SRGroupFile}, \hyperpage{12}
   \item \texttt  {SRGroupsAvailable}, \hyperpage{10}
-  \item \texttt  {SRLevels}, \hyperpage{12}
+  \item \texttt  {SRLevels}, \hyperpage{11}
 
 \end{theindex}

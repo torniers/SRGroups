@@ -9,11 +9,12 @@
 <Heading>Regular rooted tree groups</Heading>
 
 <ManSection>
-  <Filt Arg="G" Name="IsRegularRootedTreeGroup" Label="for IsPermGroup"/>
+  <Filt Arg="arg" Name="IsRegularRootedTreeGroup" Label="for IsPermGroup"/>
  <Returns><C>true</C> or <C>false</C>
 </Returns>
  <Description>
- The argument of this category is any permutation group, <A>G</A>. Checks whether <A>G</A> is a regular rooted tree group.
+ Groups acting on the regular rooted trees <Math>T_{k,n}</Math> are stored together with their degree <Math>k\in\mathbb{N}_{\ge 2}</Math> (see <Ref Attr="RegularRootedTreeGroupDegree"/>) and depth <Math>n\in\mathbb{N}</Math> (see <Ref Attr="RegularRootedTreeGroupDepth"/>) as well as other attributes and properties in this category.
+<P/>
  </Description>
 </ManSection>
 
@@ -21,29 +22,17 @@
 <ManSection>
   <Attr Arg="G" Name="RegularRootedTreeGroupDegree" Label="for IsRegularRootedTreeGroup"/>
  <Returns> The degree of <A>G</A>.
+ 
+ 
 </Returns>
  <Description>
- The argument of this attribute is any regular rooted tree group, <A>G</A>.
+ The argument of this attribute is a regular rooted tree group <A>G</A>.
+<P/>
  </Description>
 </ManSection>
 
 
-<Example><![CDATA[
-gap> RegularRootedTreeGroupDepth(AutT(2,3));
-3
-]]></Example>
-
-
-<ManSection>
-  <Attr Arg="G" Name="RegularRootedTreeGroupDepth" Label="for IsRegularRootedTreeGroup"/>
- <Returns> The depth of <A>G</A>.
-</Returns>
- <Description>
- The argument of this attribute is any regular rooted tree group, <A>G</A>.
- </Description>
-</ManSection>
-
-
+<P/>
 <Example><![CDATA[
 gap> RegularRootedTreeGroupDegree(AutT(2,3));
 2
@@ -51,22 +40,13 @@ gap> RegularRootedTreeGroupDegree(AutT(2,3));
 
 
 <ManSection>
-  <Oper Arg="k,n,G" Name="RegularRootedTreeGroup" Label="for IsInt, IsInt, IsPermGroup"/>
- <Returns> The regular rooted tree group <A>G</A> as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>, with attributes <Ref Attr="RegularRootedTreeGroupDegree"/> and <Ref Attr="RegularRootedTreeGroupDepth"/>.
-</Returns>
- <Description>
- The arguments of this operation are a regular rooted tree group, <A>G</A>, and its degree <A>k</A> and depth <A>n</A>.
- </Description>
-</ManSection>
-
-
-<ManSection>
-  <Func Arg="k,n" Name="AutT" />
- <Returns> The regular rooted tree group <Math>\mathrm{Aut}(T_{k,n})</Math> as a permutation group of the <Math>k^{n}</Math> leaves of <Math>T_{k,n}</Math>.
+  <Attr Arg="G" Name="RegularRootedTreeGroupDepth" Label="for IsRegularRootedTreeGroup"/>
+ <Returns> The depth of <A>G</A>.
+ 
  
 </Returns>
  <Description>
- The arguments of this function are a degree <A>k</A> <Math>\in\mathbb{N}_{\ge 2}</Math> and a depth <A>n</A> <Math>\in\mathbb{N}</Math>.
+ The argument of this attribute is a regular rooted tree group <A>G</A>.
 <P/>
  </Description>
 </ManSection>
@@ -74,11 +54,22 @@ gap> RegularRootedTreeGroupDegree(AutT(2,3));
 
 <P/>
 <Example><![CDATA[
-gap> G:=AutT(2,2);
-Group([ (1,2), (3,4), (1,3)(2,4) ])
-gap> Size(G);
-8
+gap> RegularRootedTreeGroupDepth(AutT(2,3));
+3
 ]]></Example>
+
+
+<ManSection>
+  <Oper Arg="k,n,G" Name="RegularRootedTreeGroup" Label="for IsInt, IsInt, IsPermGroup"/>
+ <Returns> The regular rooted tree group <A>G</A> as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>, together with its degree <A>k</A> (see <Ref Attr="RegularRootedTreeGroupDegree"/>) and its depth <A>n</A> (see <Ref Attr="RegularRootedTreeGroupDepth"/>).
+ 
+ 
+</Returns>
+ <Description>
+ The arguments of this method are a permutation group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,n})</Math>, its degree <A>k</A> and its depth <A>n</A>.
+<P/>
+ </Description>
+</ManSection>
 
 
 </Section>
@@ -89,11 +80,12 @@ gap> Size(G);
 
 <ManSection>
   <Func Arg="k,n,aut,i" Name="BelowAction" />
- <Returns> The restriction of <A>aut</A> to the subtree below the level 1 vertex <A>i</A>, as an element of <F>AutT(</F><A>k</A>,<A>n-1</A><F>)</F>.
+ <Returns> The restriction of <A>aut</A> to the subtree below the level 1 vertex <A>i</A>, as an element of <Math>\mathrm{Aut}(T_{k,n-1})</Math>.
+ 
  
 </Returns>
  <Description>
- The arguments of this function are a degree, <A>k</A> <Math>\in\mathbb{N}_{\ge 2}</Math>, a depth, <A>n</A> <Math>\in\mathbb{N}</Math>, an element of <F>AutT(</F><A>k</A>,<A>n</A><F>)</F>, <A>aut</A>, and a level 1 vertex, <A>i</A> <Math>\in\{1,\cdots,k\}</Math>.
+ The arguments of this function are a degree <A>k</A> <Math>\in\mathbb{N}_{\ge 2}</Math>, a depth <A>n</A> <Math>\in\mathbb{N}</Math>, an element <A>aut</A> of <Math>\mathrm{Aut}(T_{k,n})</Math> (see <Ref Func="AutT"/>), and a depth 1 vertex <A>i</A> <Math>\in\{1,\cdots,k\}</Math> of <Math>T_{k,n}</Math>.
 <P/>
  </Description>
 </ManSection>
@@ -107,9 +99,13 @@ gap> BelowAction(2,2,(1,2)(3,4),2);
 
 
 <ManSection>
-  <Func Arg="G, grouplist" Name="RemoveConjugates" />
+  <Func Arg="G, subgroups" Name="RemoveConjugates" />
+ <Returns> Removes <A>G</A>-conjugates from the list <A>subgroups</A>.
+ 
+ 
+</Returns>
  <Description>
- The arguments of this function are a group, <A>G</A>, and a list of groups, grouplist. For every group H1 in grouplist, this function removes all conjugate groups <Math>H2</Math> such that <Math>H2\in H1^G</Math>.
+ The arguments of this function are a group, <A>G</A>, and a list <A>subgroups</A> of subgroups of <A>G</A>.
 <P/>
  </Description>
 </ManSection>
@@ -117,7 +113,13 @@ gap> BelowAction(2,2,(1,2)(3,4),2);
 
 <P/>
 <Example><![CDATA[
-gap> 
+gap> G:=SymmetricGroup(3);
+Sym( [ 1 .. 3 ] )
+gap> subgroups:=[Group((1,2)),Group((2,3)),Group((1,3))];
+[ Group([ (1,2) ]), Group([ (2,3) ]), Group([ (1,3) ]) ]
+gap> RemoveConjugates(G,subgroups);
+gap> subgroups;
+[ Group([ (1,2) ]) ]
 ]]></Example>
 
 

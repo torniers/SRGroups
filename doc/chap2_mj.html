@@ -32,7 +32,6 @@
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X81620BBB8303B641">2.1-2 RegularRootedTreeGroupDegree</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7DA9D61678810B77">2.1-3 RegularRootedTreeGroupDepth</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7F279D957D29554A">2.1-4 RegularRootedTreeGroup</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X843B26BC8517173F">2.1-5 AutT</a></span>
 </div></div>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2_mj.html#X866E18057EF83F65">2.2 <span class="Heading">Auxiliary functions</span></a>
 </span>
@@ -54,10 +53,10 @@
 
 <h5>2.1-1 IsRegularRootedTreeGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsRegularRootedTreeGroup</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;filter&nbsp;)</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsRegularRootedTreeGroup</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;filter&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="code">true</code> or <code class="code">false</code></p>
 
-<p>The argument of this category is any permutation group, <var class="Arg">G</var>. Checks whether <var class="Arg">G</var> is a regular rooted tree group.</p>
+<p>Groups acting on the regular rooted trees <span class="SimpleMath">\(T_{k,n}\)</span> are stored together with their degree <span class="SimpleMath">\(k\in\mathbb{N}_{\ge 2}\)</span> (see <code class="func">RegularRootedTreeGroupDegree</code> (<span class="RefLink">???</span>)) and depth <span class="SimpleMath">\(n\in\mathbb{N}\)</span> (see <code class="func">RegularRootedTreeGroupDepth</code> (<span class="RefLink">???</span>)) as well as other attributes and properties in this category.</p>
 
 <p><a id="X81620BBB8303B641" name="X81620BBB8303B641"></a></p>
 
@@ -66,12 +65,12 @@
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RegularRootedTreeGroupDegree</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: The degree of <var class="Arg">G</var>.</p>
 
-<p>The argument of this attribute is any regular rooted tree group, <var class="Arg">G</var>.</p>
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var>.</p>
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RegularRootedTreeGroupDepth(AutT(2,3));</span>
-3
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RegularRootedTreeGroupDegree(AutT(2,3));</span>
+2
 </pre></div>
 
 <p><a id="X7DA9D61678810B77" name="X7DA9D61678810B77"></a></p>
@@ -81,12 +80,12 @@
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RegularRootedTreeGroupDepth</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: The depth of <var class="Arg">G</var>.</p>
 
-<p>The argument of this attribute is any regular rooted tree group, <var class="Arg">G</var>.</p>
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var>.</p>
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RegularRootedTreeGroupDegree(AutT(2,3));</span>
-2
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RegularRootedTreeGroupDepth(AutT(2,3));</span>
+3
 </pre></div>
 
 <p><a id="X7F279D957D29554A" name="X7F279D957D29554A"></a></p>
@@ -94,26 +93,9 @@
 <h5>2.1-4 RegularRootedTreeGroup</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RegularRootedTreeGroup</code>( <var class="Arg">k</var>, <var class="Arg">n</var>, <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>Returns: The regular rooted tree group <var class="Arg">G</var> as an object of the category <code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>), with attributes <code class="func">RegularRootedTreeGroupDegree</code> (<span class="RefLink">???</span>) and <code class="func">RegularRootedTreeGroupDepth</code> (<span class="RefLink">???</span>).</p>
+<p>Returns: The regular rooted tree group <var class="Arg">G</var> as an object of the category <code class="func">IsRegularRootedTreeGroup</code> (<span class="RefLink">???</span>), together with its degree <var class="Arg">k</var> (see <code class="func">RegularRootedTreeGroupDegree</code> (<span class="RefLink">???</span>)) and its depth <var class="Arg">n</var> (see <code class="func">RegularRootedTreeGroupDepth</code> (<span class="RefLink">???</span>)).</p>
 
-<p>The arguments of this operation are a regular rooted tree group, <var class="Arg">G</var>, and its degree <var class="Arg">k</var> and depth <var class="Arg">n</var>.</p>
-
-<p><a id="X843B26BC8517173F" name="X843B26BC8517173F"></a></p>
-
-<h5>2.1-5 AutT</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AutT</code>( <var class="Arg">k</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
-<p>Returns: The regular rooted tree group <span class="SimpleMath">\(\mathrm{Aut}(T_{k,n})\)</span> as a permutation group of the <span class="SimpleMath">\(k^{n}\)</span> leaves of <span class="SimpleMath">\(T_{k,n}\)</span>.</p>
-
-<p>The arguments of this function are a degree <var class="Arg">k</var> <span class="SimpleMath">\(\in\mathbb{N}_{\ge 2}\)</span> and a depth <var class="Arg">n</var> <span class="SimpleMath">\(\in\mathbb{N}\)</span>.</p>
-
-
-<div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=AutT(2,2);</span>
-Group([ (1,2), (3,4), (1,3)(2,4) ])
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Size(G);</span>
-8
-</pre></div>
+<p>The arguments of this method are a permutation group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,n})\)</span>, its degree <var class="Arg">k</var> and its depth <var class="Arg">n</var>.</p>
 
 <p><a id="X866E18057EF83F65" name="X866E18057EF83F65"></a></p>
 
@@ -124,9 +106,9 @@ Group([ (1,2), (3,4), (1,3)(2,4) ])
 <h5>2.2-1 BelowAction</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; BelowAction</code>( <var class="Arg">k</var>, <var class="Arg">n</var>, <var class="Arg">aut</var>, <var class="Arg">i</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
-<p>Returns: The restriction of <var class="Arg">aut</var> to the subtree below the level 1 vertex <var class="Arg">i</var>, as an element of <code class="file">AutT(</code><var class="Arg">k</var>,<var class="Arg">n-1</var><code class="file">)</code>.</p>
+<p>Returns: The restriction of <var class="Arg">aut</var> to the subtree below the level 1 vertex <var class="Arg">i</var>, as an element of <span class="SimpleMath">\(\mathrm{Aut}(T_{k,n-1})\)</span>.</p>
 
-<p>The arguments of this function are a degree, <var class="Arg">k</var> <span class="SimpleMath">\(\in\mathbb{N}_{\ge 2}\)</span>, a depth, <var class="Arg">n</var> <span class="SimpleMath">\(\in\mathbb{N}\)</span>, an element of <code class="file">AutT(</code><var class="Arg">k</var>,<var class="Arg">n</var><code class="file">)</code>, <var class="Arg">aut</var>, and a level 1 vertex, <var class="Arg">i</var> <span class="SimpleMath">\(\in\{1,\cdots,k\}\)</span>.</p>
+<p>The arguments of this function are a degree <var class="Arg">k</var> <span class="SimpleMath">\(\in\mathbb{N}_{\ge 2}\)</span>, a depth <var class="Arg">n</var> <span class="SimpleMath">\(\in\mathbb{N}\)</span>, an element <var class="Arg">aut</var> of <span class="SimpleMath">\(\mathrm{Aut}(T_{k,n})\)</span> (see <code class="func">AutT</code> (<a href="chap3_mj.html#X843B26BC8517173F"><span class="RefLink">3.2-1</span></a>)), and a depth 1 vertex <var class="Arg">i</var> <span class="SimpleMath">\(\in\{1,\cdots,k\}\)</span> of <span class="SimpleMath">\(T_{k,n}\)</span>.</p>
 
 
 <div class="example"><pre>
@@ -138,12 +120,20 @@ Group([ (1,2), (3,4), (1,3)(2,4) ])
 
 <h5>2.2-2 RemoveConjugates</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RemoveConjugates</code>( <var class="Arg">G</var>, <var class="Arg">grouplist</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
-<p>The arguments of this function are a group, <var class="Arg">G</var>, and a list of groups, grouplist. For every group H1 in grouplist, this function removes all conjugate groups <span class="SimpleMath">\(H2\)</span> such that <span class="SimpleMath">\(H2\in H1^G\)</span>.</p>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RemoveConjugates</code>( <var class="Arg">G</var>, <var class="Arg">subgroups</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p>Returns: Removes <var class="Arg">G</var>-conjugates from the list <var class="Arg">subgroups</var>.</p>
+
+<p>The arguments of this function are a group, <var class="Arg">G</var>, and a list <var class="Arg">subgroups</var> of subgroups of <var class="Arg">G</var>.</p>
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"></span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=SymmetricGroup(3);</span>
+Sym( [ 1 .. 3 ] )
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">subgroups:=[Group((1,2)),Group((2,3)),Group((1,3))];</span>
+[ Group([ (1,2) ]), Group([ (2,3) ]), Group([ (1,3) ]) ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RemoveConjugates(G,subgroups);</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">subgroups;</span>
+[ Group([ (1,2) ]) ]
 </pre></div>
 
 
