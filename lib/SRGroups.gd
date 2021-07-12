@@ -157,87 +157,119 @@ DeclareGlobalFunction( "RemoveConjugates" );
 ##################################################################################################################
 
 #! @Description
-#! The argument of this property is any regular rooted tree group, <A>G</A>. Tests whether <A>G</A> satisfies the self-replicating conditions.
+#! The argument of this property is aa regular rooted tree group <A>G</A>.
+#!
+#! @Returns
+#! <K>true</K> if <A>G</A> is self-replicating, and <K>false</K> otherwise.
 #!
 #! @Arguments G
 #!
 DeclareProperty("IsSelfReplicating", IsRegularRootedTreeGroup);
 #!
 #! @BeginExampleSession
-#! gap> IsSelfReplicating(AutT(2,3));
-#! true
+#! gap> subgroups:=AllSubgroups(AutT(2,2));
+#! [ Group(()), Group([ (3,4) ]), Group([ (1,2) ]), Group([ (1,2)(3,4) ]), 
+#!   Group([ (1,3)(2,4) ]), Group([ (1,4)(2,3) ]), Group([ (3,4), (1,2) ]), 
+#!   Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]), 
+#!   Group([ (3,4), (1,2), (1,3)(2,4) ]) ]
+#! gap> Apply(subgroups,G->RegularRootedTreeGroup(2,2,G));
+#! gap> Apply(subgroups,G->IsSelfReplicating(G));
+#! gap> subgroups;
+#! [ false, false, false, false, false, false, false, true, true, true ]
 #! @EndExampleSession
 
 ##################################################################################################################
 
 #! @Description
-#! The argument of this property is any regular rooted tree group, <A>G</A>. Tests whether <A>G</A> has sufficient rigid automorphisms.
+#! The argument of this property is a regular rooted tree group <A>G</A>
+#!
+#! @Returns
+#! <K>true</K> if <A>G</A> has sufficient rigid automorphisms, and <K>false</K> otherwise.
 #!
 #! @Arguments G
 #!
 DeclareProperty("HasSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
 #!
 #! @BeginExampleSession
-#! gap> HasSufficientRigidAutomorphisms(AutT(2,3));
-#! true
+#! gap> subgroups:=AllSubgroups(AutT(2,2));
+#! [ Group(()), Group([ (3,4) ]), Group([ (1,2) ]), Group([ (1,2)(3,4) ]), 
+#!   Group([ (1,3)(2,4) ]), Group([ (1,4)(2,3) ]), Group([ (3,4), (1,2) ]), 
+#!   Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]), 
+#!   Group([ (3,4), (1,2), (1,3)(2,4) ]) ]
+#! gap> Apply(subgroups,G->RegularRootedTreeGroup(2,2,G));
+#! gap> Apply(subgroups,G->HasSufficientRigidAutomorphisms(G));
+#! gap> subgroups;
+#! [ false, false, false, false, true, false, false, true, true, true ]
 #! @EndExampleSession
 
 ##################################################################################################################
 
-# parent group (projection), maximal extension and representative with sufficient rigid automorphisms also become attributes
 #! @Description
-#! The argument of this attribute is any regular rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>.
+#! The argument of this attribute is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$.
+#!
 #! @Returns
-#! The image of <A>G</A> when projected onto the automorphism group of degree <A>k</A> and depth <A>n-1</A>.
+#! The restriction of <A>G</A> to $\mathrm{Aut}(T_{k,n-1})$.
 #!
 #! @Arguments G
 #!
 DeclareAttribute("ParentGroup", IsRegularRootedTreeGroup);
 #!
 #! @BeginExampleSession
-#! gap> G:=AutT(2,3); H:=AutT(2,2);
-#! Group([ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ])
-#! Group([ (1,2), (3,4), (1,3)(2,4) ])
+#! gap> G:=AutT(2,3);;
 #! gap> ParentGroup(G);
 #! Group([ (1,2), (1,3)(2,4), (3,4) ])
-#! gap> H=last;
+#! gap> last=AutT(2,2);
 #! true
 #! @EndExampleSession
 
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is any regular rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>.
+#! The argument of this attribute is a self-replicating regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$ with sufficient rigid automorphisms.
 #! @Returns
-#! The maximal extension of <A>G</A>, <A>M(G)</A>, that is a subgroup of the automorphism group of degree <A>k</A> and depth <A>n+1</A>.
+#! The maximal extension of $M(G)\le\mathrm{Aut}(T_{k,n+1})$ of <A>G</A>.
 #!
 #! @Arguments G
 #!
 DeclareAttribute("MaximalExtension", IsRegularRootedTreeGroup);
 #!
 #! @BeginExampleSession
-#! gap> G:=AutT(2,3); H:=AutT(2,4);
-#! Group([ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ])
-#! <permutation group of size 32768 with 15 generators>
+#! gap> G:=AutT(2,3);;
 #! gap> MaximalExtension(G);
 #! <permutation group with 11 generators>
-#! gap> H=last;
+#! gap> last=AutT(2,4);
 #! true
 #! @EndExampleSession
 
 ##################################################################################################################
 
 #! @Description
-#! The argument of this attribute is any regular rooted tree group, <A>G</A>. 
+#! The argument of this attribute is a self-replicating regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$.
+#!
 #! @Returns
-#! A conjugate of <A>G</A> with sufficient rigid automorphisms.
+#! A self-replicating $\mathrm{Aut}(T_{k,n})$-conjugate of <A>G</A> with sufficient rigid automorphisms. If <A>G</A> has sufficient rigid automorphisms then the output group has the same parent group (see <Ref Attr="ParentGroup"/>) as <A>G</A>.
 #!
 #! @Arguments G
 #!
 DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRootedTreeGroup);
 #!
 #! @BeginExampleSession
-#! gap> 
+#! gap> G:=SRGroup(2,3,6);;
+#! gap> conjugates:=ShallowCopy(AsList(G^AutT(2,3)));
+#! [ Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4) ]), 
+#!   Group([ (1,5)(2,6)(3,8)(4,7), (1,3)(2,4)(5,8)(6,7), (1,2)(3,4) ]) ]
+#! gap> Apply(conjugates,H->RegularRootedTreeGroup(2,3,H));
+#! gap> for H in conjugates do Print(HasSufficientRigidAutomorphisms(H),"\n"); od;
+#! true
+#! false
+#! gap> H:=conjugates[2];
+#! Group([ (1,5)(2,6)(3,8)(4,7), (1,3)(2,4)(5,8)(6,7), (1,2)(3,4) ])
+#! gap> IsSelfReplicating(H);
+#! true
+#! gap> RepresentativeWithSufficientRigidAutomorphisms(H);
+#! Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4) ])
+#! gap> last=conjugates[1];
+#! true
 #! @EndExampleSession
 
 ##################################################################################################################

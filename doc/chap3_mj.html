@@ -56,14 +56,21 @@
 <h5>3.1-1 IsSelfReplicating</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsSelfReplicating</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;property&nbsp;)</td></tr></table></div>
-<p>Returns: <code class="code">true</code> or <code class="code">false</code></p>
+<p>Returns: <code class="keyw">true</code> if <var class="Arg">G</var> is self-replicating, and <code class="keyw">false</code> otherwise.</p>
 
-<p>The argument of this property is any regular rooted tree group, <var class="Arg">G</var>. Tests whether <var class="Arg">G</var> satisfies the self-replicating conditions.</p>
+<p>The argument of this property is aa regular rooted tree group <var class="Arg">G</var>.</p>
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsSelfReplicating(AutT(2,3));</span>
-true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">subgroups:=AllSubgroups(AutT(2,2));</span>
+[ Group(()), Group([ (3,4) ]), Group([ (1,2) ]), Group([ (1,2)(3,4) ]), 
+  Group([ (1,3)(2,4) ]), Group([ (1,4)(2,3) ]), Group([ (3,4), (1,2) ]), 
+  Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]), 
+  Group([ (3,4), (1,2), (1,3)(2,4) ]) ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Apply(subgroups,G-&gt;RegularRootedTreeGroup(2,2,G));</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Apply(subgroups,G-&gt;IsSelfReplicating(G));</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">subgroups;</span>
+[ false, false, false, false, false, false, false, true, true, true ]
 </pre></div>
 
 <p><a id="X84DDFFAE8701C3F8" name="X84DDFFAE8701C3F8"></a></p>
@@ -71,14 +78,21 @@ true
 <h5>3.1-2 HasSufficientRigidAutomorphisms</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; HasSufficientRigidAutomorphisms</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;property&nbsp;)</td></tr></table></div>
-<p>Returns: <code class="code">true</code> or <code class="code">false</code></p>
+<p>Returns: <code class="keyw">true</code> if <var class="Arg">G</var> has sufficient rigid automorphisms, and <code class="keyw">false</code> otherwise.</p>
 
-<p>The argument of this property is any regular rooted tree group, <var class="Arg">G</var>. Tests whether <var class="Arg">G</var> has sufficient rigid automorphisms.</p>
+<p>The argument of this property is a regular rooted tree group <var class="Arg">G</var></p>
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">HasSufficientRigidAutomorphisms(AutT(2,3));</span>
-true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">subgroups:=AllSubgroups(AutT(2,2));</span>
+[ Group(()), Group([ (3,4) ]), Group([ (1,2) ]), Group([ (1,2)(3,4) ]), 
+  Group([ (1,3)(2,4) ]), Group([ (1,4)(2,3) ]), Group([ (3,4), (1,2) ]), 
+  Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]), 
+  Group([ (3,4), (1,2), (1,3)(2,4) ]) ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Apply(subgroups,G-&gt;RegularRootedTreeGroup(2,2,G));</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Apply(subgroups,G-&gt;HasSufficientRigidAutomorphisms(G));</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">subgroups;</span>
+[ false, false, false, false, true, false, false, true, true, true ]
 </pre></div>
 
 <p><a id="X7943CE9B7AB931AC" name="X7943CE9B7AB931AC"></a></p>
@@ -86,18 +100,16 @@ true
 <h5>3.1-3 ParentGroup</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ParentGroup</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
-<p>Returns: The image of <var class="Arg">G</var> when projected onto the automorphism group of degree <var class="Arg">k</var> and depth <var class="Arg">n-1</var>.</p>
+<p>Returns: The restriction of <var class="Arg">G</var> to <span class="SimpleMath">\(\mathrm{Aut}(T_{k,n-1})\)</span>.</p>
 
-<p>The argument of this attribute is any regular rooted tree group, <var class="Arg">G</var>, of degree <var class="Arg">k</var> and depth <var class="Arg">n</var>.</p>
+<p>The argument of this attribute is a regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,n})\)</span>.</p>
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=AutT(2,3); H:=AutT(2,2);</span>
-Group([ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ])
-Group([ (1,2), (3,4), (1,3)(2,4) ])
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=AutT(2,3);;</span>
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ParentGroup(G);</span>
 Group([ (1,2), (1,3)(2,4), (3,4) ])
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H=last;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">last=AutT(2,2);</span>
 true
 </pre></div>
 
@@ -106,18 +118,16 @@ true
 <h5>3.1-4 MaximalExtension</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; MaximalExtension</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
-<p>Returns: The maximal extension of <var class="Arg">G</var>, <var class="Arg">M(G)</var>, that is a subgroup of the automorphism group of degree <var class="Arg">k</var> and depth <var class="Arg">n+1</var>.</p>
+<p>Returns: The maximal extension of <span class="SimpleMath">\(M(G)\le\mathrm{Aut}(T_{k,n+1})\)</span> of <var class="Arg">G</var>.</p>
 
-<p>The argument of this attribute is any regular rooted tree group, <var class="Arg">G</var>, of degree <var class="Arg">k</var> and depth <var class="Arg">n</var>.</p>
+<p>The argument of this attribute is a self-replicating regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,n})\)</span> with sufficient rigid automorphisms.</p>
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=AutT(2,3); H:=AutT(2,4);</span>
-Group([ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ])
-&lt;permutation group of size 32768 with 15 generators&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=AutT(2,3);;</span>
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MaximalExtension(G);</span>
 &lt;permutation group with 11 generators&gt;
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H=last;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">last=AutT(2,4);</span>
 true
 </pre></div>
 
@@ -126,13 +136,29 @@ true
 <h5>3.1-5 RepresentativeWithSufficientRigidAutomorphisms</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RepresentativeWithSufficientRigidAutomorphisms</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
-<p>Returns: A conjugate of <var class="Arg">G</var> with sufficient rigid automorphisms.</p>
+<p>Returns: A self-replicating <span class="SimpleMath">\(\mathrm{Aut}(T_{k,n})\)</span>-conjugate of <var class="Arg">G</var> with sufficient rigid automorphisms. If <var class="Arg">G</var> has sufficient rigid automorphisms then the output group has the same parent group (see <code class="func">ParentGroup</code> (<span class="RefLink">???</span>)) as <var class="Arg">G</var>.</p>
 
-<p>The argument of this attribute is any regular rooted tree group, <var class="Arg">G</var>.</p>
+<p>The argument of this attribute is a self-replicating regular rooted tree group <var class="Arg">G</var> <span class="SimpleMath">\(\le\mathrm{Aut}(T_{k,n})\)</span>.</p>
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"></span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=SRGroup(2,3,6);</span>
+SRGroup(2,3,6)
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">conjugates:=ShallowCopy(AsList(G^AutT(2,3)));</span>
+[ Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4) ]), 
+  Group([ (1,5)(2,6)(3,8)(4,7), (1,3)(2,4)(5,8)(6,7), (1,2)(3,4) ]) ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Apply(conjugates,H-&gt;RegularRootedTreeGroup(2,3,H));</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">for H in conjugates do Print(HasSufficientRigidAutomorphisms(H),"\n"); od;</span>
+true
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H:=conjugates[2];</span>
+Group([ (1,5)(2,6)(3,8)(4,7), (1,3)(2,4)(5,8)(6,7), (1,2)(3,4) ])
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsSelfReplicating(H);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RepresentativeWithSufficientRigidAutomorphisms(H);</span>
+Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4) ])
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">last=conjugates[1];</span>
+true
 </pre></div>
 
 <p><a id="X7A489A5D79DA9E5C" name="X7A489A5D79DA9E5C"></a></p>

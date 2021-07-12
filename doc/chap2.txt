@@ -76,7 +76,7 @@
   [33X[1;0Y[29X[2XRemoveConjugates[102X( [3XG[103X, [3Xsubgroups[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10YRemoves [3XG[103X-conjugates from the list [3Xsubgroups[103X.[133X
   
-  [33X[0;0YThe  arguments  of  this  function  are  a group, [3XG[103X, and a list [3Xsubgroups[103X of
+  [33X[0;0YThe  arguments  of  this  function  are  a  group  [3XG[103X and a list [3Xsubgroups[103X of
   subgroups of [3XG[103X.[133X
   
   [4X[32X  Example  [32X[104X

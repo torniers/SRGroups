@@ -105,7 +105,7 @@ gap> BelowAction(2,2,(1,2)(3,4),2);
  
 </Returns>
  <Description>
- The arguments of this function are a group, <A>G</A>, and a list <A>subgroups</A> of subgroups of <A>G</A>.
+ The arguments of this function are a group <A>G</A> and a list <A>subgroups</A> of subgroups of <A>G</A>.
 <P/>
  </Description>
 </ManSection>

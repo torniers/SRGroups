@@ -337,7 +337,7 @@ diagrams at different depths.
 
 
 
- The arguments of this function are a group, \mbox{\texttt{\mdseries\slshape G}}, and a list \mbox{\texttt{\mdseries\slshape subgroups}} of subgroups of \mbox{\texttt{\mdseries\slshape G}}. 
+ The arguments of this function are a group \mbox{\texttt{\mdseries\slshape G}} and a list \mbox{\texttt{\mdseries\slshape subgroups}} of subgroups of \mbox{\texttt{\mdseries\slshape G}}. 
 
  }
 
@@ -376,11 +376,11 @@ diagrams at different depths.
 \label{IsSelfReplicating:for IsRegularRootedTreeGroup}
 }\hfill{\scriptsize (property)}}\\
 \textbf{\indent Returns:\ }
-\texttt{true} or \texttt{false} 
+ \texttt{true} if \mbox{\texttt{\mdseries\slshape G}} is self-replicating, and \texttt{false} otherwise. 
 
 
 
- The argument of this property is any regular rooted tree group, \mbox{\texttt{\mdseries\slshape G}}. Tests whether \mbox{\texttt{\mdseries\slshape G}} satisfies the self-replicating conditions. 
+ The argument of this property is aa regular rooted tree group \mbox{\texttt{\mdseries\slshape G}}. 
 
  }
 
@@ -388,8 +388,15 @@ diagrams at different depths.
 
  
 \begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
-  !gapprompt@gap>| !gapinput@IsSelfReplicating(AutT(2,3));|
-  true
+  !gapprompt@gap>| !gapinput@subgroups:=AllSubgroups(AutT(2,2));|
+  [ Group(()), Group([ (3,4) ]), Group([ (1,2) ]), Group([ (1,2)(3,4) ]), 
+    Group([ (1,3)(2,4) ]), Group([ (1,4)(2,3) ]), Group([ (3,4), (1,2) ]), 
+    Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]), 
+    Group([ (3,4), (1,2), (1,3)(2,4) ]) ]
+  !gapprompt@gap>| !gapinput@Apply(subgroups,G->RegularRootedTreeGroup(2,2,G));|
+  !gapprompt@gap>| !gapinput@Apply(subgroups,G->IsSelfReplicating(G));|
+  !gapprompt@gap>| !gapinput@subgroups;|
+  [ false, false, false, false, false, false, false, true, true, true ]
 \end{Verbatim}
  
 
@@ -400,11 +407,11 @@ diagrams at different depths.
 \label{HasSufficientRigidAutomorphisms:for IsRegularRootedTreeGroup}
 }\hfill{\scriptsize (property)}}\\
 \textbf{\indent Returns:\ }
-\texttt{true} or \texttt{false} 
+ \texttt{true} if \mbox{\texttt{\mdseries\slshape G}} has sufficient rigid automorphisms, and \texttt{false} otherwise. 
 
 
 
- The argument of this property is any regular rooted tree group, \mbox{\texttt{\mdseries\slshape G}}. Tests whether \mbox{\texttt{\mdseries\slshape G}} has sufficient rigid automorphisms. 
+ The argument of this property is a regular rooted tree group \mbox{\texttt{\mdseries\slshape G}} 
 
  }
 
@@ -412,8 +419,15 @@ diagrams at different depths.
 
  
 \begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
-  !gapprompt@gap>| !gapinput@HasSufficientRigidAutomorphisms(AutT(2,3));|
-  true
+  !gapprompt@gap>| !gapinput@subgroups:=AllSubgroups(AutT(2,2));|
+  [ Group(()), Group([ (3,4) ]), Group([ (1,2) ]), Group([ (1,2)(3,4) ]), 
+    Group([ (1,3)(2,4) ]), Group([ (1,4)(2,3) ]), Group([ (3,4), (1,2) ]), 
+    Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]), 
+    Group([ (3,4), (1,2), (1,3)(2,4) ]) ]
+  !gapprompt@gap>| !gapinput@Apply(subgroups,G->RegularRootedTreeGroup(2,2,G));|
+  !gapprompt@gap>| !gapinput@Apply(subgroups,G->HasSufficientRigidAutomorphisms(G));|
+  !gapprompt@gap>| !gapinput@subgroups;|
+  [ false, false, false, false, true, false, false, true, true, true ]
 \end{Verbatim}
  
 
@@ -424,22 +438,22 @@ diagrams at different depths.
 \label{ParentGroup:for IsRegularRootedTreeGroup}
 }\hfill{\scriptsize (attribute)}}\\
 \textbf{\indent Returns:\ }
- The image of \mbox{\texttt{\mdseries\slshape G}} when projected onto the automorphism group of degree \mbox{\texttt{\mdseries\slshape k}} and depth \mbox{\texttt{\mdseries\slshape n-1}}. 
+ The restriction of \mbox{\texttt{\mdseries\slshape G}} to $\mathrm{Aut}(T_{k,n-1})$. 
 
 
 
- The argument of this attribute is any regular rooted tree group, \mbox{\texttt{\mdseries\slshape G}}, of degree \mbox{\texttt{\mdseries\slshape k}} and depth \mbox{\texttt{\mdseries\slshape n}}. }
+ The argument of this attribute is a regular rooted tree group \mbox{\texttt{\mdseries\slshape G}} $\le\mathrm{Aut}(T_{k,n})$. 
+
+ }
 
  
 
  
 \begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
-  !gapprompt@gap>| !gapinput@G:=AutT(2,3); H:=AutT(2,2);|
-  Group([ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ])
-  Group([ (1,2), (3,4), (1,3)(2,4) ])
+  !gapprompt@gap>| !gapinput@G:=AutT(2,3);;|
   !gapprompt@gap>| !gapinput@ParentGroup(G);|
   Group([ (1,2), (1,3)(2,4), (3,4) ])
-  !gapprompt@gap>| !gapinput@H=last;|
+  !gapprompt@gap>| !gapinput@last=AutT(2,2);|
   true
 \end{Verbatim}
  
@@ -451,22 +465,20 @@ diagrams at different depths.
 \label{MaximalExtension:for IsRegularRootedTreeGroup}
 }\hfill{\scriptsize (attribute)}}\\
 \textbf{\indent Returns:\ }
- The maximal extension of \mbox{\texttt{\mdseries\slshape G}}, \mbox{\texttt{\mdseries\slshape M(G)}}, that is a subgroup of the automorphism group of degree \mbox{\texttt{\mdseries\slshape k}} and depth \mbox{\texttt{\mdseries\slshape n+1}}. 
+ The maximal extension of $M(G)\le\mathrm{Aut}(T_{k,n+1})$ of \mbox{\texttt{\mdseries\slshape G}}. 
 
 
 
- The argument of this attribute is any regular rooted tree group, \mbox{\texttt{\mdseries\slshape G}}, of degree \mbox{\texttt{\mdseries\slshape k}} and depth \mbox{\texttt{\mdseries\slshape n}}. }
+ The argument of this attribute is a self-replicating regular rooted tree group \mbox{\texttt{\mdseries\slshape G}} $\le\mathrm{Aut}(T_{k,n})$ with sufficient rigid automorphisms. }
 
  
 
  
 \begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
-  !gapprompt@gap>| !gapinput@G:=AutT(2,3); H:=AutT(2,4);|
-  Group([ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ])
-  <permutation group of size 32768 with 15 generators>
+  !gapprompt@gap>| !gapinput@G:=AutT(2,3);;|
   !gapprompt@gap>| !gapinput@MaximalExtension(G);|
   <permutation group with 11 generators>
-  !gapprompt@gap>| !gapinput@H=last;|
+  !gapprompt@gap>| !gapinput@last=AutT(2,4);|
   true
 \end{Verbatim}
  
@@ -478,17 +490,36 @@ diagrams at different depths.
 \label{RepresentativeWithSufficientRigidAutomorphisms:for IsRegularRootedTreeGroup}
 }\hfill{\scriptsize (attribute)}}\\
 \textbf{\indent Returns:\ }
- A conjugate of \mbox{\texttt{\mdseries\slshape G}} with sufficient rigid automorphisms. 
+ A self-replicating $\mathrm{Aut}(T_{k,n})$-conjugate of \mbox{\texttt{\mdseries\slshape G}} with sufficient rigid automorphisms. If \mbox{\texttt{\mdseries\slshape G}} has sufficient rigid automorphisms then the output group has the same parent
+group (see \texttt{ParentGroup} (\ref{ParentGroup})) as \mbox{\texttt{\mdseries\slshape G}}. 
 
 
 
- The argument of this attribute is any regular rooted tree group, \mbox{\texttt{\mdseries\slshape G}}. }
+ The argument of this attribute is a self-replicating regular rooted tree group \mbox{\texttt{\mdseries\slshape G}} $\le\mathrm{Aut}(T_{k,n})$. 
+
+ }
 
  
 
  
 \begin{Verbatim}[commandchars=!@|,fontsize=\small,frame=single,label=Example]
-  !gapprompt@gap>| !gapinput@|
+  !gapprompt@gap>| !gapinput@G:=SRGroup(2,3,6);|
+  SRGroup(2,3,6)
+  !gapprompt@gap>| !gapinput@conjugates:=ShallowCopy(AsList(G^AutT(2,3)));|
+  [ Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4) ]), 
+    Group([ (1,5)(2,6)(3,8)(4,7), (1,3)(2,4)(5,8)(6,7), (1,2)(3,4) ]) ]
+  !gapprompt@gap>| !gapinput@Apply(conjugates,H->RegularRootedTreeGroup(2,3,H));|
+  !gapprompt@gap>| !gapinput@for H in conjugates do Print(HasSufficientRigidAutomorphisms(H),"\n"); od;|
+  true
+  false
+  !gapprompt@gap>| !gapinput@H:=conjugates[2];|
+  Group([ (1,5)(2,6)(3,8)(4,7), (1,3)(2,4)(5,8)(6,7), (1,2)(3,4) ])
+  !gapprompt@gap>| !gapinput@IsSelfReplicating(H);|
+  true
+  !gapprompt@gap>| !gapinput@RepresentativeWithSufficientRigidAutomorphisms(H);|
+  Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4) ])
+  !gapprompt@gap>| !gapinput@last=conjugates[1];|
+  true
 \end{Verbatim}
  }
 
@@ -936,6 +967,17 @@ formatted correctly (see \texttt{SRGroupFile} (\ref{SRGroupFile})).
 
 \printindex
 
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
+\immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}
 \immediate\write\pagenrlog{["Ind", 0, 0], \arabic{page},}

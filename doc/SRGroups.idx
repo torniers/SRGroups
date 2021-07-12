@@ -6,20 +6,20 @@
 \indexentry{RemoveConjugates@\texttt  {RemoveConjugates}|hyperpage}{6}
 \indexentry{IsSelfReplicating@\texttt  {IsSelfReplicating}!for IsRegularRootedTreeGroup|hyperpage}{7}
 \indexentry{HasSufficientRigidAutomorphisms@\texttt  {HasSufficientRigidAutomorphisms}!for IsRegularRootedTreeGroup|hyperpage}{7}
-\indexentry{ParentGroup@\texttt  {ParentGroup}!for IsRegularRootedTreeGroup|hyperpage}{7}
+\indexentry{ParentGroup@\texttt  {ParentGroup}!for IsRegularRootedTreeGroup|hyperpage}{8}
 \indexentry{MaximalExtension@\texttt  {MaximalExtension}!for IsRegularRootedTreeGroup|hyperpage}{8}
 \indexentry{RepresentativeWithSufficientRigidAutomorphisms@\texttt  {Representative}\-\texttt  {With}\-\texttt  {Sufficient}\-\texttt  {Rigid}\-\texttt  {Automorphisms}!for IsRegularRootedTreeGroup|hyperpage}{8}
-\indexentry{AutT@\texttt  {AutT}|hyperpage}{8}
+\indexentry{AutT@\texttt  {AutT}|hyperpage}{9}
 \indexentry{ConjugacyClassRepsMaxSelfReplicatingSubgroups@\texttt  {Conjugacy}\-\texttt  {Class}\-\texttt  {Reps}\-\texttt  {Max}\-\texttt  {Self}\-\texttt  {Replicating}\-\texttt  {Subgroups}|hyperpage}{9}
 \indexentry{ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection@\texttt  {Conjugacy}\-\texttt  {Class}\-\texttt  {Reps}\-\texttt  {Self}\-\texttt  {Replicating}\-\texttt  {Subgroups}\-\texttt  {With}\-\texttt  {Conjugate}\-\texttt  {Projection}|hyperpage}{9}
-\indexentry{SRGroupsAvailable@\texttt  {SRGroupsAvailable}|hyperpage}{10}
-\indexentry{NrSRGroups@\texttt  {NrSRGroups}|hyperpage}{10}
-\indexentry{SRDegrees@\texttt  {SRDegrees}|hyperpage}{10}
-\indexentry{SRLevels@\texttt  {SRLevels}|hyperpage}{11}
-\indexentry{SRGroup@\texttt  {SRGroup}|hyperpage}{11}
-\indexentry{AllSRGroups@\texttt  {AllSRGroups}|hyperpage}{11}
-\indexentry{AllSRGroupsInfo@\texttt  {AllSRGroupsInfo}|hyperpage}{12}
-\indexentry{SRGroupFile@\texttt  {SRGroupFile}|hyperpage}{12}
-\indexentry{ExtendSRGroup@\texttt  {ExtendSRGroup}|hyperpage}{13}
-\indexentry{CombineSRFiles@\texttt  {CombineSRFiles}|hyperpage}{13}
-\indexentry{CheckSRProjections@\texttt  {CheckSRProjections}|hyperpage}{14}
+\indexentry{SRGroupsAvailable@\texttt  {SRGroupsAvailable}|hyperpage}{11}
+\indexentry{NrSRGroups@\texttt  {NrSRGroups}|hyperpage}{11}
+\indexentry{SRDegrees@\texttt  {SRDegrees}|hyperpage}{11}
+\indexentry{SRLevels@\texttt  {SRLevels}|hyperpage}{12}
+\indexentry{SRGroup@\texttt  {SRGroup}|hyperpage}{12}
+\indexentry{AllSRGroups@\texttt  {AllSRGroups}|hyperpage}{12}
+\indexentry{AllSRGroupsInfo@\texttt  {AllSRGroupsInfo}|hyperpage}{13}
+\indexentry{SRGroupFile@\texttt  {SRGroupFile}|hyperpage}{13}
+\indexentry{ExtendSRGroup@\texttt  {ExtendSRGroup}|hyperpage}{14}
+\indexentry{CombineSRFiles@\texttt  {CombineSRFiles}|hyperpage}{14}
+\indexentry{CheckSRProjections@\texttt  {CheckSRProjections}|hyperpage}{15}

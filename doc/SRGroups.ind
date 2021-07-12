@@ -1,8 +1,8 @@
 \begin{theindex}
 
-  \item \texttt  {AllSRGroups}, \hyperpage{11}
-  \item \texttt  {AllSRGroupsInfo}, \hyperpage{12}
-  \item \texttt  {AutT}, \hyperpage{8}
+  \item \texttt  {AllSRGroups}, \hyperpage{12}
+  \item \texttt  {AllSRGroupsInfo}, \hyperpage{13}
+  \item \texttt  {AutT}, \hyperpage{9}
 
   \indexspace
 
@@ -10,8 +10,8 @@
 
   \indexspace
 
-  \item \texttt  {CheckSRProjections}, \hyperpage{14}
-  \item \texttt  {CombineSRFiles}, \hyperpage{13}
+  \item \texttt  {CheckSRProjections}, \hyperpage{15}
+  \item \texttt  {CombineSRFiles}, \hyperpage{14}
   \item \texttt  {Conjugacy}\-\texttt  {Class}\-\texttt  {Reps}\-\texttt  {Max}\-\texttt  {Self}\-\texttt  {Replicating}\-\texttt  {Subgroups}, 
 		\hyperpage{9}
   \item \texttt  {Conjugacy}\-\texttt  {Class}\-\texttt  {Reps}\-\texttt  {Self}\-\texttt  {Replicating}\-\texttt  {Subgroups}\-\texttt  {With}\-\texttt  {Conjugate}\-\texttt  {Projection}, 
@@ -19,7 +19,7 @@
 
   \indexspace
 
-  \item \texttt  {ExtendSRGroup}, \hyperpage{13}
+  \item \texttt  {ExtendSRGroup}, \hyperpage{14}
 
   \indexspace
 
@@ -40,12 +40,12 @@
 
   \indexspace
 
-  \item \texttt  {NrSRGroups}, \hyperpage{10}
+  \item \texttt  {NrSRGroups}, \hyperpage{11}
 
   \indexspace
 
   \item \texttt  {ParentGroup}
-    \subitem for IsRegularRootedTreeGroup, \hyperpage{7}
+    \subitem for IsRegularRootedTreeGroup, \hyperpage{8}
 
   \indexspace
 
@@ -61,10 +61,10 @@
 
   \indexspace
 
-  \item \texttt  {SRDegrees}, \hyperpage{10}
-  \item \texttt  {SRGroup}, \hyperpage{11}
-  \item \texttt  {SRGroupFile}, \hyperpage{12}
-  \item \texttt  {SRGroupsAvailable}, \hyperpage{10}
-  \item \texttt  {SRLevels}, \hyperpage{11}
+  \item \texttt  {SRDegrees}, \hyperpage{11}
+  \item \texttt  {SRGroup}, \hyperpage{12}
+  \item \texttt  {SRGroupFile}, \hyperpage{13}
+  \item \texttt  {SRGroupsAvailable}, \hyperpage{11}
+  \item \texttt  {SRLevels}, \hyperpage{12}
 
 \end{theindex}

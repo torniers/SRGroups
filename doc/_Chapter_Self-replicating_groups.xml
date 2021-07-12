@@ -10,10 +10,12 @@
 
 <ManSection>
   <Prop Arg="G" Name="IsSelfReplicating" Label="for IsRegularRootedTreeGroup"/>
- <Returns><C>true</C> or <C>false</C>
+ <Returns> <K>true</K> if <A>G</A> is self-replicating, and <K>false</K> otherwise.
+ 
+ 
 </Returns>
  <Description>
- The argument of this property is any regular rooted tree group, <A>G</A>. Tests whether <A>G</A> satisfies the self-replicating conditions.
+ The argument of this property is aa regular rooted tree group <A>G</A>.
 <P/>
  </Description>
 </ManSection>
@@ -21,17 +23,26 @@
 
 <P/>
 <Example><![CDATA[
-gap> IsSelfReplicating(AutT(2,3));
-true
+gap> subgroups:=AllSubgroups(AutT(2,2));
+[ Group(()), Group([ (3,4) ]), Group([ (1,2) ]), Group([ (1,2)(3,4) ]), 
+  Group([ (1,3)(2,4) ]), Group([ (1,4)(2,3) ]), Group([ (3,4), (1,2) ]), 
+  Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]), 
+  Group([ (3,4), (1,2), (1,3)(2,4) ]) ]
+gap> Apply(subgroups,G->RegularRootedTreeGroup(2,2,G));
+gap> Apply(subgroups,G->IsSelfReplicating(G));
+gap> subgroups;
+[ false, false, false, false, false, false, false, true, true, true ]
 ]]></Example>
 
 
 <ManSection>
   <Prop Arg="G" Name="HasSufficientRigidAutomorphisms" Label="for IsRegularRootedTreeGroup"/>
- <Returns><C>true</C> or <C>false</C>
+ <Returns> <K>true</K> if <A>G</A> has sufficient rigid automorphisms, and <K>false</K> otherwise.
+ 
+ 
 </Returns>
  <Description>
- The argument of this property is any regular rooted tree group, <A>G</A>. Tests whether <A>G</A> has sufficient rigid automorphisms.
+ The argument of this property is a regular rooted tree group <A>G</A>
 <P/>
  </Description>
 </ManSection>
@@ -39,74 +50,95 @@ true
 
 <P/>
 <Example><![CDATA[
-gap> HasSufficientRigidAutomorphisms(AutT(2,3));
-true
+gap> subgroups:=AllSubgroups(AutT(2,2));
+[ Group(()), Group([ (3,4) ]), Group([ (1,2) ]), Group([ (1,2)(3,4) ]), 
+  Group([ (1,3)(2,4) ]), Group([ (1,4)(2,3) ]), Group([ (3,4), (1,2) ]), 
+  Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]), 
+  Group([ (3,4), (1,2), (1,3)(2,4) ]) ]
+gap> Apply(subgroups,G->RegularRootedTreeGroup(2,2,G));
+gap> Apply(subgroups,G->HasSufficientRigidAutomorphisms(G));
+gap> subgroups;
+[ false, false, false, false, true, false, false, true, true, true ]
 ]]></Example>
 
 
 <ManSection>
   <Attr Arg="G" Name="ParentGroup" Label="for IsRegularRootedTreeGroup"/>
- <Returns> The image of <A>G</A> when projected onto the automorphism group of degree <A>k</A> and depth <A>n-1</A>.
+ <Returns> The restriction of <A>G</A> to <Math>\mathrm{Aut}(T_{k,n-1})</Math>.
  
  
 </Returns>
  <Description>
- The argument of this attribute is any regular rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>.
+ The argument of this attribute is a regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,n})</Math>.
+<P/>
  </Description>
 </ManSection>
 
 
 <P/>
 <Example><![CDATA[
-gap> G:=AutT(2,3); H:=AutT(2,2);
-Group([ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ])
-Group([ (1,2), (3,4), (1,3)(2,4) ])
+gap> G:=AutT(2,3);;
 gap> ParentGroup(G);
 Group([ (1,2), (1,3)(2,4), (3,4) ])
-gap> H=last;
+gap> last=AutT(2,2);
 true
 ]]></Example>
 
 
 <ManSection>
   <Attr Arg="G" Name="MaximalExtension" Label="for IsRegularRootedTreeGroup"/>
- <Returns> The maximal extension of <A>G</A>, <A>M(G)</A>, that is a subgroup of the automorphism group of degree <A>k</A> and depth <A>n+1</A>.
+ <Returns> The maximal extension of <Math>M(G)\le\mathrm{Aut}(T_{k,n+1})</Math> of <A>G</A>.
  
  
 </Returns>
  <Description>
- The argument of this attribute is any regular rooted tree group, <A>G</A>, of degree <A>k</A> and depth <A>n</A>.
+ The argument of this attribute is a self-replicating regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,n})</Math> with sufficient rigid automorphisms.
  </Description>
 </ManSection>
 
 
 <P/>
 <Example><![CDATA[
-gap> G:=AutT(2,3); H:=AutT(2,4);
-Group([ (1,2), (3,4), (5,6), (7,8), (1,3)(2,4), (5,7)(6,8), (1,5)(2,6)(3,7)(4,8) ])
-<permutation group of size 32768 with 15 generators>
+gap> G:=AutT(2,3);;
 gap> MaximalExtension(G);
 <permutation group with 11 generators>
-gap> H=last;
+gap> last=AutT(2,4);
 true
 ]]></Example>
 
 
 <ManSection>
   <Attr Arg="G" Name="RepresentativeWithSufficientRigidAutomorphisms" Label="for IsRegularRootedTreeGroup"/>
- <Returns> A conjugate of <A>G</A> with sufficient rigid automorphisms.
+ <Returns> A self-replicating <Math>\mathrm{Aut}(T_{k,n})</Math>-conjugate of <A>G</A> with sufficient rigid automorphisms. If <A>G</A> has sufficient rigid automorphisms then the output group has the same parent group (see <Ref Attr="ParentGroup"/>) as <A>G</A>.
  
  
 </Returns>
  <Description>
- The argument of this attribute is any regular rooted tree group, <A>G</A>. 
+ The argument of this attribute is a self-replicating regular rooted tree group <A>G</A> <Math>\le\mathrm{Aut}(T_{k,n})</Math>.
+<P/>
  </Description>
 </ManSection>
 
 
 <P/>
 <Example><![CDATA[
-gap> 
+gap> G:=SRGroup(2,3,6);
+SRGroup(2,3,6)
+gap> conjugates:=ShallowCopy(AsList(G^AutT(2,3)));
+[ Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4) ]), 
+  Group([ (1,5)(2,6)(3,8)(4,7), (1,3)(2,4)(5,8)(6,7), (1,2)(3,4) ]) ]
+gap> Apply(conjugates,H->RegularRootedTreeGroup(2,3,H));
+gap> for H in conjugates do Print(HasSufficientRigidAutomorphisms(H),"\n"); od;
+true
+false
+gap> H:=conjugates[2];
+Group([ (1,5)(2,6)(3,8)(4,7), (1,3)(2,4)(5,8)(6,7), (1,2)(3,4) ])
+gap> IsSelfReplicating(H);
+true
+gap> RepresentativeWithSufficientRigidAutomorphisms(H);
+Group([ (1,5)(2,6)(3,7)(4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4) ])
+gap> last=conjugates[1];
+true
 ]]></Example>
 
 
