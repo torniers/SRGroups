@@ -53,7 +53,7 @@
 ##################################################################################################################
 
 #! @Description
-#! Groups acting on the regular rooted trees $T_{k,n}$ are stored together with their degree $k\in\mathbb{N}_{\ge 2}$ (see <Ref Attr="RegularRootedTreeGroupDegree"/>) and depth $n\in\mathbb{N}$ (see <Ref Attr="RegularRootedTreeGroupDepth"/>) as well as other attributes and properties in this category.
+#! Groups acting on the regular rooted trees $T_{k,n}$ are stored together with their degree $k\in\mathbb{N}_{\ge 2}$ (see <Ref Attr="RegularRootedTreeGroupDegree" Label="for IsRegularRootedTreeGroup"/>) and depth $n\in\mathbb{N}$ (see <Ref Attr="RegularRootedTreeGroupDepth" Label="for IsRegularRootedTreeGroup"/>) as well as other attributes and properties in this category.
 #!
 DeclareCategory("IsRegularRootedTreeGroup", IsPermGroup);
 
@@ -97,7 +97,7 @@ DeclareAttribute("RegularRootedTreeGroupDepth", IsRegularRootedTreeGroup);
 #! The arguments of this method are a permutation group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$, its degree <A>k</A> and its depth <A>n</A>.
 #!
 #! @Returns
-#! The regular rooted tree group <A>G</A> as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>, together with its degree <A>k</A> (see <Ref Attr="RegularRootedTreeGroupDegree"/>) and its depth <A>n</A> (see <Ref Attr="RegularRootedTreeGroupDepth"/>).
+#! The regular rooted tree group <A>G</A> as an object of the category <Ref Filt="IsRegularRootedTreeGroup" Label="for IsPermGroup"/>, together with its degree <A>k</A> (see <Ref Attr="RegularRootedTreeGroupDegree" Label="for IsRegularRootedTreeGroup"/>) and its depth <A>n</A> (see <Ref Attr="RegularRootedTreeGroupDepth" Label="for IsRegularRootedTreeGroup"/>).
 #!
 #! @Arguments k,n,G
 #!
@@ -247,7 +247,7 @@ DeclareAttribute("MaximalExtension", IsRegularRootedTreeGroup);
 #! The argument of this attribute is a self-replicating regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$.
 #!
 #! @Returns
-#! A self-replicating $\mathrm{Aut}(T_{k,n})$-conjugate of <A>G</A> with sufficient rigid automorphisms. If <A>G</A> has sufficient rigid automorphisms then the output group has the same parent group (see <Ref Attr="ParentGroup"/>) as <A>G</A>.
+#! A self-replicating $\mathrm{Aut}(T_{k,n})$-conjugate of <A>G</A> with sufficient rigid automorphisms. If <A>G</A> has sufficient rigid automorphisms then the output group has the same parent group (see <Ref Attr="ParentGroup" Label="for IsRegularRootedTreeGroup"/>) as <A>G</A>.
 #!
 #! @Arguments G
 #!
@@ -287,6 +287,7 @@ DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRoot
 #! The regular rooted tree group $\mathrm{Aut}(T_{k,n})$ as a permutation group of the $k^{n}$ leaves of $T_{k,n}$.
 #!
 #! @Arguments k,n
+#!
 DeclareGlobalFunction( "AutT" );
 #!
 #! @BeginExampleSession
@@ -315,37 +316,25 @@ DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
 ##################################################################################################################
 
 #! @Description
-#! The argument of this function is any regular rooted tree group, <A>G</A>
+#! The argument of this function is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$.
 #!
 #! @Returns
-#! A list containing conjugacy class representatives of all self-replicating subgroups of the maximal extension of <A>G</A>, <A>M(G)</A>.
+#! A list of $\mathrm{Aut}(T_{k,n+1})$-conjugacy class representatives of self-replicating subgroups of $\mathrm{Aut}(T_{k,n+1})$ whose parent group is conjugate to $G$.
 #!
 #! @Arguments G
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection" );
 #!
 #! @BeginExampleSession
-#! gap> ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(AutT(3,1));
-#! [ Group([ (1,4,7)(2,5,8)(3,6,9), (1,4)(2,5)(3,6), (1,2,3), (1,2) ]),
-#!   Group([ (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9), (2,3)
-#!       (8,9), (7,9,8), (4,6,5), (1,3,2) ]),
-#!   Group([ (2,3)(4,7)(5,9)(6,8), (1,4,7)(2,5,8)(3,6,9), (5,6)(8,9),
-#!       (2,3)(8,9), (7,9,8), (4,6,5), (1,3,2) ]),
-#!   Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),
-#!       (7,9,8), (4,6,5), (1,3,2) ]),
-#!   Group([ (1,7)(2,8)(3,9)(5,6), (1,7,4)(2,9,5)(3,8,6), (1,2,3),
-#!       (7,8,9), (4,6,5)(7,8,9) ]),
-#!   Group([ (2,3)(4,7)(5,8)(6,9), (4,6,5)(7,9,8), (1,4,7)(2,5,9)
-#!       (3,6,8), (1,2,3)(4,5,6)(7,9,8) ]),
-#!   Group([ (2,3)(4,7)(5,8)(6,9), (1,7,6,2,9,4,3,8,5), (1,2,3)
-#!       (4,6,5), (1,2,3)(4,5,6)(7,9,8) ]),
-#!   Group([ (2,3)(4,7)(5,8)(6,9), (1,6,7,3,5,8,2,4,9), (1,3,2)(4,6,5)
-#!       (7,8,9) ]),
-#!   Group([ (2,3)(4,7)(5,8)(6,9), (1,7,4)(2,9,5)(3,8,6), (1,2,3)
-#!       (4,5,6)(7,9,8) ]),
-#!   Group([ (1,4)(2,5)(3,6), (1,7,4)(2,8,5)(3,9,6), (2,3)(5,6)(8,9),
-#!       (1,2,3)(4,5,6)(7,8,9), (4,5,6)(7,9,8) ]),
-#!   Group([ (2,3)(5,6)(8,9), (4,7)(5,8)(6,9), (1,4,7)(2,5,8)(3,6,9),
-#!       (1,3,2)(4,6,5)(7,9,8) ]) ]
+#! gap> A3:=RegularRootedTreeGroup(3,1,AlternatingGroup(3));;
+#! gap> S3:=RegularRootedTreeGroup(3,1,SymmetricGroup(3));;
+#! gap> A3_extn:=ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(A3);;
+#! gap> S3_extn:=ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection(S3);;
+#! gap> Size(A3_extn);
+#! 5
+#! gap> Size(S3_extn);
+#! 11
+#! gap> NrSRGroups(3,2);
+#! 16
 #! @EndExampleSession
 
 ##################################################################################################################

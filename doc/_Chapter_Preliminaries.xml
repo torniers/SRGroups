@@ -13,7 +13,7 @@
  <Returns><C>true</C> or <C>false</C>
 </Returns>
  <Description>
- Groups acting on the regular rooted trees <Math>T_{k,n}</Math> are stored together with their degree <Math>k\in\mathbb{N}_{\ge 2}</Math> (see <Ref Attr="RegularRootedTreeGroupDegree"/>) and depth <Math>n\in\mathbb{N}</Math> (see <Ref Attr="RegularRootedTreeGroupDepth"/>) as well as other attributes and properties in this category.
+ Groups acting on the regular rooted trees <Math>T_{k,n}</Math> are stored together with their degree <Math>k\in\mathbb{N}_{\ge 2}</Math> (see <Ref Attr="RegularRootedTreeGroupDegree" Label="for IsRegularRootedTreeGroup"/>) and depth <Math>n\in\mathbb{N}</Math> (see <Ref Attr="RegularRootedTreeGroupDepth" Label="for IsRegularRootedTreeGroup"/>) as well as other attributes and properties in this category.
 <P/>
  </Description>
 </ManSection>
@@ -61,7 +61,7 @@ gap> RegularRootedTreeGroupDepth(AutT(2,3));
 
 <ManSection>
   <Oper Arg="k,n,G" Name="RegularRootedTreeGroup" Label="for IsInt, IsInt, IsPermGroup"/>
- <Returns> The regular rooted tree group <A>G</A> as an object of the category <Ref Filt="IsRegularRootedTreeGroup"/>, together with its degree <A>k</A> (see <Ref Attr="RegularRootedTreeGroupDegree"/>) and its depth <A>n</A> (see <Ref Attr="RegularRootedTreeGroupDepth"/>).
+ <Returns> The regular rooted tree group <A>G</A> as an object of the category <Ref Filt="IsRegularRootedTreeGroup" Label="for IsPermGroup"/>, together with its degree <A>k</A> (see <Ref Attr="RegularRootedTreeGroupDegree" Label="for IsRegularRootedTreeGroup"/>) and its depth <A>n</A> (see <Ref Attr="RegularRootedTreeGroupDepth" Label="for IsRegularRootedTreeGroup"/>).
  
  
 </Returns>

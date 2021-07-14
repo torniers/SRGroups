@@ -13,9 +13,8 @@
   
   [33X[0;0YGroups  acting  on the regular rooted trees [23XT_{k,n}[123X are stored together with
   their   degree   [23Xk\in\mathbb{N}_{\ge  2}[123X  (see  [2XRegularRootedTreeGroupDegree[102X
-  ([14X???RegularRootedTreeGroupDegree???[114X))    and   depth   [23Xn\in\mathbb{N}[123X   (see
-  [2XRegularRootedTreeGroupDepth[102X  ([14X???RegularRootedTreeGroupDepth???[114X)) as well as
-  other attributes and properties in this category.[133X
+  ([14X2.1-2[114X))  and depth [23Xn\in\mathbb{N}[123X (see [2XRegularRootedTreeGroupDepth[102X ([14X2.1-3[114X))
+  as well as other attributes and properties in this category.[133X
   
   [1X2.1-2 RegularRootedTreeGroupDegree[101X
   
@@ -45,10 +44,9 @@
   
   [33X[1;0Y[29X[2XRegularRootedTreeGroup[102X( [3Xk[103X, [3Xn[103X, [3XG[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10YThe  regular  rooted  tree  group  [3XG[103X  as an object of the category
-            [2XIsRegularRootedTreeGroup[102X         ([14X???IsRegularRootedTreeGroup???[114X),
-            together  with  its  degree  [3Xk[103X  (see  [2XRegularRootedTreeGroupDegree[102X
-            ([14X???RegularRootedTreeGroupDegree???[114X))   and   its   depth  [3Xn[103X  (see
-            [2XRegularRootedTreeGroupDepth[102X ([14X???RegularRootedTreeGroupDepth???[114X)).[133X
+            [2XIsRegularRootedTreeGroup[102X  ([14X2.1-1[114X), together with its degree [3Xk[103X (see
+            [2XRegularRootedTreeGroupDegree[102X   ([14X2.1-2[114X))   and  its  depth  [3Xn[103X  (see
+            [2XRegularRootedTreeGroupDepth[102X ([14X2.1-3[114X)).[133X
   
   [33X[0;0YThe    arguments    of    this    method   are   a   permutation   group   [3XG[103X
   [23X\le\mathrm{Aut}(T_{k,n})[123X, its degree [3Xk[103X and its depth [3Xn[103X.[133X
