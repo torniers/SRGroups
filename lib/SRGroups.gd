@@ -358,9 +358,10 @@ DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateP
 ##################################################################################################################
 
 #! @Description
-#! The argument of this function is a degree, <A>k</A>, and a depth, <A>n</A>.
+#! The argument of this function is a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
+#!
 #! @Returns
-#! Whether the self-replicating groups of degree, <A>k</A>, and depth, <A>n</A>, are available.
+#! <K>true</K> if the self-replicating groups of degree <A>k</A> and depth <A>n</A> are available, and <K>false</K> otherwise.
 #!
 #! @Arguments k,n
 #!
@@ -376,9 +377,10 @@ DeclareGlobalFunction( "SRGroupsAvailable" );
 ##################################################################################################################
 
 #! @Description
-#! The argument of this function is a degree, <A>k</A>, and a depth, <A>n</A>.
+#! The argument of this function is a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$ and a depth <A>n</A> $\in\mathbb{N}$.
+#!
 #! @Returns
-#! The number of self-replicating groups of degree, <A>k</A>, and depth, <A>n</A>.
+#! The number of self-replicating groups of degree <A>k</A> and depth <A>n</A> stored in the library, if available, and <K>fail</K> otherwise.
 #!
 #! @Arguments k,n
 #!
@@ -389,6 +391,8 @@ DeclareGlobalFunction( "NrSRGroups" );
 #! 15
 #! gap> NrSRGroups(2,5);
 #! 2436
+#! gap> NrSRGroups(2,6);
+#! fail
 #! @EndExampleSession
 
 ##################################################################################################################

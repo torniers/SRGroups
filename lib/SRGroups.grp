@@ -82,8 +82,7 @@ InstallGlobalFunction(NrSRGroups,function(k,n)
 	elif not (IsInt(n) and n>=1) then
 		Error("input argument n=",n," must be an integer greater than or equal to 1");
 	elif not SRGroupsAvailable(k,n) then
-		Print("These groups are not available (yet)!");
-		return;
+		return fail;
 	else
 		return Length(GetSRData(k,n));
 	fi;
