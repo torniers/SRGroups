@@ -247,7 +247,7 @@ DeclareAttribute("MaximalExtension", IsRegularRootedTreeGroup);
 #! The argument of this attribute is a self-replicating regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$.
 #!
 #! @Returns
-#! A self-replicating $\mathrm{Aut}(T_{k,n})$-conjugate of <A>G</A> with sufficient rigid automorphisms. If <A>G</A> has sufficient rigid automorphisms then the output group has the same parent group (see <Ref Attr="ParentGroup" Label="for IsRegularRootedTreeGroup"/>) as <A>G</A>.
+#! A self-replicating $\mathrm{Aut}(T_{k,n})$-conjugate of <A>G</A> with sufficient rigid automorphisms. If the parent group of <A>G</A> has sufficient rigid automorphisms then the output group has the same parent group (see <Ref Attr="ParentGroup" Label="for IsRegularRootedTreeGroup"/>) as <A>G</A>.
 #!
 #! @Arguments G
 #!
@@ -300,17 +300,20 @@ DeclareGlobalFunction( "AutT" );
 ##################################################################################################################
 
 #! @Description
-#! The argument of this function is any regular rooted tree group, <A>G</A>
+#! The argument of this function is a regular rooted tree group <A>G</A>.
 #!
 #! @Returns
-#! A list containing conjugacy class representatives of all maximal self-replicating subgroups of <A>G</A>.
+#! A list of $\mathrm{Aut}(T_{k,n})$-conjugacy class representatives of all self-replicating, maximal subgroups of <A>G</A>.
 #!
 #! @Arguments G
+#!
 DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
 #!
 #! @BeginExampleSession
-#! gap> ConjugacyClassRepsMaxSelfReplicatingSubgroups(AutT(2,2));
-#! [ Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]) ]
+#! gap> Size(ConjugacyClassRepsMaxSelfReplicatingSubgroups(AutT(2,2)));
+#! 2
+#! NrSRGroups(2,2);
+#! 3
 #! @EndExampleSession
 
 ##################################################################################################################
@@ -319,9 +322,10 @@ DeclareGlobalFunction( "ConjugacyClassRepsMaxSelfReplicatingSubgroups" );
 #! The argument of this function is a regular rooted tree group <A>G</A> $\le\mathrm{Aut}(T_{k,n})$.
 #!
 #! @Returns
-#! A list of $\mathrm{Aut}(T_{k,n+1})$-conjugacy class representatives of self-replicating subgroups of $\mathrm{Aut}(T_{k,n+1})$ whose parent group is conjugate to $G$.
+#! A list of $\mathrm{Aut}(T_{k,n+1})$-conjugacy class representatives of all self-replicating subgroups of $\mathrm{Aut}(T_{k,n+1})$ whose parent group is conjugate to $G$.
 #!
 #! @Arguments G
+#!
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection" );
 #!
 #! @BeginExampleSession
