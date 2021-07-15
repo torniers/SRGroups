@@ -388,7 +388,7 @@ DeclareGlobalFunction( "NrSRGroups" );
 #!
 #! @BeginExampleSession
 #! gap> NrSRGroups(2,3);
-#! 15
+#! 15 
 #! gap> NrSRGroups(2,5);
 #! 2436
 #! gap> NrSRGroups(2,6);
@@ -398,11 +398,15 @@ DeclareGlobalFunction( "NrSRGroups" );
 ##################################################################################################################
 
 #! @Description
-#! There are no inputs to this function.
+#! This function has no arguments.
+
 #! @Returns
-#! All of the degrees currently stored in the <Package>SRGroups</Package> library.
-#! @Arguments 
+#! A list of all degrees $k\in\mathbb{N}_{\ge 2}$ for which self-replicating groups are available at depth $1$, and possibly greater depth.
+#!
+#! @Arguments
+#!
 DeclareGlobalFunction( "SRDegrees" );
+#!
 #! @BeginExampleSession
 #! gap> SRDegrees();
 #! [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]
@@ -411,14 +415,20 @@ DeclareGlobalFunction( "SRDegrees" );
 ##################################################################################################################
 
 #! @Description
-#! The input to this function is the degree of the regular rooted tree, <A>k</A>.
+#! The argument of this function is a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$.
+#!
 #! @Returns
-#! All of the levels currently stored in the <Package>SRGroups</Package> library for an input RegularRootedTreeGroupDegree, <A>deg</A>.
+#! A list of all depth $n\in\mathbb{N}$ for which self-replicating groups of degree <A>k</A> and depth <A>n</A> are available.
+#!
 #! @Arguments k
+#!
 DeclareGlobalFunction( "SRLevels" );
+#!
 #! @BeginExampleSession
 #! gap> SRLevels(2);
-#! [ 1, 2, 3, 4 ]
+#! [ 1, 2, 3, 4, 5 ]
+#! gap> SRLevels(17);
+#! [  ]
 #! @EndExampleSession
 
 ##################################################################################################################

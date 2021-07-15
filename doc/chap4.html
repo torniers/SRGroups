@@ -62,9 +62,9 @@
 <h5>4.1-1 SRGroupsAvailable</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SRGroupsAvailable</code>( <var class="Arg">k</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
-<p>Returns: Whether the self-replicating groups of degree, <var class="Arg">k</var>, and depth, <var class="Arg">n</var>, are available.</p>
+<p>Returns: <code class="keyw">true</code> if the self-replicating groups of degree <var class="Arg">k</var> and depth <var class="Arg">n</var> are available, and <code class="keyw">false</code> otherwise.</p>
 
-<p>The argument of this function is a degree, <var class="Arg">k</var>, and a depth, <var class="Arg">n</var>.</p>
+<p>The argument of this function is a degree <var class="Arg">k</var> <span class="Math">\in\mathbb{N}_{\ge 2}</span> and a depth <var class="Arg">n</var> <span class="Math">\in\mathbb{N}</span>.</p>
 
 
 <div class="example"><pre>
@@ -79,16 +79,18 @@ false
 <h5>4.1-2 NrSRGroups</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; NrSRGroups</code>( <var class="Arg">k</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
-<p>Returns: The number of self-replicating groups of degree, <var class="Arg">k</var>, and depth, <var class="Arg">n</var>.</p>
+<p>Returns: The number of self-replicating groups of degree <var class="Arg">k</var> and depth <var class="Arg">n</var> stored in the library, if available, and <code class="keyw">fail</code> otherwise.</p>
 
-<p>The argument of this function is a degree, <var class="Arg">k</var>, and a depth, <var class="Arg">n</var>.</p>
+<p>The argument of this function is a degree <var class="Arg">k</var> <span class="Math">\in\mathbb{N}_{\ge 2}</span> and a depth <var class="Arg">n</var> <span class="Math">\in\mathbb{N}</span>.</p>
 
 
 <div class="example"><pre>
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NrSRGroups(2,3);</span>
-15
+15 
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NrSRGroups(2,5);</span>
 2436
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NrSRGroups(2,6);</span>
+fail
 </pre></div>
 
 <p><a id="X7BF255357B870D37" name="X7BF255357B870D37"></a></p>
@@ -96,7 +98,7 @@ false
 <h5>4.1-3 SRDegrees</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SRDegrees</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
-<p>Returns: All of the degrees currently stored in the <strong class="pkg">SRGroups</strong> library.</p>
+<p>Returns: A list of all degrees <span class="Math">k\in\mathbb{N}_{\ge 2}</span> for which self-replicating groups are available at depth <span class="Math">1</span>, and possibly greater depth.</p>
 
 <p>There are no inputs to this function.</p>
 
