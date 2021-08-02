@@ -1,34 +1,34 @@
 *.DS_Store
 *~
 
-# /gh-pages/
-# /tmp
+/gh-pages/
+/tmp
 
 /doc/*.aux
 /doc/*.bbl
 /doc/*.blg
 /doc/*.brf
-# /doc/*.css
-# /doc/*.html
+/doc/*.css
+/doc/*.html
 /doc/*.idx
 /doc/*.ilg
 /doc/*.ind
 /doc/*.js
 /doc/*.log
 /doc/*.out
-# /doc/*.pdf
 /doc/*.pnr
 /doc/*.tex
 /doc/*.toc
 /doc/*.txt
 /doc/*.xml.bib
-# /doc/AutoDoc.xml
+/doc/AutoDoc.xml
 
 /doc/SRGroups.xml
 
 /doc/_*.xml
 /doc/maketest.g
 /doc/manual.lab
+/doc/manual.pdf
 /doc/manual.six
 /doc/QuickReference/*
 /doc/title.xml
