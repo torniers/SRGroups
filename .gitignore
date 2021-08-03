@@ -33,3 +33,5 @@
 /doc/QuickReference/*
 /doc/title.xml
 *.actual/
+
+/tst/srgroups*.tst
