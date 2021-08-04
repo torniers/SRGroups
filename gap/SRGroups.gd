@@ -547,8 +547,8 @@ DeclareGlobalFunction( "AllSRGroupsInfo" );
 
 # internal?
 DeclareGlobalFunction( "GetSRData" );
-DeclareGlobalFunction( "CheckSRGroupsInputs" );
 DeclareGlobalFunction( "GetSRMaximums" );
+DeclareGlobalFunction( "CheckSRGroupsInputs" );
 DeclareGlobalFunction( "StringVariables" );
 DeclareGlobalFunction( "UnbindVariables" );
 
