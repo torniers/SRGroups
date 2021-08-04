@@ -102,6 +102,17 @@ DeclareAttribute("RegularRootedTreeGroupDepth", IsRegularRootedTreeGroup);
 #! @Arguments k,n,G
 #!
 DeclareOperation("RegularRootedTreeGroup", [IsInt, IsInt, IsPermGroup]);
+#!
+#! @BeginExampleSession
+#! A3:=AlternatingGroup(3);
+#! Alt( [ 1 .. 3 ] )
+#! gap> IsRegularRootedTreeGroup(A3);
+#! false
+#! gap> A3:=RegularRootedTreeGroup(3,1,AlternatingGroup(3));
+#! Alt( [ 1 .. 3 ] )
+#! gap> IsRegularRootedTreeGroup(A3);
+#! true
+#! @EndExampleSession
 
 ##################################################################################################################
 #! @Section Auxiliary functions
@@ -436,39 +447,61 @@ DeclareGlobalFunction( "SRLevels" );
 ##################################################################################################################
 
 #! @Description
-#! The argument of this function is a degree, <A>k</A>, a depth, <A>n</A>, and a designated number of the stored self-replicating group, <A>num</A>.
-#! @Returns
-#! The <A>num</A>th self-replicating group of degree <A>k</A> and depth <A>n</A> stored in the <Package>SRGroups</Package> library.
+#! The arguments of this function are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$, a depth <A>n</A> $\in\mathbb{N}$ and a number <A>nr</A> $\in$ <C>[1..NrSRGroups(k,n)]</C>.
 #!
-#! @Arguments k,n,num
+#! @Returns
+#! The <A>nr</A>-th self-replicating group of degree <A>k</A> and depth <A>n</A> stored in the library.
+#!
+#! @Arguments k,n,nr
 #!
 DeclareGlobalFunction( "SRGroup" );
 #!
 #! @BeginExampleSession
+#! gap> SRGroup(4,1,2);
+#! SRGroup(4,1,2) = E(4) = 2[x]2
 #! gap> SRGroup(2,3,1);
 #! SRGroup(2,3,1)
-#! gap> Size(last);
-#! 8
+#! gap> IsRegularRootedTreeGroup(last);
+#! true
 #! @EndExampleSession
+
+##################################################################################################################
+
+# TODO, seems to allow a variable number of parameters. Could have a version for "k, n", and one for "k, n, nr"?
+# or only allow "k, n, nr" delegate the other option to AllSRGroupsInfo?
+DeclareGlobalFunction( "SRGroupsInfo" );
 
 ##################################################################################################################
 
 DeclareSynonym( "Level" , "Depth" );
 
 #! @Description
-#! Main library search function that acts analogously as the AllTransitiveGroups function from the <Package>transgrp</Package> library. Has several possible input arguments such as <A>Degree</A>, <A>Depth</A> (or <A>Level</A>), <A>Number</A>, <A>Projection</A>, <A>IsSubgroup</A>, <A>Size</A>, <A>NumberOfGenerators</A>, and <A>IsAbelian</A>. Order of the arguments do not matter. List inputs and singular inputs can be provided. The argument definitions are as follows:
-#! <A>Degree</A> (int > 1) := degree of tree
-#! <A>Depth</A>/<A>Level</A> (int > 0) := level of tree
-#! <A>Number</A> (int > 0) := self-replicating group number
-#! <A>Projection</A> (int > 0) := groups whose projected image are the group number on the level above
+#! The arguments of this function are a non-zero number of pairs of a function applicable to self-replicating groups and a value, or list of values, that the function may return. It acts analogously to the function <C>AllTransitiveGroups</C> from the package <Package>transgrp</Package> of transitive groups. Special examples of applicable functions are:
+#!
+#! <A>Degree</A>: short hand for <Ref Attr="RegularRootedTreeGroupDepth" Label="for IsRegularRootedTreeGroup"/>.
+#!
+#! <A>Depth</A> (or <A>Level</A>): short hand for <Ref Attr="RegularRootedTreeGroupDepth" Label="for IsRegularRootedTreeGroup"/>.
+#!
+# TODO perhaps a more useful filter would be the number of children?
+#! <A>Number</A>: the index <C>nr</C> in the library.
+#!
+#! <A>Projection</A>: the index <C>nr</C> of <Ref Attr="ParentGroup" Label="for IsRegularRootedTreeGroup"/> in the library.
+#!
+# TODO is there a bug here?
+# gap> AllSRGroups(Degree,2,Depth,2,IsSubgroup,1);
+# [ SRGroup(2,2,1), SRGroup(2,2,2), SRGroup(2,2,3) ]
 #! <A>IsSubgroup</A> (int > 0) := groups that are a subgroup of the group number provided
-#! <A>Size</A> (int >= degree^depth or int > 1) := size of group
+#!
+# TODO this should be MinimalGeneratingSetSize to avoid conflict with the function MinimalGeneratingSet
 #! <A>MinimalGeneratingSet</A> (int > 0) := size of the group's minimal generating set
-#! <A>IsAbelian</A> (boolean) := all groups that are abelian if true, and not abelian if false
+#!
 #! @Returns
-#! A list of self-replicating groups matching the input arguments as RegularRootedTreeGroup objects.
-#! @Arguments Input1, val1, Input2, val2, ...
+#! A list of all self-replicating groups that satisfy the parameters.
+#!
+#! @Arguments fun1, val1, fun2, val2, ...
+#!
 DeclareGlobalFunction("AllSRGroups");
+#!
 #! @BeginExampleSession
 #! gap> AllSRGroups(Degree, 2, Level, 4, IsAbelian, true);
 #! [ SRGroup(2,4,2), SRGroup(2,4,9), SRGroup(2,4,12), SRGroup(2,4,14) ]
@@ -483,37 +516,30 @@ DeclareGlobalFunction("AllSRGroups");
 ##################################################################################################################
 
 #! @Description
-#! Inputs work the same as the main library search function <Ref Func="AllSRGroups"/>, with one additional input: <A>Position</A> (or <A>Index</A>).
-#! Position/Index :=  (int in [1..4])
+#! The arguments of this function are a non-zero number of pairs of a function applicable to self-replicating groups and a value, or list of values, that the function may return. It acts analogously to the function <Ref Func="AllSRGroups"/> above. One additional special example of an applicable function is
+#!
+#! <A>Position</A>: An integer <A>pos</A> in <C>[0..4]</C>, isolating the <A>pos</A>-th entry of the raw data list.
+#!
 #! @Returns
-#! Information about the self-replicating group(s) satisfying all of the provided input arguments in list form: [<A>Generators</A>, <A>Name</A>, <A>Parent Name</A>, <A>Children Name(s)</A>]. If the <A>Position</A> input is provided, only the corresponding index of this list is returned.
-#! @Arguments Input1, val1, Input2, val2, ...
+#! A list of all self-replicating groups that satisfy the parameters as raw library data, i.e. each group is given by a list of the form [<A>Generators</A>, <A>Name</A>, <A>Parent Name</A>, <A>Children Name(s)</A>]. If the <A>Position</A> function is used, only the corresponding index of this list is returned.
+#!
+#! @Arguments fun1, val1, fun2, val2, ...
+#!
 DeclareGlobalFunction( "AllSRGroupsInfo" );
+#!
 #! @BeginExampleSession
-#! gap> AllSRGroupsInfo(Degree, 2, Depth, [2,3], IsAbelian, true);
-#! [ [ [ (1,2)(3,4), (1,3,2,4) ], "SRGroup(2,2,1)", "SRGroup(2,1,1)",
-#!       [ "SRGroup(2,3,1)", "SRGroup(2,3,2)" ] ],
-#!   [ [ (1,2)(3,4), (1,3)(2,4) ], "SRGroup(2,2,2)", "SRGroup(2,1,1)",
-#!       [ "SRGroup(2,3,3)", "SRGroup(2,3,4)", "SRGroup(2,3,5)",
-#!           "SRGroup(2,3,6)" ] ],
-#!   [ [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ]
-#!         , "SRGroup(2,3,1)", "SRGroup(2,2,1)",
-#!       [ "SRGroup(2,4,1)", "SRGroup(2,4,2)" ] ],
-#!   [
-#!       [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8),
-#!           (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,4)",
-#!       "SRGroup(2,2,2)",
-#!       [ "SRGroup(2,4,8)", "SRGroup(2,4,9)", "SRGroup(2,4,10)" ] ],
-#!   [ [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8),
-#!           (1,2)(3,4)(5,6)(7,8) ], "SRGroup(2,3,5)",
-#!       "SRGroup(2,2,2)",
-#!       [ "SRGroup(2,4,11)", "SRGroup(2,4,12)", "SRGroup(2,4,13)",
-#!           "SRGroup(2,4,14)", "SRGroup(2,4,15)" ] ] ]
-#! gap> AllSRGroupsInfo(Degree, 2, Level, [2,3], IsAbelian, true, Position, 1);
-#! [ [ (1,2)(3,4), (1,3,2,4) ], [ (1,2)(3,4), (1,3)(2,4) ],
-#!   [ (1,5,4,8,2,6,3,7), (1,4,2,3)(5,8,6,7), (1,2)(3,4)(5,6)(7,8) ],
-#!   [ (1,5,2,6)(3,7,4,8), (1,3)(2,4)(5,7)(6,8), (1,2)(3,4)(5,6)(7,8) ],
-#!   [ (1,3)(2,4)(5,7)(6,8), (1,5)(2,6)(3,7)(4,8), (1,2)(3,4)(5,6)(7,8) ] ]
+#! gap> AllSRGroupsInfo(Degree,2,Depth,2);
+#! [ [ [ (1,2)(3,4), (1,3,2,4) ], "SRGroup(2,2,1)", "SRGroup(2,1,1)", 
+#!       [ "SRGroup(2,3,1)", "SRGroup(2,3,2)" ] ], 
+#!   [ [ (1,2)(3,4), (1,3)(2,4) ], "SRGroup(2,2,2)", "SRGroup(2,1,1)", 
+#!       [ "SRGroup(2,3,3)", "SRGroup(2,3,4)", "SRGroup(2,3,5)", "SRGroup(2,3,6)" ] ], 
+#!   [ [ (1,3)(2,4), (1,4)(2,3), (3,4) ], "SRGroup(2,2,3)", "SRGroup(2,1,1)", 
+#!       [ "SRGroup(2,3,7)", "SRGroup(2,3,8)", "SRGroup(2,3,9)", "SRGroup(2,3,10)", 
+#!           "SRGroup(2,3,11)", "SRGroup(2,3,12)", "SRGroup(2,3,13)", "SRGroup(2,3,14)",
+#!           "SRGroup(2,3,15)" ] ] ]
+#! gap> AllSRGroupsInfo(Degree,2,Depth,2,Position,1);
+#! [ [ (1,2)(3,4), (1,3,2,4) ], [ (1,2)(3,4), (1,3)(2,4) ], 
+#!   [ (1,3)(2,4), (1,4)(2,3), (3,4) ] ]
 #! @EndExampleSession
 
 ##################################################################################################################
@@ -523,7 +549,6 @@ DeclareGlobalFunction( "AllSRGroupsInfo" );
 DeclareGlobalFunction( "GetSRData" );
 DeclareGlobalFunction( "CheckSRGroupsInputs" );
 DeclareGlobalFunction( "GetSRMaximums" );
-DeclareGlobalFunction( "SRGroupsInfo" );
 DeclareGlobalFunction( "StringVariables" );
 DeclareGlobalFunction( "UnbindVariables" );
 
