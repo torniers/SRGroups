@@ -10,7 +10,7 @@
 SetPackageInfo( rec(
 
 PackageName := "SRGroups",
-Subtitle := "Self-relicating groups acting on regular rooted trees",
+Subtitle := "Self-relicating groups",
 Version := "0.9",
 Date := "06/07/2021", # dd/mm/yyyy format
 License := "GPL-3.0-or-later",
@@ -80,7 +80,7 @@ PackageDoc := rec(
 	HTMLStart := "doc/chap0.html",
 	PDFFile   := "doc/manual.pdf",
 	SixFile   := "doc/manual.six",
-	LongTitle := "Self-replicating groups of regular rooted trees",
+	LongTitle := "Self-replicating groups",
 ),
 
 Dependencies := rec(
