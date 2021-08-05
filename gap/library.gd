@@ -266,6 +266,8 @@ DeclareGlobalFunction( "NumberExtensionsUnformatted" );
 
 DeclareGlobalFunction( "IsSubgroupOfConjugate" );
 
+##################################################################################################################
+
 #! @Description
 #! The arguments of this function are a degree, <A>k</A>, and a level, <A>n</A>.
 #! @Returns

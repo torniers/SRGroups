@@ -6,14 +6,14 @@
 ##################################################################################################################
 
 InstallGlobalFunction( SRGroupsAvailable,
-function(deg,lev)
-		if not (IsInt(deg) and deg>=2) then
-			Error("input argument deg=",deg," must be an integer greater than or equal to 2");
-		elif not (IsInt(lev) and lev>=1) then
-			Error("input argument lev=",lev," must be an integer greater than or equal to 1");
-		else
-			return (lev in SRLevels(deg) and deg in SRDegrees());
-		fi;
+function(k,n)
+	if not (IsInt(k) and k>=2) then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
+	elif not (IsInt(n) and n>=1) then
+		Error("input argument n=",n," must be an integer greater than or equal to 1");
+	else
+		return (k in SRDegrees() and n in SRLevels(k));
+	fi;
 end);
 
 ##################################################################################################################

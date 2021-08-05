@@ -352,4 +352,6 @@ DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateP
 #! 16
 #! @EndExampleSession
 
+##################################################################################################################
 
+#! @Chapter The library of self-replicating groups
