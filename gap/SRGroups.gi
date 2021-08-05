@@ -752,13 +752,8 @@ InstallGlobalFunction(AllSRGroupsInfo,function(arg)
 end);
 
 ##################################################################################################################
-
-
-
-
-
-
-
+##################################################################################################################
+##################################################################################################################
 
 # Input:: deg: degree of the tree (integer at least 2), lev: level of the tree (integer at least 1; if lev=1, then the unformatted "sr_deg_1.grp" file must already exist) (requires "sr_deg_lev+1.grp" file to exist)
 # Output:: Formatted version of the file "sr_deg_lev.grp"
