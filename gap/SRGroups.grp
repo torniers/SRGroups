@@ -28,7 +28,8 @@ end);
 
 ##################################################################################################################
 
-InstallGlobalFunction(GetSRMaximums,function(arg)
+InstallGlobalFunction( GetSRMaximums,
+function(arg)
 	local deg, lev, max, maxAbove, errorString, i;
 	
 	if arg[1][1]<>0 and arg[2][1]<>0 then
@@ -174,7 +175,8 @@ end);
 
 ##################################################################################################################
 
-InstallGlobalFunction(CheckSRGroupsInputs,function(arg)
+InstallGlobalFunction( CheckSRGroupsInputs,
+function(arg)
 	local deg, lev, newDegs, newLevs, cont, errorString, i, j, k, argMinimums, argFunctions, degs, levs, max;
 	
 	if arg[1]=true then
@@ -312,7 +314,7 @@ end);
 
 ##################################################################################################################
 
-InstallGlobalFunction(StringVariables, function(arg)
+InstallGlobalFunction( StringVariables, function(arg)
 	local Superstring, i;
 
 	for i in [1..Length(arg)] do
@@ -328,7 +330,8 @@ end);
 
 ##################################################################################################################
 
-InstallGlobalFunction(UnbindVariables, function(arg)
+InstallGlobalFunction( UnbindVariables,
+function(arg)
 	local k;
 
 	for k in [1..Length(arg)] do
@@ -340,60 +343,6 @@ end);
 
 ##################################################################################################################
 
-InstallGlobalFunction(CheckSRProjections,function(k,n)
-	local dir, fnam, list1, list2, pr, i, G1, G2, check, aut, autAbove;
-	
-	if not (IsInt(k) and k>=2) then
-		Error("input argument k=",k," must be an integer greater than or equal to 2");
-	elif not (IsInt(n) and n>=1) then
-		Error("input argument n=",n," must be an integer greater than or equal to 1");
-	else
-		if not SRGroupsAvailable(k,n) then
-			Print("These groups are not available (yet)!");
-			return;
-		else
-			check:=0;
-			aut:=AutT(k,n);
-			autAbove:=AutT(k,n-1);
-			list1:=AllSRGroups(Degree,k,Depth,n);
-			list2:=AllSRGroupsInfo(Degree,k,Depth,n,Position,3);
-			pr:=Projection(aut);
-			for i in [1..Length(list1)] do
-				G1:=Image(pr,list1[i]);
-				G2:=Group(EvalString(Concatenation("SRGroupsInfo(",SplitString(list2[i],"(")[2]))[1]);
-				if not (G1=G2 or IsConjugate(autAbove,G1,G2)) then
-					Print("SRGroup(",String(k),",",String(n),")[",String(i),"]\n");
-					check:=check+1;
-				fi;
-			od;
 
-			if check=0 then
-				Print("All groups project correctly.");
-			else
-				Print(check," groups did not project corrrectly.");
-			fi;
 
-			return;
-		fi;
-	fi;
-end);
 
-##################################################################################################################
-
-InstallGlobalFunction(IsSubgroupOfConjugate,function(pr,G,H)
-	local Hcon;
-	
-	if not IsSubgroup(pr,G) then return false; fi;
-	
-	if IsSubgroup(G,H) then
-		return true;
-	else
-		for Hcon in H^pr do
-			if IsSubgroup(G,Hcon) then
-				return true;
-			fi;
-		od;
-	fi;
-	
-	return false;
-end);

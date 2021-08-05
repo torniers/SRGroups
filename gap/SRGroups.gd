@@ -560,6 +560,7 @@ DeclareGlobalFunction( "UnbindVariables" );
 
 DeclareGlobalFunction( "FormatSRFile" );
 
+##################################################################################################################
 
 #! @Description
 #! The arguments of this function are a degree, <A>k</A>, or <A>0</A>. If the argument is non-zero, this function creates the file containing all self-replicating groups of the regular rooted k-tree at the lowest level not stored in the <Package>SRGroups</Package> library. If the argument is <A>0</A>, this function creates the file containing all self-replicating groups of the regular rooted tree at the level 1 for the lowest degree not stored in the <Package>SRGroups</Package> library. The file naming convention is "sr_k_n.grp", and they are stored in the "data" folder of the <Package>SRGroups</Package> package. Level 1 groups are calculated using the <Package>transgrp</Package> library. If the argument is non-zero and there is a gap between files (i.e. if "sr_k_n.grp" and "sr_k_n+2.grp" exists, but "sr_k_n+1.grp" does not exist), then this function creates the files in this gap.
@@ -590,10 +591,7 @@ DeclareGlobalFunction( "SRGroupFile" );
 #! Done.
 #! @EndExampleSession
 
-
-# DeclareGlobalFunction( "HasseDiagram" );
-# DeclareGlobalFunction( "ExtensionsMapping" );
-# DeclareGlobalFunction( "PermutationMapping" );
+##################################################################################################################
 
 #! @Description
 #! The arguments of this function are: arg[1]: degree of tree (int > 1), <A>k</A>, arg[2]: highest level of tree where the file "sr_k_n.grp" exists (int > 1), <A>n</A>, (arg[3],arg[4],...): sequence of group numbers to extend from using the files "temp_k_n_arg[3]_arg[4]_...arg[Length(arg)-1].grp". This function creates the file of the group number arg[Length(arg)] stored in the file "temp_k_n_arg[3]_arg[4]_...arg[Length(arg)-1].grp", and saves it as "temp_k_n_arg[3]_arg[4]_...arg[Length(arg)].grp".
@@ -607,12 +605,15 @@ DeclareGlobalFunction( "ExtendSRGroup" );
 #! @Arguments k,n
 DeclareGlobalFunction( "CombineSRFiles" );
 
+##################################################################################################################
 
 DeclareGlobalFunction( "ReorderSRFiles" );
 
+##################################################################################################################
 
 DeclareGlobalFunction( "NumberExtensionsUnformatted" );
 
+##################################################################################################################
 
 DeclareGlobalFunction( "IsSubgroupOfConjugate" );
 
@@ -627,5 +628,4 @@ DeclareGlobalFunction( "CheckSRProjections" );
 #! All groups project correctly.
 #! @EndExampleSession
 
-
-
+##################################################################################################################
