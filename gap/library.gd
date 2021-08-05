@@ -78,7 +78,7 @@ DeclareGlobalFunction( "SRDegrees" );
 #! The argument of this function is a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$.
 #!
 #! @Returns
-#! A list of all depth $n\in\mathbb{N}$ for which self-replicating groups of degree <A>k</A> and depth <A>n</A> are available.
+#! A list of all depths $n\in\mathbb{N}$ for which self-replicating groups of degree <A>k</A> and depth <A>n</A> are available.
 #!
 #! @Arguments k
 #!

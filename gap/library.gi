@@ -5,6 +5,7 @@
 #
 ##################################################################################################################
 
+# TODO: transgrp uses a list called TRANSLENGTHS for this
 InstallGlobalFunction( SRGroupsAvailable,
 function(k,n)
 	if not (IsInt(k) and k>=2) then
@@ -18,6 +19,7 @@ end);
 
 ##################################################################################################################
 
+# TODO: transgrp uses a list called TRANSLENGTHS for this
 InstallGlobalFunction( NrSRGroups,
 function(k,n)
 	if not (IsInt(k) and k>=2) then
@@ -35,57 +37,67 @@ end);
 
 InstallGlobalFunction( SRDegrees,
 function()
-	local srDegrees, count, dirData, dataContents;
+	local dir, file_names, degrees, file_name;
+	
+	# get list of file names
+	dir:=DirectoriesPackageLibrary("SRGroups", "data");
+	file_names:=DirectoryContents(dir[1]);
 
-	dirData:=DirectoriesPackageLibrary("SRGroups", "data");
-	dataContents:=DirectoryContents(dirData[1]);
-
-	srDegrees:=[];
-	for count in [1..Length(dataContents)] do
-		if StartsWith(dataContents[count],"sr_") then
-			Add(srDegrees,EvalString(SplitString(dataContents[count], ".", "_")[2]));
+	# extract degrees
+	degrees:=[];
+	for file_name in file_names do
+		if StartsWith(file_name,"sr_") then
+			Add(degrees,EvalString(SplitString(file_name, "_")[2]));
 		fi;
 	od;
-	srDegrees:=DuplicateFreeList(srDegrees);
-	StableSort(srDegrees);
-	return srDegrees;
+	
+	# remove duplicates and sort
+	degrees:=DuplicateFreeList(degrees);
+	Sort(degrees);
+	
+	return degrees;
 end);
 
 ##################################################################################################################
 
 InstallGlobalFunction( SRLevels,
-function(deg)
-	local srLevels, count, dirData, dataContents;
+function(k)
+	local dir, file_names, levels, file_name;
 	
-	if not (IsInt(deg) and deg>=2) then
-		Error("input argument deg=",deg," must be an integer greater than or equal to 2");
+	if not (IsInt(k) and k>=2) then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
 	else
-		dirData:=DirectoriesPackageLibrary("SRGroups", "data");
-		dataContents:=DirectoryContents(dirData[1]);
+		# get list of file names
+		dir:=DirectoriesPackageLibrary("SRGroups", "data");
+		file_names:=DirectoryContents(dir[1]);
 
-		srLevels:=[];
-		for count in [1..Length(dataContents)] do
-			if StartsWith(dataContents[count],Concatenation("sr_",String(deg))) then
-				Add(srLevels,EvalString(SplitString(dataContents[count], ".", "_")[3]));
+		# extract levels
+		levels:=[];
+		for file_name in file_names do
+			if StartsWith(file_name,Concatenation("sr_",String(k))) then
+				Add(levels,EvalString(SplitString(file_name, ".", "_")[3]));
 			fi;
 		od;
-		StableSort(srLevels);
-		return srLevels;
+
+		# sort
+		Sort(levels);
+
+		return levels;
 	fi;
 end);
 
 ##################################################################################################################
 
 InstallGlobalFunction( SRGroup,
-function(k,n,num)
+function(k,n,nr)
 	if not (IsInt(k) and k>=2) then
 		Error("input argument k=",k," must be an integer greater than or equal to 2");
 	elif not (IsInt(n) and n>=1) then
 		Error("input argument n=",n," must be an integer greater than or equal to 1");
-	elif not (IsInt(num) and num>=1) then
-		Error("input argument num=",num," must be an integer greater than or equal to 1");
+	elif not (IsInt(nr) and nr>=1) then
+		Error("input argument nr=",nr," must be an integer greater than or equal to 1");
 	else
-		return AllSRGroups(Degree,k,Level,n,Number,num)[1];
+		return AllSRGroups(Degree,k,Level,n,Number,nr)[1];
 	fi;
 end);
 
