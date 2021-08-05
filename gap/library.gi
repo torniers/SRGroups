@@ -88,6 +88,7 @@ end);
 
 ##################################################################################################################
 
+# TODO: implement something like 'OneTransitiveGroup' that gives the first example of an SRGroup with certain properties?
 InstallGlobalFunction( SRGroup,
 function(k,n,nr)
 	if not (IsInt(k) and k>=2) then
@@ -103,6 +104,7 @@ end);
 
 ##################################################################################################################
 
+# TODO: is this how transgrp works or is it meant to work differently?
 InstallGlobalFunction( SRGroupsInfo,
 function(arg)
 	local dir, fnam, G, list, listTemp, i, j, k, n, lastNonZero, argFunctions, argMinimums, out, max, maxArgLength, listGroups, booleanList;
