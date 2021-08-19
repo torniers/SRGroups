@@ -117,7 +117,7 @@ DeclareOperation("RegularRootedTreeGroup", [IsInt, IsInt, IsPermGroup]);
 ##################################################################################################################
 #! @Section Auxiliary functions
 ##################################################################################################################
-
+# TODO: Extend to vertices not necessarily at level 1?
 #! @Description
 #! The arguments of this function are a degree <A>k</A> $\in\mathbb{N}_{\ge 2}$, a depth <A>n</A> $\in\mathbb{N}$, an element <A>aut</A> of $\mathrm{Aut}(T_{k,n})$ (see <Ref Func="AutT"/>), and a depth 1 vertex <A>i</A> $\in\{1,\cdots,k\}$ of $T_{k,n}$.
 #!
@@ -307,6 +307,11 @@ DeclareGlobalFunction( "AutT" );
 #! gap> Size(G);
 #! 8
 #! @EndExampleSession
+
+##################################################################################################################
+
+# for illustrational purposes
+DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroups" );
 
 ##################################################################################################################
 

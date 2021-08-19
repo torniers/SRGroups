@@ -249,6 +249,32 @@ end );
 
 ##################################################################################################################
 
+# illustrational
+InstallGlobalFunction( ConjugacyClassRepsSelfReplicatingSubgroups,
+function(G)
+	local k, n, reps, H, class;
+		
+	k:=RegularRootedTreeGroupDegree(G);
+	n:=RegularRootedTreeGroupDepth(G);
+	
+	if k=0 then
+		return fail;	
+	else
+		reps:=[];
+		for class in ConjugacyClassesSubgroups(G) do
+			for H in class do
+				if IsSelfReplicating(RegularRootedTreeGroup(k,n,H)) then
+					Add(reps,RegularRootedTreeGroup(k,n,H));
+					break;
+				fi;
+			od;
+		od;
+		return reps;
+	fi;
+end );
+
+##################################################################################################################
+
 # Input::	G: a self-replicating regular rooted tree group with sufficient rigid automorphisms
 # Output::	a list of AutT(k,n)-conjugacy class representatives of maximal self-replicating subgroups of G with sufficient rigid automorphisms
 InstallGlobalFunction( ConjugacyClassRepsMaxSelfReplicatingSubgroups,
