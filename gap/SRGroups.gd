@@ -287,6 +287,7 @@ DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRoot
 #! @Section Examples
 ##################################################################################################################
 
+#TODO
 #! AutT. More to come. Grigorchuk, Hanoi, ...
 
 ##################################################################################################################
@@ -310,8 +311,23 @@ DeclareGlobalFunction( "AutT" );
 
 ##################################################################################################################
 
-# for illustrational purposes
+#! @Description
+#! The argument of this function is a regular rooted tree group <A>G</A>. This method calls <C>ConjugacyClassesSubgroups</C> on $G$ and may therefore be slow. Use for instructional purposes on small examples only, and use <Ref Func="ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection"/> for computations.
+#!
+#! @Returns
+#! A list of $\mathrm{Aut}(T_{k,n})$-conjugacy class representatives of all self-replicating subgroups of <A>G</A>.
+#!
+#! @Arguments G
+#!
 DeclareGlobalFunction( "ConjugacyClassRepsSelfReplicatingSubgroups" );
+#!
+#! @BeginExampleSession
+#! gap> ConjugacyClassRepsSelfReplicatingSubgroups(AutT(2,2));
+#! [ Group([ (1,3)(2,4), (1,2)(3,4) ]), Group([ (1,3,2,4), (1,2)(3,4) ]), 
+#!   Group([ (3,4), (1,2), (1,3)(2,4) ]) ]
+#! NrSRGroups(2,2);
+#! 3
+#! @EndExampleSession
 
 ##################################################################################################################
 
