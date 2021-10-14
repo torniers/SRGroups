@@ -87,6 +87,7 @@ function(k)
 end);
 
 ##################################################################################################################
+##################################################################################################################
 
 # TODO: implement something like 'OneTransitiveGroup' that gives the first example of an SRGroup with certain properties?
 InstallGlobalFunction( SRGroup,
@@ -364,7 +365,7 @@ InstallGlobalFunction(AllSRGroupsInfo,function(arg)
 			fi;
 		od;
 	else
-		Error("argument must be of the form (fun2,val1,fun2,val2,...)");
+		Error("argument must be of the form (fun1,val1,fun2,val2,...)");
 	fi;
 	
 	inputArgs:=[];
