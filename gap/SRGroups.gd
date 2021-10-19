@@ -287,8 +287,8 @@ DeclareAttribute("RepresentativeWithSufficientRigidAutomorphisms", IsRegularRoot
 #! @Section Examples
 ##################################################################################################################
 
-#TODO
-#! AutT. More to come. Grigorchuk, Hanoi, ...
+# TODO Introduction
+# TODO Implement more examples of prominent groups: Grigorchuk, Hanoi, ...
 
 ##################################################################################################################
 
@@ -311,11 +311,12 @@ DeclareGlobalFunction( "AutT" );
 
 ##################################################################################################################
 
+# TODO: Make this AutT(k,n)-classes?
 #! @Description
 #! The argument of this function is a regular rooted tree group <A>G</A>. This method calls <C>ConjugacyClassesSubgroups</C> on $G$ and may therefore be slow. Use for instructional purposes on small examples only, and use <Ref Func="ConjugacyClassRepsSelfReplicatingSubgroupsWithConjugateProjection"/> for computations.
 #!
 #! @Returns
-#! A list of $\mathrm{Aut}(T_{k,n})$-conjugacy class representatives of all self-replicating subgroups of <A>G</A>.
+#! A list of $G$-conjugacy class representatives of all self-replicating subgroups of <A>G</A>.
 #!
 #! @Arguments G
 #!

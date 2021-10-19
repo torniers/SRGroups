@@ -249,7 +249,8 @@ end );
 
 ##################################################################################################################
 
-# illustrational
+# Input::	G: a regular rooted tree group
+# Output::	a list of G-conjugacy class representatives of self-replicating subgroups of G
 InstallGlobalFunction( ConjugacyClassRepsSelfReplicatingSubgroups,
 function(G)
 	local k, n, reps, H, class;
