@@ -117,7 +117,7 @@ DeclareGlobalFunction( "SRGroup" );
 ##################################################################################################################
 
 # TODO, seems to allow a variable number of parameters. Could have a version for "k, n", and one for "k, n, nr"?
-# or only allow "k, n, nr" delegate the other option to AllSRGroupsInfo?
+# or only allow "k, n, nr" and delegate the other option to AllSRGroupsInfo?
 DeclareGlobalFunction( "SRGroupsInfo" );
 
 ##################################################################################################################
@@ -193,18 +193,19 @@ DeclareGlobalFunction( "AllSRGroupsInfo" );
 
 ##################################################################################################################
 
-
 # internal?
 DeclareGlobalFunction( "GetSRData" );
 DeclareGlobalFunction( "GetSRMaximums" );
 DeclareGlobalFunction( "CheckSRGroupsInputs" );
-DeclareGlobalFunction( "StringVariables" );
-DeclareGlobalFunction( "UnbindVariables" );
-
-
 
 ##################################################################################################################
 #! @Section Extending the library
+##################################################################################################################
+
+# internal?
+DeclareGlobalFunction( "StringVariables" );
+DeclareGlobalFunction( "UnbindVariables" );
+
 ##################################################################################################################
 
 DeclareGlobalFunction( "FormatSRFile" );
