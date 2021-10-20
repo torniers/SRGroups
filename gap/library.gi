@@ -74,7 +74,7 @@ function(k)
 		# extract levels
 		levels:=[];
 		for file_name in file_names do
-			if StartsWith(file_name,Concatenation("sr_",String(k))) then
+			if StartsWith(file_name,Concatenation("sr_", String(k))) then
 				Add(levels,EvalString(SplitString(file_name, ".", "_")[3]));
 			fi;
 		od;
@@ -439,7 +439,7 @@ end);
 ##################################################################################################################
 
 InstallGlobalFunction(GetSRData,function(k,n)
-	local dir, fnam, listTemp;
+	local dir, file_name, list;
 	
 	if not (IsInt(k) and k>=2) then
 		Error("input argument k=",k," must be an integer greater than or equal to 2");
@@ -448,13 +448,15 @@ InstallGlobalFunction(GetSRData,function(k,n)
 	elif not SRGroupsAvailable(k,n) then
 		Error("These groups are not available (yet)!");
 	else
-		dir:= DirectoriesPackageLibrary( "SRGroups", "data" );
-		fnam:=Filename( dir[1], Concatenation("sr_",String(k),"_",String(n),".grp"));
-		Read(fnam);
-		listTemp:=EvalString(Concatenation("sr_",String(k),"_",String(n)));
+		# read relevant library file providing sr_k_n
+		dir:=DirectoriesPackageLibrary( "SRGroups", "data" );
+		file_name:=Filename(dir[1], Concatenation("sr_",String(k),"_",String(n),".grp"));
+		Read(file_name);
+		list:=EvalString(Concatenation("sr_",String(k),"_",String(n)));
+		# unbind sr_k_n
 		MakeReadWriteGlobal(Concatenation("sr_",String(k),"_",String(n)));
 		UnbindGlobal(Concatenation("sr_",String(k),"_",String(n)));
-		return listTemp;
+		return list;
 	fi;
 end);
 
