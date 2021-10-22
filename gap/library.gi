@@ -5,7 +5,7 @@
 #
 ##################################################################################################################
 
-# TODO: transgrp uses a list called TRANSLENGTHS for this
+# TODO: transgrp uses a list called TRANSLENGTHS for this; there should probably be a global list of pairs [k,n] that are available 
 InstallGlobalFunction( SRGroupsAvailable,
 function(k,n)
 	if not (IsInt(k) and k>=2) then
@@ -19,7 +19,7 @@ end);
 
 ##################################################################################################################
 
-# TODO: transgrp uses a list called TRANSLENGTHS for this
+# TODO: transgrp uses a list called TRANSLENGTHS for this; see above
 InstallGlobalFunction( NrSRGroups,
 function(k,n)
 	if not (IsInt(k) and k>=2) then
@@ -29,7 +29,7 @@ function(k,n)
 	elif not SRGroupsAvailable(k,n) then
 		return fail;
 	else
-		return Length(GetSRData(k,n));
+		return Length(SRGroupsData(k,n));
 	fi;
 end);
 
@@ -42,15 +42,13 @@ function()
 	# get list of file names
 	dir:=DirectoriesPackageLibrary("SRGroups", "data");
 	file_names:=DirectoryContents(dir[1]);
-
 	# extract degrees
 	degrees:=[];
 	for file_name in file_names do
 		if StartsWith(file_name,"sr_") then
 			Add(degrees,EvalString(SplitString(file_name, "_")[2]));
 		fi;
-	od;
-	
+	od;	
 	# remove duplicates and sort
 	degrees:=DuplicateFreeList(degrees);
 	Sort(degrees);
@@ -70,7 +68,6 @@ function(k)
 		# get list of file names
 		dir:=DirectoriesPackageLibrary("SRGroups", "data");
 		file_names:=DirectoryContents(dir[1]);
-
 		# extract levels
 		levels:=[];
 		for file_name in file_names do
@@ -78,7 +75,6 @@ function(k)
 				Add(levels,EvalString(SplitString(file_name, ".", "_")[3]));
 			fi;
 		od;
-
 		# sort
 		Sort(levels);
 
@@ -87,11 +83,25 @@ function(k)
 end);
 
 ##################################################################################################################
+
+SRGroupFromData:=function(data)
+	local k, n, G;
+	
+	k:=EvalString(SplitString(G[2],",","(")[2]);
+	n:=EvalString(SplitString(G[2],",")[2]);
+	G:=RegularRootedTreeGroup(k,n,Group(data[1]));
+	SetName(G,data[2]);
+	
+	return G;
+end;
+
+##################################################################################################################
 ##################################################################################################################
 
-# TODO: implement something like 'OneTransitiveGroup' that gives the first example of an SRGroup with certain properties?
 InstallGlobalFunction( SRGroup,
 function(k,n,nr)
+	local data;
+	
 	if not (IsInt(k) and k>=2) then
 		Error("input argument k=",k," must be an integer greater than or equal to 2");
 	elif not (IsInt(n) and n>=1) then
@@ -99,10 +109,153 @@ function(k,n,nr)
 	elif not (IsInt(nr) and nr>=1) then
 		Error("input argument nr=",nr," must be an integer greater than or equal to 1");
 	else
-		return AllSRGroups(Degree,k,Level,n,Number,nr)[1];
+		data:=SRGroupsData(k,n);
+		if not nr in [1..Length(data)] then
+			Error("there are only ",Length(data)," SRGroups of degree k=",k," and depth n=",n);
+		else
+			return SRGroupFromData(SRGroupData(k,n,nr));
+		fi;
 	fi;
 end);
 
+##################################################################################################################
+
+InstallGlobalFunction( OneSRGroup,
+function(args...)
+	local group;
+
+	group:=SelectSRGroups(args,false);
+	if group=[] then
+		return fail;
+	else
+		return group;
+	fi;	
+end);
+
+##################################################################################################################
+
+InstallGlobalFunction( AllSRGroups,
+function(args...)
+	return SelectSRGroups(args,true);
+end);
+
+##################################################################################################################
+
+# TODO: make this quicker by searching for degree AND level first
+# internal
+InstallGlobalFunction( SelectSRGroups,
+function(args,all)
+	local k, n, nr, groups, degree, groups_temp, names, i, j;
+	
+	if not IsInt(Length(args)/2) then
+		Error("argument must be of the form fun1,val1,fun2,val2,...");
+	else	
+		# pre-select groups by desired degree(s)
+		if not Position(args,Degree)=fail then
+			k:=args[Position(args,Degree)+1];
+			if not IsList(k) then k:=[k]; fi;
+			Remove(args,Position(args,Degree)+1);
+			Remove(args,Position(args,Degree));
+		else
+			k:=SRDegrees();
+		fi;
+
+		groups:=[];
+		for degree in k do
+			for n in SRLevels(degree) do
+				# get groups from library and name them
+				groups_temp:=SRGroupsData(degree,n);
+				names:=ShallowCopy(groups_temp);
+				Apply(names,G->G[2]);
+				Apply(groups_temp,G->RegularRootedTreeGroup(EvalString(SplitString(G[2],",","(")[2]),EvalString(SplitString(G[2],",")[2]),Group(G[1])));
+				for i in [1..Length(groups_temp)] do SetName(groups_temp[i],names[i]); od;
+				Append(groups,groups_temp);
+			od;
+		od;
+		
+		# sieve by depth
+		if not Position(args,Depth)=fail then
+			n:=args[Position(args,Depth)+1];
+			if not IsList(n) then n:=[n]; fi;
+			Remove(args,Position(args,Depth)+1);
+			Remove(args,Position(args,Depth));
+		else
+			n:=fail;
+		fi;		
+		if not n=fail then
+			for i in [Length(groups),Length(groups)-1..1] do
+				if not RegularRootedTreeGroupDepth(groups[i]) in n then Remove(groups,i); fi;
+			od;
+		fi;
+
+		# sieve by number
+		if not Position(args,Number)=fail then
+			nr:=args[Position(args,Number)+1];
+			if not IsList(nr) then nr:=[nr]; fi;
+			Remove(args,Position(args,Number)+1);
+			Remove(args,Position(args,Number));
+		else
+			nr:=fail;
+		fi;
+		if not nr=fail then
+			for i in [Length(groups),Length(groups)-1..1] do
+				if not EvalString(SplitString(SplitString(Name(groups[i]),",")[3],")")[1]) in nr then Remove(groups,i); fi;
+			od;
+		fi;
+
+		# sieve by all remaining properties
+		if not args=[] then
+			for i in [1..Length(args)/2] do
+				for j in [Length(groups),Length(groups)-1..1] do
+					if not args[2*i-1](groups[j])=args[2*i] then Remove(groups,j); fi;
+				od;
+			od;
+		fi;
+		
+		return groups;
+	fi;	
+end);
+
+##################################################################################################################
+
+# internal
+InstallGlobalFunction( SRGroupData,
+function(k,n,nr)
+	if not (IsInt(k) and k in SRDegrees()) then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
+	elif not (IsInt(n) and n in SRLevels(k)) then
+		Error("input argument n=",n," must be an integer greater than or equal to 1");
+	elif not (IsInt(nr) and nr in [1..Length(SRGroupsData(k,n))]) then
+		Error("there are less than nr=",nr," SRGroups of degree k=",k," and depth n=",n);
+	else
+		return SRGroupsData(k,n)[nr];
+	fi;
+end);
+
+# internal
+InstallGlobalFunction( SRGroupsData,
+function(k,n)
+	local dir, file_name, data;
+		
+	if not (IsInt(k) and k in SRDegrees()) then
+		Error("input argument k=",k," must be an integer greater than or equal to 2");
+	elif not (IsInt(n) and n in SRLevels(k)) then
+		Error("input argument n=",n," must be an integer greater than or equal to 1");
+	else
+		# extract sr_k_n from the relevant library file
+		dir:=DirectoriesPackageLibrary( "SRGroups", "data" );
+		file_name:=Filename(dir[1], Concatenation("sr_",String(k),"_",String(n),".grp"));
+		Read(file_name);
+		data:=EvalString(Concatenation("sr_",String(k),"_",String(n)));
+		# unbind sr_k_n
+		MakeReadWriteGlobal(Concatenation("sr_",String(k),"_",String(n)));
+		UnbindGlobal(Concatenation("sr_",String(k),"_",String(n)));
+		return data;
+	fi;
+end);
+
+
+##################################################################################################################
 ##################################################################################################################
 
 # TODO: is this how transgrp works or is it meant to work differently?
@@ -184,7 +337,7 @@ function(arg)
 		for i in [1..Length(arg[1])] do
 			for j in [1..Length(arg[2])] do
 				if SRGroupsAvailable(arg[1][i],arg[2][j]) then
-					listTemp:=GetSRData(arg[1][i],arg[2][j]);
+					listTemp:=SRGroupsData(arg[1][i],arg[2][j]);
 					Append(list,listTemp);
 				fi;
 			od;
@@ -192,7 +345,7 @@ function(arg)
 	elif arg[1][1]<>0 and arg[2][1]=0 then
 		for i in [1..Length(arg[1])] do
 			for j in [argMinimums[2]..Length(SRLevels(arg[1][i]))] do
-				listTemp:=GetSRData(arg[1][i],SRLevels(arg[1][i])[j]);
+				listTemp:=SRGroupsData(arg[1][i],SRLevels(arg[1][i])[j]);
 				Append(list,listTemp);
 			od;
 		od;
@@ -200,7 +353,7 @@ function(arg)
 		for i in [1..Length(SRDegrees())] do
 			for j in [1..Length(arg[2])] do
 				if SRGroupsAvailable(SRDegrees()[i],arg[2][j]) then
-					listTemp:=GetSRData(SRDegrees()[i],arg[2][j]);
+					listTemp:=SRGroupsData(SRDegrees()[i],arg[2][j]);
 					Append(list,listTemp);
 				fi;
 			od;
@@ -208,7 +361,7 @@ function(arg)
 	else
 		for i in [1..Length(SRDegrees())] do
 			for j in [argMinimums[2]..Length(SRLevels(SRDegrees()[i]))] do
-				listTemp:=GetSRData(SRDegrees()[i],SRLevels(SRDegrees()[i])[j]);
+				listTemp:=SRGroupsData(SRDegrees()[i],SRLevels(SRDegrees()[i])[j]);
 				Append(list,listTemp);
 			od;
 		od;
@@ -338,23 +491,6 @@ end);
 
 ##################################################################################################################
 
-InstallGlobalFunction(AllSRGroups,function(arg)
-	local groupList, groupNames, i, G;
-	
-	groupList:=CallFuncList(AllSRGroupsInfo,arg);
-	groupNames:=ShallowCopy(groupList);
-	Apply(groupNames,G->G[2]);
-	
-	Apply(groupList,G->RegularRootedTreeGroup( EvalString(SplitString(SplitString(G[2],",")[1],"(")[2]),EvalString(SplitString(G[2],",")[2]),Group(G[1])));
-	for i in [1..Length(groupList)] do
-		SetName(groupList[i],groupNames[i]);
-	od;
-	
-	return groupList;
-end);
-
-##################################################################################################################
-
 InstallGlobalFunction(AllSRGroupsInfo,function(arg)
 	local inputArgs, i;
 	
@@ -436,30 +572,6 @@ InstallGlobalFunction(AllSRGroupsInfo,function(arg)
 end);
 
 ##################################################################################################################
-##################################################################################################################
-
-InstallGlobalFunction(GetSRData,function(k,n)
-	local dir, file_name, list;
-	
-	if not (IsInt(k) and k>=2) then
-		Error("input argument k=",k," must be an integer greater than or equal to 2");
-	elif not (IsInt(n) and n>=1) then
-		Error("input argument n=",n," must be an integer greater than or equal to 1");
-	elif not SRGroupsAvailable(k,n) then
-		Error("These groups are not available (yet)!");
-	else
-		# read relevant library file providing sr_k_n
-		dir:=DirectoriesPackageLibrary( "SRGroups", "data" );
-		file_name:=Filename(dir[1], Concatenation("sr_",String(k),"_",String(n),".grp"));
-		Read(file_name);
-		list:=EvalString(Concatenation("sr_",String(k),"_",String(n)));
-		# unbind sr_k_n
-		MakeReadWriteGlobal(Concatenation("sr_",String(k),"_",String(n)));
-		UnbindGlobal(Concatenation("sr_",String(k),"_",String(n)));
-		return list;
-	fi;
-end);
-
 ##################################################################################################################
 
 InstallGlobalFunction( GetSRMaximums,

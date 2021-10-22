@@ -116,9 +116,7 @@ DeclareGlobalFunction( "SRGroup" );
 
 ##################################################################################################################
 
-# TODO, seems to allow a variable number of parameters. Could have a version for "k, n", and one for "k, n, nr"?
-# or only allow "k, n, nr" and delegate the other option to AllSRGroupsInfo?
-DeclareGlobalFunction( "SRGroupsInfo" );
+DeclareGlobalFunction( "OneSRGroup" );
 
 ##################################################################################################################
 
@@ -164,6 +162,23 @@ DeclareGlobalFunction("AllSRGroups");
 
 ##################################################################################################################
 
+DeclareGlobalFunction( "SelectSRGroups" );
+
+##################################################################################################################
+
+# internal
+DeclareGlobalFunction( "SRGroupData" );
+DeclareGlobalFunction( "SRGroupsData" );
+
+##################################################################################################################
+##################################################################################################################
+
+# TODO, seems to allow a variable number of parameters. Could have a version for "k, n", and one for "k, n, nr"?
+# or only allow "k, n, nr" and delegate the other option to AllSRGroupsInfo?
+DeclareGlobalFunction( "SRGroupsInfo" );
+
+##################################################################################################################
+
 #! @Description
 #! The arguments of this function are a non-zero number of pairs of a function applicable to self-replicating groups and a value, or list of values, that the function may return. It acts analogously to the function <Ref Func="AllSRGroups"/> above. One additional special example of an applicable function is
 #!
@@ -194,7 +209,6 @@ DeclareGlobalFunction( "AllSRGroupsInfo" );
 ##################################################################################################################
 
 # internal?
-DeclareGlobalFunction( "GetSRData" );
 DeclareGlobalFunction( "GetSRMaximums" );
 DeclareGlobalFunction( "CheckSRGroupsInputs" );
 
