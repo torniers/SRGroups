@@ -145,7 +145,7 @@ end);
 # internal
 InstallGlobalFunction( SelectSRGroups,
 function(args,all)
-	local k, n, nr, groups, degree, groups_temp, names, i, j;
+	local k, n, nr, groups, degree, groups_temp, names, i, j, works;
 	
 	if not IsInt(Length(args)/2) then
 		Error("argument must be of the form fun1,val1,fun2,val2,...");
@@ -205,10 +205,19 @@ function(args,all)
 
 		# sieve by all remaining properties
 		if not args=[] then
-			for i in [1..Length(args)/2] do
-				for j in [Length(groups),Length(groups)-1..1] do
-					if not args[2*i-1](groups[j])=args[2*i] then Remove(groups,j); fi;
+			# start from the start of the list so that OneSRGroup returns the SRGroup with the smallest possible parameters
+			i:=1;
+			while i<=Length(groups) do
+				works:=true;
+				for j in [1..Length(args)/2] do
+					if not args[2*j-1](groups[i])=args[2*j] then
+						Remove(groups,i);
+						works:=false;
+						break;
+					fi;
 				od;
+				if not all and works then return groups[i]; fi;
+			i:=i+1;
 			od;
 		fi;
 		
