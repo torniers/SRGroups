@@ -205,23 +205,18 @@ function(args,all)
 
 		# sieve by all remaining properties
 		if not args=[] then
-			# start from the start of the list so that OneSRGroup returns the SRGroup with the smallest possible parameters
-			i:=1;
-			while i<=Length(groups) do
-				works:=true;
+			for i in [1..Length(groups)] do
 				for j in [1..Length(args)/2] do
 					if not args[2*j-1](groups[i])=args[2*j] then
-						Remove(groups,i);
-						works:=false;
+						Unbind(groups[i]);
 						break;
 					fi;
 				od;
-				if not all and works then return groups[i]; fi;
-			i:=i+1;
+				if not all and IsBound(groups[i]) then return groups[i]; fi;
 			od;
 		fi;
 		
-		return groups;
+		return Compacted(groups);
 	fi;	
 end);
 
