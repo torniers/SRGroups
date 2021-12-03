@@ -87,8 +87,8 @@ end);
 SRGroupFromData:=function(data)
 	local k, n, G;
 	
-	k:=EvalString(SplitString(G[2],",","(")[2]);
-	n:=EvalString(SplitString(G[2],",")[2]);
+	k:=EvalString(SplitString(data[2],",","(")[2]);
+	n:=EvalString(SplitString(data[2],",")[2]);
 	G:=RegularRootedTreeGroup(k,n,Group(data[1]));
 	SetName(G,data[2]);
 	
