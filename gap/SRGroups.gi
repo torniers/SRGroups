@@ -84,6 +84,7 @@ function(G)
 	if n=1 then return IsTransitive(G,[1..k]); fi;
 
 	# transitivity condition
+	# TODO: use normal transitivity on [1..d^k] instead because it is equivalent?
 	blocks:=[];
 	for i in [1..k] do Add(blocks,[(i-1)*k^(n-1)+1..i*k^(n-1)]); od;
 	if not IsTransitive(G,blocks,OnSets) then return false; fi;
