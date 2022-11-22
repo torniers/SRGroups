@@ -141,6 +141,10 @@ end);
 
 ##################################################################################################################
 
+InstallMethod(Depth, "for SRGroup", [IsRegularRootedTreeGroup], RegularRootedTreeGroupDepth);
+
+##################################################################################################################
+
 # TODO: make this quicker by searching for degree AND level first
 # internal
 InstallGlobalFunction( SelectSRGroups,
@@ -516,12 +520,8 @@ InstallGlobalFunction(AllSRGroupsInfo,function(arg)
 		Add(inputArgs,0);
 	fi;
 	
-	if IsInt(Position(arg,Depth)) or IsInt(Position(arg,Level)) then
-		if IsInt(Position(arg,Depth)) then
-			Add(inputArgs,arg[Position(arg,Depth)+1]);
-		elif IsInt(Position(arg,Level)) then
-			Add(inputArgs,arg[Position(arg,Level)+1]);
-		fi;
+	if IsInt(Position(arg,Depth)) then
+		Add(inputArgs,arg[Position(arg,Depth)+1]);
 	else
 		Add(inputArgs,0);
 	fi;

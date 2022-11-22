@@ -168,7 +168,7 @@ DeclareGlobalFunction( "RemoveConjugates" );
 ##################################################################################################################
 
 #! @Description
-#! The argument of this property is aa regular rooted tree group <A>G</A>.
+#! The argument of this property is a regular rooted tree group <A>G</A>.
 #!
 #! @Returns
 #! <K>true</K> if <A>G</A> is self-replicating, and <K>false</K> otherwise.
