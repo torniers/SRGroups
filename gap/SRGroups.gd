@@ -62,6 +62,7 @@ DeclareCategory("IsRegularRootedTreeGroup", IsPermGroup);
 #! @BeginGroup RegularRootedTreeGroupDegree
 #! @Description
 #! The argument of this attribute is a regular rooted tree group <A>G</A>.
+#! You can also use <A>Degree</A>.
 #!
 #! @Returns
 #! The degree of <A>G</A>.
@@ -74,10 +75,6 @@ DeclareAttribute("RegularRootedTreeGroupDegree", IsRegularRootedTreeGroup);
 #! gap> RegularRootedTreeGroupDegree(AutT(2,3));
 #! 2
 #! @EndExampleSession
-
-#! @Arguments G
-#!
-DeclareOperation( "Degree", [IsRegularRootedTreeGroup] );
 #! @EndGroup
 
 ##################################################################################################################
@@ -106,6 +103,19 @@ DeclareOperation( "Depth", [IsRegularRootedTreeGroup] );
 DeclareSynonym( "Level", Depth );
 
 #! @EndGroup
+
+##################################################################################################################
+
+#! @Description
+#! The argument of this attribute is a regular rooted tree group <A>G</A>.
+#!
+#! @Returns
+#! The <Ref Attr="Size" BookName="Reference"/> of the <Ref Attr="MinimalGeneratingSet" BookName="Reference"/>.
+#!
+#! @Arguments G
+#!
+DeclareAttribute("MinimalGeneratingSetSize", IsRegularRootedTreeGroup);
+
 
 ##################################################################################################################
 

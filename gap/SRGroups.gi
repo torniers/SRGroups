@@ -8,6 +8,10 @@
 
 InstallMethod(Degree, "for SRGroup", [IsRegularRootedTreeGroup], RegularRootedTreeGroupDegree);
 InstallMethod(Depth, "for SRGroup", [IsRegularRootedTreeGroup], RegularRootedTreeGroupDepth);
+InstallMethod(MinimalGeneratingSetSize, "for SRGroup", [IsRegularRootedTreeGroup],
+function(G)
+    return Size(MinimalGeneratingSet(G));
+end );
 
 ##################################################################################################################
 

@@ -123,22 +123,25 @@ DeclareGlobalFunction( "OneSRGroup" );
 #! @Description
 #! The arguments of this function are a non-zero number of pairs of a function applicable to self-replicating groups and a value, or list of values, that the function may return. It acts analogously to the function <C>AllTransitiveGroups</C> from the package <Package>transgrp</Package> of transitive groups. Special examples of applicable functions are:
 #!
-#! <A>Degree</A>: short hand for <Ref Attr="RegularRootedTreeGroupDepth" Label="for IsRegularRootedTreeGroup"/>.
+#! <A>Degree</A>: The <Ref Attr="Degree" Label="for IsRegularRootedTreeGroup"/> of the group.
 #!
-#! <A>Depth</A> (or <A>Level</A>): short hand for <Ref Attr="RegularRootedTreeGroupDepth" Label="for IsRegularRootedTreeGroup"/>.
+#! <A>Depth</A> (or <A>Level</A>): The <Ref Attr="Depth" Label="for IsRegularRootedTreeGroup"/> of the group.
 #!
 # TODO perhaps a more useful filter would be the number of children?
-#! <A>Number</A>: the index <C>nr</C> in the library.
+#! <A>ChildCount</A>: the index <C>nr</C> in the library.
 #!
-#! <A>Projection</A>: the index <C>nr</C> of <Ref Attr="ParentGroup" Label="for IsRegularRootedTreeGroup"/> in the library.
+#! <A>ParentGroup</A>: Restricts returned groups to have a given parent, this gives the projection.
+#! @BeginExampleSession
+#! gap> AllSRGroups(Degree,2,Depth,[2..3],ParentGroup,SRGroup(2,1,1));
+#! [ SRGroup(2,2,1), SRGroup(2,2,2), SRGroup(2,2,3) ]
+#! @EndExampleSession
 #!
-# TODO is there a bug here?
+# TODO is there a bug here? - Yes
 # gap> AllSRGroups(Degree,2,Depth,2,IsSubgroup,1);
 # [ SRGroup(2,2,1), SRGroup(2,2,2), SRGroup(2,2,3) ]
 #! <A>IsSubgroup</A> (int > 0) := groups that are a subgroup of the group number provided
 #!
-# TODO this should be MinimalGeneratingSetSize to avoid conflict with the function MinimalGeneratingSet
-#! <A>MinimalGeneratingSet</A> (int > 0) := size of the group's minimal generating set
+#! <A>MinimalGeneratingSetSize</A> (int > 0) := size of the group's minimal generating set
 #!
 #! @Returns
 #! A list of all self-replicating groups that satisfy the parameters.

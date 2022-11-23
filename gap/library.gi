@@ -173,21 +173,6 @@ function(args,all)
 			od;
 		od;
 		
-		# sieve by depth
-		if not Position(args,Depth)=fail then
-			n:=args[Position(args,Depth)+1];
-			if not IsList(n) then n:=[n]; fi;
-			Remove(args,Position(args,Depth)+1);
-			Remove(args,Position(args,Depth));
-		else
-			n:=fail;
-		fi;		
-		if not n=fail then
-			for i in [Length(groups),Length(groups)-1..1] do
-				if not RegularRootedTreeGroupDepth(groups[i]) in n then Remove(groups,i); fi;
-			od;
-		fi;
-
 		# sieve by number
 		if not Position(args,Number)=fail then
 			nr:=args[Position(args,Number)+1];
@@ -207,7 +192,7 @@ function(args,all)
 		if not args=[] then
 			for i in [1..Length(groups)] do
 				for j in [1..Length(args)/2] do
-					if not args[2*j-1](groups[i])=args[2*j] then
+					if not STGSelFunc(args[2*j-1](groups[i]),args[2*j]) then
 						Unbind(groups[i]);
 						break;
 					fi;
