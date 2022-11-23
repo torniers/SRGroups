@@ -141,10 +141,6 @@ end);
 
 ##################################################################################################################
 
-InstallMethod(Depth, "for SRGroup", [IsRegularRootedTreeGroup], RegularRootedTreeGroupDepth);
-
-##################################################################################################################
-
 # TODO: make this quicker by searching for degree AND level first
 # internal
 InstallGlobalFunction( SelectSRGroups,

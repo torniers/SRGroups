@@ -120,9 +120,6 @@ DeclareGlobalFunction( "OneSRGroup" );
 
 ##################################################################################################################
 
-DeclareOperation( "Depth", [IsRegularRootedTreeGroup] );
-DeclareSynonym( "Level", Depth );
-
 #! @Description
 #! The arguments of this function are a non-zero number of pairs of a function applicable to self-replicating groups and a value, or list of values, that the function may return. It acts analogously to the function <C>AllTransitiveGroups</C> from the package <Package>transgrp</Package> of transitive groups. Special examples of applicable functions are:
 #!

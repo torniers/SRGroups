@@ -59,6 +59,7 @@ DeclareCategory("IsRegularRootedTreeGroup", IsPermGroup);
 
 ##################################################################################################################
 
+#! @BeginGroup RegularRootedTreeGroupDegree
 #! @Description
 #! The argument of this attribute is a regular rooted tree group <A>G</A>.
 #!
@@ -74,8 +75,14 @@ DeclareAttribute("RegularRootedTreeGroupDegree", IsRegularRootedTreeGroup);
 #! 2
 #! @EndExampleSession
 
+#! @Arguments G
+#!
+DeclareOperation( "Degree", [IsRegularRootedTreeGroup] );
+#! @EndGroup
+
 ##################################################################################################################
 
+#! @BeginGroup RegularRootedTreeGroupDepth
 #! @Description
 #! The argument of this attribute is a regular rooted tree group <A>G</A>.
 #!
@@ -90,6 +97,15 @@ DeclareAttribute("RegularRootedTreeGroupDepth", IsRegularRootedTreeGroup);
 #! gap> RegularRootedTreeGroupDepth(AutT(2,3));
 #! 3
 #! @EndExampleSession
+
+#! @Arguments G
+#!
+DeclareOperation( "Depth", [IsRegularRootedTreeGroup] );
+
+# TODO document after https://github.com/gap-packages/AutoDoc/issues/174 is resolved
+DeclareSynonym( "Level", Depth );
+
+#! @EndGroup
 
 ##################################################################################################################
 
