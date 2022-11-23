@@ -116,25 +116,52 @@ DeclareGlobalFunction( "SRGroup" );
 
 ##################################################################################################################
 
+# TODO(cameron) work out where to put this.
+#! @BeginGroup ChildrenGroups
+
+#! @Description
+#! Finds all the self-replicating groups that have G as a parent
+#!
+#! @Returns
+#! A list of groups, the size of the list.
+#!
+#! @Arguments G
+DeclareAttribute("ChildGroups", IsRegularRootedTreeGroup);
+#! @Arguments G
+DeclareAttribute("ChildGroupsCount", IsRegularRootedTreeGroup);
+
+#! @EndGroup
+
+##################################################################################################################
+
+#! @Description
+#! Finds the index of the self-replicating group G in the library
+#!
+#! @Returns
+#! The index of G in the library
+#!
+#! @Arguments G
+DeclareAttribute("SRGroupNumber", IsRegularRootedTreeGroup);
+
+##################################################################################################################
+
+#!
 DeclareGlobalFunction( "OneSRGroup" );
 
 ##################################################################################################################
 
 #! @Description
-#! The arguments of this function are a non-zero number of pairs of a function applicable to self-replicating groups and a value, or list of values, that the function may return. It acts analogously to the function <C>AllTransitiveGroups</C> from the package <Package>transgrp</Package> of transitive groups. Special examples of applicable functions are:
+#! The arguments of this function are a non-zero number of pairs of a function applicable to self-replicating groups and a value, or list of values, that the function may return. It is this library's version of <Ref Func="AllLibraryGroups" BookName="Reference"/>. Special examples of applicable functions are:
 #!
-#! <A>Degree</A>: The <Ref Attr="Degree" Label="for IsRegularRootedTreeGroup"/> of the group.
+#! <A>Degree</A>: the <Ref Attr="Degree" Label="for IsRegularRootedTreeGroup"/> of the group.
 #!
-#! <A>Depth</A> (or <A>Level</A>): The <Ref Attr="Depth" Label="for IsRegularRootedTreeGroup"/> of the group.
+#! <A>Depth</A> (or <A>Level</A>): the <Ref Attr="Depth" Label="for IsRegularRootedTreeGroup"/> of the group.
 #!
-# TODO perhaps a more useful filter would be the number of children?
-#! <A>ChildCount</A>: the index <C>nr</C> in the library.
+#! <A>ChildGroupsCount</A>: the number of <Ref Attr="ChildGroups" Label="for IsRegularRootedTreeGroup"/>.
 #!
-#! <A>ParentGroup</A>: Restricts returned groups to have a given parent, this gives the projection.
-#! @BeginExampleSession
-#! gap> AllSRGroups(Degree,2,Depth,[2..3],ParentGroup,SRGroup(2,1,1));
-#! [ SRGroup(2,2,1), SRGroup(2,2,2), SRGroup(2,2,3) ]
-#! @EndExampleSession
+#! <A>ParentGroup</A>: Restricts returned groups to have a given <Ref Attr="ParentGroup" Label="for IsRegularRootedTreeGroup"/>, this gives the projection.
+#!
+#! <A>SRGroupNumber</A>: Restricts the index in the library.
 #!
 # TODO is there a bug here? - Yes
 # gap> AllSRGroups(Degree,2,Depth,2,IsSubgroup,1);
@@ -153,12 +180,14 @@ DeclareGlobalFunction("AllSRGroups");
 #! @BeginExampleSession
 #! gap> AllSRGroups(Degree, 2, Level, 4, IsAbelian, true);
 #! [ SRGroup(2,4,2), SRGroup(2,4,9), SRGroup(2,4,12), SRGroup(2,4,14) ]
-#! gap> AllSRGroups(Degree,[2..5],Depth,[2..5],IsSubgroup,[1..5],Projection,[1..3]);
+#! gap> AllSRGroups(Degree,[2..5],Depth,[2..5],IsSubgroup,[1..5]);
 #! Restricting degrees to [ 2, 3 ]
 #! [ SRGroup(2,1,1), SRGroup(2,1,1), SRGroup(2,2,1), SRGroup(2,3,1),
 #!   SRGroup(2,3,2), SRGroup(2,4,1), SRGroup(2,4,1), SRGroup(2,4,2),
 #!   SRGroup(2,4,2), SRGroup(2,4,2), SRGroup(3,1,1), SRGroup(3,1,1),
 #!   SRGroup(3,1,1), SRGroup(3,1,1) ]
+#! gap> AllSRGroups(Degree,2,Depth,[2..3],ParentGroup,SRGroup(2,1,1));
+#! [ SRGroup(2,2,1), SRGroup(2,2,2), SRGroup(2,2,3) ]
 #! @EndExampleSession
 
 ##################################################################################################################

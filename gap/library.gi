@@ -120,6 +120,37 @@ end);
 
 ##################################################################################################################
 
+InstallMethod(ChildGroups, "for G", [IsRegularRootedTreeGroup],
+function(G)
+    local groups, data, name, k, n, nr;
+    k := Degree(G);
+    n := Depth(G);
+    nr := SRGroupNumber(G);
+    data := SRGroupData(k, n, nr)[4];
+    groups := [];
+    for name in data do
+        if name = "the classes it extends to" then
+            return fail;
+        fi;
+        Add(groups, EvalString(name));
+    od;
+    return groups;
+end );
+
+InstallMethod(ChildGroupsCount, "for G", [IsRegularRootedTreeGroup],
+function(G)
+    return Size(ChildGroups(G));
+end );
+
+##################################################################################################################
+
+InstallMethod(SRGroupNumber, "for G", [IsRegularRootedTreeGroup],
+function(G)
+    return EvalString(SplitString(SplitString(Name(G),",")[3],")")[1]);
+end );
+
+##################################################################################################################
+
 InstallGlobalFunction( OneSRGroup,
 function(args...)
 	local group;
@@ -173,21 +204,6 @@ function(args,all)
 			od;
 		od;
 		
-		# sieve by number
-		if not Position(args,Number)=fail then
-			nr:=args[Position(args,Number)+1];
-			if not IsList(nr) then nr:=[nr]; fi;
-			Remove(args,Position(args,Number)+1);
-			Remove(args,Position(args,Number));
-		else
-			nr:=fail;
-		fi;
-		if not nr=fail then
-			for i in [Length(groups),Length(groups)-1..1] do
-				if not EvalString(SplitString(SplitString(Name(groups[i]),",")[3],")")[1]) in nr then Remove(groups,i); fi;
-			od;
-		fi;
-
 		# sieve by all remaining properties
 		if not args=[] then
 			for i in [1..Length(groups)] do
