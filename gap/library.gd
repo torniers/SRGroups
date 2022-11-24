@@ -152,20 +152,17 @@ DeclareGlobalFunction( "OneSRGroup" );
 #! @Description
 #! The arguments of this function are a non-zero number of pairs of a function applicable to self-replicating groups and a value, or list of values, that the function may return. It is this library's version of <Ref Func="AllLibraryGroups" BookName="Reference"/>. Special examples of applicable functions are:
 #!
-#! <A>Degree</A>: the <Ref Attr="Degree" Label="for IsRegularRootedTreeGroup"/> of the group.
+#! <A>Degree</A> (int>1): the <Ref Attr="Degree" Label="for IsRegularRootedTreeGroup"/> of the group.
 #!
-#! <A>Depth</A> (or <A>Level</A>): the <Ref Attr="Depth" Label="for IsRegularRootedTreeGroup"/> of the group.
+#! <A>Depth</A> (or <A>Level</A>) (int>0): the <Ref Attr="Depth" Label="for IsRegularRootedTreeGroup"/> of the group.
 #!
-#! <A>ChildGroupsCount</A>: the number of <Ref Attr="ChildGroups" Label="for IsRegularRootedTreeGroup"/>.
+#! <A>SRGroupNumber</A> (int>0): Restricts the index in the library.
 #!
-#! <A>ParentGroup</A>: Restricts returned groups to have a given <Ref Attr="ParentGroup" Label="for IsRegularRootedTreeGroup"/>, this gives the projection.
+#! <A>ChildGroupsCount</A> (int>0): the number of <Ref Attr="ChildGroups" Label="for IsRegularRootedTreeGroup"/>.
 #!
-#! <A>SRGroupNumber</A>: Restricts the index in the library.
+#! <A>ParentGroup</A> (SRGroup): Restricts returned groups to have a given <Ref Attr="ParentGroup" Label="for IsRegularRootedTreeGroup"/>, this gives the projection.
 #!
-# TODO is there a bug here? - Yes
-# gap> AllSRGroups(Degree,2,Depth,2,IsSubgroup,1);
-# [ SRGroup(2,2,1), SRGroup(2,2,2), SRGroup(2,2,3) ]
-#! <A>IsSubgroup</A> (int > 0) := groups that are a subgroup of the group number provided
+#! <A>IsSubgroup</A> (Group) := groups that are a subgroup of the group provided
 #!
 #! <A>MinimalGeneratingSetSize</A> (int > 0) := size of the group's minimal generating set
 #!
