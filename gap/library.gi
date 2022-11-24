@@ -194,11 +194,10 @@ end);
 
 ##################################################################################################################
 
-# TODO: make this quicker by searching for degree AND level first
 # internal
 InstallGlobalFunction( SelectSRGroups,
 function(args,all)
-	local k, n, nr, groups, degree, groups_temp, names, i, j;
+	local k, n, nr, groups, degree, level, groups_temp, names, i, j;
 	
 	if not IsInt(Length(args)/2) then
 		Error("argument must be of the form fun1,val1,fun2,val2,...");
@@ -214,10 +213,18 @@ function(args,all)
 		fi;
 
 		groups:=[];
-		for degree in k do
-			for n in SRLevels(degree) do
+		for degree in k do   
+            if not Position(args,Depth)=fail then
+                n := args[Position(args,Depth)+1];
+                if not IsList(n) then n:=[n]; fi;
+                n := Intersection(SRLevels(degree), n);
+            else
+                n := SRLevels(degree);
+            fi;
+
+			for level in n do
 				# get groups from library and name them
-				groups_temp:=SRGroupsData(degree,n);
+				groups_temp:=SRGroupsData(degree,level);
 				names:=ShallowCopy(groups_temp);
 				Apply(names,G->G[2]);
 				Apply(groups_temp,G->RegularRootedTreeGroup(EvalString(SplitString(G[2],",","(")[2]),EvalString(SplitString(G[2],",")[2]),Group(G[1])));
