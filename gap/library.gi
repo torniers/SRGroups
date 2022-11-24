@@ -120,7 +120,7 @@ end);
 
 ##################################################################################################################
 
-InstallMethod(ChildGroups, "for G", [IsRegularRootedTreeGroup],
+InstallMethod(ChildGroups, "for G", [IsSelfReplicating],
 function(G)
     local groups, data, name, k, n, nr;
     k := Degree(G);
@@ -128,6 +128,7 @@ function(G)
     nr := SRGroupNumber(G);
     data := SRGroupData(k, n, nr)[4];
     groups := [];
+    # TODO(cameron) this is slower than expected
     for name in data do
         if name = "the classes it extends to" then
             return fail;
@@ -137,16 +138,37 @@ function(G)
     return groups;
 end );
 
-InstallMethod(ChildGroupsCount, "for G", [IsRegularRootedTreeGroup],
+InstallMethod(ChildGroupsCount, "for G", [IsSelfReplicating],
 function(G)
-    return Size(ChildGroups(G));
+    local data, k, n, nr;
+    k := Degree(G);
+    n := Depth(G);
+    nr := SRGroupNumber(G);
+    data := SRGroupData(k, n, nr)[4];
+    return Size(data);
 end );
 
 ##################################################################################################################
 
-InstallMethod(SRGroupNumber, "for G", [IsRegularRootedTreeGroup],
+InstallMethod(SRGroupNumber, "for G", [IsSelfReplicating],
 function(G)
-    return EvalString(SplitString(SplitString(Name(G),",")[3],")")[1]);
+    local n, k, i, candidate;
+    if HasName(G) and StartsWith(Name(G), "SRGroup") then
+        # Just read it
+        return EvalString(SplitString(SplitString(Name(G),",")[3],")")[1]);
+    else
+        # TODO(cameron) Find a more efficient way of doing this.
+        k := Degree(G);
+        n := Depth(G);
+        i := 0;
+        for candidate in AllSRGroups(Depth,n,Degree,k) do
+            i := i + 1;
+            if candidate = G then
+                return i;
+            fi;
+        od;
+    fi;
+    return fail;
 end );
 
 ##################################################################################################################

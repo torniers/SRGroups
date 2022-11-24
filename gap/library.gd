@@ -116,7 +116,7 @@ DeclareGlobalFunction( "SRGroup" );
 
 ##################################################################################################################
 
-#! @BeginGroup ChildrenGroups
+#! @BeginGroup ChildGroups
 
 #! @Description
 #! Finds all the self-replicating groups that have G as a parent
@@ -176,18 +176,17 @@ DeclareGlobalFunction( "OneSRGroup" );
 #!
 DeclareGlobalFunction("AllSRGroups");
 #!
-# TODO(cameron) redo the example
 #! @BeginExampleSession
 #! gap> AllSRGroups(Degree, 2, Level, 4, IsAbelian, true);
-#! [ SRGroup(2,4,2), SRGroup(2,4,9), SRGroup(2,4,12), SRGroup(2,4,14) ]
-#! gap> AllSRGroups(Degree,[2..5],Depth,[2..5],IsSubgroup,[1..5]);
-#! Restricting degrees to [ 2, 3 ]
-#! [ SRGroup(2,1,1), SRGroup(2,1,1), SRGroup(2,2,1), SRGroup(2,3,1),
-#!   SRGroup(2,3,2), SRGroup(2,4,1), SRGroup(2,4,1), SRGroup(2,4,2),
-#!   SRGroup(2,4,2), SRGroup(2,4,2), SRGroup(3,1,1), SRGroup(3,1,1),
-#!   SRGroup(3,1,1), SRGroup(3,1,1) ]
-#! gap> AllSRGroups(Degree,2,Depth,[2..3],ParentGroup,SRGroup(2,1,1));
-#! [ SRGroup(2,2,1), SRGroup(2,2,2), SRGroup(2,2,3) ]
+#! [ SRGroup(2,4,1), SRGroup(2,4,9), SRGroup(2,4,13), SRGroup(2,4,14) ]
+#! gap> AllSRGroups(Degree,2,Depth,5,IsSubgroup,[SRGroup(2,1,1), SRGroup(2,2,1)], ParentGroup, SRGroup(2,4,118));
+#! [ SRGroup(2,5,2332), SRGroup(2,5,2341), SRGroup(2,5,2342), SRGroup(2,5,2343), SRGroup(2,5,2344), SRGroup(2,5,2345),
+#!   SRGroup(2,5,2346), SRGroup(2,5,2347), SRGroup(2,5,2348), SRGroup(2,5,2364), SRGroup(2,5,2366), SRGroup(2,5,2368),
+#!   SRGroup(2,5,2371), SRGroup(2,5,2373), SRGroup(2,5,2375), SRGroup(2,5,2384), SRGroup(2,5,2387), SRGroup(2,5,2388),
+#!   SRGroup(2,5,2410), SRGroup(2,5,2411), SRGroup(2,5,2412), SRGroup(2,5,2413), SRGroup(2,5,2422), SRGroup(2,5,2425),
+#!   SRGroup(2,5,2426), SRGroup(2,5,2433), SRGroup(2,5,2434), SRGroup(2,5,2435), SRGroup(2,5,2436) ]
+#! gap> AllSRGroups(Degree,[2..5],Depth,[2..5],MinimalGeneratingSetSize,1);
+#! [ SRGroup(2,2,1), SRGroup(2,3,1), SRGroup(2,4,1), SRGroup(2,5,2), SRGroup(3,2,4) ]
 #! @EndExampleSession
 
 ##################################################################################################################
