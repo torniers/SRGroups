@@ -116,7 +116,6 @@ DeclareGlobalFunction( "SRGroup" );
 
 ##################################################################################################################
 
-# TODO(cameron) work out where to put this.
 #! @BeginGroup ChildrenGroups
 
 #! @Description
@@ -126,9 +125,9 @@ DeclareGlobalFunction( "SRGroup" );
 #! A list of groups, the size of the list.
 #!
 #! @Arguments G
-DeclareAttribute("ChildGroups", IsRegularRootedTreeGroup);
+DeclareAttribute("ChildGroups", IsSelfReplicating);
 #! @Arguments G
-DeclareAttribute("ChildGroupsCount", IsRegularRootedTreeGroup);
+DeclareAttribute("ChildGroupsCount", IsSelfReplicating);
 
 #! @EndGroup
 
@@ -141,7 +140,7 @@ DeclareAttribute("ChildGroupsCount", IsRegularRootedTreeGroup);
 #! The index of G in the library
 #!
 #! @Arguments G
-DeclareAttribute("SRGroupNumber", IsRegularRootedTreeGroup);
+DeclareAttribute("SRGroupNumber", IsSelfReplicating);
 
 ##################################################################################################################
 
@@ -177,6 +176,7 @@ DeclareGlobalFunction( "OneSRGroup" );
 #!
 DeclareGlobalFunction("AllSRGroups");
 #!
+# TODO(cameron) redo the example
 #! @BeginExampleSession
 #! gap> AllSRGroups(Degree, 2, Level, 4, IsAbelian, true);
 #! [ SRGroup(2,4,2), SRGroup(2,4,9), SRGroup(2,4,12), SRGroup(2,4,14) ]

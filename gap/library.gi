@@ -176,7 +176,7 @@ end);
 # internal
 InstallGlobalFunction( SelectSRGroups,
 function(args,all)
-	local k, n, nr, groups, degree, groups_temp, names, i, j, works;
+	local k, n, nr, groups, degree, groups_temp, names, i, j;
 	
 	if not IsInt(Length(args)/2) then
 		Error("argument must be of the form fun1,val1,fun2,val2,...");
@@ -208,10 +208,28 @@ function(args,all)
 		if not args=[] then
 			for i in [1..Length(groups)] do
 				for j in [1..Length(args)/2] do
-					if not STGSelFunc(args[2*j-1](groups[i]),args[2*j]) then
-						Unbind(groups[i]);
-						break;
-					fi;
+                    if AbsoluteValue(NumberArgumentsFunction(args[2*j-1])) = 2 then
+                        # For binary functions
+                        if IsList(args[2*j]) then
+                            if not ForAny(args[2*j], x->args[2*j-1](groups[i],x)) then
+                                Unbind(groups[i]);
+                                break;
+                            fi;
+                        else
+                            if not args[2*j-1](groups[i], args[2*j]) then
+                                Unbind(groups[i]);
+                                break;
+                            fi;
+                        fi;
+                    elif AbsoluteValue(NumberArgumentsFunction(args[2*j-1])) = 1 then
+                        # For operations and unary functions
+                        if not STGSelFunc(args[2*j-1](groups[i]),args[2*j]) then
+                            Unbind(groups[i]);
+                            break;
+                        fi;
+                    else
+                        Error("Function at position ", 2*j-1, " requires more than two parameters.");
+                    fi;
 				od;
 				if not all and IsBound(groups[i]) then return groups[i]; fi;
 			od;
