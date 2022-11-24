@@ -19,9 +19,10 @@ end);
 
 ##################################################################################################################
 
-# TODO: transgrp uses a list called TRANSLENGTHS for this; see above
+SR_NR_CACHE := [];
 InstallGlobalFunction( NrSRGroups,
 function(k,n)
+    local nr;
 	if not (IsInt(k) and k>=2) then
 		Error("input argument k=",k," must be an integer greater than or equal to 2");
 	elif not (IsInt(n) and n>=1) then
@@ -29,15 +30,31 @@ function(k,n)
 	elif not SRGroupsAvailable(k,n) then
 		return fail;
 	else
-		return Length(SRGroupsData(k,n));
+        if IsBound(SR_NR_CACHE[k]) and IsBound(SR_NR_CACHE[k][n]) then
+            return SR_NR_CACHE[k][n];
+        fi;
+
+		nr := Length(SRGroupsData(k,n));
+
+        if not IsBound(SR_NR_CACHE[k]) then
+            SR_NR_CACHE[k] := [];
+        fi;
+        SR_NR_CACHE[k][n] := nr;
+
+        return nr;
 	fi;
 end);
 
 ##################################################################################################################
 
+SR_DEGREES_CACHE := -1;
 InstallGlobalFunction( SRDegrees,
 function()
 	local dir, file_names, degrees, file_name;
+
+    if not SR_DEGREES_CACHE = -1 then
+       return SR_DEGREES_CACHE; 
+    fi;
 	
 	# get list of file names
 	dir:=DirectoriesPackageLibrary("SRGroups", "data");
@@ -52,19 +69,26 @@ function()
 	# remove duplicates and sort
 	degrees:=DuplicateFreeList(degrees);
 	Sort(degrees);
+
+    SR_DEGREES_CACHE := degrees;
 	
 	return degrees;
 end);
 
 ##################################################################################################################
 
+SR_LEVELS_CACHE := [];
 InstallGlobalFunction( SRLevels,
 function(k)
 	local dir, file_names, levels, file_name;
-	
+
 	if not (IsInt(k) and k>=2) then
 		Error("input argument k=",k," must be an integer greater than or equal to 2");
 	else
+        if IsBound(SR_LEVELS_CACHE[k]) then
+            return SR_LEVELS_CACHE[k];
+        fi;
+
 		# get list of file names
 		dir:=DirectoriesPackageLibrary("SRGroups", "data");
 		file_names:=DirectoryContents(dir[1]);
@@ -77,6 +101,8 @@ function(k)
 		od;
 		# sort
 		Sort(levels);
+
+        SR_LEVELS_CACHE[k] := levels;
 
 		return levels;
 	fi;
