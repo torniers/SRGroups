@@ -144,11 +144,8 @@ DeclareAttribute("SRGroupNumber", IsSelfReplicating);
 
 ##################################################################################################################
 
-#!
-DeclareGlobalFunction( "OneSRGroup" );
-
-##################################################################################################################
-
+#! @BeginGroup AllSRGroups
+#! @GroupTitle Selection Functions
 #! @Description
 #! The arguments of this function are a non-zero number of pairs of a function applicable to self-replicating groups and a value, or list of values, that the function may return. It is this library's version of <Ref Func="AllLibraryGroups" BookName="Reference"/>. Special examples of applicable functions are:
 #!
@@ -156,9 +153,9 @@ DeclareGlobalFunction( "OneSRGroup" );
 #!
 #! <A>Depth</A> (or <A>Level</A>) (int>0): the <Ref Attr="Depth" Label="for IsRegularRootedTreeGroup"/> of the group.
 #!
-#! <A>SRGroupNumber</A> (int>0): Restricts the index in the library.
+#! <A>SRGroupNumber</A> (int>0): Restricts the <Ref Attr="SRGroupNumber" Label="for IsSelfReplicating"/> in the library.
 #!
-#! <A>ChildGroupsCount</A> (int>0): the number of <Ref Attr="ChildGroups" Label="for IsRegularRootedTreeGroup"/>.
+#! <A>ChildGroupsCount</A> (int>0): the number of <Ref Attr="ChildGroups" Label="for IsSelfReplicating"/>.
 #!
 #! <A>ParentGroup</A> (SRGroup): Restricts returned groups to have a given <Ref Attr="ParentGroup" Label="for IsRegularRootedTreeGroup"/>, this gives the projection.
 #!
@@ -167,7 +164,11 @@ DeclareGlobalFunction( "OneSRGroup" );
 #! <A>MinimalGeneratingSetSize</A> (int > 0) := size of the group's minimal generating set
 #!
 #! @Returns
-#! A list of all self-replicating groups that satisfy the parameters.
+#! A one or a list of all self-replicating groups that satisfy the parameters.
+#!
+#! @Arguments fun1, val1, fun2, val2, ...
+#!
+DeclareGlobalFunction( "OneSRGroup" );
 #!
 #! @Arguments fun1, val1, fun2, val2, ...
 #!
@@ -185,6 +186,7 @@ DeclareGlobalFunction("AllSRGroups");
 #! gap> AllSRGroups(Degree,[2..5],Depth,[2..5],MinimalGeneratingSetSize,1);
 #! [ SRGroup(2,2,1), SRGroup(2,3,1), SRGroup(2,4,1), SRGroup(2,5,2), SRGroup(3,2,4) ]
 #! @EndExampleSession
+#! @EndGroup
 
 ##################################################################################################################
 
