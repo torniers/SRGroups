@@ -128,7 +128,6 @@ function(G)
     nr := SRGroupNumber(G);
     data := SRGroupData(k, n, nr)[4];
     groups := [];
-    # TODO(cameron) this is slower than expected
     for name in data do
         if name = "the classes it extends to" then
             return fail;
@@ -199,10 +198,12 @@ InstallGlobalFunction( SelectSRGroups,
 function(args,all)
 	local k, n, nr, groups, degree, level, groups_temp, names, i, j;
 	
+    # TODO(cameron) more input checking
 	if not IsInt(Length(args)/2) then
 		Error("argument must be of the form fun1,val1,fun2,val2,...");
 	else	
 		# pre-select groups by desired degree(s)
+        # TODO(cameron) mention if we filter out degrees or depths
 		if not Position(args,Degree)=fail then
 			k:=args[Position(args,Degree)+1];
 			if not IsList(k) then k:=[k]; fi;
