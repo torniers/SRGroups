@@ -49,7 +49,11 @@ function(k, n)
     # TODO(cameron) Find better algorithm than n^2
     groups := AllSRGroups(Degree, k, Depth, n);
     for group_i in groups do
-        dot := Concatenation(dot, "\"", Name(group_i), "\"", ";\n");
+        if IsCyclic(group_i) then
+            dot := Concatenation(dot, "\"", Name(group_i), "\"[color=\"blue\"];\n");
+        else
+            dot := Concatenation(dot, "\"", Name(group_i), "\";\n");
+        fi;
         for group_j in groups do
             if (not group_j = group_i) and IsSubgroup(group_i, group_j) then
                 dot := Concatenation(dot, "\"", Name(group_i), "\" -> \"", Name(group_j), "\";\n");
