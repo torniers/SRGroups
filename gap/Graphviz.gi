@@ -43,28 +43,15 @@ end);
 
 InstallGlobalFunction(DotSubgroupLattice,
 function(k, n)
-    local dot, i, group_i, group_j, groups, parent_groups, p_group;
+    local dot, parent_count, group_i, group_j, groups, hue;
     dot := "digraph {\n";
 
-    i := 0;
-    parent_groups := AllSRGroups(Degree, k, Depth, n-1);
-    for p_group in parent_groups do
-        i := i + 1;
-        dot := Concatenation(dot, "subgraph cluster_", String(i), "{\n");
-        groups := ChildGroups(p_group);
-        for group_i in groups do
-            if IsCyclic(group_i) then
-                dot := Concatenation(dot, "\"", Name(group_i), "\"[color=\"blue\"];\n");
-            else
-                dot := Concatenation(dot, "\"", Name(group_i), "\";\n");
-            fi;
-        od;
-        dot := Concatenation(dot, "}\n");
-    od;
-
+    parent_count := NrSRGroups(k, n-1);
     # TODO(cameron) Find better algorithm than n^2
     groups := AllSRGroups(Degree, k, Depth, n);
     for group_i in groups do
+        hue := String(Float(SRGroupNumber(ParentGroup(group_i))/parent_count)); #TODO(cameron) use a better colourmap
+        dot := Concatenation(dot, "\"", Name(group_i), "\"[color=\"", hue, " 1.0 1.0\"];\n");
         for group_j in groups do
             if (not group_j = group_i) and IsSubgroup(group_i, group_j) then
                 dot := Concatenation(dot, "\"", Name(group_i), "\" -> \"", Name(group_j), "\";\n");
