@@ -15,7 +15,7 @@ RecurseDotGroupHeirarchy := function(k, n, nr, levels, name)
     for name_child in SRGroupData(k, n, nr)[4] do
         i := i + 1;
         if not name_child = "the classes it extends to" then
-            dot := Concatenation(dot, "\"", name, "\"", " -> ", "\"", name_child, "\"", ";\n");
+            dot := Concatenation(dot, "\"", name, "\" -> \"", name_child, "\";\n");
             k_child:=SRGroupDegreeFromName(name_child);
 	        n_child:=SRGroupLevelFromName(name_child);
             nr_child:=SRGroupNrFromName(name_child);
@@ -32,7 +32,7 @@ function(k, n, nr, levels)
     dot := "digraph {\n";
 
     name := Concatenation("SRGroup(", String(k), ",", String(n), ",", String(nr), ")");
-    dot := Concatenation(dot, "\"", name, "\"", ";\n");
+    dot := Concatenation(dot, "\"", name, "\";\n");
     dot := Concatenation(dot, RecurseDotGroupHeirarchy(k, n, nr, levels - 1, name));
 
     dot := Concatenation(dot, "}");
@@ -50,7 +50,15 @@ function(k, n)
     groups := AllSRGroups(Degree, k, Depth, n);
     for group_i in groups do
         dot := Concatenation(dot, "\"", Name(group_i), "\"", ";\n");
+        for group_j in groups do
+            if (not group_j = group_i) and IsSubgroup(group_i, group_j) then
+                dot := Concatenation(dot, "\"", Name(group_i), "\" -> \"", Name(group_j), "\";\n");
+            fi;
+        od;
     od;
+
+    #TODO(cameron) Do what `tred` does, until then filter output through `tred` to remove transitive edges.
+    # https://gitlab.com/graphviz/graphviz/-/blob/main/cmd/tools/tred.c
 
     dot := Concatenation(dot, "}");
     return dot;
