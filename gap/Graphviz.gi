@@ -43,14 +43,14 @@ end);
 
 InstallGlobalFunction(DotSubgroupLattice,
 function(k, n)
-    local dot, parent_count, group_i, group_j, groups, hue, shape, ranks, rank, i;
+    local dot, parent_count, group_i, group_j, groups, hue, shape, ranks, rank, i, bound_positions;
     dot := "digraph {\n";
     groups := AllSRGroups(Degree, k, Depth, n);
 
     # Sort the groups into bins of the order
     ranks := [];
     for group_i in groups do
-        i := LogInt(Order(group_i), k);
+        i := Order(group_i);
         if not IsBound(ranks[i]) then
             ranks[i] := [];
         fi;
@@ -58,10 +58,11 @@ function(k, n)
     od;
 
     # Create all the nodes, each within a group specifying the rank so all the orders are on the same level.
-    i := PositionBound(ranks);
+    bound_positions := PositionsBound(ranks);
+    i := 1;
     parent_count := NrSRGroups(k, n-1);
     for rank in ranks do
-        dot := Concatenation(dot, "{rank = same;", String(k^i), "[shape=none];\n");
+        dot := Concatenation(dot, "{rank = same;", String(bound_positions[i]), "[shape=none];\n");
         for group_i in rank do
             # Create the node   
             hue := String(Float(SRGroupNumber(ParentGroup(group_i))/parent_count)); #TODO(cameron) use a better colourmap
@@ -74,6 +75,11 @@ function(k, n)
         od;
         dot := Concatenation(dot, "}\n");
         i := i + 1;
+    od;
+
+    # Enforce the hierarchy more strictly
+    for i in [2..Length(bound_positions)] do
+        dot := Concatenation(dot, String(bound_positions[i]), " -> ", String(bound_positions[i-1]), "[style=invis];\n");
     od;
 
     # Create the edges
