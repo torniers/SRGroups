@@ -84,11 +84,18 @@ end);
 
 ##################################################################################################################
 
+SRGroupDegreeFromName := function(name)
+    return EvalString(SplitString(name,",","(")[2]);
+end;
+SRGroupLevelFromName := function(name)
+    return EvalString(SplitString(name,",")[2]);
+end;
+
 SRGroupFromData:=function(data)
 	local k, n, G;
 	
-	k:=EvalString(SplitString(data[2],",","(")[2]);
-	n:=EvalString(SplitString(data[2],",")[2]);
+	k:=SRGroupDegreeFromName(data[2]);
+    n:=SRGroupLevelFromName(data[2]);
 	G:=RegularRootedTreeGroup(k,n,Group(data[1]));
 	SetName(G,data[2]);
 	
