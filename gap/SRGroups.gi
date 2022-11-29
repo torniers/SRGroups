@@ -6,6 +6,15 @@
 #
 ##################################################################################################################
 
+InstallMethod(Degree, "for SRGroup", [IsRegularRootedTreeGroup], RegularRootedTreeGroupDegree);
+InstallMethod(Depth, "for SRGroup", [IsRegularRootedTreeGroup], RegularRootedTreeGroupDepth);
+InstallMethod(MinimalGeneratingSetSize, "for SRGroup", [IsRegularRootedTreeGroup],
+function(G)
+    return Size(MinimalGeneratingSet(G));
+end );
+
+##################################################################################################################
+
 # Input::	k: integer at least 2, n: integer at least 2, G: a subgroup of the automorphism group of the k-regular rooted tree of depth n
 # Output::	the regular rooted tree group G
 InstallMethod( RegularRootedTreeGroup, "for k,n,G (creator)", [IsInt, IsInt, IsPermGroup],

@@ -116,34 +116,59 @@ DeclareGlobalFunction( "SRGroup" );
 
 ##################################################################################################################
 
-DeclareGlobalFunction( "OneSRGroup" );
+#! @BeginGroup ChildGroups
+
+#! @Description
+#! Finds all the self-replicating groups that have G as a parent
+#!
+#! @Returns
+#! A list of groups, the size of the list.
+#!
+#! @Arguments G
+DeclareAttribute("ChildGroups", IsSelfReplicating);
+#! @Arguments G
+DeclareAttribute("ChildGroupsCount", IsSelfReplicating);
+
+#! @EndGroup
 
 ##################################################################################################################
 
-DeclareSynonym( "Level" , "Depth" );
-
 #! @Description
-#! The arguments of this function are a non-zero number of pairs of a function applicable to self-replicating groups and a value, or list of values, that the function may return. It acts analogously to the function <C>AllTransitiveGroups</C> from the package <Package>transgrp</Package> of transitive groups. Special examples of applicable functions are:
-#!
-#! <A>Degree</A>: short hand for <Ref Attr="RegularRootedTreeGroupDepth" Label="for IsRegularRootedTreeGroup"/>.
-#!
-#! <A>Depth</A> (or <A>Level</A>): short hand for <Ref Attr="RegularRootedTreeGroupDepth" Label="for IsRegularRootedTreeGroup"/>.
-#!
-# TODO perhaps a more useful filter would be the number of children?
-#! <A>Number</A>: the index <C>nr</C> in the library.
-#!
-#! <A>Projection</A>: the index <C>nr</C> of <Ref Attr="ParentGroup" Label="for IsRegularRootedTreeGroup"/> in the library.
-#!
-# TODO is there a bug here?
-# gap> AllSRGroups(Degree,2,Depth,2,IsSubgroup,1);
-# [ SRGroup(2,2,1), SRGroup(2,2,2), SRGroup(2,2,3) ]
-#! <A>IsSubgroup</A> (int > 0) := groups that are a subgroup of the group number provided
-#!
-# TODO this should be MinimalGeneratingSetSize to avoid conflict with the function MinimalGeneratingSet
-#! <A>MinimalGeneratingSet</A> (int > 0) := size of the group's minimal generating set
+#! Finds the index of the self-replicating group G in the library
 #!
 #! @Returns
-#! A list of all self-replicating groups that satisfy the parameters.
+#! The index of G in the library
+#!
+#! @Arguments G
+DeclareAttribute("SRGroupNumber", IsSelfReplicating);
+
+##################################################################################################################
+
+#! @BeginGroup AllSRGroups
+#! @GroupTitle Selection Functions
+#! @Description
+#! The arguments of this function are a non-zero number of pairs of a function applicable to self-replicating groups and a value, or list of values, that the function may return. It is this library's version of <Ref Func="AllLibraryGroups" BookName="Reference"/>. Special examples of applicable functions are:
+#!
+#! <A>Degree</A> (int>1): the <Ref Attr="Degree" Label="for IsRegularRootedTreeGroup"/> of the group.
+#!
+#! <A>Depth</A> (or <A>Level</A>) (int>0): the <Ref Attr="Depth" Label="for IsRegularRootedTreeGroup"/> of the group.
+#!
+#! <A>SRGroupNumber</A> (int>0): Restricts the <Ref Attr="SRGroupNumber" Label="for IsSelfReplicating"/> in the library.
+#!
+#! <A>ChildGroupsCount</A> (int>0): the number of <Ref Attr="ChildGroups" Label="for IsSelfReplicating"/>.
+#!
+#! <A>ParentGroup</A> (SRGroup): Restricts returned groups to have a given <Ref Attr="ParentGroup" Label="for IsRegularRootedTreeGroup"/>, this gives the projection.
+#!
+#! <A>IsSubgroup</A> (Group) := groups that are a subgroup of the group provided
+#!
+#! <A>MinimalGeneratingSetSize</A> (int > 0) := size of the group's minimal generating set
+#!
+#! @Returns
+#! A one or a list of all self-replicating groups that satisfy the parameters.
+#!
+#! @Arguments fun1, val1, fun2, val2, ...
+#!
+DeclareGlobalFunction( "OneSRGroup" );
 #!
 #! @Arguments fun1, val1, fun2, val2, ...
 #!
@@ -151,14 +176,17 @@ DeclareGlobalFunction("AllSRGroups");
 #!
 #! @BeginExampleSession
 #! gap> AllSRGroups(Degree, 2, Level, 4, IsAbelian, true);
-#! [ SRGroup(2,4,2), SRGroup(2,4,9), SRGroup(2,4,12), SRGroup(2,4,14) ]
-#! gap> AllSRGroups(Degree,[2..5],Depth,[2..5],IsSubgroup,[1..5],Projection,[1..3]);
-#! Restricting degrees to [ 2, 3 ]
-#! [ SRGroup(2,1,1), SRGroup(2,1,1), SRGroup(2,2,1), SRGroup(2,3,1),
-#!   SRGroup(2,3,2), SRGroup(2,4,1), SRGroup(2,4,1), SRGroup(2,4,2),
-#!   SRGroup(2,4,2), SRGroup(2,4,2), SRGroup(3,1,1), SRGroup(3,1,1),
-#!   SRGroup(3,1,1), SRGroup(3,1,1) ]
+#! [ SRGroup(2,4,1), SRGroup(2,4,9), SRGroup(2,4,13), SRGroup(2,4,14) ]
+#! gap> AllSRGroups(Degree,2,Depth,5,IsSubgroup,[SRGroup(2,1,1), SRGroup(2,2,1)], ParentGroup, SRGroup(2,4,118));
+#! [ SRGroup(2,5,2332), SRGroup(2,5,2341), SRGroup(2,5,2342), SRGroup(2,5,2343), SRGroup(2,5,2344), SRGroup(2,5,2345),
+#!   SRGroup(2,5,2346), SRGroup(2,5,2347), SRGroup(2,5,2348), SRGroup(2,5,2364), SRGroup(2,5,2366), SRGroup(2,5,2368),
+#!   SRGroup(2,5,2371), SRGroup(2,5,2373), SRGroup(2,5,2375), SRGroup(2,5,2384), SRGroup(2,5,2387), SRGroup(2,5,2388),
+#!   SRGroup(2,5,2410), SRGroup(2,5,2411), SRGroup(2,5,2412), SRGroup(2,5,2413), SRGroup(2,5,2422), SRGroup(2,5,2425),
+#!   SRGroup(2,5,2426), SRGroup(2,5,2433), SRGroup(2,5,2434), SRGroup(2,5,2435), SRGroup(2,5,2436) ]
+#! gap> AllSRGroups(Degree,[2..5],Depth,[2..5],MinimalGeneratingSetSize,1);
+#! [ SRGroup(2,2,1), SRGroup(2,3,1), SRGroup(2,4,1), SRGroup(2,5,2), SRGroup(3,2,4) ]
 #! @EndExampleSession
+#! @EndGroup
 
 ##################################################################################################################
 

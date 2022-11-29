@@ -127,6 +127,59 @@ end);
 
 ##################################################################################################################
 
+InstallMethod(ChildGroups, "for G", [IsSelfReplicating],
+function(G)
+    local groups, data, name, k, n, nr;
+    k := Degree(G);
+    n := Depth(G);
+    nr := SRGroupNumber(G);
+    data := SRGroupData(k, n, nr)[4];
+    groups := [];
+    # TODO(cameron) this is slower than expected
+    for name in data do
+        if name = "the classes it extends to" then
+            return fail;
+        fi;
+        Add(groups, EvalString(name));
+    od;
+    return groups;
+end );
+
+InstallMethod(ChildGroupsCount, "for G", [IsSelfReplicating],
+function(G)
+    local data, k, n, nr;
+    k := Degree(G);
+    n := Depth(G);
+    nr := SRGroupNumber(G);
+    data := SRGroupData(k, n, nr)[4];
+    return Size(data);
+end );
+
+##################################################################################################################
+
+InstallMethod(SRGroupNumber, "for G", [IsSelfReplicating],
+function(G)
+    local n, k, i, candidate;
+    if HasName(G) and StartsWith(Name(G), "SRGroup") then
+        # Just read it
+        return EvalString(SplitString(SplitString(Name(G),",")[3],")")[1]);
+    else
+        # TODO(cameron) Find a more efficient way of doing this.
+        k := Degree(G);
+        n := Depth(G);
+        i := 0;
+        for candidate in AllSRGroups(Depth,n,Degree,k) do
+            i := i + 1;
+            if candidate = G then
+                return i;
+            fi;
+        od;
+    fi;
+    return fail;
+end );
+
+##################################################################################################################
+
 InstallGlobalFunction( OneSRGroup,
 function(args...)
 	local group;
@@ -148,11 +201,10 @@ end);
 
 ##################################################################################################################
 
-# TODO: make this quicker by searching for degree AND level first
 # internal
 InstallGlobalFunction( SelectSRGroups,
 function(args,all)
-	local k, n, nr, groups, degree, groups_temp, names, i, j, works;
+	local k, n, nr, groups, degree, level, groups_temp, names, i, j;
 	
 	if not IsInt(Length(args)/2) then
 		Error("argument must be of the form fun1,val1,fun2,val2,...");
@@ -168,10 +220,18 @@ function(args,all)
 		fi;
 
 		groups:=[];
-		for degree in k do
-			for n in SRLevels(degree) do
+		for degree in k do   
+            if not Position(args,Depth)=fail then
+                n := args[Position(args,Depth)+1];
+                if not IsList(n) then n:=[n]; fi;
+                n := Intersection(SRLevels(degree), n);
+            else
+                n := SRLevels(degree);
+            fi;
+
+			for level in n do
 				# get groups from library and name them
-				groups_temp:=SRGroupsData(degree,n);
+				groups_temp:=SRGroupsData(degree,level);
 				names:=ShallowCopy(groups_temp);
 				Apply(names,G->G[2]);
 				Apply(groups_temp,G->RegularRootedTreeGroup(EvalString(SplitString(G[2],",","(")[2]),EvalString(SplitString(G[2],",")[2]),Group(G[1])));
@@ -180,44 +240,32 @@ function(args,all)
 			od;
 		od;
 		
-		# sieve by depth
-		if not Position(args,Depth)=fail then
-			n:=args[Position(args,Depth)+1];
-			if not IsList(n) then n:=[n]; fi;
-			Remove(args,Position(args,Depth)+1);
-			Remove(args,Position(args,Depth));
-		else
-			n:=fail;
-		fi;		
-		if not n=fail then
-			for i in [Length(groups),Length(groups)-1..1] do
-				if not RegularRootedTreeGroupDepth(groups[i]) in n then Remove(groups,i); fi;
-			od;
-		fi;
-
-		# sieve by number
-		if not Position(args,Number)=fail then
-			nr:=args[Position(args,Number)+1];
-			if not IsList(nr) then nr:=[nr]; fi;
-			Remove(args,Position(args,Number)+1);
-			Remove(args,Position(args,Number));
-		else
-			nr:=fail;
-		fi;
-		if not nr=fail then
-			for i in [Length(groups),Length(groups)-1..1] do
-				if not EvalString(SplitString(SplitString(Name(groups[i]),",")[3],")")[1]) in nr then Remove(groups,i); fi;
-			od;
-		fi;
-
 		# sieve by all remaining properties
 		if not args=[] then
 			for i in [1..Length(groups)] do
 				for j in [1..Length(args)/2] do
-					if not args[2*j-1](groups[i])=args[2*j] then
-						Unbind(groups[i]);
-						break;
-					fi;
+                    if AbsoluteValue(NumberArgumentsFunction(args[2*j-1])) = 2 then
+                        # For binary functions
+                        if IsList(args[2*j]) then
+                            if not ForAny(args[2*j], x->args[2*j-1](groups[i],x)) then
+                                Unbind(groups[i]);
+                                break;
+                            fi;
+                        else
+                            if not args[2*j-1](groups[i], args[2*j]) then
+                                Unbind(groups[i]);
+                                break;
+                            fi;
+                        fi;
+                    elif AbsoluteValue(NumberArgumentsFunction(args[2*j-1])) = 1 then
+                        # For operations and unary functions
+                        if not STGSelFunc(args[2*j-1](groups[i]),args[2*j]) then
+                            Unbind(groups[i]);
+                            break;
+                        fi;
+                    else
+                        Error("Function at position ", 2*j-1, " requires more than two parameters.");
+                    fi;
 				od;
 				if not all and IsBound(groups[i]) then return groups[i]; fi;
 			od;
@@ -523,12 +571,8 @@ InstallGlobalFunction(AllSRGroupsInfo,function(arg)
 		Add(inputArgs,0);
 	fi;
 	
-	if IsInt(Position(arg,Depth)) or IsInt(Position(arg,Level)) then
-		if IsInt(Position(arg,Depth)) then
-			Add(inputArgs,arg[Position(arg,Depth)+1]);
-		elif IsInt(Position(arg,Level)) then
-			Add(inputArgs,arg[Position(arg,Level)+1]);
-		fi;
+	if IsInt(Position(arg,Depth)) then
+		Add(inputArgs,arg[Position(arg,Depth)+1]);
 	else
 		Add(inputArgs,0);
 	fi;
