@@ -43,21 +43,40 @@ end);
 
 InstallGlobalFunction(DotSubgroupLattice,
 function(k, n)
-    local dot, parent_count, group_i, group_j, groups, hue, shape;
+    local dot, parent_count, group_i, group_j, groups, hue, shape, ranks, rank, i;
     dot := "digraph {\n";
+    groups := AllSRGroups(Degree, k, Depth, n);
+
+    # Make sure that the rank is correct
+    ranks := [];
+    for group_i in groups do
+        i := Order(group_i); # TODO(cameron) take the log base 2 `Log2(Order(group_i));`
+        if not IsBound(ranks[i]) then
+            ranks[i] := [];
+        fi;
+        Add(ranks[i], Name(group_i));
+    od;
+    for rank in ranks do
+        dot := Concatenation(dot, "{rank = same;");
+        for group_i in rank do
+            dot := Concatenation(dot, "\"", group_i, "\";");
+        od;
+        dot := Concatenation(dot, "}\n");
+    od;
 
     parent_count := NrSRGroups(k, n-1);
     # TODO(cameron) Find better algorithm than n^2
-    groups := AllSRGroups(Degree, k, Depth, n);
     for group_i in groups do
+        # Create the node
         hue := String(Float(SRGroupNumber(ParentGroup(group_i))/parent_count)); #TODO(cameron) use a better colourmap
         if IsCyclic(group_i) then
             shape := "box";
         else
             shape := "oval";
         fi;
-        
         dot := Concatenation(dot, "\"", Name(group_i), "\"[color=\"", hue, " 1.0 1.0\" shape=", shape,"];\n");
+
+        # Create the edges
         for group_j in groups do
             if (not group_j = group_i) and IsSubgroup(group_i, group_j) then
                 dot := Concatenation(dot, "\"", Name(group_i), "\" -> \"", Name(group_j), "\";\n");
