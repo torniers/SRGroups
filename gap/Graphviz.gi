@@ -47,36 +47,37 @@ function(k, n)
     dot := "digraph {\n";
     groups := AllSRGroups(Degree, k, Depth, n);
 
-    # Make sure that the rank is correct
+    # Sort the groups into bins of the order
     ranks := [];
     for group_i in groups do
-        i := Order(group_i); # TODO(cameron) take the log base 2 `Log2(Order(group_i));`
+        i := LogInt(Order(group_i), k);
         if not IsBound(ranks[i]) then
             ranks[i] := [];
         fi;
-        Add(ranks[i], Name(group_i));
+        Add(ranks[i], group_i);
     od;
+
+    # Create all the nodes, each within a group specifying the rank so all the orders are on the same level.
+    i := PositionBound(ranks);
+    parent_count := NrSRGroups(k, n-1);
     for rank in ranks do
-        dot := Concatenation(dot, "{rank = same;");
+        dot := Concatenation(dot, "{rank = same;", String(k^i), "[shape=none];\n");
         for group_i in rank do
-            dot := Concatenation(dot, "\"", group_i, "\";");
+            # Create the node   
+            hue := String(Float(SRGroupNumber(ParentGroup(group_i))/parent_count)); #TODO(cameron) use a better colourmap
+            if IsCyclic(group_i) then
+                shape := "box";
+            else
+                shape := "oval";
+            fi;
+            dot := Concatenation(dot, "\"", Name(group_i), "\"[color=\"", hue, " 1.0 1.0\" shape=", shape,"];\n");
         od;
         dot := Concatenation(dot, "}\n");
+        i := i + 1;
     od;
 
-    parent_count := NrSRGroups(k, n-1);
-    # TODO(cameron) Find better algorithm than n^2
+    # Create the edges
     for group_i in groups do
-        # Create the node
-        hue := String(Float(SRGroupNumber(ParentGroup(group_i))/parent_count)); #TODO(cameron) use a better colourmap
-        if IsCyclic(group_i) then
-            shape := "box";
-        else
-            shape := "oval";
-        fi;
-        dot := Concatenation(dot, "\"", Name(group_i), "\"[color=\"", hue, " 1.0 1.0\" shape=", shape,"];\n");
-
-        # Create the edges
         for group_j in groups do
             if (not group_j = group_i) and IsSubgroup(group_i, group_j) then
                 dot := Concatenation(dot, "\"", Name(group_i), "\" -> \"", Name(group_j), "\";\n");
