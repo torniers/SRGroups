@@ -35,7 +35,7 @@ function(k, n, nr, levels)
     dot := Concatenation(dot, "\"", name, "\";\n");
     dot := Concatenation(dot, RecurseDotGroupHeirarchy(k, n, nr, levels - 1, name));
 
-    dot := Concatenation(dot, "}");
+    dot := Concatenation(dot, "}\n");
     return dot;
 end);
 
@@ -60,7 +60,7 @@ function(k, n)
     #TODO(cameron) Do what `tred` does, until then filter output through `tred` to remove transitive edges.
     # https://gitlab.com/graphviz/graphviz/-/blob/main/cmd/tools/tred.c
 
-    dot := Concatenation(dot, "}");
+    dot := Concatenation(dot, "}\n");
     return dot;
 end);
 
