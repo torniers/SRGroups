@@ -41,9 +41,16 @@ end);
 
 ##################################################################################################################
 
+SRSubgroupLattice := function(groups)
+    local digraph;
+    digraph := Digraph(groups, IsSubgroup);
+    digraph := DigraphTransitiveReduction(digraph);
+    return digraph;
+end;
+
 InstallGlobalFunction(DotSubgroupLattice,
 function(k, n)
-    local dot, parent_count, group_i, group_j, groups, hue, shape, ranks, rank, i, bound_positions, colour;
+    local dot, parent_count, group_i, groups, hue, shape, ranks, rank, i, bound_positions, colour, edge;
     dot := "digraph {\n";
     groups := AllSRGroups(Degree, k, Depth, n);
 
@@ -64,7 +71,7 @@ function(k, n)
     od;
 
     # Create all the nodes, each within a group specifying the rank so all the orders are on the same level.
-        bound_positions := PositionsBound(ranks);
+    bound_positions := PositionsBound(ranks);
     if colour then
         parent_count := NrSRGroups(k, n-1);
     fi;
@@ -98,18 +105,33 @@ function(k, n)
     od;
 
     # Create the edges
-    for group_i in groups do
-        for group_j in groups do
-            if (not group_j = group_i) and IsSubgroup(group_i, group_j) then
-                dot := Concatenation(dot, "\"", Name(group_i), "\" -> \"", Name(group_j), "\";\n");
-            fi;
-        od;
+    for edge in DigraphEdges(SRSubgroupLattice(groups)) do
+        if not edge[1] = edge[2] then
+            dot := Concatenation(dot, "\"", Name(groups[edge[1]]), "\" -> \"", Name(groups[edge[2]]), "\";\n");
+        fi;
     od;
-
-    #TODO(cameron) Do what `tred` does, until then filter output through `tred` to remove transitive edges.
-    # https://gitlab.com/graphviz/graphviz/-/blob/main/cmd/tools/tred.c
 
     dot := Concatenation(dot, "}\n");
     return dot;
+end);
+
+##################################################################################################################
+
+InstallGlobalFunction(JupyterDot,
+function(dot)
+    local id, code;
+    id:=Base64String(Concatenation("graph",String(Random(1,10000))));
+    code := Concatenation("<div id='",id,"'></div>\
+        <script src=\"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.umd.js\"></script>\
+        <script type=\"module\">\
+            const dot = `", dot,"`;\
+            import { Graphviz } from \"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js\";\
+            if (Graphviz) {\
+                const graphviz = await Graphviz.load();\
+                const svg = graphviz.layout(dot, \"svg\", \"dot\");\
+                document.getElementById(\"", id, "\").innerHTML = svg;\
+            }\
+        </script>");
+    return Objectify( JupyterRenderableType, rec(  source := "gap", data := rec( ("text/html") := code ), metadata:=rec() ));
 end);
 

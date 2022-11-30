@@ -17,3 +17,7 @@ DeclareGlobalFunction("DotGroupHeirarchy");
 
 # PrintTo("fun_t.dot", DotSubgroupLattice(2,4));
 DeclareGlobalFunction("DotSubgroupLattice");
+
+##################################################################################################################
+
+DeclareGlobalFunction("JupyterDot");
