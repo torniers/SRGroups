@@ -43,9 +43,15 @@ end);
 
 InstallGlobalFunction(DotSubgroupLattice,
 function(k, n)
-    local dot, parent_count, group_i, group_j, groups, hue, shape, ranks, rank, i, bound_positions;
+    local dot, parent_count, group_i, group_j, groups, hue, shape, ranks, rank, i, bound_positions, colour;
     dot := "digraph {\n";
     groups := AllSRGroups(Degree, k, Depth, n);
+
+    if n = 1 then
+        colour := false;
+    else
+        colour := true;
+    fi;
 
     # Sort the groups into bins of the order
     ranks := [];
@@ -58,20 +64,29 @@ function(k, n)
     od;
 
     # Create all the nodes, each within a group specifying the rank so all the orders are on the same level.
-    bound_positions := PositionsBound(ranks);
+        bound_positions := PositionsBound(ranks);
+    if colour then
+        parent_count := NrSRGroups(k, n-1);
+    fi;
     i := 1;
-    parent_count := NrSRGroups(k, n-1);
     for rank in ranks do
         dot := Concatenation(dot, "{rank = same;", String(bound_positions[i]), "[shape=none];\n");
         for group_i in rank do
-            # Create the node   
-            hue := String(Float(SRGroupNumber(ParentGroup(group_i))/parent_count)); #TODO(cameron) use a better colourmap
+            # Create the node
+            if colour then
+                #TODO(cameron) use a better colourmap
+                hue := String(Float(SRGroupNumber(ParentGroup(group_i))/parent_count));
+            fi;
             if IsCyclic(group_i) then
                 shape := "box";
             else
                 shape := "oval";
             fi;
-            dot := Concatenation(dot, "\"", Name(group_i), "\"[color=\"", hue, " 1.0 1.0\" shape=", shape,"];\n");
+            dot := Concatenation(dot, "\"", Name(group_i), "\"[");
+            if colour then
+                dot := Concatenation(dot, "color=\"", hue, " 1.0 1.0\" ");
+            fi;
+            dot := Concatenation(dot, "shape=", shape,"];\n");
         od;
         dot := Concatenation(dot, "}\n");
         i := i + 1;
