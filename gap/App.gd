@@ -1,0 +1,6 @@
+DeclareGlobalFunction("SRGroupsRunApp");
+
+
+##################################################################################################################
+
+DeclareGlobalFunction("JupyterDot");

@@ -49,16 +49,11 @@ SRSubgroupLattice := function(groups)
 end;
 
 InstallGlobalFunction(DotSubgroupLattice,
-function(k, n)
-    local dot, parent_count, group_i, groups, hue, shape, ranks, rank, i, bound_positions, colour, edge;
+function(groups)
+    local dot, parent_count, group_i, shape, ranks, rank, i, bound_positions, edge;
     dot := "digraph {\n";
-    groups := AllSRGroups(Degree, k, Depth, n);
 
-    if n = 1 then
-        colour := false;
-    else
-        colour := true;
-    fi;
+    # TODO(cameron) readd colour
 
     # Sort the groups into bins of the order
     # TODO(cameron) use an associative array, rather than a plain list
@@ -73,27 +68,17 @@ function(k, n)
 
     # Create all the nodes, each within a group specifying the rank so all the orders are on the same level.
     bound_positions := PositionsBound(ranks);
-    if colour then
-        parent_count := NrSRGroups(k, n-1);
-    fi;
     i := 1;
     for rank in ranks do
         dot := Concatenation(dot, "{rank = same;", String(bound_positions[i]), "[shape=none];\n");
         for group_i in rank do
             # Create the node
-            if colour then
-                #TODO(cameron) use a better colourmap
-                hue := String(Float(SRGroupNumber(ParentGroup(group_i))/parent_count));
-            fi;
             if IsCyclic(group_i) then
                 shape := "box";
             else
                 shape := "oval";
             fi;
             dot := Concatenation(dot, "\"", Name(group_i), "\"[");
-            if colour then
-                dot := Concatenation(dot, "color=\"", hue, " 1.0 1.0\" ");
-            fi;
             dot := Concatenation(dot, "shape=", shape,"];\n");
         od;
         dot := Concatenation(dot, "}\n");
@@ -114,48 +99,5 @@ function(k, n)
 
     dot := Concatenation(dot, "}\n");
     return dot;
-end);
-
-##################################################################################################################
-
-InstallGlobalFunction(JupyterDot,
-function(dot, callback_name)
-    local id, code;
-    id:=Base64String(Concatenation("graph",String(Random(1,10000))));
-    # TODO(cameron) use a local copy of the library
-    # output: (data) => document.getElementById(\"",id,"\").parentElement.innerHTML = data.content.data[\"text/plain\"]\
-    code := Concatenation("<div id='",id,"'></div>\n\
-<script src=\"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.umd.js\"></script>\n\
-<script type=\"module\">\n\
-    const dot = `",dot,"`;\n\
-    import { Graphviz } from \"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js\";\n\
-    if (Graphviz) {\n\
-        const graphviz = await Graphviz.load();\n\
-        const svg = graphviz.layout(dot, \"svg\", \"dot\");\n\
-        document.getElementById(\"",id,"\").innerHTML = svg;\n\
-        var callbacks = {\n\
-            iopub: {\n\
-                output: (data) => {\n\
-                    document.getElementById(\"",id,"\").innerHTML = graphviz.layout(data.content.data[\"text/plain\"], \"svg\", \"dot\");\n\
-                    document.querySelectorAll('[id*=\"node\"]').forEach(\n\
-                        (x) => {\n\
-                            x.addEventListener(\"click\", function(){\n\
-                                IPython.notebook.kernel.execute(`",callback_name,"(${x.firstElementChild.textContent});`, callbacks);\n\
-                            });\n\
-                        }\n\
-                    );\n\
-                }\n\
-            }\n\
-        };\n\
-        document.querySelectorAll('[id*=\"node\"]').forEach(\n\
-            (x) => {\n\
-                x.addEventListener(\"click\", function(){\n\
-                    IPython.notebook.kernel.execute(`",callback_name,"(${x.firstElementChild.textContent});`, callbacks);\n\
-                });\n\
-            }\n\
-        );\n\
-    }\n\
-</script>");
-    return Objectify( JupyterRenderableType, rec(  source := "gap", data := rec( ("text/html") := code ), metadata:=rec() ));
 end);
 

@@ -11,3 +11,6 @@ ReadPackage( "SRGroups", "gap/library.gi");
 
 ReadPackage( "SRGroups", "gap/Graphviz.gd");
 ReadPackage( "SRGroups", "gap/Graphviz.gi");
+
+ReadPackage( "SRGroups", "gap/App.gd");
+ReadPackage( "SRGroups", "gap/App.gi");
