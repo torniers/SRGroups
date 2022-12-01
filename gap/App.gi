@@ -1,11 +1,17 @@
 SRGroupsAppSelectedProjections := [];
 
 SRGroupsAppCallback := function(group_name)
-    local groups, group, dot;
+    local groups, group, dot, pos;
     Print(group_name);
     group := EvalString(group_name);
-    Add(SRGroupsAppSelectedProjections, group);
-    groups := AllSRGroups(Degree, Degree(group), ParentGroup, SRGroupsAppSelectedProjections);
+    pos := Position(SRGroupsAppSelectedProjections, group);
+    if pos = fail then
+        Add(SRGroupsAppSelectedProjections, group);
+    else
+        Remove(SRGroupsAppSelectedProjections, pos);
+    fi;
+    groups := AllSRGroups(Degree, Degree(group), Depth, List(SRGroupsAppSelectedProjections, x->Depth(x)+1), ParentGroup, SRGroupsAppSelectedProjections);
+    Append(groups, AllSRGroups(Degree, Degree(group), Depth, 1));
     dot := DotSubgroupLattice(groups);
     return Objectify( JupyterRenderableType, rec(source := "gap", data := rec( ("text/plain") := dot ), metadata:=rec()));
 end;
