@@ -61,6 +61,7 @@ function(k, n)
     fi;
 
     # Sort the groups into bins of the order
+    # TODO(cameron) use an associative array, rather than a plain list
     ranks := [];
     for group_i in groups do
         i := Order(group_i);
@@ -118,20 +119,43 @@ end);
 ##################################################################################################################
 
 InstallGlobalFunction(JupyterDot,
-function(dot)
+function(dot, callback_name)
     local id, code;
     id:=Base64String(Concatenation("graph",String(Random(1,10000))));
-    code := Concatenation("<div id='",id,"'></div>\
-        <script src=\"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.umd.js\"></script>\
-        <script type=\"module\">\
-            const dot = `", dot,"`;\
-            import { Graphviz } from \"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js\";\
-            if (Graphviz) {\
-                const graphviz = await Graphviz.load();\
-                const svg = graphviz.layout(dot, \"svg\", \"dot\");\
-                document.getElementById(\"", id, "\").innerHTML = svg;\
-            }\
-        </script>");
+    # TODO(cameron) use a local copy of the library
+    # output: (data) => document.getElementById(\"",id,"\").parentElement.innerHTML = data.content.data[\"text/plain\"]\
+    code := Concatenation("<div id='",id,"'></div>\n\
+<script src=\"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.umd.js\"></script>\n\
+<script type=\"module\">\n\
+    const dot = `",dot,"`;\n\
+    import { Graphviz } from \"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js\";\n\
+    if (Graphviz) {\n\
+        const graphviz = await Graphviz.load();\n\
+        const svg = graphviz.layout(dot, \"svg\", \"dot\");\n\
+        document.getElementById(\"",id,"\").innerHTML = svg;\n\
+        var callbacks = {\n\
+            iopub: {\n\
+                output: (data) => {\n\
+                    document.getElementById(\"",id,"\").innerHTML = graphviz.layout(data.content.data[\"text/plain\"], \"svg\", \"dot\");\n\
+                    document.querySelectorAll('[id*=\"node\"]').forEach(\n\
+                        (x) => {\n\
+                            x.addEventListener(\"click\", function(){\n\
+                                IPython.notebook.kernel.execute(`",callback_name,"(${x.firstElementChild.textContent});`, callbacks);\n\
+                            });\n\
+                        }\n\
+                    );\n\
+                }\n\
+            }\n\
+        };\n\
+        document.querySelectorAll('[id*=\"node\"]').forEach(\n\
+            (x) => {\n\
+                x.addEventListener(\"click\", function(){\n\
+                    IPython.notebook.kernel.execute(`",callback_name,"(${x.firstElementChild.textContent});`, callbacks);\n\
+                });\n\
+            }\n\
+        );\n\
+    }\n\
+</script>");
     return Objectify( JupyterRenderableType, rec(  source := "gap", data := rec( ("text/html") := code ), metadata:=rec() ));
 end);
 
