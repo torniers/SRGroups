@@ -4,26 +4,29 @@ SRGroupsAppCallback := function(group_name)
     local groups, group, dot, pos;
     Print(group_name);
     group := EvalString(group_name);
+
+    # Toggle the position of the group
     pos := Position(SRGroupsAppSelectedProjections, group);
     if pos = fail then
         Add(SRGroupsAppSelectedProjections, group);
     else
         Remove(SRGroupsAppSelectedProjections, pos);
     fi;
+
+    # Work out the groups we want to display
     groups := AllSRGroups(Degree, Degree(group), Depth, List(SRGroupsAppSelectedProjections, x->Depth(x)+1), ParentGroup, SRGroupsAppSelectedProjections);
     Append(groups, AllSRGroups(Degree, Degree(group), Depth, 1));
-    dot := DotSubgroupLattice(groups);
+
+    # Generate the dot code
+    dot := _DotSubgroupLattice(groups, SRGroupsAppSelectedProjections);
+
     return Objectify( JupyterRenderableType, rec(source := "gap", data := rec( ("text/plain") := dot ), metadata:=rec()));
 end;
 
 InstallGlobalFunction(SRGroupsRunApp,
 function(k)
-    local groups;
     SRGroupsAppSelectedProjections := [];
-
-    groups := AllSRGroups(Degree, k, Depth, 1);
-
-    return JupyterDot(DotSubgroupLattice(groups), "SRGroupsAppCallback");
+    return JupyterDot(DotSubgroupLattice(k, 1), "SRGroupsAppCallback");
 end);
 
 ##################################################################################################################
