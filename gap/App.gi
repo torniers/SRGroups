@@ -19,7 +19,6 @@ SRGroupsAppCallback := function(group_name)
 
     # Depth 1
     groups := AllSRGroups(Degree, Degree(group), Depth, 1);
-    ;
     dot := [_DotSubgroupLattice(groups, GetWithDefault(SRGroupsAppSelectedProjections, 1, []))];
 
     # Loop over all the higher depths we want to display
@@ -44,7 +43,6 @@ function(dot, callback_name)
     local id, code;
     id:=Base64String(Concatenation("graph",String(Random(1,10000))));
     # TODO(cameron) use a local copy of the library
-    # output: (data) => document.getElementById(\"",id,"\").parentElement.innerHTML = data.content.data[\"text/plain\"]\
     code := Concatenation("<div id='",id,"'></div>\n\
 <script src=\"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.umd.js\"></script>\n\
 <script type=\"module\">\n\
