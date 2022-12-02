@@ -1,7 +1,7 @@
 SRGroupsAppSelectedProjections := [];
 
 SRGroupsAppCallback := function(group_name)
-    local groups, group, dot, pos, i, colours;
+    local groups, group, dot, pos, i, colours, fill_colours;
     group := EvalString(group_name);
 
     # Make sure we have a list to put the group in
@@ -19,14 +19,20 @@ SRGroupsAppCallback := function(group_name)
 
     # Depth 1
     groups := AllSRGroups(Degree, Degree(group), Depth, 1);
-    dot := [_DotSubgroupLattice(groups, [], GetWithDefault(SRGroupsAppSelectedProjections, 1, []))];
+    fill_colours := [];
+    fill_colours{List(SRGroupsAppSelectedProjections[1], x->SRGroupNumber(x))} := List([1..Length(SRGroupsAppSelectedProjections[1])], x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections[1]))), " 1.0 1.0"));
+    dot := [_DotSubgroupLattice(groups, [], fill_colours, GetWithDefault(SRGroupsAppSelectedProjections, 1, []))];
 
-    # Loop over all the higher depths we want to display
+    # Loop over all the higher depths we want to display, depth is one greater than i
     for i in [1..Length(SRGroupsAppSelectedProjections)] do
         groups := AllSRGroups(Degree, Degree(group), Depth, i+1, ParentGroup, SRGroupsAppSelectedProjections[i]);
         colours := [];
         colours{List(SRGroupsAppSelectedProjections[i], x->SRGroupNumber(x))} := List([1..Length(SRGroupsAppSelectedProjections[i])], x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections[i]))), " 1.0 1.0"));
-        Add(dot, _DotSubgroupLattice(groups, colours, GetWithDefault(SRGroupsAppSelectedProjections, i+1, [])));
+        fill_colours := [];
+        if i+1 <= Length(SRGroupsAppSelectedProjections) then
+            fill_colours{List(SRGroupsAppSelectedProjections[i+1], x->SRGroupNumber(x))} := List([1..Length(SRGroupsAppSelectedProjections[i+1])], x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections[i+1]))), " 1.0 1.0"));
+        fi;
+        Add(dot, _DotSubgroupLattice(groups, colours, fill_colours, GetWithDefault(SRGroupsAppSelectedProjections, i+1, [])));
     od;
 
     return Objectify( JupyterRenderableType, rec(source := "gap", data := dot, metadata:=rec()));
