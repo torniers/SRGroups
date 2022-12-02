@@ -127,24 +127,6 @@ end);
 
 ##################################################################################################################
 
-InstallMethod(ChildGroups, "for G", [IsSelfReplicating],
-function(G)
-    local groups, data, name, k, n, nr;
-    k := Degree(G);
-    n := Depth(G);
-    nr := SRGroupNumber(G);
-    data := SRGroupData(k, n, nr)[4];
-    groups := [];
-    # TODO(cameron) this is slower than expected
-    for name in data do
-        if name = "the classes it extends to" then
-            return fail;
-        fi;
-        Add(groups, EvalString(name));
-    od;
-    return groups;
-end );
-
 InstallMethod(ChildGroupsCount, "for G", [IsSelfReplicating],
 function(G)
     local data, k, n, nr;

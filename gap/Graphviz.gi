@@ -49,8 +49,8 @@ SRSubgroupLattice := function(groups)
     return digraph;
 end;
 
-_DotSubgroupLattice := function(groups, selected_groups)
-    local dot, parent_count, group_i, shape, style, ranks, rank, i, bound_positions, edge;
+_DotSubgroupLattice := function(groups, colours, selected_groups)
+    local dot, parent_count, group_i, shape, style, colour, ranks, rank, i, bound_positions, edge;
     dot := "digraph {\n";
 
     # TODO(cameron) readd colour
@@ -83,8 +83,14 @@ _DotSubgroupLattice := function(groups, selected_groups)
             else
                 style := "";
             fi;
+            if (not Depth(group_i) = 1) and IsBound(colours[SRGroupNumber(ParentGroup(group_i))]) then
+                colour := colours[SRGroupNumber(ParentGroup(group_i))];
+            else
+                colour := "1.0 1.0 0.0";
+            fi;
             dot := Concatenation(dot, "\"", Name(group_i), "\"[");
             dot := Concatenation(dot, "style=\"", style, "\" ");
+            dot := Concatenation(dot, "color=\"", colour, "\" ");
             dot := Concatenation(dot, "shape=", shape);
             dot := Concatenation(dot, "];\n");
         od;
@@ -110,6 +116,6 @@ end;
 
 InstallGlobalFunction(DotSubgroupLattice,
 function(k, n)
-    return _DotSubgroupLattice(AllSRGroups(Degree, k, Depth, n), []);
+    return _DotSubgroupLattice(AllSRGroups(Degree, k, Depth, n), [], []);
 end);
 

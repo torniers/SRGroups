@@ -149,6 +149,24 @@ function(G)
 	fi;
 end );
 
+InstallMethod( ParentGroup, "for G", [IsSelfReplicating],
+function(G)
+	local k, n, nr, pr;
+    if not StartsWith(Name(G), "SRGroup") then
+        TryNextMethod();
+    fi;
+	
+	k:=Degree(G);
+	n:=Depth(G);
+    nr := SRGroupNumber(G);
+	
+	if n=1 then
+		return Group(());
+	else
+        return EvalString(SRGroupData(k, n, nr)[3]);
+	fi;
+end );
+
 ##################################################################################################################
 
 # Input::	G: a self-replicating regular rooted tree group with sufficient rigid automorphisms

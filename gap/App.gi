@@ -1,7 +1,7 @@
 SRGroupsAppSelectedProjections := [];
 
 SRGroupsAppCallback := function(group_name)
-    local groups, group, dot, pos, i;
+    local groups, group, dot, pos, i, colours;
     group := EvalString(group_name);
 
     # Make sure we have a list to put the group in
@@ -19,12 +19,14 @@ SRGroupsAppCallback := function(group_name)
 
     # Depth 1
     groups := AllSRGroups(Degree, Degree(group), Depth, 1);
-    dot := [_DotSubgroupLattice(groups, GetWithDefault(SRGroupsAppSelectedProjections, 1, []))];
+    dot := [_DotSubgroupLattice(groups, [], GetWithDefault(SRGroupsAppSelectedProjections, 1, []))];
 
     # Loop over all the higher depths we want to display
     for i in [1..Length(SRGroupsAppSelectedProjections)] do
         groups := AllSRGroups(Degree, Degree(group), Depth, i+1, ParentGroup, SRGroupsAppSelectedProjections[i]);
-        Add(dot, _DotSubgroupLattice(groups, GetWithDefault(SRGroupsAppSelectedProjections, i+1, [])));
+        colours := [];
+        colours{List(SRGroupsAppSelectedProjections[i], x->SRGroupNumber(x))} := List([1..Length(SRGroupsAppSelectedProjections[i])], x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections[i]))), " 1.0 1.0"));
+        Add(dot, _DotSubgroupLattice(groups, colours, GetWithDefault(SRGroupsAppSelectedProjections, i+1, [])));
     od;
 
     return Objectify( JupyterRenderableType, rec(source := "gap", data := dot, metadata:=rec()));

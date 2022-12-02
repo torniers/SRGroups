@@ -122,10 +122,8 @@ DeclareGlobalFunction( "SRGroup" );
 #! Finds all the self-replicating groups that have G as a parent
 #!
 #! @Returns
-#! A list of groups, the size of the list.
+#! The number of child groups
 #!
-#! @Arguments G
-DeclareAttribute("ChildGroups", IsSelfReplicating);
 #! @Arguments G
 DeclareAttribute("ChildGroupsCount", IsSelfReplicating);
 
