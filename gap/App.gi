@@ -1,26 +1,34 @@
 SRGroupsAppSelectedProjections := [];
 
 SRGroupsAppCallback := function(group_name)
-    local groups, group, dot, pos;
-    Print(group_name);
+    local groups, group, dot, pos, i;
     group := EvalString(group_name);
 
-    # Toggle the position of the group
-    pos := Position(SRGroupsAppSelectedProjections, group);
-    if pos = fail then
-        Add(SRGroupsAppSelectedProjections, group);
-    else
-        Remove(SRGroupsAppSelectedProjections, pos);
+    # Make sure we have a list to put the group in
+    if not IsBound(SRGroupsAppSelectedProjections[Depth(group)]) then
+        SRGroupsAppSelectedProjections[Depth(group)] := [];
     fi;
 
-    # Work out the groups we want to display
-    groups := AllSRGroups(Degree, Degree(group), Depth, List(SRGroupsAppSelectedProjections, x->Depth(x)+1), ParentGroup, SRGroupsAppSelectedProjections);
-    Append(groups, AllSRGroups(Degree, Degree(group), Depth, 1));
+    # Toggle the position of the group
+    pos := Position(SRGroupsAppSelectedProjections[Depth(group)], group);
+    if pos = fail then
+        Add(SRGroupsAppSelectedProjections[Depth(group)], group);
+    else
+        Remove(SRGroupsAppSelectedProjections[Depth(group)], pos);
+    fi;
 
-    # Generate the dot code
-    dot := _DotSubgroupLattice(groups, SRGroupsAppSelectedProjections);
+    # Depth 1
+    groups := AllSRGroups(Degree, Degree(group), Depth, 1);
+    ;
+    dot := [_DotSubgroupLattice(groups, GetWithDefault(SRGroupsAppSelectedProjections, 1, []))];
 
-    return Objectify( JupyterRenderableType, rec(source := "gap", data := rec( ("text/plain") := dot ), metadata:=rec()));
+    # Loop over all the higher depths we want to display
+    for i in [1..Length(SRGroupsAppSelectedProjections)] do
+        groups := AllSRGroups(Degree, Degree(group), Depth, i+1, ParentGroup, SRGroupsAppSelectedProjections[i]);
+        Add(dot, _DotSubgroupLattice(groups, GetWithDefault(SRGroupsAppSelectedProjections, i+1, [])));
+    od;
+
+    return Objectify( JupyterRenderableType, rec(source := "gap", data := dot, metadata:=rec()));
 end;
 
 InstallGlobalFunction(SRGroupsRunApp,
@@ -46,32 +54,30 @@ function(dot, callback_name)
         const graphviz = await Graphviz.load();\n\
         const svg = graphviz.layout(dot, \"svg\", \"dot\");\n\
         document.getElementById(\"",id,"\").innerHTML = svg;\n\
+        function register_callbacks(){\n\
+            document.querySelectorAll('[id*=\"node\"]').forEach(\n\
+                (x) => {\n\
+                    x.addEventListener(\"click\", function(){\n\
+                        const name = x.firstElementChild.textContent.split(\" \")[0];\n\
+                        IPython.notebook.kernel.execute(`",callback_name,"(\"${name}\");`, callbacks);\n\
+                    });\n\
+                }\n\
+            );\n\
+        }\n\
         var callbacks = {\n\
             iopub: {\n\
                 output: (data) => {\n\
                     console.log(data.content);\n\
-                    document.getElementById(\"",id,"\").innerHTML = graphviz.layout(data.content.data[\"text/plain\"], \"svg\", \"dot\");\n\
-                    document.querySelectorAll('[id*=\"node\"]').forEach(\n\
-                        (x) => {\n\
-                            x.addEventListener(\"click\", function(){\n\
-                                const name = x.firstElementChild.textContent.split(\" \")[0];\n\
-                                console.log(name);\n\
-                                IPython.notebook.kernel.execute(`",callback_name,"(\"${name}\");`, callbacks);\n\
-                            });\n\
-                        }\n\
-                    );\n\
+                    document.getElementById(\"",id,"\").innerHTML = \"\";\n\
+                    data.content.data.forEach((dot)=>{\n\
+                        document.getElementById(\"",id,"\").innerHTML += graphviz.layout(dot, \"svg\", \"dot\");\n\
+                        document.getElementById(\"",id,"\").innerHTML += \"<br>\";\n\
+                    });\n\
+                    register_callbacks();\n\
                 }\n\
             }\n\
         };\n\
-        document.querySelectorAll('[id*=\"node\"]').forEach(\n\
-            (x) => {\n\
-                x.addEventListener(\"click\", function(){\n\
-                    const name = x.firstElementChild.textContent.split(\" \")[0];\n\
-                    console.log(name);\n\
-                    IPython.notebook.kernel.execute(`",callback_name,"(\"${name}\");`, callbacks);\n\
-                });\n\
-            }\n\
-        );\n\
+        register_callbacks();\n\
     }\n\
 </script>");
     return Objectify( JupyterRenderableType, rec(  source := "gap", data := rec( ("text/html") := code ), metadata:=rec() ));
