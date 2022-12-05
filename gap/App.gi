@@ -54,13 +54,14 @@ function(dot, id, callback_name)
     # TODO(cameron) use a local copy of the library
     code := Concatenation("<div id='",id,"'></div>\n\
 <script src=\"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.umd.js\"></script>\n\
+<script src=\"https://cdn.jsdelivr.net/npm/svg-pan-zoom-container@0.6.1\"></script>\n\
 <script type=\"module\">\n\
     const dot = `",dot,"`;\n\
     import { Graphviz } from \"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js\";\n\
     if (Graphviz) {\n\
         const graphviz = await Graphviz.load();\n\
         const svg = graphviz.layout(dot, \"svg\", \"dot\");\n\
-        document.getElementById(\"",id,"\").innerHTML = svg;\n\
+        document.getElementById(\"",id,"\").innerHTML = \"<div data-pan-on-drag='modifier: Shift;' data-zoom-on-wheel='max-scale: 10; min-scale: 1;' style='border-style:solid; height: 500px;' >\" + svg + \"</div>\";\n\
         function register_callbacks(){\n\
             document.querySelectorAll('.",id," >[id*=\"node\"]').forEach(\n\
                 (x) => {\n\
@@ -77,7 +78,8 @@ function(dot, id, callback_name)
                     console.log(data.content);\n\
                     document.getElementById(\"",id,"\").innerHTML = \"\";\n\
                     data.content.data.forEach((dot)=>{\n\
-                        document.getElementById(\"",id,"\").innerHTML += graphviz.layout(dot, \"svg\", \"dot\");\n\
+                        document.getElementById(\"",id,"\").innerHTML += \"<div data-pan-on-drag='modifier: Shift;' data-zoom-on-wheel='max-scale: 10; min-scale: 1;' style='border-style:solid; height: 500px;' >\" + \n\
+                            graphviz.layout(dot, \"svg\", \"dot\") + \"</div>\";\n\
                         document.getElementById(\"",id,"\").innerHTML += \"<br>\";\n\
                     });\n\
                     register_callbacks();\n\
