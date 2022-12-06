@@ -88,7 +88,13 @@ SRGroupsAppCallback := function(group_name, id)
 
     # Loop over all the higher depths we want to display, depth is one greater than i
     for i in [1..Length(SRGroupsAppSelectedProjections.id)] do
+        if SRGroupsAppSelectedProjections.id[i] = [] then
+            continue;
+        fi;
         groups := AllSRGroups(Degree, Degree(group), Depth, i+1, ParentGroup, SRGroupsAppSelectedProjections.id[i]);
+        if groups = [] then
+            continue;
+        fi;
 
         colours := [];
         colours{List(SRGroupsAppSelectedProjections.id[i], x->SRGroupNumber(x))} := List(
