@@ -1,42 +1,59 @@
-SRGroupNrFromName@ := function(name)
-    return EvalString(SplitString(name,",",")")[3]);
-end;
+DotGroupHeirarchy@ := function(groups, class)
+    local dot, group_i, group_j;
+    dot := "digraph {\n";
 
-RecurseDotGroupHeirarchy@ := function(k, n, nr, levels, name)
-    local dot, i, name_child, k_child, n_child, nr_child;
-    dot := "";
-    i := 0;
+    # TODO(cameron) add colours
 
-    if levels <= 0 then
-        return "";
+    # Add the svg-class if we are provided with one
+    if not class = "" then
+        dot := Concatenation(dot, "class=", class, ";");
     fi;
 
-    # TODO(cameron) stop rereading the same file over and over again
-    for name_child in SRGroupData(k, n, nr)[4] do
-        i := i + 1;
-        if not name_child = "the classes it extends to" then
-            dot := Concatenation(dot, "\"", name, "\" -> \"", name_child, "\";\n");
-            k_child:=SRGroupDegreeFromName(name_child);
-	        n_child:=SRGroupLevelFromName(name_child);
-            nr_child:=SRGroupNrFromName@(name_child);
-            dot := Concatenation(dot, RecurseDotGroupHeirarchy@(k_child, n_child, nr_child, levels - 1, name_child));
-        fi;
+    for group_i in groups do
+        dot := Concatenation(dot, "\"", Name(group_i), "\"\n");
     od;
 
+    # TODO(cameron) I think we can do better than n^2 or cache things
+    for group_i in groups do
+        for group_j in groups do
+            if group_i = ParentGroup(group_j) then
+                dot := Concatenation(dot, "\"", Name(group_i), "\" -> \"", Name(group_j), "\"\n");
+            fi;
+        od;
+    od;
+
+    dot := Concatenation(dot, "}\n");
     return dot;
+end;
+
+IsSRGroupAncestor := function(group, potential_ancestor)
+    local depth_g, depth_a, i, actual_ancestor;
+    if not (IsSelfReplicating(group) and IsSelfReplicating(potential_ancestor)) then
+        Error(Name(group), " or ", Name(potential_ancestor), " was not self-replicating.");
+    fi;
+    if not Degree(group) = Degree(potential_ancestor) then
+        # Need same degree
+        return false;
+    fi;
+    depth_a := Depth(potential_ancestor);
+    depth_g := Depth(group);
+    if not depth_a < depth_g then
+        # Ancestor must be higher up
+        return false;
+    fi;
+    actual_ancestor := group;
+    for i in [1..depth_g-depth_a] do
+        actual_ancestor := ParentGroup(group);
+    od;
+    return actual_ancestor = potential_ancestor;
 end;
 
 InstallGlobalFunction(DotGroupHeirarchy,
 function(k, n, nr, levels)
-    local dot, name;
-    dot := "digraph {\n";
-
-    name := Concatenation("SRGroup(", String(k), ",", String(n), ",", String(nr), ")");
-    dot := Concatenation(dot, "\"", name, "\";\n");
-    dot := Concatenation(dot, RecurseDotGroupHeirarchy@(k, n, nr, levels - 1, name));
-
-    dot := Concatenation(dot, "}\n");
-    return dot;
+    return DotGroupHeirarchy@(
+        AllSRGroups(Degree, k, Depth, [n..n+levels-1], IsSRGroupAncestor, SRGroup(k, n, nr)),
+        ""
+    );
 end);
 
 ##################################################################################################################

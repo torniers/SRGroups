@@ -98,6 +98,7 @@ SRGroupFromData:=function(data)
     n:=SRGroupLevelFromName(data[2]);
 	G:=RegularRootedTreeGroup(k,n,Group(data[1]));
 	SetName(G,data[2]);
+    SetIsSelfReplicating(G, true);
 	
 	return G;
 end;

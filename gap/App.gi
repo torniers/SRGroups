@@ -100,6 +100,10 @@ SRGroupsAppCallback := function(group_name, id)
         Remove(SRGroupsAppSelectedProjections.(id)[Depth(group)], pos);
     fi;
 
+    # Overview
+    # TODO(cameron) add colours
+    dot := [DotGroupHeirarchy@(Union(SRGroupsAppSelectedProjections.(id)), id)];
+
     # Depth 1
     groups := AllSRGroups(Degree, degree, Depth, 1);
     fill_colours := [];
@@ -107,7 +111,10 @@ SRGroupsAppCallback := function(group_name, id)
         [1..Length(SRGroupsAppSelectedProjections.(id)[1])],
         x->HSVColour@(x, Length(SRGroupsAppSelectedProjections.(id)[1]))
     );
-    dot := [DotSubgroupLattice@(groups, [], fill_colours, GetWithDefault(SRGroupsAppSelectedProjections.(id), 1, []), id)];
+    Add(
+        dot,
+        DotSubgroupLattice@(groups, [], fill_colours, GetWithDefault(SRGroupsAppSelectedProjections.(id), 1, []), id)
+    );
 
     # Loop over all the higher depths we want to display, depth is one greater than i
     for i in [1..Length(SRGroupsAppSelectedProjections.(id))] do
@@ -155,6 +162,7 @@ function(k)
     id:=Base64String(Concatenation("graph",String(Random(1,10000))));
     SRGroupsAppSelectedProjections.(id) := [];
     ProjectionCache@.(id) := [];
+    # TODO(cameron) start with overview graph present
     return JupyterDot@(DotSubgroupLattice@(AllSRGroups(Degree, k, Depth, 1), [], [], [], id), id, "SRGroupsAppCallback");
 end);
 
