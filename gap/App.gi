@@ -1,7 +1,3 @@
-# A map from the unique ids, to a list corresponding to degrees each containing a list of the selected projections of
-# that degree.
-SRGroupsAppSelectedProjections := rec();
-
 # dot is the initial dot code to display, id is the unique id of the instance of the app
 # callback_name is a string containing the name of a function that takes in the name of an sr group and the id
 #   and returns a list of dot code
@@ -57,56 +53,79 @@ JupyterDot@ := function(dot, id, callback_name)
     return Objectify(JupyterRenderableType, rec(source := "gap", data := rec(("text/html") := code), metadata:=rec()));
 end;
 
+# A map from the unique ids, to a list corresponding to degrees each containing a list of the selected projections of
+# that degree.
+# SRGroupsAppSelectedProjections.(id)[degree] := list of selected groups
+SRGroupsAppSelectedProjections := rec();
+
+# A map from the unique ids, to a list corresponding to degrees each containing a list corresponding to depth each
+# containing a list containing what groups are projected to the group of the index
+# ProjectionCache@.(id)[n][nr] := list of groups that project to SRGroup(k, n, nr)
+ProjectionCache@ := rec();
+
 # This is the callback used for the app, see JupyterDot@. The id is the unique id of the instance of this app
 # It takes in a group_name that will be toggled between selected and not, then constructs dot code based on what is
 # selected and returns a list where each element is the dot code for the depth
 SRGroupsAppCallback := function(group_name, id)
-    local groups, group, dot, pos, i, colours, fill_colours;
+    local degree, groups, group, dot, pos, i, colours, fill_colours;
     group := EvalString(group_name);
+    degree := Degree(group);
 
     # Make sure we have a list to put the group in
-    if not IsBound(SRGroupsAppSelectedProjections.id[Depth(group)]) then
-        SRGroupsAppSelectedProjections.id[Depth(group)] := [];
+    if not IsBound(SRGroupsAppSelectedProjections.(id)[Depth(group)]) then
+        SRGroupsAppSelectedProjections.(id)[Depth(group)] := [];
+    fi;
+    # Make sure we have a list to put the child groups in
+    if not IsBound(ProjectionCache@.(id)[Depth(group)]) then
+        ProjectionCache@.(id)[Depth(group)] := [];
     fi;
 
     # Toggle the position of the group
-    pos := Position(SRGroupsAppSelectedProjections.id[Depth(group)], group);
+    pos := Position(SRGroupsAppSelectedProjections.(id)[Depth(group)], group);
     if pos = fail then
-        Add(SRGroupsAppSelectedProjections.id[Depth(group)], group);
+        Add(SRGroupsAppSelectedProjections.(id)[Depth(group)], group);
+        # Calculate the groups that project back onto this one, if we haven't already yet
+        if not IsBound(ProjectionCache@.(id)[Depth(group)][SRGroupNumber(group)]) then
+            ProjectionCache@.(id)[Depth(group)][SRGroupNumber(group)] := AllSRGroups(
+                Degree, degree, Depth, Depth(group) + 1, ParentGroup, group
+            );
+        fi;
     else
-        Remove(SRGroupsAppSelectedProjections.id[Depth(group)], pos);
+        Remove(SRGroupsAppSelectedProjections.(id)[Depth(group)], pos);
     fi;
 
     # Depth 1
-    groups := AllSRGroups(Degree, Degree(group), Depth, 1);
+    groups := AllSRGroups(Degree, degree, Depth, 1);
     fill_colours := [];
-    fill_colours{List(SRGroupsAppSelectedProjections.id[1], x->SRGroupNumber(x))} := List(
-        [1..Length(SRGroupsAppSelectedProjections.id[1])],
-        x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections.id[1]))), " 1.0 1.0")
+    fill_colours{List(SRGroupsAppSelectedProjections.(id)[1], x->SRGroupNumber(x))} := List(
+        [1..Length(SRGroupsAppSelectedProjections.(id)[1])],
+        x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections.(id)[1]))), " 1.0 1.0")
     );
-    dot := [DotSubgroupLattice@(groups, [], fill_colours, GetWithDefault(SRGroupsAppSelectedProjections.id, 1, []), id)];
+    dot := [DotSubgroupLattice@(groups, [], fill_colours, GetWithDefault(SRGroupsAppSelectedProjections.(id), 1, []), id)];
 
     # Loop over all the higher depths we want to display, depth is one greater than i
-    for i in [1..Length(SRGroupsAppSelectedProjections.id)] do
-        if SRGroupsAppSelectedProjections.id[i] = [] then
+    for i in [1..Length(SRGroupsAppSelectedProjections.(id))] do
+        if SRGroupsAppSelectedProjections.(id)[i] = [] then
             continue;
         fi;
-        groups := AllSRGroups(Degree, Degree(group), Depth, i+1, ParentGroup, SRGroupsAppSelectedProjections.id[i]);
+        groups := Union(
+            ProjectionCache@.(id)[i]{List(SRGroupsAppSelectedProjections.(id)[i], x->SRGroupNumber(x))}
+        );
         if groups = [] then
             continue;
         fi;
 
         colours := [];
-        colours{List(SRGroupsAppSelectedProjections.id[i], x->SRGroupNumber(x))} := List(
-            [1..Length(SRGroupsAppSelectedProjections.id[i])],
-            x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections.id[i]))), " 1.0 1.0")
+        colours{List(SRGroupsAppSelectedProjections.(id)[i], x->SRGroupNumber(x))} := List(
+            [1..Length(SRGroupsAppSelectedProjections.(id)[i])],
+            x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections.(id)[i]))), " 1.0 1.0")
         );
 
         fill_colours := [];
-        if i+1 <= Length(SRGroupsAppSelectedProjections.id) then
-            fill_colours{List(SRGroupsAppSelectedProjections.id[i+1], x->SRGroupNumber(x))} := List(
-                [1..Length(SRGroupsAppSelectedProjections.id[i+1])],
-                x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections.id[i+1]))), " 1.0 1.0")
+        if i+1 <= Length(SRGroupsAppSelectedProjections.(id)) then
+            fill_colours{List(SRGroupsAppSelectedProjections.(id)[i+1], x->SRGroupNumber(x))} := List(
+                [1..Length(SRGroupsAppSelectedProjections.(id)[i+1])],
+                x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections.(id)[i+1]))), " 1.0 1.0")
             );
         fi;
 
@@ -116,7 +135,7 @@ SRGroupsAppCallback := function(group_name, id)
                 groups,
                 colours,
                 fill_colours,
-                GetWithDefault(SRGroupsAppSelectedProjections.id, i+1, []), id
+                GetWithDefault(SRGroupsAppSelectedProjections.(id), i+1, []), id
             )
         );
     od;
@@ -128,7 +147,8 @@ InstallGlobalFunction(SRGroupsRunApp,
 function(k)
     local id;
     id:=Base64String(Concatenation("graph",String(Random(1,10000))));
-    SRGroupsAppSelectedProjections.id := [];
+    SRGroupsAppSelectedProjections.(id) := [];
+    ProjectionCache@.(id) := [];
     return JupyterDot@(DotSubgroupLattice@(AllSRGroups(Degree, k, Depth, 1), [], [], [], id), id, "SRGroupsAppCallback");
 end);
 
