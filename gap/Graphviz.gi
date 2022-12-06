@@ -50,32 +50,27 @@ SRSubgroupLattice := function(groups)
 end;
 
 _DotSubgroupLattice := function(groups, colours, fill_colours, selected_groups, class)
-    local dot, parent_count, group_i, shape, style, colour, fill_colour, ranks, rank, i, bound_positions, edge;
+    local dot, parent_count, group_i, shape, style, colour, fill_colour, ranks, rank, orders, order, i, edge;
     dot := "digraph {\n";
 
     if not class = "" then
         dot := Concatenation(dot, "class=", class, ";");
     fi;
 
-    # TODO(cameron) readd colour
-
     # Sort the groups into bins of the order
-    # TODO(cameron) use an associative array, rather than a plain list
-    ranks := [];
+    ranks := rec();
     for group_i in groups do
         i := Order(group_i);
-        if not IsBound(ranks[i]) then
-            ranks[i] := [];
+        if not IsBound(ranks.(i)) then
+            ranks.(i) := [];
         fi;
-        Add(ranks[i], group_i);
+        Add(ranks.(i), group_i);
     od;
 
     # Create all the nodes, each within a group specifying the rank so all the orders are on the same level.
-    bound_positions := PositionsBound(ranks);
-    i := 1;
-    for rank in ranks do
-        dot := Concatenation(dot, "{rank = same;", String(bound_positions[i]), "[shape=none];\n");
-        for group_i in rank do
+    for order in RecNames(ranks) do
+        dot := Concatenation(dot, "{rank = same;", order, "[shape=none];\n");
+        for group_i in ranks.(order) do
             # Create the node
             if IsCyclic(group_i) then
                 shape := "box";
@@ -105,12 +100,12 @@ _DotSubgroupLattice := function(groups, colours, fill_colours, selected_groups, 
             dot := Concatenation(dot, "];\n");
         od;
         dot := Concatenation(dot, "}\n");
-        i := i + 1;
     od;
 
     # Enforce the hierarchy more strictly
-    for i in [2..Length(bound_positions)] do
-        dot := Concatenation(dot, String(bound_positions[i]), " -> ", String(bound_positions[i-1]), "[style=invis];\n");
+    orders := Set(List(RecNames(ranks), x->Int(x))); # Convert to int, to prevent sorting lexicographically
+    for i in [2..Length(orders)] do
+        dot := Concatenation(dot, String(orders[i]), " -> ", String(orders[i-1]), "[style=invis];\n");
     od;
 
     # Create the edges
