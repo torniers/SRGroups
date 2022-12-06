@@ -21,7 +21,7 @@ SRGroupsAppCallback := function(group_name, id)
     groups := AllSRGroups(Degree, Degree(group), Depth, 1);
     fill_colours := [];
     fill_colours{List(SRGroupsAppSelectedProjections.id[1], x->SRGroupNumber(x))} := List([1..Length(SRGroupsAppSelectedProjections.id[1])], x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections.id[1]))), " 1.0 1.0"));
-    dot := [_DotSubgroupLattice(groups, [], fill_colours, GetWithDefault(SRGroupsAppSelectedProjections.id, 1, []), id)];
+    dot := [DotSubgroupLattice@(groups, [], fill_colours, GetWithDefault(SRGroupsAppSelectedProjections.id, 1, []), id)];
 
     # Loop over all the higher depths we want to display, depth is one greater than i
     for i in [1..Length(SRGroupsAppSelectedProjections.id)] do
@@ -32,7 +32,7 @@ SRGroupsAppCallback := function(group_name, id)
         if i+1 <= Length(SRGroupsAppSelectedProjections.id) then
             fill_colours{List(SRGroupsAppSelectedProjections.id[i+1], x->SRGroupNumber(x))} := List([1..Length(SRGroupsAppSelectedProjections.id[i+1])], x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections.id[i+1]))), " 1.0 1.0"));
         fi;
-        Add(dot, _DotSubgroupLattice(groups, colours, fill_colours, GetWithDefault(SRGroupsAppSelectedProjections.id, i+1, []), id));
+        Add(dot, DotSubgroupLattice@(groups, colours, fill_colours, GetWithDefault(SRGroupsAppSelectedProjections.id, i+1, []), id));
     od;
 
     return Objectify( JupyterRenderableType, rec(source := "gap", data := dot, metadata:=rec()));
@@ -43,12 +43,12 @@ function(k)
     local id;
     id:=Base64String(Concatenation("graph",String(Random(1,10000))));
     SRGroupsAppSelectedProjections.id := [];
-    return JupyterDot(_DotSubgroupLattice(AllSRGroups(Degree, k, Depth, 1), [], [], [], id), id, "SRGroupsAppCallback");
+    return JupyterDot@(DotSubgroupLattice@(AllSRGroups(Degree, k, Depth, 1), [], [], [], id), id, "SRGroupsAppCallback");
 end);
 
 ##################################################################################################################
 
-InstallGlobalFunction(JupyterDot,
+InstallGlobalFunction(JupyterDot@,
 function(dot, id, callback_name)
     local code;
     # TODO(cameron) use a local copy of the library

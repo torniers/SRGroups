@@ -1,8 +1,8 @@
-SRGroupNrFromName := function(name)
+SRGroupNrFromName@ := function(name)
     return EvalString(SplitString(name,",",")")[3]);
 end;
 
-RecurseDotGroupHeirarchy := function(k, n, nr, levels, name)
+RecurseDotGroupHeirarchy@ := function(k, n, nr, levels, name)
     local dot, i, name_child, k_child, n_child, nr_child;
     dot := "";
     i := 0;
@@ -18,8 +18,8 @@ RecurseDotGroupHeirarchy := function(k, n, nr, levels, name)
             dot := Concatenation(dot, "\"", name, "\" -> \"", name_child, "\";\n");
             k_child:=SRGroupDegreeFromName(name_child);
 	        n_child:=SRGroupLevelFromName(name_child);
-            nr_child:=SRGroupNrFromName(name_child);
-            dot := Concatenation(dot, RecurseDotGroupHeirarchy(k_child, n_child, nr_child, levels - 1, name_child));
+            nr_child:=SRGroupNrFromName@(name_child);
+            dot := Concatenation(dot, RecurseDotGroupHeirarchy@(k_child, n_child, nr_child, levels - 1, name_child));
         fi;
     od;
 
@@ -33,7 +33,7 @@ function(k, n, nr, levels)
 
     name := Concatenation("SRGroup(", String(k), ",", String(n), ",", String(nr), ")");
     dot := Concatenation(dot, "\"", name, "\";\n");
-    dot := Concatenation(dot, RecurseDotGroupHeirarchy(k, n, nr, levels - 1, name));
+    dot := Concatenation(dot, RecurseDotGroupHeirarchy@(k, n, nr, levels - 1, name));
 
     dot := Concatenation(dot, "}\n");
     return dot;
@@ -41,15 +41,15 @@ end);
 
 ##################################################################################################################
 
-# TODO(cameron) probably should just implement topological sort, rather than add digraph as a dependency
-SRSubgroupLattice := function(groups)
+# TODO(cameron) document that we use digraphs as a dep
+TransitiveReduction@ := function(groups)
     local digraph;
     digraph := Digraph(groups, IsSubgroup);
     digraph := DigraphTransitiveReduction(digraph);
     return digraph;
 end;
 
-_DotSubgroupLattice := function(groups, colours, fill_colours, selected_groups, class)
+DotSubgroupLattice@ := function(groups, colours, fill_colours, selected_groups, class)
     local dot, parent_count, group_i, shape, style, colour, fill_colour, ranks, rank, orders, order, i, edge;
     dot := "digraph {\n";
 
@@ -109,7 +109,7 @@ _DotSubgroupLattice := function(groups, colours, fill_colours, selected_groups, 
     od;
 
     # Create the edges
-    for edge in DigraphEdges(SRSubgroupLattice(groups)) do
+    for edge in DigraphEdges(TransitiveReduction@(groups)) do
         if not edge[1] = edge[2] then
             dot := Concatenation(dot, "\"", Name(groups[edge[1]]), "\" -> \"", Name(groups[edge[2]]), "\";\n");
         fi;
@@ -121,6 +121,6 @@ end;
 
 InstallGlobalFunction(DotSubgroupLattice,
 function(k, n)
-    return _DotSubgroupLattice(AllSRGroups(Degree, k, Depth, n), [], [], [], "");
+    return DotSubgroupLattice@(AllSRGroups(Degree, k, Depth, n), [], [], [], "");
 end);
 
