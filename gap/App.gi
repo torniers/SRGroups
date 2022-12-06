@@ -63,6 +63,12 @@ SRGroupsAppSelectedProjections := rec();
 # ProjectionCache@.(id)[n][nr] := list of groups that project to SRGroup(k, n, nr)
 ProjectionCache@ := rec();
 
+# 1 <= n <= total
+# Returns a string for the HSV with hue being a unique value for each n
+HSVColour@ := function(n, total)
+    return Concatenation(String(Float((total-n+1)/total)), " 1.0 1.0");
+end;
+
 # This is the callback used for the app, see JupyterDot@. The id is the unique id of the instance of this app
 # It takes in a group_name that will be toggled between selected and not, then constructs dot code based on what is
 # selected and returns a list where each element is the dot code for the depth
@@ -99,7 +105,7 @@ SRGroupsAppCallback := function(group_name, id)
     fill_colours := [];
     fill_colours{List(SRGroupsAppSelectedProjections.(id)[1], x->SRGroupNumber(x))} := List(
         [1..Length(SRGroupsAppSelectedProjections.(id)[1])],
-        x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections.(id)[1]))), " 1.0 1.0")
+        x->HSVColour@(x, Length(SRGroupsAppSelectedProjections.(id)[1]))
     );
     dot := [DotSubgroupLattice@(groups, [], fill_colours, GetWithDefault(SRGroupsAppSelectedProjections.(id), 1, []), id)];
 
@@ -118,14 +124,14 @@ SRGroupsAppCallback := function(group_name, id)
         colours := [];
         colours{List(SRGroupsAppSelectedProjections.(id)[i], x->SRGroupNumber(x))} := List(
             [1..Length(SRGroupsAppSelectedProjections.(id)[i])],
-            x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections.(id)[i]))), " 1.0 1.0")
+            x->HSVColour@(x, Length(SRGroupsAppSelectedProjections.(id)[i]))
         );
 
         fill_colours := [];
         if i+1 <= Length(SRGroupsAppSelectedProjections.(id)) then
             fill_colours{List(SRGroupsAppSelectedProjections.(id)[i+1], x->SRGroupNumber(x))} := List(
                 [1..Length(SRGroupsAppSelectedProjections.(id)[i+1])],
-                x->Concatenation(String(Float(x/Length(SRGroupsAppSelectedProjections.(id)[i+1]))), " 1.0 1.0")
+                x->HSVColour@(x, Length(SRGroupsAppSelectedProjections.(id)[i+1]))
             );
         fi;
 
