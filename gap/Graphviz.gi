@@ -53,6 +53,7 @@ DotSubgroupLattice@ := function(groups, colours, fill_colours, selected_groups, 
     local dot, parent_count, group_i, shape, style, colour, fill_colour, ranks, rank, orders, order, i, edge;
     dot := "digraph {\n";
 
+    # Add the svg-class if we are provided with one
     if not class = "" then
         dot := Concatenation(dot, "class=", class, ";");
     fi;

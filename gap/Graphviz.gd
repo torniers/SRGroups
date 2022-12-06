@@ -15,6 +15,14 @@ DeclareGlobalFunction("DotGroupHeirarchy");
 
 ##################################################################################################################
 
-# PrintTo("fun_t.dot", DotSubgroupLattice(2,4));
+#! @Description
+#! Creates dot code to visualise the subgroup lattice of self-replicating groups in a Hasse diagram
+#! <A>k</A> is the degree of the self-replicating groups to visualise
+#! <A>n</A> is the depth of the self-replicating groups to visualise
+#!
+#! @Returns
+#! A string containing dot code
+#!
+#! @Arguments k, n
 DeclareGlobalFunction("DotSubgroupLattice");
 
