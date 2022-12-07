@@ -104,16 +104,29 @@ SRGroupsAppCallback := function(group_name, id)
     fi;
 
     # Overview graph
-    # TODO(cameron) add colours
-    groups := [
-        Depth1Cache@.(id),
+    groups := [Depth1Cache@.(id)];
+    Append(
+        groups,
         List(
             [1..Length(SRGroupsAppSelectedProjections.(id))],
             n->Union(ProjectionCache@.(id)[n]{List(SRGroupsAppSelectedProjections.(id)[n], SRGroupNumber)})
         )
-    ];
+    );
     Perform(groups, function(x)SortBy(x, SRGroupNumber);end);
-    dot := [DotGroupHeirarchy@(groups, id)];
+    colours := [];
+    for k in [1..Length(groups)-1] do
+        colours[k] := [];
+        i := 1;
+        for nr_i in List(SRGroupsAppSelectedProjections.(id)[k], SRGroupNumber) do
+            colours[k][nr_i] := [];
+            for nr_j in List(ProjectionCache@.(id)[k][nr_i], SRGroupNumber) do
+                #TODO(cameron) fix
+                colours[k][nr_i][nr_j] := HSVColour@(i, Length(SRGroupsAppSelectedProjections.(id)[k]));
+            od;
+            i := i + 1;
+        od;
+    od;
+    dot := [DotGroupHeirarchy@(groups, colours, id)];
 
     # Depth 1
     groups := Depth1Cache@.(id);
@@ -167,7 +180,7 @@ SRGroupsAppCallback := function(group_name, id)
     return Objectify( JupyterRenderableType, rec(source := "gap", data := dot, metadata:=rec()));
 end;
 
-InstallGlobalFunction(SRGroupsRunApp,
+InstallGlobalFunction(RunApp@,
 function(k)
     local id;
     id:=Base64String(Concatenation("graph",String(Random(1,10000))));

@@ -1,5 +1,5 @@
-DotGroupHeirarchy@ := function(groups_by_depth, class)
-    local dot, depth, i, group_i, group_j;
+DotGroupHeirarchy@ := function(groups_by_depth, colours, class)
+    local dot, depth, i, group_i, group_j, colour;
     dot := "digraph {\n";
 
     # TODO(cameron) add colours
@@ -11,7 +11,8 @@ DotGroupHeirarchy@ := function(groups_by_depth, class)
 
     for depth in groups_by_depth do
         for group_i in depth do
-            dot := Concatenation(dot, "\"", Name(group_i), "\"\n");
+
+            dot := Concatenation(dot, "\"", Name(group_i), "\";\n");
         od;
     od;
 
@@ -19,7 +20,16 @@ DotGroupHeirarchy@ := function(groups_by_depth, class)
         for group_i in groups_by_depth[i] do
             for group_j in groups_by_depth[i+1] do
                 if group_i = ParentGroup(group_j) then
-                    dot := Concatenation(dot, "\"", Name(group_i), "\" -> \"", Name(group_j), "\"\n");
+                    if (IsBound(colours[i]) and
+                        IsBound(colours[i][SRGroupNumber(group_i)]) and
+                        IsBound(colours[i][SRGroupNumber(group_i)][SRGroupNumber(group_j)])) then
+                        colour := colours[i][SRGroupNumber(group_i)][SRGroupNumber(group_j)];
+                    else
+                        colour := "1.0 1.0 0.0";
+                    fi;
+                    dot := Concatenation(dot, "\"", Name(group_i), "\" -> \"", Name(group_j), "\"[");
+                    dot := Concatenation(dot, "color=\"", colour , "\"");
+                    dot := Concatenation(dot, "];\n");
                 fi;
             od;
         od;
@@ -55,6 +65,7 @@ InstallGlobalFunction(DotGroupHeirarchy,
 function(k, n, nr, levels)
     return DotGroupHeirarchy@(
         List([n..n+levels-1], x->AllSRGroups(Degree, k, Depth, x, IsSRGroupAncestor, SRGroup(k, n, nr))),
+        [],
         ""
     );
 end);

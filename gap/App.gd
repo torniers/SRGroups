@@ -13,5 +13,5 @@
 #! A JupyterRenderableType that will run the app in Jupyter
 #!
 #! @Arguments k
-DeclareGlobalFunction("SRGroupsRunApp");
+DeclareGlobalFunction("RunApp@");
 
