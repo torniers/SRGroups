@@ -48,6 +48,17 @@ Persons := [ rec(
 		Place := "Newcastle, Australia",
 		Institution := "The University of Newcastle",
 	),
+	rec(
+		FirstNames := "Cameron",
+		LastName := "Murtagh",
+		#WWWHome := TODO,
+		Email := "cameron.murtagh@uon.edu.au",
+		IsAuthor := true,
+		IsMaintainer := false,
+		PostalAddress := "University Drive, Callaghan NSW 2308",
+		Place := "Newcastle, Australia",
+		Institution := "The University of Newcastle",
+	),
 ],
 
 SourceRepository := rec(
@@ -86,7 +97,7 @@ PackageDoc := rec(
 Dependencies := rec(
 	GAP := ">= 4.10.2",
 	NeededOtherPackages := [ ],
-	SuggestedOtherPackages := [ ],
+	SuggestedOtherPackages := [["Digraphs", "1.6.0"], ["JupyterKernel", "1.4.1"]],
 	ExternalConditions := [ ],
 ),
 

@@ -2,8 +2,6 @@ DotGroupHeirarchy@ := function(groups_by_depth, colours, class)
     local dot, depth, i, group_i, group_j, colour;
     dot := "digraph {\n";
 
-    # TODO(cameron) add colours
-
     # Add the svg-class if we are provided with one
     if not class = "" then
         dot := Concatenation(dot, "class=", class, ";");
@@ -72,7 +70,6 @@ end);
 
 ##################################################################################################################
 
-# TODO(cameron) document that we use digraphs as a dep
 TransitiveReduction@ := function(groups)
     local digraph;
     digraph := Digraph(groups, IsSubgroup);
