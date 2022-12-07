@@ -118,7 +118,7 @@ SRGroupsAppCallback := function(group_name, id)
     # Depth 1
     groups := Depth1Cache@.(id);
     fill_colours := [];
-    fill_colours{List(SRGroupsAppSelectedProjections.(id)[1], x->SRGroupNumber(x))} := List(
+    fill_colours{List(SRGroupsAppSelectedProjections.(id)[1], SRGroupNumber)} := List(
         [1..Length(SRGroupsAppSelectedProjections.(id)[1])],
         x->HSVColour@(x, Length(SRGroupsAppSelectedProjections.(id)[1]))
     );
@@ -133,21 +133,21 @@ SRGroupsAppCallback := function(group_name, id)
             continue;
         fi;
         groups := Union(
-            ProjectionCache@.(id)[i]{List(SRGroupsAppSelectedProjections.(id)[i], x->SRGroupNumber(x))}
+            ProjectionCache@.(id)[i]{List(SRGroupsAppSelectedProjections.(id)[i], SRGroupNumber)}
         );
         if groups = [] then
             continue;
         fi;
 
         colours := [];
-        colours{List(SRGroupsAppSelectedProjections.(id)[i], x->SRGroupNumber(x))} := List(
+        colours{List(SRGroupsAppSelectedProjections.(id)[i], SRGroupNumber)} := List(
             [1..Length(SRGroupsAppSelectedProjections.(id)[i])],
             x->HSVColour@(x, Length(SRGroupsAppSelectedProjections.(id)[i]))
         );
 
         fill_colours := [];
         if i+1 <= Length(SRGroupsAppSelectedProjections.(id)) then
-            fill_colours{List(SRGroupsAppSelectedProjections.(id)[i+1], x->SRGroupNumber(x))} := List(
+            fill_colours{List(SRGroupsAppSelectedProjections.(id)[i+1], SRGroupNumber)} := List(
                 [1..Length(SRGroupsAppSelectedProjections.(id)[i+1])],
                 x->HSVColour@(x, Length(SRGroupsAppSelectedProjections.(id)[i+1]))
             );

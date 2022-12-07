@@ -121,7 +121,7 @@ DotSubgroupLattice@ := function(groups, colours, fill_colours, selected_groups, 
     od;
 
     # Enforce the hierarchy more strictly
-    orders := Set(List(RecNames(ranks), x->Int(x))); # Convert to int, to prevent sorting lexicographically
+    orders := Set(List(RecNames(ranks), Int)); # Convert to int, to prevent sorting lexicographically
     for i in [2..Length(orders)] do
         dot := Concatenation(dot, String(orders[i]), " -> ", String(orders[i-1]), "[style=invis];\n");
     od;
