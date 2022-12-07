@@ -105,14 +105,14 @@ SRGroupsAppCallback := function(group_name, id)
 
     # Overview graph
     # TODO(cameron) add colours
-    groups := Union(
+    groups := [
         Depth1Cache@.(id),
-        Union(List(
+        List(
             [1..Length(SRGroupsAppSelectedProjections.(id))],
             n->Union(ProjectionCache@.(id)[n]{List(SRGroupsAppSelectedProjections.(id)[n], SRGroupNumber)})
-        ))
-    );
-    SortBy(groups, SRGroupNumber);
+        )
+    ];
+    Perform(groups, function(x)SortBy(x, SRGroupNumber);end);
     dot := [DotGroupHeirarchy@(groups, id)];
 
     # Depth 1

@@ -1,5 +1,5 @@
-DotGroupHeirarchy@ := function(groups, class)
-    local dot, group_i, group_j;
+DotGroupHeirarchy@ := function(groups_by_depth, class)
+    local dot, depth, i, group_i, group_j;
     dot := "digraph {\n";
 
     # TODO(cameron) add colours
@@ -9,16 +9,19 @@ DotGroupHeirarchy@ := function(groups, class)
         dot := Concatenation(dot, "class=", class, ";");
     fi;
 
-    for group_i in groups do
-        dot := Concatenation(dot, "\"", Name(group_i), "\"\n");
+    for depth in groups_by_depth do
+        for group_i in depth do
+            dot := Concatenation(dot, "\"", Name(group_i), "\"\n");
+        od;
     od;
 
-    # TODO(cameron) I think we can do better than n^2 or cache things
-    for group_i in groups do
-        for group_j in groups do
-            if group_i = ParentGroup(group_j) then
-                dot := Concatenation(dot, "\"", Name(group_i), "\" -> \"", Name(group_j), "\"\n");
-            fi;
+    for i in [1..Length(groups_by_depth)-1] do
+        for group_i in groups_by_depth[i] do
+            for group_j in groups_by_depth[i+1] do
+                if group_i = ParentGroup(group_j) then
+                    dot := Concatenation(dot, "\"", Name(group_i), "\" -> \"", Name(group_j), "\"\n");
+                fi;
+            od;
         od;
     od;
 
@@ -51,7 +54,7 @@ end;
 InstallGlobalFunction(DotGroupHeirarchy,
 function(k, n, nr, levels)
     return DotGroupHeirarchy@(
-        AllSRGroups(Degree, k, Depth, [n..n+levels-1], IsSRGroupAncestor, SRGroup(k, n, nr)),
+        List([n..n+levels-1], x->AllSRGroups(Degree, k, Depth, x, IsSRGroupAncestor, SRGroup(k, n, nr))),
         ""
     );
 end);
