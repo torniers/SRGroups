@@ -55,13 +55,16 @@ end;
 
 # A map from the unique ids, to a list corresponding to degrees each containing a list of the selected projections of
 # that degree.
-# SRGroupsAppSelectedProjections.(id)[degree] := list of selected groups
+# SRGroupsAppSelectedProjections.(id)[depth] := list of selected groups
 SRGroupsAppSelectedProjections := rec();
 
 # A map from the unique ids, to a list corresponding to degrees each containing a list corresponding to depth each
 # containing a list containing what groups are projected to the group of the index
 # ProjectionCache@.(id)[n][nr] := list of groups that project to SRGroup(k, n, nr)
 ProjectionCache@ := rec();
+
+# Contains the groups of depth 1
+Depth1Cache@ := rec();
 
 # 1 <= n <= total
 # Returns a string for the HSV with hue being a unique value for each n
@@ -100,12 +103,20 @@ SRGroupsAppCallback := function(group_name, id)
         Remove(SRGroupsAppSelectedProjections.(id)[Depth(group)], pos);
     fi;
 
-    # Overview
+    # Overview graph
     # TODO(cameron) add colours
-    dot := [DotGroupHeirarchy@(Union(SRGroupsAppSelectedProjections.(id)), id)];
+    groups := Union(
+        Depth1Cache@.(id),
+        Union(List(
+            [1..Length(SRGroupsAppSelectedProjections.(id))],
+            n->Union(ProjectionCache@.(id)[n]{List(SRGroupsAppSelectedProjections.(id)[n], SRGroupNumber)})
+        ))
+    );
+    SortBy(groups, SRGroupNumber);
+    dot := [DotGroupHeirarchy@(groups, id)];
 
     # Depth 1
-    groups := AllSRGroups(Degree, degree, Depth, 1);
+    groups := Depth1Cache@.(id);
     fill_colours := [];
     fill_colours{List(SRGroupsAppSelectedProjections.(id)[1], x->SRGroupNumber(x))} := List(
         [1..Length(SRGroupsAppSelectedProjections.(id)[1])],
@@ -162,7 +173,8 @@ function(k)
     id:=Base64String(Concatenation("graph",String(Random(1,10000))));
     SRGroupsAppSelectedProjections.(id) := [];
     ProjectionCache@.(id) := [];
+    Depth1Cache@.(id) := AllSRGroups(Degree, k, Depth, 1);
     # TODO(cameron) start with overview graph present
-    return JupyterDot@(DotSubgroupLattice@(AllSRGroups(Degree, k, Depth, 1), [], [], [], id), id, "SRGroupsAppCallback");
+    return JupyterDot@(DotSubgroupLattice@(Depth1Cache@.(id), [], [], [], id), id, "SRGroupsAppCallback");
 end);
 
