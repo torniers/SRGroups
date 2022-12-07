@@ -120,7 +120,6 @@ SRGroupsAppCallback := function(group_name, id)
         for nr_i in List(SRGroupsAppSelectedProjections.(id)[k], SRGroupNumber) do
             colours[k][nr_i] := [];
             for nr_j in List(ProjectionCache@.(id)[k][nr_i], SRGroupNumber) do
-                #TODO(cameron) fix
                 colours[k][nr_i][nr_j] := HSVColour@(i, Length(SRGroupsAppSelectedProjections.(id)[k]));
             od;
             i := i + 1;
