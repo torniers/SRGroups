@@ -4,10 +4,10 @@
 # Returns the javascript code to be injected into jupyter
 JupyterDot@ := function(id, callback_name)
     local code;
-    # TODO(cameron) use a local copy of the library
-    code := Concatenation("<div id='",id,"'></div>\n\
-<script src=\"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.umd.js\"></script>\n\
-<script src=\"https://cdn.jsdelivr.net/npm/svg-pan-zoom-container@0.6.1\"></script>\n\
+    code := Concatenation("\
+<script src=\"gap/graphviz.umd.js\"></script>\n\
+<script src=\"gap/svg-pan-zoom-container.js\"></script>\n\
+<div id='",id,"'></div>\n\
 <script type=\"module\">\n\
     import { Graphviz } from \"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js\";\n\
     if (Graphviz) {\n\
