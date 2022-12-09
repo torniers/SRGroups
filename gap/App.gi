@@ -5,8 +5,8 @@
 JupyterDot@ := function(id, callback_name)
     local code;
     code := Concatenation("\
-<script src=\"gap/graphviz.umd.js\"></script>\n\
-<script src=\"gap/svg-pan-zoom-container.js\"></script>\n\
+<script src=\"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.umd.js\"></script>\n\
+<script src=\"https://cdn.jsdelivr.net/npm/svg-pan-zoom-container@0.6.1\"></script>\n\
 <div id='",id,"'></div>\n\
 <script type=\"module\">\n\
     import { Graphviz } from \"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/index.js\";\n\
@@ -27,17 +27,20 @@ JupyterDot@ := function(id, callback_name)
         var callbacks = {\n\
             iopub: {\n\
                 output: (data) => {\n\
-                    console.log(data.content);\n\
-                    document.getElementById(\"",id,"\").innerHTML = \"\";\n\
-                    data.content.data.forEach((dot)=>{\n\
-                        document.getElementById(\"",id,"\").innerHTML += \"<div \" + \n\
-                            \"data-pan-on-drag='button: right;' \" + \n\
-                            \"data-zoom-on-wheel='max-scale: 10; min-scale: 1;' \"+\n\
-                            \"style='border-style:solid; height: 500px;' >\" + \n\
-                            graphviz.layout(dot, \"svg\", \"dot\") + \"</div>\";\n\
-                        document.getElementById(\"",id,"\").innerHTML += \"<br>\";\n\
-                    });\n\
-                    register_callbacks();\n\
+                    if(\"text\" in data.content) {\n\
+                        console.log(data.content.text);\n\
+                    } else {\n\
+                        document.getElementById(\"",id,"\").innerHTML = \"\";\n\
+                        data.content.data.forEach((dot)=>{\n\
+                            document.getElementById(\"",id,"\").innerHTML += \"<div \" + \n\
+                                \"data-pan-on-drag='button: right;' \" + \n\
+                                \"data-zoom-on-wheel='max-scale: 10; min-scale: 1;' \"+\n\
+                                \"style='border-style:solid; height: 500px;' >\" + \n\
+                                graphviz.layout(dot, \"svg\", \"dot\") + \"</div>\";\n\
+                            document.getElementById(\"",id,"\").innerHTML += \"<br>\";\n\
+                        });\n\
+                        register_callbacks();\n\
+                    }\n\
                 }\n\
             }\n\
         };\n\
@@ -73,6 +76,11 @@ end;
 AppCallback@ := function(group_name, id)
     local degree, groups, group, dot, pos, i, j, k, nr_i, nr_j, colours, fill_colours;
     
+    # We were called with an invalid id, perhaps leftovers from a previous session
+    if not IsBound(Depth1Cache@.(id)) then
+        return Objectify( JupyterRenderableType, rec(source := "gap", data := [], metadata:=rec()));
+    fi;
+
     if group_name = "" then
         # This is the setup call
         dot := [
@@ -111,7 +119,6 @@ AppCallback@ := function(group_name, id)
         for i in [Depth(group)+1..Length(AppSelectedProjections@.(id))] do
             # Iterate backwards, to prevent iterator invalidation
             for j in [Length(AppSelectedProjections@.(id)[i]), Length(AppSelectedProjections@.(id)[i])-1..1] do
-                Print(i, ",", j, " ", AppSelectedProjections@.(id)[i][j], ", ", group, "\n");
                 if IsSRGroupAncestor(AppSelectedProjections@.(id)[i][j], group) then
                     Remove(AppSelectedProjections@.(id)[i], j);
                 fi;
@@ -198,7 +205,8 @@ end;
 InstallGlobalFunction(RunApp@,
 function(k)
     local id;
-    id:=Base64String(Concatenation("graph",String(Random(1,10000))));
+    # Remove '=', as it causes errors
+    id := ReplacedString(Base64String(String(Random(1,10000))), "=", "");
     AppSelectedProjections@.(id) := [];
     ProjectionCache@.(id) := [];
     Depth1Cache@.(id) := AllSRGroups(Degree, k, Depth, 1);
