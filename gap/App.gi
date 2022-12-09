@@ -71,7 +71,7 @@ end;
 # It takes in a group_name that will be toggled between selected and not, then constructs dot code based on what is
 # selected and returns a list where each element is the dot code for the depth
 AppCallback@ := function(group_name, id)
-    local degree, groups, group, dot, pos, i, k, nr_i, nr_j, colours, fill_colours;
+    local degree, groups, group, dot, pos, i, j, k, nr_i, nr_j, colours, fill_colours;
     
     if group_name = "" then
         # This is the setup call
@@ -93,7 +93,6 @@ AppCallback@ := function(group_name, id)
     # Make sure we have a list to put the child groups in
     if not IsBound(ProjectionCache@.(id)[Depth(group)]) then
         ProjectionCache@.(id)[Depth(group)] := [];
-        # TODO(cameron) Cascade!!
     fi;
 
     # Toggle the position of the group
@@ -108,6 +107,16 @@ AppCallback@ := function(group_name, id)
         fi;
     else
         Remove(AppSelectedProjections@.(id)[Depth(group)], pos);
+        # Hide all the children of this group as well
+        for i in [Depth(group)+1..Length(AppSelectedProjections@.(id))] do
+            # Iterate backwards, to prevent iterator invalidation
+            for j in [Length(AppSelectedProjections@.(id)[i]), Length(AppSelectedProjections@.(id)[i])-1..1] do
+                Print(i, ",", j, " ", AppSelectedProjections@.(id)[i][j], ", ", group, "\n");
+                if IsSRGroupAncestor(AppSelectedProjections@.(id)[i][j], group) then
+                    Remove(AppSelectedProjections@.(id)[i], j);
+                fi;
+            od;
+        od;
     fi;
 
     # Overview graph

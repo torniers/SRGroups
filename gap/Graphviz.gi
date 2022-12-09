@@ -61,7 +61,7 @@ IsSRGroupAncestor := function(group, potential_ancestor)
     fi;
     actual_ancestor := group;
     for i in [1..depth_g-depth_a] do
-        actual_ancestor := ParentGroup(group);
+        actual_ancestor := ParentGroup(actual_ancestor);
     od;
     return actual_ancestor = potential_ancestor;
 end;
@@ -128,7 +128,6 @@ DotSubgroupLattice@ := function(groups, colours, fill_colours, selected_groups, 
             else
                 fill_colour := "1.0 0.0 1.0";
             fi;
-            # TODO(cameron) One name on each line.
             dot := Concatenation(dot, "\"", _NameSplit@(Name(group_i)), "\"[");
             dot := Concatenation(dot, "style=\"", style, "\" ");
             dot := Concatenation(dot, "color=\"", colour, "\" ");
