@@ -2,7 +2,7 @@
 # callback_name is a string containing the name of a function that takes in the name of an sr group and the id
 #   and returns a list of dot code
 # Returns the javascript code to be injected into jupyter
-JupyterDot@ := function(id, callback_name)
+_JupyterDot@ := function(id, callback_name)
     local code;
     code := Concatenation("\
 <script src=\"https://cdn.jsdelivr.net/npm/@hpcc-js/wasm/dist/graphviz.umd.js\"></script>\n\
@@ -53,39 +53,39 @@ end;
 
 # A map from the unique ids, to a list corresponding to degrees each containing a list of the selected projections of
 # that degree.
-# AppSelectedProjections@.(id)[depth] := list of selected groups
-AppSelectedProjections@ := rec();
+# _AppSelectedProjections@.(id)[depth] := list of selected groups
+_AppSelectedProjections@ := rec();
 
 # A map from the unique ids, to a list corresponding to degrees each containing a list corresponding to depth each
 # containing a list containing what groups are projected to the group of the index
 # ProjectionCache@.(id)[n][nr] := list of groups that project to SRGroup(k, n, nr)
-ProjectionCache@ := rec();
+_ProjectionCache@ := rec();
 
 # Contains the groups of depth 1
-Depth1Cache@ := rec();
+_Depth1Cache@ := rec();
 
 # 1 <= n <= total
 # Returns a string for the HSV with hue being a unique value for each n
-HSVColour@ := function(n, total)
+_HSVColour@ := function(n, total)
     return Concatenation(String(Float((total-n+1)/total)), " 1.0 1.0");
 end;
 
-# This is the callback used for the app, see JupyterDot@. The id is the unique id of the instance of this app
+# This is the callback used for the app, see _JupyterDot@. The id is the unique id of the instance of this app
 # It takes in a group_name that will be toggled between selected and not, then constructs dot code based on what is
 # selected and returns a list where each element is the dot code for the depth
 AppCallback@ := function(group_name, id)
     local degree, groups, group, dot, pos, i, j, k, nr_i, nr_j, colours, fill_colours;
     
     # We were called with an invalid id, perhaps leftovers from a previous session
-    if not IsBound(Depth1Cache@.(id)) then
+    if not IsBound(_Depth1Cache@.(id)) then
         return Objectify( JupyterRenderableType, rec(source := "gap", data := [], metadata:=rec()));
     fi;
 
     if group_name = "" then
         # This is the setup call
         dot := [
-            DotGroupHeirarchy@([Depth1Cache@.(id)], [], id),
-            DotSubgroupLattice@(Depth1Cache@.(id), [], [], [], id)
+            _DotGroupHeirarchy@([_Depth1Cache@.(id)], [], id),
+            _DotSubgroupLattice@(_Depth1Cache@.(id), [], [], [], id)
         ];
         return Objectify( JupyterRenderableType, rec(source := "gap", data := dot, metadata:=rec()));
     fi;
@@ -95,44 +95,44 @@ AppCallback@ := function(group_name, id)
     degree := Degree(group);
 
     # Make sure we have a list to put the group in
-    if not IsBound(AppSelectedProjections@.(id)[Depth(group)]) then
-        AppSelectedProjections@.(id)[Depth(group)] := [];
+    if not IsBound(_AppSelectedProjections@.(id)[Depth(group)]) then
+        _AppSelectedProjections@.(id)[Depth(group)] := [];
     fi;
     # Make sure we have a list to put the child groups in
-    if not IsBound(ProjectionCache@.(id)[Depth(group)]) then
-        ProjectionCache@.(id)[Depth(group)] := [];
+    if not IsBound(_ProjectionCache@.(id)[Depth(group)]) then
+        _ProjectionCache@.(id)[Depth(group)] := [];
     fi;
 
     # Toggle the position of the group
-    pos := Position(AppSelectedProjections@.(id)[Depth(group)], group);
+    pos := Position(_AppSelectedProjections@.(id)[Depth(group)], group);
     if pos = fail then
-        Add(AppSelectedProjections@.(id)[Depth(group)], group);
+        Add(_AppSelectedProjections@.(id)[Depth(group)], group);
         # Calculate the groups that project back onto this one, if we haven't already yet
-        if not IsBound(ProjectionCache@.(id)[Depth(group)][SRGroupNumber(group)]) then
-            ProjectionCache@.(id)[Depth(group)][SRGroupNumber(group)] := AllSRGroups(
+        if not IsBound(_ProjectionCache@.(id)[Depth(group)][SRGroupNumber(group)]) then
+            _ProjectionCache@.(id)[Depth(group)][SRGroupNumber(group)] := AllSRGroups(
                 Degree, degree, Depth, Depth(group) + 1, ParentGroup, group
             );
         fi;
     else
-        Remove(AppSelectedProjections@.(id)[Depth(group)], pos);
+        Remove(_AppSelectedProjections@.(id)[Depth(group)], pos);
         # Hide all the children of this group as well
-        for i in [Depth(group)+1..Length(AppSelectedProjections@.(id))] do
+        for i in [Depth(group)+1..Length(_AppSelectedProjections@.(id))] do
             # Iterate backwards, to prevent iterator invalidation
-            for j in [Length(AppSelectedProjections@.(id)[i]), Length(AppSelectedProjections@.(id)[i])-1..1] do
-                if IsSRGroupAncestor(AppSelectedProjections@.(id)[i][j], group) then
-                    Remove(AppSelectedProjections@.(id)[i], j);
+            for j in [Length(_AppSelectedProjections@.(id)[i]), Length(_AppSelectedProjections@.(id)[i])-1..1] do
+                if IsSRGroupAncestor(_AppSelectedProjections@.(id)[i][j], group) then
+                    Remove(_AppSelectedProjections@.(id)[i], j);
                 fi;
             od;
         od;
     fi;
 
     # Overview graph
-    groups := [Depth1Cache@.(id)];
+    groups := [_Depth1Cache@.(id)];
     Append(
         groups,
         List(
-            [1..Length(AppSelectedProjections@.(id))],
-            n->Union(ProjectionCache@.(id)[n]{List(AppSelectedProjections@.(id)[n], SRGroupNumber)})
+            [1..Length(_AppSelectedProjections@.(id))],
+            n->Union(_ProjectionCache@.(id)[n]{List(_AppSelectedProjections@.(id)[n], SRGroupNumber)})
         )
     );
     Perform(groups, function(x)SortBy(x, SRGroupNumber);end);
@@ -140,61 +140,61 @@ AppCallback@ := function(group_name, id)
     for k in [1..Length(groups)-1] do
         colours[k] := [];
         i := 1;
-        for nr_i in List(AppSelectedProjections@.(id)[k], SRGroupNumber) do
+        for nr_i in List(_AppSelectedProjections@.(id)[k], SRGroupNumber) do
             colours[k][nr_i] := [];
-            for nr_j in List(ProjectionCache@.(id)[k][nr_i], SRGroupNumber) do
-                colours[k][nr_i][nr_j] := HSVColour@(i, Length(AppSelectedProjections@.(id)[k]));
+            for nr_j in List(_ProjectionCache@.(id)[k][nr_i], SRGroupNumber) do
+                colours[k][nr_i][nr_j] := _HSVColour@(i, Length(_AppSelectedProjections@.(id)[k]));
             od;
             i := i + 1;
         od;
     od;
-    dot := [DotGroupHeirarchy@(groups, colours, id)];
+    dot := [_DotGroupHeirarchy@(groups, colours, id)];
 
     # Depth 1
-    groups := Depth1Cache@.(id);
+    groups := _Depth1Cache@.(id);
     fill_colours := [];
-    fill_colours{List(AppSelectedProjections@.(id)[1], SRGroupNumber)} := List(
-        [1..Length(AppSelectedProjections@.(id)[1])],
-        x->HSVColour@(x, Length(AppSelectedProjections@.(id)[1]))
+    fill_colours{List(_AppSelectedProjections@.(id)[1], SRGroupNumber)} := List(
+        [1..Length(_AppSelectedProjections@.(id)[1])],
+        x->_HSVColour@(x, Length(_AppSelectedProjections@.(id)[1]))
     );
     Add(
         dot,
-        DotSubgroupLattice@(groups, [], fill_colours, GetWithDefault(AppSelectedProjections@.(id), 1, []), id)
+        _DotSubgroupLattice@(groups, [], fill_colours, GetWithDefault(_AppSelectedProjections@.(id), 1, []), id)
     );
 
     # Loop over all the higher depths we want to display, depth is one greater than i
-    for i in [1..Length(AppSelectedProjections@.(id))] do
-        if AppSelectedProjections@.(id)[i] = [] then
+    for i in [1..Length(_AppSelectedProjections@.(id))] do
+        if _AppSelectedProjections@.(id)[i] = [] then
             continue;
         fi;
         groups := Union(
-            ProjectionCache@.(id)[i]{List(AppSelectedProjections@.(id)[i], SRGroupNumber)}
+            _ProjectionCache@.(id)[i]{List(_AppSelectedProjections@.(id)[i], SRGroupNumber)}
         );
         if groups = [] then
             continue;
         fi;
 
         colours := [];
-        colours{List(AppSelectedProjections@.(id)[i], SRGroupNumber)} := List(
-            [1..Length(AppSelectedProjections@.(id)[i])],
-            x->HSVColour@(x, Length(AppSelectedProjections@.(id)[i]))
+        colours{List(_AppSelectedProjections@.(id)[i], SRGroupNumber)} := List(
+            [1..Length(_AppSelectedProjections@.(id)[i])],
+            x->_HSVColour@(x, Length(_AppSelectedProjections@.(id)[i]))
         );
 
         fill_colours := [];
-        if i+1 <= Length(AppSelectedProjections@.(id)) then
-            fill_colours{List(AppSelectedProjections@.(id)[i+1], SRGroupNumber)} := List(
-                [1..Length(AppSelectedProjections@.(id)[i+1])],
-                x->HSVColour@(x, Length(AppSelectedProjections@.(id)[i+1]))
+        if i+1 <= Length(_AppSelectedProjections@.(id)) then
+            fill_colours{List(_AppSelectedProjections@.(id)[i+1], SRGroupNumber)} := List(
+                [1..Length(_AppSelectedProjections@.(id)[i+1])],
+                x->_HSVColour@(x, Length(_AppSelectedProjections@.(id)[i+1]))
             );
         fi;
 
         Add(
             dot,
-            DotSubgroupLattice@(
+            _DotSubgroupLattice@(
                 groups,
                 colours,
                 fill_colours,
-                GetWithDefault(AppSelectedProjections@.(id), i+1, []), id
+                GetWithDefault(_AppSelectedProjections@.(id), i+1, []), id
             )
         );
     od;
@@ -207,9 +207,9 @@ function(k)
     local id;
     # Remove '=', as it causes errors
     id := ReplacedString(Base64String(String(Random(1,10000))), "=", "");
-    AppSelectedProjections@.(id) := [];
-    ProjectionCache@.(id) := [];
-    Depth1Cache@.(id) := AllSRGroups(Degree, k, Depth, 1);
-    return JupyterDot@(id, "AppCallback@SRGroups");
+    _AppSelectedProjections@.(id) := [];
+    _ProjectionCache@.(id) := [];
+    _Depth1Cache@.(id) := AllSRGroups(Degree, k, Depth, 1);
+    return _JupyterDot@(id, "AppCallback@SRGroups");
 end);
 

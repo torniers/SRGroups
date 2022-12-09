@@ -1,10 +1,16 @@
+# Splits a converts a string like `SRGroup(4,1,1) = C(4) = 4` to `SRGroup(4,1,1)\nC(4)\n4`.
 _NameSplit@ := function(name)
     name := SplitString(name, "=");
     Perform(name, NormalizeWhitespace);
     return JoinStringsWithSeparator(name, "\\n");
 end;
 
-DotGroupHeirarchy@ := function(groups_by_depth, colours, class)
+# Generates dot code for the group depth/projection hierarchy
+# groups_by_depth, a list of lists of groups
+# colours, a list of lists of lists of strings containing the colour that the edge should be
+#   colours[depth][start][end] = "1.0 1.0 1.0"
+# class, the class that the graph should have
+_DotGroupHeirarchy@ := function(groups_by_depth, colours, class)
     local dot, depth, i, group_i, group_j, colour;
     dot := "digraph {\n";
 
@@ -44,6 +50,7 @@ DotGroupHeirarchy@ := function(groups_by_depth, colours, class)
     return dot;
 end;
 
+# TODO(cameron) move somewhere else
 IsSRGroupAncestor := function(group, potential_ancestor)
     local depth_g, depth_a, i, actual_ancestor;
     if not (IsSelfReplicating(group) and IsSelfReplicating(potential_ancestor)) then
@@ -68,7 +75,7 @@ end;
 
 InstallGlobalFunction(DotGroupHeirarchy,
 function(k, n, nr, levels)
-    return DotGroupHeirarchy@(
+    return _DotGroupHeirarchy@(
         List([n..n+levels-1], x->AllSRGroups(Degree, k, Depth, x, IsSRGroupAncestor, SRGroup(k, n, nr))),
         [],
         ""
@@ -77,6 +84,7 @@ end);
 
 ##################################################################################################################
 
+# Returns a digraph of the subgroup lattice of groups, but remove transitive edges.
 _TransitiveReduction@ := function(groups)
     local digraph;
     digraph := Digraph(groups, IsSubgroup);
@@ -84,7 +92,15 @@ _TransitiveReduction@ := function(groups)
     return digraph;
 end;
 
-DotSubgroupLattice@ := function(groups, colours, fill_colours, selected_groups, class)
+# Generates dot code for the group lattice
+# groups, a list groups
+# colours, a list strings for the outline colour
+#   colours[parent group number] = "1.0 1.0 1.0"
+# fill_colours, a list strings for the fill colour
+#   fill_colours[group number] = "1.0 1.0 1.0"
+# selected_groups, a list containing the groups that should be filled in
+# class, the class that the graph should have
+_DotSubgroupLattice@ := function(groups, colours, fill_colours, selected_groups, class)
     local dot, parent_count, group_i, shape, style, colour, fill_colour, ranks, rank, orders, order, i, edge;
     dot := "digraph {\n";
 
@@ -110,6 +126,8 @@ DotSubgroupLattice@ := function(groups, colours, fill_colours, selected_groups, 
             # Create the node
             if IsCyclic(group_i) then
                 shape := "box";
+            elif IsNilpotentGroup(group_i) then
+                shape := "octagon";
             else
                 shape := "oval";
             fi;
@@ -159,6 +177,6 @@ end;
 
 InstallGlobalFunction(DotSubgroupLattice,
 function(k, n)
-    return DotSubgroupLattice@(AllSRGroups(Degree, k, Depth, n), [], [], [], "");
+    return _DotSubgroupLattice@(AllSRGroups(Degree, k, Depth, n), [], [], [], "");
 end);
 
