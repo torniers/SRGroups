@@ -1,3 +1,9 @@
+_NameSplit@ := function(name)
+    name := SplitString(name, "=");
+    Perform(name, NormalizeWhitespace);
+    return JoinStringsWithSeparator(name, "\\n");
+end;
+
 DotGroupHeirarchy@ := function(groups_by_depth, colours, class)
     local dot, depth, i, group_i, group_j, colour;
     dot := "digraph {\n";
@@ -9,8 +15,7 @@ DotGroupHeirarchy@ := function(groups_by_depth, colours, class)
 
     for depth in groups_by_depth do
         for group_i in depth do
-
-            dot := Concatenation(dot, "\"", Name(group_i), "\";\n");
+            dot := Concatenation(dot, "\"", _NameSplit@(Name(group_i)), "\";\n");
         od;
     od;
 
@@ -25,7 +30,9 @@ DotGroupHeirarchy@ := function(groups_by_depth, colours, class)
                     else
                         colour := "1.0 1.0 0.0";
                     fi;
-                    dot := Concatenation(dot, "\"", Name(group_i), "\" -> \"", Name(group_j), "\"[");
+                    dot := Concatenation(
+                        dot, "\"", _NameSplit@(Name(group_i)), "\" -> \"", _NameSplit@(Name(group_j)), "\"["
+                    );
                     dot := Concatenation(dot, "color=\"", colour , "\"");
                     dot := Concatenation(dot, "];\n");
                 fi;
@@ -70,7 +77,7 @@ end);
 
 ##################################################################################################################
 
-TransitiveReduction@ := function(groups)
+_TransitiveReduction@ := function(groups)
     local digraph;
     digraph := Digraph(groups, IsSubgroup);
     digraph := DigraphTransitiveReduction(digraph);
@@ -121,7 +128,8 @@ DotSubgroupLattice@ := function(groups, colours, fill_colours, selected_groups, 
             else
                 fill_colour := "1.0 0.0 1.0";
             fi;
-            dot := Concatenation(dot, "\"", Name(group_i), "\"[");
+            # TODO(cameron) One name on each line.
+            dot := Concatenation(dot, "\"", _NameSplit@(Name(group_i)), "\"[");
             dot := Concatenation(dot, "style=\"", style, "\" ");
             dot := Concatenation(dot, "color=\"", colour, "\" ");
             dot := Concatenation(dot, "fillcolor=\"", fill_colour, "\" ");
@@ -138,9 +146,11 @@ DotSubgroupLattice@ := function(groups, colours, fill_colours, selected_groups, 
     od;
 
     # Create the edges
-    for edge in DigraphEdges(TransitiveReduction@(groups)) do
+    for edge in DigraphEdges(_TransitiveReduction@(groups)) do
         if not edge[1] = edge[2] then
-            dot := Concatenation(dot, "\"", Name(groups[edge[1]]), "\" -> \"", Name(groups[edge[2]]), "\";\n");
+            dot := Concatenation(
+                dot, "\"", _NameSplit@(Name(groups[edge[1]])), "\" -> \"", _NameSplit@(Name(groups[edge[2]])), "\";\n"
+            );
         fi;
     od;
 

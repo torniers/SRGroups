@@ -17,7 +17,7 @@ JupyterDot@ := function(id, callback_name)
             document.querySelectorAll('.",id," >[id*=\"node\"]').forEach(\n\
                 (x) => {\n\
                     x.addEventListener(\"click\", function(){\n\
-                        const name = x.firstElementChild.textContent.split(\" \")[0];\n\
+                        const name = x.firstElementChild.textContent.split(\"\\\\n\")[0];\n\
                         IPython.notebook.kernel.execute(`",callback_name,"(\"${name}\", \"",id,"\");`, callbacks);\n\
                     });\n\
                 }\n\
@@ -30,10 +30,10 @@ JupyterDot@ := function(id, callback_name)
                     console.log(data.content);\n\
                     document.getElementById(\"",id,"\").innerHTML = \"\";\n\
                     data.content.data.forEach((dot)=>{\n\
-                        document.getElementById(\"",id,"\").innerHTML += \"<div \
-                            data-pan-on-drag='button: right;' \
-                            data-zoom-on-wheel='max-scale: 10; min-scale: 1;' \
-                            style='border-style:solid; height: 500px;' >\" + \n\
+                        document.getElementById(\"",id,"\").innerHTML += \"<div \" + \n\
+                            \"data-pan-on-drag='button: right;' \" + \n\
+                            \"data-zoom-on-wheel='max-scale: 10; min-scale: 1;' \"+\n\
+                            \"style='border-style:solid; height: 500px;' >\" + \n\
                             graphviz.layout(dot, \"svg\", \"dot\") + \"</div>\";\n\
                         document.getElementById(\"",id,"\").innerHTML += \"<br>\";\n\
                     });\n\
@@ -93,6 +93,7 @@ AppCallback@ := function(group_name, id)
     # Make sure we have a list to put the child groups in
     if not IsBound(ProjectionCache@.(id)[Depth(group)]) then
         ProjectionCache@.(id)[Depth(group)] := [];
+        # TODO(cameron) Cascade!!
     fi;
 
     # Toggle the position of the group
