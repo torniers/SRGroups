@@ -17,7 +17,7 @@ _JupyterDot@ := function(id, callback_name)
             document.querySelectorAll('.",id," >[id*=\"node\"]').forEach(\n\
                 (x) => {\n\
                     x.addEventListener(\"click\", function(){\n\
-                        const name = x.firstElementChild.textContent.split(\"\\\\n\")[0];\n\
+                        const name = x.firstElementChild.textContent.split(\"\\n\")[0];\n\
                         IPython.notebook.kernel.execute(`",callback_name,"(\"${name}\", \"",id,"\");`, callbacks);\n\
                     });\n\
                 }\n\

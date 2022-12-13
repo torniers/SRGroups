@@ -1,8 +1,8 @@
-# Splits a converts a string like `SRGroup(4,1,1) = C(4) = 4` to `SRGroup(4,1,1)\nC(4)\n4`.
-_NameSplit@ := function(name)
+# Converts a string like `SRGroup(4,1,1) = C(4) = 4` to `SRGroup(4,1,1)\nC(4)\n4`.
+_NodeName@ := function(name)
     name := SplitString(name, "=");
     Perform(name, NormalizeWhitespace);
-    return JoinStringsWithSeparator(name, "\\n");
+    return JoinStringsWithSeparator(name, "\n");
 end;
 
 # Generates dot code for the group depth/projection hierarchy
@@ -21,7 +21,8 @@ _DotGroupHeirarchy@ := function(groups_by_depth, colours, class)
 
     for depth in groups_by_depth do
         for group_i in depth do
-            dot := Concatenation(dot, "\"", _NameSplit@(Name(group_i)), "\";\n");
+            dot := Concatenation(dot, "\"", _NodeName@(Name(group_i)), "\"");
+            dot := Concatenation(dot, "[label=\"\" shape=point style=filled fillcolor=white];\n");
         od;
     od;
 
@@ -37,8 +38,9 @@ _DotGroupHeirarchy@ := function(groups_by_depth, colours, class)
                         colour := "1.0 1.0 0.0";
                     fi;
                     dot := Concatenation(
-                        dot, "\"", _NameSplit@(Name(group_i)), "\" -> \"", _NameSplit@(Name(group_j)), "\"["
+                        dot, "\"", _NodeName@(Name(group_i)), "\" -> \"", _NodeName@(Name(group_j)), "\"["
                     );
+                    dot := Concatenation(dot, "arrowhead=none ");
                     dot := Concatenation(dot, "color=\"", colour , "\"");
                     dot := Concatenation(dot, "];\n");
                 fi;
@@ -101,7 +103,7 @@ end;
 # selected_groups, a list containing the groups that should be filled in
 # class, the class that the graph should have
 _DotSubgroupLattice@ := function(groups, colours, fill_colours, selected_groups, class)
-    local dot, parent_count, group_i, shape, style, colour, fill_colour, ranks, rank, orders, order, i, edge;
+    local dot, parent_count, group_i, shape, colour, fill_colour, ranks, rank, orders, order, i, edge;
     dot := "digraph {\n";
 
     # Add the svg-class if we are provided with one
@@ -125,14 +127,9 @@ _DotSubgroupLattice@ := function(groups, colours, fill_colours, selected_groups,
         for group_i in ranks.(order) do
             # Create the node
             if IsCyclic(group_i) then
-                shape := "box";
+                shape := "square";
             else
-                shape := "oval";
-            fi;
-            if group_i in selected_groups then
-                style := "filled";
-            else
-                style := "";
+                shape := "circle";
             fi;
             if (not Depth(group_i) = 1) and IsBound(colours[SRGroupNumber(ParentGroup(group_i))]) then
                 colour := colours[SRGroupNumber(ParentGroup(group_i))];
@@ -144,8 +141,9 @@ _DotSubgroupLattice@ := function(groups, colours, fill_colours, selected_groups,
             else
                 fill_colour := "1.0 0.0 1.0";
             fi;
-            dot := Concatenation(dot, "\"", _NameSplit@(Name(group_i)), "\"[");
-            dot := Concatenation(dot, "style=\"", style, "\" ");
+            dot := Concatenation(dot, "\"", _NodeName@(Name(group_i)), "\"[");
+            dot := Concatenation(dot, "label=\"\" ");
+            dot := Concatenation(dot, "style=filled ");
             dot := Concatenation(dot, "color=\"", colour, "\" ");
             dot := Concatenation(dot, "fillcolor=\"", fill_colour, "\" ");
             dot := Concatenation(dot, "shape=", shape);
@@ -164,7 +162,8 @@ _DotSubgroupLattice@ := function(groups, colours, fill_colours, selected_groups,
     for edge in DigraphEdges(_TransitiveReduction@(groups)) do
         if not edge[1] = edge[2] then
             dot := Concatenation(
-                dot, "\"", _NameSplit@(Name(groups[edge[1]])), "\" -> \"", _NameSplit@(Name(groups[edge[2]])), "\";\n"
+                dot, "\"", _NodeName@(Name(groups[edge[1]])), "\" -> \"", _NodeName@(Name(groups[edge[2]])),
+                "\" [arrowhead=none];\n"
             );
         fi;
     od;
