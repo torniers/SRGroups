@@ -36,7 +36,7 @@ _JupyterDot@ := function(id, callback_name)
                                 \"data-pan-on-drag='button: right;' \" + \n\
                                 \"data-zoom-on-wheel='max-scale: 10; min-scale: 1;' \"+\n\
                                 \"style='border-style:solid; height: 500px;' >\" + \n\
-                                graphviz.layout(dot, \"svg\", \"dot\") + \"</div>\";\n\
+                                graphviz.layout(dot[1], \"svg\", dot[0]) + \"</div>\";\n\
                             document.getElementById(\"",id,"\").innerHTML += \"<br>\";\n\
                         });\n\
                         register_callbacks();\n\
@@ -84,8 +84,8 @@ AppCallback@ := function(group_name, id)
     if group_name = "" then
         # This is the setup call
         dot := [
-            _DotGroupHeirarchy@([_Depth1Cache@.(id)], [], id),
-            _DotSubgroupLattice@(_Depth1Cache@.(id), [], [], [], id)
+            ["twopi", _DotGroupHeirarchy@([_Depth1Cache@.(id)], [], id)],
+            ["dot", _DotSubgroupLattice@(_Depth1Cache@.(id), [], [], [], id)]
         ];
         return Objectify( JupyterRenderableType, rec(source := "gap", data := dot, metadata:=rec()));
     fi;
@@ -148,7 +148,7 @@ AppCallback@ := function(group_name, id)
             i := i + 1;
         od;
     od;
-    dot := [_DotGroupHeirarchy@(groups, colours, id)];
+    dot := [["twopi", _DotGroupHeirarchy@(groups, colours, id)]];
 
     # Depth 1
     groups := _Depth1Cache@.(id);
@@ -159,7 +159,7 @@ AppCallback@ := function(group_name, id)
     );
     Add(
         dot,
-        _DotSubgroupLattice@(groups, [], fill_colours, GetWithDefault(_AppSelectedProjections@.(id), 1, []), id)
+        ["dot", _DotSubgroupLattice@(groups, [], fill_colours, GetWithDefault(_AppSelectedProjections@.(id), 1, []), id)]
     );
 
     # Loop over all the higher depths we want to display, depth is one greater than i
@@ -190,13 +190,13 @@ AppCallback@ := function(group_name, id)
 
         Add(
             dot,
-            _DotSubgroupLattice@(
+            ["dot", _DotSubgroupLattice@(
                 groups,
                 colours,
                 fill_colours,
                 GetWithDefault(_AppSelectedProjections@.(id), i+1, []),
                 id
-            )
+            )]
         );
     od;
 
