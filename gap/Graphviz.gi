@@ -126,8 +126,6 @@ _DotSubgroupLattice@ := function(groups, colours, fill_colours, selected_groups,
             # Create the node
             if IsCyclic(group_i) then
                 shape := "box";
-            elif IsNilpotentGroup(group_i) then
-                shape := "octagon";
             else
                 shape := "oval";
             fi;

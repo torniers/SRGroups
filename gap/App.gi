@@ -194,7 +194,8 @@ AppCallback@ := function(group_name, id)
                 groups,
                 colours,
                 fill_colours,
-                GetWithDefault(_AppSelectedProjections@.(id), i+1, []), id
+                GetWithDefault(_AppSelectedProjections@.(id), i+1, []),
+                id
             )
         );
     od;

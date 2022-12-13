@@ -10,7 +10,6 @@
 #! If selecting a vertex does not show the next graph make sure that the next depth is in the library.
 #!
 #! Square vertices are cyclic
-#! Octagon vertices are nilpotent
 #!
 #! @Returns
 #! A JupyterRenderableType that will run the app in Jupyter
