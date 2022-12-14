@@ -10,3 +10,6 @@ ReadPackage( "SRGroups", "gap/SRGroups.gi");
 ReadPackage( "SRGroups", "gap/library.gd");
 
 ReadPackage( "SRGroups", "gap/library.gi");
+
+ReadPackage( "SRGroups", "gap/Sign.gd");
+ReadPackage( "SRGroups", "gap/Sign.gi");
