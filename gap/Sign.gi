@@ -53,13 +53,21 @@ end);
 
 InstallGlobalFunction("ClassifyRegularRootedTreeGroupSign@",
 function(group)
-    local depth, to_check, x;
+    local depth, to_check, x, satisfied;
     depth := Depth(group);
-    to_check := List(Combinations([1..depth-1]), x->Union(x,[depth]));
+    to_check := Combinations([1..depth]);
+    Remove(to_check, 1);
+    satisfied := [];
+
     for x in to_check do
         if SignRegularRootedTreeGroup@(group, x) = 1 then
-            return x;
+            Add(satisfied, x);
         fi;
     od;
-    return fail;
+
+    return satisfied;
 end);
+
+ClassifySignAll@ := function(depth)
+    return List(AllSRGroups(Degree, 2, Depth, depth), ClassifyRegularRootedTreeGroupSign@SRGroups);
+end;
