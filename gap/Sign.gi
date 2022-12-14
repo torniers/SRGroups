@@ -21,7 +21,7 @@ end;
 
 InstallGlobalFunction("KernelGroupOfSign@",
 function(depth, l)
-    local perms, perm;
+    local perms, perm, group;
     perms := [];
 
     for perm in AutT(2,depth) do
@@ -30,6 +30,36 @@ function(depth, l)
         fi;
     od;
 
-    return Group(perms);
+    group := Group(perms);
+    SetName(group, Concatenation("KernelGroupOfSign(", String(l), ")"));
+    SetFilterObj(group, IsRegularRootedTreeGroup);
+    Setter(RegularRootedTreeGroupDegree)(group, 2);
+    Setter(RegularRootedTreeGroupDepth)(group, depth);
+    SetIsSelfReplicating(group, true);
+
+    return group;
 end);
 
+InstallGlobalFunction("SignRegularRootedTreeGroup@",
+function(group, l)
+    local depth;
+    depth := Depth(group);
+    if ForAll(GeneratorsOfGroup(group), i->Product(l, phi_depth->projected_sign(i, depth, phi_depth)) = 1) then
+        return 1;
+    else
+        return -1;
+    fi;
+end);
+
+InstallGlobalFunction("ClassifyRegularRootedTreeGroupSign@",
+function(group)
+    local depth, to_check, x;
+    depth := Depth(group);
+    to_check := List(Combinations([1..depth-1]), x->Union(x,[depth]));
+    for x in to_check do
+        if SignRegularRootedTreeGroup@(group, x) = 1 then
+            return x;
+        fi;
+    od;
+    return fail;
+end);
