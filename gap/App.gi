@@ -13,6 +13,7 @@ _JupyterDot@ := function(id, callback_name)
     if (Graphviz) {\n\
         const graphviz = await Graphviz.load();\n\
         \n\
+        // Register the callbacks for the graph nodes and the toggle buttons\n\
         function register_callbacks(){\n\
             document.querySelectorAll('.",id," >[id*=\"node\"]').forEach(\n\
                 (x) => {\n\
@@ -22,6 +23,7 @@ _JupyterDot@ := function(id, callback_name)
                     };\n\
                 }\n\
             );\n\
+            \n\
             document.querySelectorAll('.collapsible').forEach(\n\
                 (x) => {\n\
                     x.onclick = function(){\n\
@@ -41,17 +43,21 @@ _JupyterDot@ := function(id, callback_name)
             iopub: {\n\
                 output: (data) => {\n\
                     if(\"text\" in data.content) {\n\
+                        // Gap is trying to tell us something\n\
                         console.log(data.content.text);\n\
                     } else {\n\
                         let container = document.getElementById(\"",id,"\");\n\
                         let i = 0;\n\
                         while(i < container.children.length || i < data.content.data.length) {\n\
                             if (i < container.children.length && i < data.content.data.length) {\n\
+                                // Update the contents of the svg with the new dot code\n\
                                 let dot = data.content.data[i];\n\
                                 container.children[i].children[1].innerHTML = graphviz.layout(dot[1], \"svg\", dot[0]);\n\
                             } else if (i < container.children.length && i >= data.content.data.length){\n\
+                                // We weren't given the dot code for this graph, so delete the contents\n\
                                 container.children[i].children[1].innerHTML = \"\";\n\
                             } else if (i >= container.children.length && i < data.content.data.length){\n\
+                                // We were given dot code for a graph we don't have yet, so make it\n\
                                 let dot = data.content.data[i];\n\
                                 container.innerHTML += \"<div>\" + \n\
                                 \"<button type='button' class='collapsible' style='width:100%;'>toggle</button>\" + \n\
