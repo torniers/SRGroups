@@ -196,7 +196,7 @@ end);
 # internal
 InstallGlobalFunction( SelectSRGroups,
 function(args,all)
-	local k, n, nr, groups, degree, level, groups_temp, names, i, j;
+	local k, n, nr, groups, degree, level, groups_temp, names, parent_groups, i, j;
 	
     # TODO(cameron) more input checking
 	if not IsInt(Length(args)/2) then
@@ -219,6 +219,8 @@ function(args,all)
                 n := args[Position(args,Depth)+1];
                 if not IsList(n) then n:=[n]; fi;
                 n := Intersection(SRLevels(degree), n);
+			    Remove(args,Position(args,Depth)+1);
+			    Remove(args,Position(args,Depth));
             else
                 n := SRLevels(degree);
             fi;
@@ -228,12 +230,19 @@ function(args,all)
 				groups_temp:=SRGroupsData(degree,level);
 				names:=ShallowCopy(groups_temp);
 				Apply(names,G->G[2]);
+                parent_groups := ShallowCopy(groups_temp);
+                Apply(parent_groups, G->EvalString(G[3]));
 				Apply(groups_temp,G->RegularRootedTreeGroup(EvalString(SplitString(G[2],",","(")[2]),EvalString(SplitString(G[2],",")[2]),Group(G[1])));
-				for i in [1..Length(groups_temp)] do SetName(groups_temp[i],names[i]); od;
+				for i in [1..Length(groups_temp)] do
+                    SetName(groups_temp[i],names[i]);
+                    SetIsSelfReplicating(groups_temp[i], true);
+                    SetParentGroup(groups_temp[i], parent_groups[i]);
+                od;
+
 				Append(groups,groups_temp);
 			od;
 		od;
-		
+
 		# sieve by all remaining properties
 		if not args=[] then
 			for i in [1..Length(groups)] do
