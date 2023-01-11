@@ -194,6 +194,7 @@ end);
 ##################################################################################################################
 
 # internal
+_SelectSRGroupsCache@ := [];
 InstallGlobalFunction( SelectSRGroups,
 function(args,all)
 	local k, n, nr, groups, degree, level, groups_temp, names, parent_groups, i, j;
@@ -225,7 +226,17 @@ function(args,all)
                 n := SRLevels(degree);
             fi;
 
+            if not IsBound(_SelectSRGroupsCache@[degree]) then
+                _SelectSRGroupsCache@[degree] := [];
+            fi;
+
 			for level in n do
+                # Grab from the cache if we can
+                if IsBound(_SelectSRGroupsCache@[degree][level]) then
+                    Append(groups, _SelectSRGroupsCache@[degree][level]);
+                    continue;
+                fi;
+
 				# get groups from library and name them
 				groups_temp:=SRGroupsData(degree,level);
 				names:=ShallowCopy(groups_temp);
@@ -238,7 +249,8 @@ function(args,all)
                     SetIsSelfReplicating(groups_temp[i], true);
                     SetParentGroup(groups_temp[i], parent_groups[i]);
                 od;
-
+                
+                _SelectSRGroupsCache@[degree][level] := groups_temp;
 				Append(groups,groups_temp);
 			od;
 		od;
