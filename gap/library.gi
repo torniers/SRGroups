@@ -120,23 +120,6 @@ end);
 
 ##################################################################################################################
 
-InstallMethod(ChildGroups, "for G", [IsSelfReplicating],
-function(G)
-    local groups, data, name, k, n, nr;
-    k := Degree(G);
-    n := Depth(G);
-    nr := SRGroupNumber(G);
-    data := SRGroupData(k, n, nr)[4];
-    groups := [];
-    for name in data do
-        if name = "the classes it extends to" then
-            return fail;
-        fi;
-        Add(groups, EvalString(name));
-    od;
-    return groups;
-end );
-
 InstallMethod(ChildGroupsCount, "for G", [IsSelfReplicating],
 function(G)
     local data, k, n, nr;
@@ -241,13 +224,17 @@ function(args,all)
 				groups_temp:=SRGroupsData(degree,level);
 				names:=ShallowCopy(groups_temp);
 				Apply(names,G->G[2]);
-                parent_groups := ShallowCopy(groups_temp);
-                Apply(parent_groups, G->EvalString(G[3]));
+                if level > 1 then
+                    parent_groups := ShallowCopy(groups_temp);
+                    Apply(parent_groups, G->EvalString(G[3]));
+                fi;
 				Apply(groups_temp,G->RegularRootedTreeGroup(EvalString(SplitString(G[2],",","(")[2]),EvalString(SplitString(G[2],",")[2]),Group(G[1])));
 				for i in [1..Length(groups_temp)] do
                     SetName(groups_temp[i],names[i]);
                     SetIsSelfReplicating(groups_temp[i], true);
-                    SetParentGroup(groups_temp[i], parent_groups[i]);
+                    if level > 1 then
+                        SetParentGroup(groups_temp[i], parent_groups[i]);
+                    fi;
                 od;
                 
                 _SelectSRGroupsCache@[degree][level] := groups_temp;
