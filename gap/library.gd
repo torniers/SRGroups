@@ -151,8 +151,6 @@ DeclareAttribute("SRGroupNumber", IsSelfReplicating);
 #!
 #! <A>Depth</A> (or <A>Level</A>) (int>0): the <Ref Attr="Depth" Label="for IsRegularRootedTreeGroup"/> of the group.
 #!
-#! <A>SRGroupNumber</A> (int>0): Restricts the <Ref Attr="SRGroupNumber" Label="for IsSelfReplicating"/> in the library.
-#!
 #! <A>ChildGroupsCount</A> (int>0): the number of <Ref Attr="ChildGroups" Label="for IsSelfReplicating"/>.
 #!
 #! <A>ParentGroup</A> (SRGroup): Restricts returned groups to have a given <Ref Attr="ParentGroup" Label="for IsRegularRootedTreeGroup"/>, this gives the projection.
