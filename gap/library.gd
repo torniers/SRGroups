@@ -116,13 +116,13 @@ DeclareGlobalFunction( "SRGroup" );
 
 ##################################################################################################################
 
-#! @BeginGroup ChildGroups
+#! @BeginGroup ChildGroupsCount
 
 #! @Description
-#! Finds all the self-replicating groups that have G as a parent
+#! Finds the count of all the self-replicating groups that have G as a parent.
 #!
 #! @Returns
-#! The number of child groups
+#! The number of children of G.
 #!
 #! @Arguments G
 DeclareAttribute("ChildGroupsCount", IsSelfReplicating);
