@@ -139,7 +139,6 @@ function(G)
         # Just read it
         return EvalString(SplitString(SplitString(Name(G),",")[3],")")[1]);
     else
-        # TODO(cameron) Find a more efficient way of doing this.
         k := Degree(G);
         n := Depth(G);
         i := 0;
