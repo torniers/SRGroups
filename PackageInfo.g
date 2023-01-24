@@ -96,8 +96,8 @@ PackageDoc := rec(
 
 Dependencies := rec(
 	GAP := ">= 4.10.2",
-	NeededOtherPackages := [ ],
-	SuggestedOtherPackages := [["Digraphs", "1.6.0"], ["JupyterKernel", "1.4.1"]],
+	NeededOtherPackages := [],
+	SuggestedOtherPackages := [["Digraphs", "1.6.0"], ["JupyterKernel", "1.4.1"], ["JupyterViz", "1.5.6"]],
 	ExternalConditions := [ ],
 ),
 

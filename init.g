@@ -7,3 +7,4 @@ ReadPackage( "SRGroups", "gap/SRGroups.gd");
 ReadPackage( "SRGroups", "gap/library.gd");
 ReadPackage( "SRGroups", "gap/Graphviz.gd");
 ReadPackage( "SRGroups", "gap/App.gd");
+ReadPackage( "SRGroups", "gap/order_dist.gd");
