@@ -120,23 +120,6 @@ end);
 
 ##################################################################################################################
 
-InstallMethod(ChildGroups, "for G", [IsSelfReplicating],
-function(G)
-    local groups, data, name, k, n, nr;
-    k := Degree(G);
-    n := Depth(G);
-    nr := SRGroupNumber(G);
-    data := SRGroupData(k, n, nr)[4];
-    groups := [];
-    for name in data do
-        if name = "the classes it extends to" then
-            return fail;
-        fi;
-        Add(groups, EvalString(name));
-    od;
-    return groups;
-end );
-
 InstallMethod(ChildGroupsCount, "for G", [IsSelfReplicating],
 function(G)
     local data, k, n, nr;
@@ -156,7 +139,6 @@ function(G)
         # Just read it
         return EvalString(SplitString(SplitString(Name(G),",")[3],")")[1]);
     else
-        # TODO(cameron) Find a more efficient way of doing this.
         k := Degree(G);
         n := Depth(G);
         i := 0;
@@ -194,9 +176,10 @@ end);
 ##################################################################################################################
 
 # internal
+_SelectSRGroupsCache@ := [];
 InstallGlobalFunction( SelectSRGroups,
 function(args,all)
-	local k, n, nr, groups, degree, level, groups_temp, names, i, j;
+	local k, n, nr, groups, degree, level, groups_temp, names, parent_groups, i, j;
 	
     # TODO(cameron) more input checking
 	if not IsInt(Length(args)/2) then
@@ -219,21 +202,45 @@ function(args,all)
                 n := args[Position(args,Depth)+1];
                 if not IsList(n) then n:=[n]; fi;
                 n := Intersection(SRLevels(degree), n);
+			    Remove(args,Position(args,Depth)+1);
+			    Remove(args,Position(args,Depth));
             else
                 n := SRLevels(degree);
             fi;
 
+            if not IsBound(_SelectSRGroupsCache@[degree]) then
+                _SelectSRGroupsCache@[degree] := [];
+            fi;
+
 			for level in n do
+                # Grab from the cache if we can
+                if IsBound(_SelectSRGroupsCache@[degree][level]) then
+                    Append(groups, _SelectSRGroupsCache@[degree][level]);
+                    continue;
+                fi;
+
 				# get groups from library and name them
 				groups_temp:=SRGroupsData(degree,level);
 				names:=ShallowCopy(groups_temp);
 				Apply(names,G->G[2]);
+                if level > 1 then
+                    parent_groups := ShallowCopy(groups_temp);
+                    Apply(parent_groups, G->EvalString(G[3]));
+                fi;
 				Apply(groups_temp,G->RegularRootedTreeGroup(EvalString(SplitString(G[2],",","(")[2]),EvalString(SplitString(G[2],",")[2]),Group(G[1])));
-				for i in [1..Length(groups_temp)] do SetName(groups_temp[i],names[i]); od;
+				for i in [1..Length(groups_temp)] do
+                    SetName(groups_temp[i],names[i]);
+                    SetIsSelfReplicating(groups_temp[i], true);
+                    if level > 1 then
+                        SetParentGroup(groups_temp[i], parent_groups[i]);
+                    fi;
+                od;
+                
+                _SelectSRGroupsCache@[degree][level] := groups_temp;
 				Append(groups,groups_temp);
 			od;
 		od;
-		
+
 		# sieve by all remaining properties
 		if not args=[] then
 			for i in [1..Length(groups)] do
