@@ -71,3 +71,40 @@ end);
 ClassifySignAll@ := function(depth)
     return List(AllSRGroups(Degree, 2, Depth, depth), ClassifyRegularRootedTreeGroupSign@SRGroups);
 end;
+
+#######################################################################################################################
+
+InstallGlobalFunction("KernelGroupOfProjection@",
+function(group)
+    local pr, depth;
+    depth := Depth(group);
+
+    pr := Projection(AutT(2,depth));
+
+    return Intersection(Kernel(pr), group);
+end);
+
+InstallGlobalFunction("ProjectionKernelSeries@", function(group)
+    local series, group_i;
+
+    group_i := KernelGroupOfProjection@(group);
+    series := [group_i];
+    while not group_i = Group(()) do
+        group_i := CommutatorSubgroup(group, group_i);
+        Add(series, group_i);
+    od;
+
+    return series;
+end);
+
+TestOrders := function(group)
+    local series, i;
+
+    series := ProjectionKernelSeries@(group);
+    for i in [1..Length(series) - 1] do
+        if not Order(series[i]) = 2*Order(series[i+1]) then
+            return false;
+        fi;
+    od;
+    return true;
+end;
