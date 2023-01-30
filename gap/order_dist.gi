@@ -11,7 +11,7 @@ function(degree, depth)
     od;
     return Plot(
         List(Set(List(RecNames(r), Int)),x->Concatenation("Order ", String(x))),
-        List(Set(RecNames(r)), x->r.(x)),
+        List(Set(List(RecNames(r), Int)), x->r.(x)),
         rec(type := "bar", title := StringFormatted("Distribution of groups of degree {} and depth {}", degree, depth))
     );
 end);
