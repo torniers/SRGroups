@@ -5,6 +5,7 @@
 #
 ReadPackage( "SRGroups", "gap/SRGroups.gi");
 ReadPackage( "SRGroups", "gap/library.gi");
+ReadPackage( "SRGroups", "gap/Sign.gi");
 ReadPackage( "SRGroups", "gap/fr.gi");
 ReadPackage( "SRGroups", "gap/Graphviz.gi");
 ReadPackage( "SRGroups", "gap/App.gi");
