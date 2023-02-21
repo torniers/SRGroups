@@ -1,17 +1,15 @@
 # The GAP package SRGroups
 
-TODO: add a description of your package; perhaps also instructions how how to
-install and use it, resp. where to find out more
+<Package>SRGroups</Package> is a <a href="https://www.gap-system.org/">GAP</a> package pertaining to self-replicating
+  groups acting on regular rooted trees of finite degree and
+  depth, following <a href="https://nova.newcastle.edu.au/vital/access/manager/Repository/uon:17152">Daniel Horadam</a>. It allows the user to create and analyse such
+  groups as well as search through a library of them
 
 
 ## Contact
 
-TODO: add info on how to contact you and/or how to report issues with your
-package
+<Package>SRGroups</Package> is currently maintained by <a href="https://www.newcastle.edu.au/profile/stephan-tornier">Stephan Tornier</a> and Cameron Murtagh.
 
 ## License
 
-TODO: Provide information on the license of your package. A license is
-important as it determines who has a right to distribute your package. The
-"default" license to consider is GNU General Public License v2 or later, as
-that is the license of GAP itself.
+<Package>SRGroups</Package> is free software; you can redistribute and/or modify it under the terms of the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU General Public License</a> as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
