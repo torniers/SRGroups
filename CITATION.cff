@@ -1,0 +1,37 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: SRGroups
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Samuel
+    family-names: King
+  - given-names: Cameron
+    family-names: Murtagh
+  - given-names: Sarah
+    family-names: Shotter
+  - given-names: Stephan
+    family-names: Tornier
+    email: stephan.tornier@newcastle.edu.au
+    affiliation: The University of Newcastle
+    orcid: 'https://orcid.org/0000-0001-7278-8165'
+repository-code: 'https://github.com/torniers/SRGroups'
+abstract: >-
+  SRGroups is a GAP package pertaining to self-replicating
+  groups acting on regular rooted trees of finite degree and
+  depth. It allows the user to create and analyse such
+  groups as well as search through a library of them.
+keywords:
+  - self-replicating group
+  - self-similar group
+  - finitely constrained group
+  - rooted tree
+  - regular rooted tree
+  - groups acting on trees
+  - locally compact group
+  - totally disconnected
+license: GPL-3.0-or-later
